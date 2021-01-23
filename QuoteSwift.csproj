@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2662F7B4-4179-46A3-8625-074BF4093962}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>QuoteSwift</RootNamespace>
+    <AssemblyName>QuoteSwift</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Address.cs" />
+    <Compile Include="Business.cs" />
+    <Compile Include="frmAddBusiness.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddBusiness.Designer.cs">
+      <DependentUpon>frmAddBusiness.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddCustomer.Designer.cs">
+      <DependentUpon>frmAddCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddPart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddPart.Designer.cs">
+      <DependentUpon>frmAddPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddPump.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddPump.Designer.cs">
+      <DependentUpon>frmAddPump.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCreateQuote.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCreateQuote.Designer.cs">
+      <DependentUpon>frmCreateQuote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmManageAllEmails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmManageAllEmails.Designer.cs">
+      <DependentUpon>frmManageAllEmails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmManagingPhoneNumbers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmManagingPhoneNumbers.Designer.cs">
+      <DependentUpon>frmManagingPhoneNumbers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmViewAllBusinesses.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewAllBusinesses.Designer.cs">
+      <DependentUpon>frmViewAllBusinesses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmViewCustomers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewCustomers.Designer.cs">
+      <DependentUpon>frmViewCustomers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmViewParts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewParts.Designer.cs">
+      <DependentUpon>frmViewParts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmViewPOBoxAddresses.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewPOBoxAddresses.Designer.cs">
+      <DependentUpon>frmViewPOBoxAddresses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmViewPump.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewPump.Designer.cs">
+      <DependentUpon>frmViewPump.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainProgramCode.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="frmViewQuotes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewQuotes.Designer.cs">
+      <DependentUpon>frmViewQuotes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Legal.cs" />
+    <Compile Include="Part.cs" />
+    <Compile Include="Pass.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pump.cs" />
+    <Compile Include="PumpPart.cs" />
+    <Compile Include="Quote.cs" />
+    <EmbeddedResource Include="frmAddBusiness.resx">
+      <DependentUpon>frmAddBusiness.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddCustomer.resx">
+      <DependentUpon>frmAddCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddPart.resx">
+      <DependentUpon>frmAddPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddPump.resx">
+      <DependentUpon>frmAddPump.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCreateQuote.resx">
+      <DependentUpon>frmCreateQuote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmManageAllEmails.resx">
+      <DependentUpon>frmManageAllEmails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmManagingPhoneNumbers.resx">
+      <DependentUpon>frmManagingPhoneNumbers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewAllBusinesses.resx">
+      <DependentUpon>frmViewAllBusinesses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewCustomers.resx">
+      <DependentUpon>frmViewCustomers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewParts.resx">
+      <DependentUpon>frmViewParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewPOBoxAddresses.resx">
+      <DependentUpon>frmViewPOBoxAddresses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewPump.resx">
+      <DependentUpon>frmViewPump.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewQuotes.resx">
+      <DependentUpon>frmViewQuotes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
