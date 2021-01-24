@@ -39,8 +39,16 @@ namespace QuoteSwift
             {
                 BindingList<Pump_Part> NewPumpParts = RetreivePumpPartList();
 
-                if (passed.ChangeSpecificObject)
+                if(NewPumpParts == null)
                 {
+                    MPC.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.","ERROR - No Pump Part Selection");
+                    return;
+                }
+
+                if (passed.ChangeSpecificObject) 
+                {
+
+                    RecordNewInformation();
 
                 }
                 else //Create New Pump And Add To Pump List
@@ -81,13 +89,38 @@ namespace QuoteSwift
             }
         }
 
+        private void mtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            ChangeViewToEdit();
+        }
+
+        private void mtxtPumpDescription_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            ChangeViewToEdit();
+        }
+
+        private void mtxtNewPumpPrice_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            ChangeViewToEdit();
+        }
+
+        private void dgvMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ChangeViewToEdit();
+        }
+
+        private void dgvNonMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ChangeViewToEdit();
+        }
+
         /** Form Specific Functions And Procedures: 
         *
         * Note: Not all Functions or Procedures below are being used more than once
         *       Some of them are only here to keep the above events easily understandable 
         *       and clutter free.                                                          
         */
-        
+
         //Disable Main Components On This Form:
 
         void DisableMainComponents()
@@ -182,9 +215,7 @@ namespace QuoteSwift
                 return false;
             }
 
-            float TempNewPumpPrice;
-            float.TryParse(mtxtNewPumpPrice.Text, out TempNewPumpPrice);
-            if (TempNewPumpPrice == 0)
+            if (NewPumpValueInput() == 0)
             {
                 MPC.ShowInformation("Please ensure the input for the price of the pump is correct and longer than 2 characters.", "INFORMATION - Pump Price Input Incorrect");
                 mtxtNewPumpPrice.Focus();
@@ -201,7 +232,7 @@ namespace QuoteSwift
             BindingList<Pump_Part> ReturnList = null;
 
             //Mandatory added first
-            for (int i = 0; i < dgvMandatoryPartView.Rows.Count; i++)
+            for (int i = 0; i < dgvMandatoryPartView.Rows.Count-1; i++)
                 if ( ( Boolean ) (dgvMandatoryPartView.Rows[i].Cells["clmAddToPumpSelection"].Value) == true)
                 {
                     Pump_Part newPart = new Pump_Part(passed.PassMandatoryPartList[i], ( int ) (dgvMandatoryPartView.Rows[i].Cells["clmMPartQuantity"].Value)); // Cast used rather than convert; not much but to a degree faster
@@ -209,7 +240,7 @@ namespace QuoteSwift
                 }
 
             //Non-Mandatory added second
-            for(int k = 0; k < dgvNonMandatoryPartView.Rows.Count; k++)
+            for(int k = 0; k < dgvNonMandatoryPartView.Rows.Count-1; k++)
                 if ((Boolean)(dgvNonMandatoryPartView.Rows[k].Cells["clmAddToPumpSelection"].Value) == true)
                 {
                     Pump_Part newPart = new Pump_Part(passed.PassNonMandatoryPartList[k], (int)(dgvNonMandatoryPartView.Rows[k].Cells["clmNMPartQuantity"].Value)); // Cast used rather than convert; not much but to a degree faster
@@ -219,6 +250,34 @@ namespace QuoteSwift
             return ReturnList;
         }
 
+        void ChangeViewToEdit()
+        {
+            if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == false)
+                if (MPC.RequestConfirmation("You are curently viewing " + passed.PumpToChange.PumpName + " pump, would you like to edit it?", "REQUEST - View To Edit Confirmation"))
+                {
+                    EnableMainComponents();
+                    passed.ChangeSpecificObject = true;
+                }
+        }
+
+        void RecordNewInformation()
+        {
+            if(mtxtPumpName.Text != passed.PumpToChange.PumpName) passed.PumpToChange.PumpName = mtxtPumpName.Text;
+
+            if (mtxtPumpDescription.Text != passed.PumpToChange.PumpDescription) passed.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
+
+            if (NewPumpValueInput() != passed.PumpToChange.NewPumpPrice) passed.PumpToChange.NewPumpPrice = NewPumpValueInput();
+
+            passed.PumpToChange.PartList = RetreivePumpPartList();
+        }
+
+        float NewPumpValueInput()
+        {
+            float TempNewPumpPrice;
+            float.TryParse(mtxtNewPumpPrice.Text, out TempNewPumpPrice);
+            return TempNewPumpPrice;
+        }
+        
         /*******************************************/
     }
 }

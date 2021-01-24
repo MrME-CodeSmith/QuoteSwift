@@ -41,22 +41,22 @@ namespace QuoteSwift
             this.mtxtNewPumpPrice = new System.Windows.Forms.MaskedTextBox();
             this.lblMandatoryParts = new System.Windows.Forms.Label();
             this.dgvMandatoryPartView = new System.Windows.Forms.DataGridView();
-            this.dgvNonMandatoryPartView = new System.Windows.Forms.DataGridView();
-            this.lblOtherParts = new System.Windows.Forms.Label();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnAddPump = new System.Windows.Forms.Button();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmNMPartQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmOriginalPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmNewPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmPartPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmAddToPumpSelection = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.clmMPartQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvNonMandatoryPartView = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmNMPartQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblOtherParts = new System.Windows.Forms.Label();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnAddPump = new System.Windows.Forms.Button();
             this.msAddPumpControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNonMandatoryPartView)).BeginInit();
@@ -126,6 +126,7 @@ namespace QuoteSwift
             this.mtxtPumpName.Name = "mtxtPumpName";
             this.mtxtPumpName.Size = new System.Drawing.Size(230, 20);
             this.mtxtPumpName.TabIndex = 4;
+            this.mtxtPumpName.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.mtxtPumpName_MaskInputRejected);
             // 
             // mtxtPumpDescription
             // 
@@ -133,6 +134,7 @@ namespace QuoteSwift
             this.mtxtPumpDescription.Name = "mtxtPumpDescription";
             this.mtxtPumpDescription.Size = new System.Drawing.Size(230, 20);
             this.mtxtPumpDescription.TabIndex = 5;
+            this.mtxtPumpDescription.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.mtxtPumpDescription_MaskInputRejected);
             // 
             // mtxtNewPumpPrice
             // 
@@ -142,6 +144,7 @@ namespace QuoteSwift
             this.mtxtNewPumpPrice.Size = new System.Drawing.Size(115, 20);
             this.mtxtNewPumpPrice.TabIndex = 6;
             this.mtxtNewPumpPrice.ValidatingType = typeof(int);
+            this.mtxtNewPumpPrice.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.mtxtNewPumpPrice_MaskInputRejected);
             // 
             // lblMandatoryParts
             // 
@@ -166,6 +169,44 @@ namespace QuoteSwift
             this.dgvMandatoryPartView.Name = "dgvMandatoryPartView";
             this.dgvMandatoryPartView.Size = new System.Drawing.Size(744, 222);
             this.dgvMandatoryPartView.TabIndex = 9;
+            this.dgvMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMandatoryPartView_CellContentClick);
+            // 
+            // clmDescription
+            // 
+            this.clmDescription.HeaderText = "Description";
+            this.clmDescription.Name = "clmDescription";
+            this.clmDescription.ReadOnly = true;
+            this.clmDescription.Width = 200;
+            // 
+            // clmOriginalPartNumber
+            // 
+            this.clmOriginalPartNumber.HeaderText = "Original Part Number";
+            this.clmOriginalPartNumber.Name = "clmOriginalPartNumber";
+            this.clmOriginalPartNumber.ReadOnly = true;
+            // 
+            // clmNewPartNumber
+            // 
+            this.clmNewPartNumber.HeaderText = "New Part Number";
+            this.clmNewPartNumber.Name = "clmNewPartNumber";
+            this.clmNewPartNumber.ReadOnly = true;
+            // 
+            // clmPartPrice
+            // 
+            this.clmPartPrice.HeaderText = "Part Price";
+            this.clmPartPrice.Name = "clmPartPrice";
+            this.clmPartPrice.ReadOnly = true;
+            this.clmPartPrice.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmPartPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // clmAddToPumpSelection
+            // 
+            this.clmAddToPumpSelection.HeaderText = "Add To Current Pump";
+            this.clmAddToPumpSelection.Name = "clmAddToPumpSelection";
+            // 
+            // clmMPartQuantity
+            // 
+            this.clmMPartQuantity.HeaderText = "Part Quantity";
+            this.clmMPartQuantity.Name = "clmMPartQuantity";
             // 
             // dgvNonMandatoryPartView
             // 
@@ -181,34 +222,7 @@ namespace QuoteSwift
             this.dgvNonMandatoryPartView.Name = "dgvNonMandatoryPartView";
             this.dgvNonMandatoryPartView.Size = new System.Drawing.Size(744, 222);
             this.dgvNonMandatoryPartView.TabIndex = 11;
-            // 
-            // lblOtherParts
-            // 
-            this.lblOtherParts.AutoSize = true;
-            this.lblOtherParts.Location = new System.Drawing.Point(12, 383);
-            this.lblOtherParts.Name = "lblOtherParts";
-            this.lblOtherParts.Size = new System.Drawing.Size(152, 13);
-            this.lblOtherParts.TabIndex = 10;
-            this.lblOtherParts.Text = "Non-Mandatory Part Selection:";
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Location = new System.Drawing.Point(15, 627);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 12;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // btnAddPump
-            // 
-            this.btnAddPump.Location = new System.Drawing.Point(684, 627);
-            this.btnAddPump.Name = "btnAddPump";
-            this.btnAddPump.Size = new System.Drawing.Size(75, 23);
-            this.btnAddPump.TabIndex = 13;
-            this.btnAddPump.Text = "Add Pump";
-            this.btnAddPump.UseVisualStyleBackColor = true;
-            this.btnAddPump.Click += new System.EventHandler(this.btnAddPump_Click);
+            this.dgvNonMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNonMandatoryPartView_CellContentClick);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -247,42 +261,33 @@ namespace QuoteSwift
             this.clmNMPartQuantity.HeaderText = "Part Quantity";
             this.clmNMPartQuantity.Name = "clmNMPartQuantity";
             // 
-            // clmDescription
+            // lblOtherParts
             // 
-            this.clmDescription.HeaderText = "Description";
-            this.clmDescription.Name = "clmDescription";
-            this.clmDescription.ReadOnly = true;
-            this.clmDescription.Width = 200;
+            this.lblOtherParts.AutoSize = true;
+            this.lblOtherParts.Location = new System.Drawing.Point(12, 383);
+            this.lblOtherParts.Name = "lblOtherParts";
+            this.lblOtherParts.Size = new System.Drawing.Size(152, 13);
+            this.lblOtherParts.TabIndex = 10;
+            this.lblOtherParts.Text = "Non-Mandatory Part Selection:";
             // 
-            // clmOriginalPartNumber
+            // btnCancel
             // 
-            this.clmOriginalPartNumber.HeaderText = "Original Part Number";
-            this.clmOriginalPartNumber.Name = "clmOriginalPartNumber";
-            this.clmOriginalPartNumber.ReadOnly = true;
+            this.btnCancel.Location = new System.Drawing.Point(15, 627);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 12;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // clmNewPartNumber
+            // btnAddPump
             // 
-            this.clmNewPartNumber.HeaderText = "New Part Number";
-            this.clmNewPartNumber.Name = "clmNewPartNumber";
-            this.clmNewPartNumber.ReadOnly = true;
-            // 
-            // clmPartPrice
-            // 
-            this.clmPartPrice.HeaderText = "Part Price";
-            this.clmPartPrice.Name = "clmPartPrice";
-            this.clmPartPrice.ReadOnly = true;
-            this.clmPartPrice.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmPartPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // clmAddToPumpSelection
-            // 
-            this.clmAddToPumpSelection.HeaderText = "Add To Current Pump";
-            this.clmAddToPumpSelection.Name = "clmAddToPumpSelection";
-            // 
-            // clmMPartQuantity
-            // 
-            this.clmMPartQuantity.HeaderText = "Part Quantity";
-            this.clmMPartQuantity.Name = "clmMPartQuantity";
+            this.btnAddPump.Location = new System.Drawing.Point(684, 627);
+            this.btnAddPump.Name = "btnAddPump";
+            this.btnAddPump.Size = new System.Drawing.Size(75, 23);
+            this.btnAddPump.TabIndex = 13;
+            this.btnAddPump.Text = "Add Pump";
+            this.btnAddPump.UseVisualStyleBackColor = true;
+            this.btnAddPump.Click += new System.EventHandler(this.btnAddPump_Click);
             // 
             // frmAddPump
             // 
