@@ -100,7 +100,7 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // lblPumpDescription
             // 
@@ -126,7 +126,7 @@ namespace QuoteSwift
             this.mtxtPumpName.Name = "mtxtPumpName";
             this.mtxtPumpName.Size = new System.Drawing.Size(230, 20);
             this.mtxtPumpName.TabIndex = 4;
-            this.mtxtPumpName.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.mtxtPumpName_MaskInputRejected);
+            this.mtxtPumpName.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.MtxtPumpName_MaskInputRejected);
             // 
             // mtxtPumpDescription
             // 
@@ -134,7 +134,7 @@ namespace QuoteSwift
             this.mtxtPumpDescription.Name = "mtxtPumpDescription";
             this.mtxtPumpDescription.Size = new System.Drawing.Size(230, 20);
             this.mtxtPumpDescription.TabIndex = 5;
-            this.mtxtPumpDescription.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.mtxtPumpDescription_MaskInputRejected);
+            this.mtxtPumpDescription.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.MtxtPumpDescription_MaskInputRejected);
             // 
             // mtxtNewPumpPrice
             // 
@@ -144,7 +144,7 @@ namespace QuoteSwift
             this.mtxtNewPumpPrice.Size = new System.Drawing.Size(115, 20);
             this.mtxtNewPumpPrice.TabIndex = 6;
             this.mtxtNewPumpPrice.ValidatingType = typeof(int);
-            this.mtxtNewPumpPrice.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.mtxtNewPumpPrice_MaskInputRejected);
+            this.mtxtNewPumpPrice.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.MtxtNewPumpPrice_MaskInputRejected);
             // 
             // lblMandatoryParts
             // 
@@ -169,7 +169,7 @@ namespace QuoteSwift
             this.dgvMandatoryPartView.Name = "dgvMandatoryPartView";
             this.dgvMandatoryPartView.Size = new System.Drawing.Size(744, 222);
             this.dgvMandatoryPartView.TabIndex = 9;
-            this.dgvMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMandatoryPartView_CellContentClick);
+            this.dgvMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvMandatoryPartView_CellContentClick);
             // 
             // clmDescription
             // 
@@ -222,7 +222,7 @@ namespace QuoteSwift
             this.dgvNonMandatoryPartView.Name = "dgvNonMandatoryPartView";
             this.dgvNonMandatoryPartView.Size = new System.Drawing.Size(744, 222);
             this.dgvNonMandatoryPartView.TabIndex = 11;
-            this.dgvNonMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNonMandatoryPartView_CellContentClick);
+            this.dgvNonMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvNonMandatoryPartView_CellContentClick);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -287,7 +287,7 @@ namespace QuoteSwift
             this.btnAddPump.TabIndex = 13;
             this.btnAddPump.Text = "Add Pump";
             this.btnAddPump.UseVisualStyleBackColor = true;
-            this.btnAddPump.Click += new System.EventHandler(this.btnAddPump_Click);
+            this.btnAddPump.Click += new System.EventHandler(this.BtnAddPump_Click);
             // 
             // frmAddPump
             // 
@@ -309,8 +309,9 @@ namespace QuoteSwift
             this.Controls.Add(this.msAddPumpControls);
             this.MainMenuStrip = this.msAddPumpControls;
             this.Name = "frmAddPump";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Adding New Pump";
-            this.Activated += new System.EventHandler(this.frmAddPump_Activated);
+            this.Activated += new System.EventHandler(this.FrmAddPump_Activated);
             this.msAddPumpControls.ResumeLayout(false);
             this.msAddPumpControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartView)).EndInit();

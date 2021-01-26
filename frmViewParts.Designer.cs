@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmViewParts
+    partial class FrmViewParts
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,8 @@ namespace QuoteSwift
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvAllParts = new System.Windows.Forms.DataGridView();
+            this.clmPartName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmOriginalPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmNewPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,7 +44,7 @@ namespace QuoteSwift
             this.btnRemovePart = new System.Windows.Forms.Button();
             this.btnUpdateSelectedPart = new System.Windows.Forms.Button();
             this.msViewPartsControls.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAllParts)).BeginInit();
             this.SuspendLayout();
             // 
             // msViewPartsControls
@@ -54,7 +55,7 @@ namespace QuoteSwift
             this.closeToolStripMenuItem});
             this.msViewPartsControls.Location = new System.Drawing.Point(0, 0);
             this.msViewPartsControls.Name = "msViewPartsControls";
-            this.msViewPartsControls.Size = new System.Drawing.Size(664, 24);
+            this.msViewPartsControls.Size = new System.Drawing.Size(768, 24);
             this.msViewPartsControls.TabIndex = 0;
             this.msViewPartsControls.Text = "msViewPartsControls";
             // 
@@ -75,21 +76,31 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
-            // dataGridView1
+            // dgvAllParts
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvAllParts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvAllParts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAllParts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clmPartName,
             this.clmDescription,
             this.clmOriginalPartNumber,
             this.clmNewPartNumber,
             this.clmMandatoryPart,
             this.clmPartPrice});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 59);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(643, 222);
-            this.dataGridView1.TabIndex = 1;
+            this.dgvAllParts.Location = new System.Drawing.Point(12, 59);
+            this.dgvAllParts.Name = "dgvAllParts";
+            this.dgvAllParts.Size = new System.Drawing.Size(743, 222);
+            this.dgvAllParts.TabIndex = 1;
+            // 
+            // clmPartName
+            // 
+            this.clmPartName.HeaderText = "Part Name";
+            this.clmPartName.Name = "clmPartName";
+            this.clmPartName.ReadOnly = true;
             // 
             // clmDescription
             // 
@@ -132,43 +143,48 @@ namespace QuoteSwift
             this.btnAddPart.TabIndex = 2;
             this.btnAddPart.Text = "Add Part";
             this.btnAddPart.UseVisualStyleBackColor = true;
-            this.btnAddPart.Click += new System.EventHandler(this.btnAddPart_Click);
+            this.btnAddPart.Click += new System.EventHandler(this.BtnAddPart_Click);
             // 
             // btnRemovePart
             // 
-            this.btnRemovePart.Location = new System.Drawing.Point(532, 30);
+            this.btnRemovePart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemovePart.Location = new System.Drawing.Point(632, 287);
             this.btnRemovePart.Name = "btnRemovePart";
             this.btnRemovePart.Size = new System.Drawing.Size(123, 23);
             this.btnRemovePart.TabIndex = 3;
             this.btnRemovePart.Text = "Remove Selected Part";
             this.btnRemovePart.UseVisualStyleBackColor = true;
+            this.btnRemovePart.Click += new System.EventHandler(this.BtnRemovePart_Click);
             // 
             // btnUpdateSelectedPart
             // 
-            this.btnUpdateSelectedPart.Location = new System.Drawing.Point(532, 287);
+            this.btnUpdateSelectedPart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateSelectedPart.Location = new System.Drawing.Point(635, 30);
             this.btnUpdateSelectedPart.Name = "btnUpdateSelectedPart";
             this.btnUpdateSelectedPart.Size = new System.Drawing.Size(120, 23);
             this.btnUpdateSelectedPart.TabIndex = 4;
             this.btnUpdateSelectedPart.Text = "Update Selected Part";
             this.btnUpdateSelectedPart.UseVisualStyleBackColor = true;
-            this.btnUpdateSelectedPart.Click += new System.EventHandler(this.btnUpdateSelectedPart_Click);
+            this.btnUpdateSelectedPart.Click += new System.EventHandler(this.BtnUpdateSelectedPart_Click);
             // 
-            // frmViewParts
+            // FrmViewParts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(664, 315);
+            this.ClientSize = new System.Drawing.Size(768, 318);
             this.Controls.Add(this.btnUpdateSelectedPart);
             this.Controls.Add(this.btnRemovePart);
             this.Controls.Add(this.btnAddPart);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgvAllParts);
             this.Controls.Add(this.msViewPartsControls);
             this.MainMenuStrip = this.msViewPartsControls;
-            this.Name = "frmViewParts";
+            this.Name = "FrmViewParts";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "View All Parts";
+            this.Activated += new System.EventHandler(this.FrmViewParts_Activated);
             this.msViewPartsControls.ResumeLayout(false);
             this.msViewPartsControls.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAllParts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,14 +196,15 @@ namespace QuoteSwift
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvAllParts;
+        private System.Windows.Forms.Button btnAddPart;
+        private System.Windows.Forms.Button btnRemovePart;
+        private System.Windows.Forms.Button btnUpdateSelectedPart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmPartName;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmOriginalPartNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmNewPartNumber;
         private System.Windows.Forms.DataGridViewCheckBoxColumn clmMandatoryPart;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPartPrice;
-        private System.Windows.Forms.Button btnAddPart;
-        private System.Windows.Forms.Button btnRemovePart;
-        private System.Windows.Forms.Button btnUpdateSelectedPart;
     }
 }

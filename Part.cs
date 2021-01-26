@@ -15,6 +15,17 @@ namespace QuoteSwift
         private string mNewPartNumber;
         private bool mMandatoryPart;
         private float mPartPrice;
+        
+        // Default Constructor:
+        public Part()
+        {
+            PartName = "";
+            PartDescription = "";
+            OriginalItemPartNumber = "";
+            NewPartNumber = "";
+            MandatoryPart = false;
+            PartPrice = 0;
+        }
 
         public Part(string mPartName, string mPartDescription, string mOriginalItempartNumber, string mNewPartNumber, bool mMandatoryPart, float mPartPrice)
         {

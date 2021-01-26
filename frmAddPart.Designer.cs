@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmAddPart
+    partial class FrmAddPart
     {
         /// <summary>
         /// Required designer variable.
@@ -31,6 +31,8 @@ namespace QuoteSwift
         {
             this.msAddPartControls = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadPartBatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetInputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAddPartDescription = new System.Windows.Forms.Label();
@@ -48,7 +50,11 @@ namespace QuoteSwift
             this.cbAddToPumpSelection = new System.Windows.Forms.ComboBox();
             this.btnAddPart = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.lblnewPartQuantity = new System.Windows.Forms.Label();
+            this.NudQuantity = new System.Windows.Forms.NumericUpDown();
+            this.OfdOpenCSVFile = new System.Windows.Forms.OpenFileDialog();
             this.msAddPartControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NudQuantity)).BeginInit();
             this.SuspendLayout();
             // 
             // msAddPartControls
@@ -65,9 +71,26 @@ namespace QuoteSwift
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadPartBatchToolStripMenuItem,
+            this.resetInputToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // loadPartBatchToolStripMenuItem
+            // 
+            this.loadPartBatchToolStripMenuItem.Name = "loadPartBatchToolStripMenuItem";
+            this.loadPartBatchToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.loadPartBatchToolStripMenuItem.Text = "Import Batch";
+            this.loadPartBatchToolStripMenuItem.Click += new System.EventHandler(this.LoadPartBatchToolStripMenuItem_Click);
+            // 
+            // resetInputToolStripMenuItem
+            // 
+            this.resetInputToolStripMenuItem.Name = "resetInputToolStripMenuItem";
+            this.resetInputToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.resetInputToolStripMenuItem.Text = "Reset Input";
+            this.resetInputToolStripMenuItem.Click += new System.EventHandler(this.ResetInputToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -80,7 +103,7 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // lblAddPartDescription
             // 
@@ -140,7 +163,7 @@ namespace QuoteSwift
             // 
             this.cbxMandatoryPart.AutoSize = true;
             this.cbxMandatoryPart.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbxMandatoryPart.Location = new System.Drawing.Point(48, 225);
+            this.cbxMandatoryPart.Location = new System.Drawing.Point(48, 255);
             this.cbxMandatoryPart.Name = "cbxMandatoryPart";
             this.cbxMandatoryPart.Size = new System.Drawing.Size(101, 17);
             this.cbxMandatoryPart.TabIndex = 7;
@@ -191,31 +214,60 @@ namespace QuoteSwift
             this.cbAddToPumpSelection.Name = "cbAddToPumpSelection";
             this.cbAddToPumpSelection.Size = new System.Drawing.Size(217, 21);
             this.cbAddToPumpSelection.TabIndex = 13;
+            this.cbAddToPumpSelection.ContextMenuStripChanged += new System.EventHandler(this.CbAddToPumpSelection_ContextMenuStripChanged);
             // 
             // btnAddPart
             // 
-            this.btnAddPart.Location = new System.Drawing.Point(278, 248);
+            this.btnAddPart.Location = new System.Drawing.Point(278, 292);
             this.btnAddPart.Name = "btnAddPart";
             this.btnAddPart.Size = new System.Drawing.Size(75, 23);
             this.btnAddPart.TabIndex = 14;
             this.btnAddPart.Text = "Add Part";
             this.btnAddPart.UseVisualStyleBackColor = true;
-            this.btnAddPart.Click += new System.EventHandler(this.btnAddPart_Click);
+            this.btnAddPart.Click += new System.EventHandler(this.BtnAddPart_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(12, 248);
+            this.btnCancel.Location = new System.Drawing.Point(12, 292);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 15;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // frmAddPart
+            // lblnewPartQuantity
+            // 
+            this.lblnewPartQuantity.AutoSize = true;
+            this.lblnewPartQuantity.Location = new System.Drawing.Point(81, 225);
+            this.lblnewPartQuantity.Name = "lblnewPartQuantity";
+            this.lblnewPartQuantity.Size = new System.Drawing.Size(49, 13);
+            this.lblnewPartQuantity.TabIndex = 16;
+            this.lblnewPartQuantity.Text = "Quantity:";
+            // 
+            // NudQuantity
+            // 
+            this.NudQuantity.Enabled = false;
+            this.NudQuantity.Location = new System.Drawing.Point(136, 223);
+            this.NudQuantity.Name = "NudQuantity";
+            this.NudQuantity.Size = new System.Drawing.Size(95, 20);
+            this.NudQuantity.TabIndex = 17;
+            // 
+            // OfdOpenCSVFile
+            // 
+            this.OfdOpenCSVFile.DefaultExt = "\"csv\";";
+            this.OfdOpenCSVFile.FileName = "*.csv";
+            this.OfdOpenCSVFile.Filter = "\"CSV files (*.csv)|*.csv|All Files (*.*)|*.*\";";
+            this.OfdOpenCSVFile.InitialDirectory = "\"C:\\\"";
+            this.OfdOpenCSVFile.RestoreDirectory = true;
+            this.OfdOpenCSVFile.Title = "Select CSV File Containing Parts To Add ";
+            // 
+            // FrmAddPart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(367, 280);
+            this.ClientSize = new System.Drawing.Size(367, 324);
+            this.Controls.Add(this.NudQuantity);
+            this.Controls.Add(this.lblnewPartQuantity);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAddPart);
             this.Controls.Add(this.cbAddToPumpSelection);
@@ -233,10 +285,13 @@ namespace QuoteSwift
             this.Controls.Add(this.lblAddPartDescription);
             this.Controls.Add(this.msAddPartControls);
             this.MainMenuStrip = this.msAddPartControls;
-            this.Name = "frmAddPart";
+            this.Name = "FrmAddPart";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "frmAddPart";
+            this.Activated += new System.EventHandler(this.FrmAddPart_Activated);
             this.msAddPartControls.ResumeLayout(false);
             this.msAddPartControls.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NudQuantity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,5 +318,10 @@ namespace QuoteSwift
         private System.Windows.Forms.ComboBox cbAddToPumpSelection;
         private System.Windows.Forms.Button btnAddPart;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label lblnewPartQuantity;
+        private System.Windows.Forms.NumericUpDown NudQuantity;
+        private System.Windows.Forms.ToolStripMenuItem loadPartBatchToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog OfdOpenCSVFile;
+        private System.Windows.Forms.ToolStripMenuItem resetInputToolStripMenuItem;
     }
 }

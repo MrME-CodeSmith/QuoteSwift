@@ -129,7 +129,7 @@ namespace QuoteSwift
             this.btnAddCustomer.TabIndex = 17;
             this.btnAddCustomer.Text = "Add Customer";
             this.btnAddCustomer.UseVisualStyleBackColor = true;
-            this.btnAddCustomer.Click += new System.EventHandler(this.btnAddCustomer_Click);
+            this.btnAddCustomer.Click += new System.EventHandler(this.BtnAddCustomer_Click);
             // 
             // gbxEmailRelated
             // 
@@ -355,7 +355,7 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // gbxCustomerInformation
             // 
@@ -631,6 +631,7 @@ namespace QuoteSwift
             this.Controls.Add(this.gbxCustomerAddress);
             this.Controls.Add(this.gbxPhoneRelated);
             this.Name = "frmAddCustomer";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "frmAddCustomer";
             this.gbxEmailRelated.ResumeLayout(false);
             this.gbxEmailRelated.PerformLayout();

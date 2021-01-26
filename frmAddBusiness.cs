@@ -10,14 +10,12 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class frmAddBusiness : Form
-    {
-
-        readonly MainProgramCode MPC = new MainProgramCode(); //Creating an instance of the class MainProgramCode containing specialised methods
+    public partial class FrmAddBusiness : Form
+    { 
 
         Pass passed;
 
-        public frmAddBusiness(ref Pass passed)
+        public FrmAddBusiness(ref Pass passed)
         {
             InitializeComponent();
             this.passed = passed;
@@ -25,17 +23,17 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void txtBusinessName_TextChanged(object sender, EventArgs e)
+        private void TxtBusinessName_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void btnAddBusiness_Click(object sender, EventArgs e)
+        private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
 
         }

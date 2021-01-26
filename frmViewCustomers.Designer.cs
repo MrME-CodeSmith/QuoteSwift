@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmViewCustomers
+    partial class FrmViewCustomers
     {
         /// <summary>
         /// Required designer variable.
@@ -73,10 +73,13 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // dataGridView1
             // 
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clmCustomerName,
@@ -110,13 +113,14 @@ namespace QuoteSwift
             // 
             // btnUpdateSelectedCustomer
             // 
+            this.btnUpdateSelectedCustomer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdateSelectedCustomer.Location = new System.Drawing.Point(502, 277);
             this.btnUpdateSelectedCustomer.Name = "btnUpdateSelectedCustomer";
             this.btnUpdateSelectedCustomer.Size = new System.Drawing.Size(153, 23);
             this.btnUpdateSelectedCustomer.TabIndex = 3;
             this.btnUpdateSelectedCustomer.Text = "Update Selected Customer";
             this.btnUpdateSelectedCustomer.UseVisualStyleBackColor = true;
-            this.btnUpdateSelectedCustomer.Click += new System.EventHandler(this.btnUpdateSelectedCustomer_Click);
+            this.btnUpdateSelectedCustomer.Click += new System.EventHandler(this.BtnUpdateSelectedCustomer_Click);
             // 
             // btnAddCustomer
             // 
@@ -129,6 +133,7 @@ namespace QuoteSwift
             // 
             // btnRemoveSelectedCustomer
             // 
+            this.btnRemoveSelectedCustomer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemoveSelectedCustomer.Location = new System.Drawing.Point(502, 27);
             this.btnRemoveSelectedCustomer.Name = "btnRemoveSelectedCustomer";
             this.btnRemoveSelectedCustomer.Size = new System.Drawing.Size(153, 23);
@@ -136,7 +141,7 @@ namespace QuoteSwift
             this.btnRemoveSelectedCustomer.Text = "Remove Selected Customer";
             this.btnRemoveSelectedCustomer.UseVisualStyleBackColor = true;
             // 
-            // frmViewCustomers
+            // FrmViewCustomers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -147,7 +152,8 @@ namespace QuoteSwift
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.msViewCustomersControls);
             this.MainMenuStrip = this.msViewCustomersControls;
-            this.Name = "frmViewCustomers";
+            this.Name = "FrmViewCustomers";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "111111111";
             this.msViewCustomersControls.ResumeLayout(false);
             this.msViewCustomersControls.PerformLayout();

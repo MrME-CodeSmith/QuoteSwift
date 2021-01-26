@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmManageAllEmails
+    partial class FrmManageAllEmails
     {
         /// <summary>
         /// Required designer variable.
@@ -70,10 +70,13 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // dataGridView1
             // 
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clmEmailAddresses});
@@ -100,6 +103,7 @@ namespace QuoteSwift
             // 
             // btnRemoveEmail
             // 
+            this.btnRemoveEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemoveEmail.Location = new System.Drawing.Point(271, 196);
             this.btnRemoveEmail.Name = "btnRemoveEmail";
             this.btnRemoveEmail.Size = new System.Drawing.Size(84, 23);
@@ -107,7 +111,7 @@ namespace QuoteSwift
             this.btnRemoveEmail.Text = "Remove Email";
             this.btnRemoveEmail.UseVisualStyleBackColor = true;
             // 
-            // frmManageAllEmails
+            // FrmManageAllEmails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -117,7 +121,8 @@ namespace QuoteSwift
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.msManageEmailAddressesControls);
             this.MainMenuStrip = this.msManageEmailAddressesControls;
-            this.Name = "frmManageAllEmails";
+            this.Name = "FrmManageAllEmails";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Managing < Business Name > Email Addresses";
             this.msManageEmailAddressesControls.ResumeLayout(false);
             this.msManageEmailAddressesControls.PerformLayout();

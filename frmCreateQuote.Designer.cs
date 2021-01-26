@@ -175,7 +175,7 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // pnlBusinessDetails
             // 
@@ -1001,7 +1001,7 @@ namespace QuoteSwift
             this.btnComplete.TabIndex = 12;
             this.btnComplete.Text = "Complete";
             this.btnComplete.UseVisualStyleBackColor = true;
-            this.btnComplete.Click += new System.EventHandler(this.btnComplete_Click);
+            this.btnComplete.Click += new System.EventHandler(this.BtnComplete_Click);
             // 
             // btnCancel
             // 
@@ -1029,6 +1029,7 @@ namespace QuoteSwift
             this.Controls.Add(this.msCreateNewQuoteControls);
             this.MainMenuStrip = this.msCreateNewQuoteControls;
             this.Name = "frmCreateQuote";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Creating New Quote For << Business Name >>";
             this.msCreateNewQuoteControls.ResumeLayout(false);
             this.msCreateNewQuoteControls.PerformLayout();

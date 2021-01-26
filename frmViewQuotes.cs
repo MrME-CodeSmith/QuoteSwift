@@ -13,85 +13,139 @@ namespace QuoteSwift
     public partial class frmViewQuotes : Form
     {
 
-        readonly MainProgramCode MPC = new MainProgramCode(); //Creating an instance of the class MainProgramCode containing specialised methods
+        
 
         Pass passed;
+
+        public ref Pass Passed { get => ref passed; }
+
         public frmViewQuotes(ref Pass passed)
         {
             InitializeComponent();
             this.passed = passed;
+            if (this.passed == null) passed = new Pass(new BindingList<Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new BindingList<Part>(), new BindingList<Part>());
+            
         }
 
-        private void btnCreateNewQuote_Click(object sender, EventArgs e)
+        private void BtnCreateNewQuote_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.passed = MPC.CreateNewQuote(ref this.passed); 
-            this.Show();
+            this.passed = MainProgramCode.CreateNewQuote(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
         }
 
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MPC.CloseApplication(MPC.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "CONFIRMATION - Application Termination"));
+            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
         }
 
-        private void managePumpsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.passed = MPC.ViewAllPumps(ref this.passed);
-            this.Show();
+            this.passed = MainProgramCode.ViewAllPumps(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
         }
 
-        private void createNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CreateNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.passed = MPC.CreateNewPump(ref this.passed);
-            this.Show();
+            this.passed = MainProgramCode.CreateNewPump(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
         }
 
-        private void viewAllPumpsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewAllPumpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.managePumpsToolStripMenuItem.PerformClick();
         }
 
-        private void addNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.passed = MPC.AddCustomer(ref this.passed);
-            this.Show();
+            this.passed = MainProgramCode.AddCustomer(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
         }
 
-        private void viewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.passed = MPC.ViewCustomers(ref this.passed);
-            this.Show();
+            this.passed = MainProgramCode.ViewCustomers(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
         }
 
-        private void manageCustomersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ManageCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.viewAllCustomersToolStripMenuItem.PerformClick();
         }
 
-        private void addNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.passed = MPC.AddBusiness(ref this.passed);
-            this.Show();
+            this.passed = MainProgramCode.AddBusiness(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
         }
 
-        private void viewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            this.passed = MPC.ViewBusinesses(ref this.passed);
-            this.Show();
+            this.passed = MainProgramCode.ViewBusinesses(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
         }
 
-        private void manageBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ManageBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.viewAllBusinessesToolStripMenuItem.PerformClick();
         }
 
-        private void btnViewSelectedQuote_Click(object sender, EventArgs e)
+        private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
             if (dgvPreviousQuotes.SelectedCells.Count > 0)
             {
@@ -102,18 +156,25 @@ namespace QuoteSwift
                 Pass ChangeQuotePass = new Pass(passed.PassQuoteList, passed.PassBusinessList, passed.PassPumpList, passed.PassMandatoryPartList, passed.PassNonMandatoryPartList, ref objQuoteSelection, true);
                 
                 this.Hide();
-                this.passed = MPC.CreateNewQuote(ref ChangeQuotePass);
-                this.Show();
+                this.passed = MainProgramCode.CreateNewQuote(ref ChangeQuotePass);
+                try
+                {
+                    this.Show();
+                }
+                catch (Exception)
+                {
+                    // Do Nothing - Since this only happens when Application.Exit() is called.
+                }
 
                 this.passed.ChangeSpecificObject = false;
             }
             else
             {
-                MPC.ShowError("The current selection is invalid.\nPlease choose a valid Quote from the list.","ERROR - Invalid Selection");
+                MainProgramCode.ShowError("The current selection is invalid.\nPlease choose a valid Quote from the list.","ERROR - Invalid Selection");
             }
         }
 
-        private void btnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
+        private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
         {
             if (dgvPreviousQuotes.SelectedCells.Count > 0)
             {
@@ -124,12 +185,52 @@ namespace QuoteSwift
                 Pass ChangeQuotePass = new Pass(passed.PassQuoteList, passed.PassBusinessList, passed.PassPumpList,passed.PassMandatoryPartList, passed.PassNonMandatoryPartList, ref objQuoteSelection, false);
 
                 this.Hide();
-                this.passed = MPC.CreateNewQuote(ref ChangeQuotePass);
-                this.Show();
+                this.passed = MainProgramCode.CreateNewQuote(ref ChangeQuotePass);
+                try
+                {
+                    this.Show();
+                }
+                catch (Exception)
+                {
+                    // Do Nothing - Since this only happens when Application.Exit() is called.
+                }
             }
             else
             {
-                MPC.ShowError("The current selection is invalid.\nPlease choose a valid Quote from the list.", "ERROR - Invalid Selection");
+                MainProgramCode.ShowError("The current selection is invalid.\nPlease choose a valid Quote from the list.", "ERROR - Invalid Selection");
+            }
+        }
+
+        private void ViewAllPartsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            this.passed = MainProgramCode.ViewAllParts(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch(Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
+        }
+
+        private void ManagePumpPartsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            viewAllPartsToolStripMenuItem.PerformClick();
+        }
+
+        private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            this.passed = MainProgramCode.AddNewPart(ref this.passed);
+            try
+            {
+                this.Show();
+            }
+            catch (Exception)
+            {
+                // Do Nothing - Since this only happens when Application.Exit() is called.
             }
         }
     }

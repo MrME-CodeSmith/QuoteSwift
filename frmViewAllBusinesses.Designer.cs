@@ -71,7 +71,7 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // btnAddBusiness
             // 
@@ -115,7 +115,7 @@ namespace QuoteSwift
             this.btnRemoveBusiness.TabIndex = 3;
             this.btnRemoveBusiness.Text = "Remove Business";
             this.btnRemoveBusiness.UseVisualStyleBackColor = true;
-            this.btnRemoveBusiness.Click += new System.EventHandler(this.btnRemoveBusiness_Click);
+            this.btnRemoveBusiness.Click += new System.EventHandler(this.BtnRemoveBusiness_Click);
             // 
             // frmViewAllBusinesses
             // 
@@ -128,6 +128,7 @@ namespace QuoteSwift
             this.Controls.Add(this.msViewAllBusinessesControls);
             this.MainMenuStrip = this.msViewAllBusinessesControls;
             this.Name = "frmViewAllBusinesses";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Viewing All Businesses";
             this.msViewAllBusinessesControls.ResumeLayout(false);
             this.msViewAllBusinessesControls.PerformLayout();

@@ -11,10 +11,7 @@ using System.Windows.Forms;
 namespace QuoteSwift
 {
     public partial class frmAddPump : Form
-    {
-
-        readonly MainProgramCode MPC = new MainProgramCode(); //Creating an instance of the class MainProgramCode containing specialised methods
-
+    { 
         Pass passed;
 
         public ref Pass Passed { get => ref passed; }
@@ -25,12 +22,12 @@ namespace QuoteSwift
             this.passed = passed;
         }
   
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MPC.CloseApplication(MPC.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "CONFIRMATION - Application Termination"));
+            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
         }
 
-        private void btnAddPump_Click(object sender, EventArgs e)
+        private void BtnAddPump_Click(object sender, EventArgs e)
         {
             //When done Editing / Adding a pump, all mandatory parts need to be added first to the part list
             //This is for the for loop when the form gets activated to work corectly.
@@ -41,7 +38,7 @@ namespace QuoteSwift
 
                 if(NewPumpParts == null)
                 {
-                    MPC.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.","ERROR - No Pump Part Selection");
+                    MainProgramCode.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.","ERROR - No Pump Part Selection");
                     return;
                 }
 
@@ -56,13 +53,13 @@ namespace QuoteSwift
 
                     Pump newPump = new Pump(mtxtNewPumpPrice.Text, mtxtPumpDescription.Text, (float)Convert.ToDouble(mtxtNewPumpPrice.Text), ref NewPumpParts); // Cast used since Convert.To does not support float
                     passed.PassPumpList.Add(newPump);
-                    MPC.ShowInformation(newPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
+                    MainProgramCode.ShowInformation(newPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
                 
                 }
             }
         }
 
-        private void frmAddPump_Activated(object sender, EventArgs e)
+        private void FrmAddPump_Activated(object sender, EventArgs e)
         {
             if(passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == true) //Determine if Edit
             {
@@ -83,33 +80,33 @@ namespace QuoteSwift
             }
             else //This should never happen. Error message displayed and application will not allow input
             {
-                MPC.ShowError("An error occured that was not suppose to ever happen.\nAll input will now be disabled for this current screen","ERROR - Undefined Action Called");
+                MainProgramCode.ShowError("An error occured that was not suppose to ever happen.\nAll input will now be disabled for this current screen","ERROR - Undefined Action Called");
 
                 DisableMainComponents();
             }
         }
 
-        private void mtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
             ChangeViewToEdit();
         }
 
-        private void mtxtPumpDescription_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        private void MtxtPumpDescription_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
             ChangeViewToEdit();
         }
 
-        private void mtxtNewPumpPrice_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        private void MtxtNewPumpPrice_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
             ChangeViewToEdit();
         }
 
-        private void dgvMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             ChangeViewToEdit();
         }
 
-        private void dgvNonMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvNonMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             ChangeViewToEdit();
         }
@@ -203,21 +200,21 @@ namespace QuoteSwift
         {
             if (mtxtPumpName.TextLength < 3)
             {
-                MPC.ShowInformation("Please ensure the input for the Pump Name is correct and longer than 3 characters.", "INFORMATION -Pump Name Input Incorrect");
+                MainProgramCode.ShowInformation("Please ensure the input for the Pump Name is correct and longer than 3 characters.", "INFORMATION -Pump Name Input Incorrect");
                 mtxtPumpName.Focus();
                 return false;
             }
 
             if (mtxtPumpDescription.TextLength < 3)
             {
-                MPC.ShowInformation("Please ensure the input for the description of the pump is correct and longer than 3 characters.", "INFORMATION - Pump Description Input Incorrect");
+                MainProgramCode.ShowInformation("Please ensure the input for the description of the pump is correct and longer than 3 characters.", "INFORMATION - Pump Description Input Incorrect");
                 mtxtPumpDescription.Focus();
                 return false;
             }
 
             if (NewPumpValueInput() == 0)
             {
-                MPC.ShowInformation("Please ensure the input for the price of the pump is correct and longer than 2 characters.", "INFORMATION - Pump Price Input Incorrect");
+                MainProgramCode.ShowInformation("Please ensure the input for the price of the pump is correct and longer than 2 characters.", "INFORMATION - Pump Price Input Incorrect");
                 mtxtNewPumpPrice.Focus();
                 return false;
             }
@@ -253,7 +250,7 @@ namespace QuoteSwift
         void ChangeViewToEdit()
         {
             if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == false)
-                if (MPC.RequestConfirmation("You are curently viewing " + passed.PumpToChange.PumpName + " pump, would you like to edit it?", "REQUEST - View To Edit Confirmation"))
+                if (MainProgramCode.RequestConfirmation("You are curently viewing " + passed.PumpToChange.PumpName + " pump, would you like to edit it?", "REQUEST - View To Edit REQUEST"))
                 {
                     EnableMainComponents();
                     passed.ChangeSpecificObject = true;
@@ -273,11 +270,10 @@ namespace QuoteSwift
 
         float NewPumpValueInput()
         {
-            float TempNewPumpPrice;
-            float.TryParse(mtxtNewPumpPrice.Text, out TempNewPumpPrice);
+            float.TryParse(mtxtNewPumpPrice.Text, out float TempNewPumpPrice);
             return TempNewPumpPrice;
         }
-        
-        /*******************************************/
+
+        /*********************************************************************************/
     }
 }

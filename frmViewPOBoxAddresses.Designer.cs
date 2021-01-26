@@ -74,10 +74,13 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // dgvPOBoxAddresses
             // 
+            this.dgvPOBoxAddresses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvPOBoxAddresses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPOBoxAddresses.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clmNumber,
@@ -133,6 +136,7 @@ namespace QuoteSwift
             // 
             // btnRemoveAddress
             // 
+            this.btnRemoveAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemoveAddress.Location = new System.Drawing.Point(849, 183);
             this.btnRemoveAddress.Name = "btnRemoveAddress";
             this.btnRemoveAddress.Size = new System.Drawing.Size(106, 23);
@@ -150,6 +154,7 @@ namespace QuoteSwift
             this.Controls.Add(this.msViewPOBoxAddressesControles);
             this.MainMenuStrip = this.msViewPOBoxAddressesControles;
             this.Name = "frmViewPOBoxAddresses";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "frmViewPOBoxAddresses";
             this.msViewPOBoxAddressesControles.ResumeLayout(false);
             this.msViewPOBoxAddressesControles.PerformLayout();

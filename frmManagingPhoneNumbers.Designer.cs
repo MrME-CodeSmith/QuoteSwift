@@ -34,8 +34,8 @@ namespace QuoteSwift
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dgvTelephoneNumbers = new System.Windows.Forms.DataGridView();
-            this.lblTelephoneNumberList = new System.Windows.Forms.Label();
             this.clmTelephoneNumbers = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblTelephoneNumberList = new System.Windows.Forms.Label();
             this.x = new System.Windows.Forms.Label();
             this.dgvCellphoneNumbers = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -75,7 +75,7 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // dgvTelephoneNumbers
             // 
@@ -87,6 +87,13 @@ namespace QuoteSwift
             this.dgvTelephoneNumbers.Size = new System.Drawing.Size(243, 150);
             this.dgvTelephoneNumbers.TabIndex = 1;
             // 
+            // clmTelephoneNumbers
+            // 
+            this.clmTelephoneNumbers.HeaderText = "Telephone Numbers";
+            this.clmTelephoneNumbers.Name = "clmTelephoneNumbers";
+            this.clmTelephoneNumbers.ReadOnly = true;
+            this.clmTelephoneNumbers.Width = 200;
+            // 
             // lblTelephoneNumberList
             // 
             this.lblTelephoneNumberList.AutoSize = true;
@@ -95,13 +102,6 @@ namespace QuoteSwift
             this.lblTelephoneNumberList.Size = new System.Drawing.Size(137, 13);
             this.lblTelephoneNumberList.TabIndex = 2;
             this.lblTelephoneNumberList.Text = "List of Telephone Numbers:";
-            // 
-            // clmTelephoneNumbers
-            // 
-            this.clmTelephoneNumbers.HeaderText = "Telephone Numbers";
-            this.clmTelephoneNumbers.Name = "clmTelephoneNumbers";
-            this.clmTelephoneNumbers.ReadOnly = true;
-            this.clmTelephoneNumbers.Width = 200;
             // 
             // x
             // 
@@ -161,6 +161,7 @@ namespace QuoteSwift
             this.Controls.Add(this.msManagePhoneNumbersControls);
             this.MainMenuStrip = this.msManagePhoneNumbersControls;
             this.Name = "frmManagingPhoneNumbers";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Managing < Business Name > Phone Numbers";
             this.msManagePhoneNumbersControls.ResumeLayout(false);
             this.msManagePhoneNumbersControls.PerformLayout();

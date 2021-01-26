@@ -10,19 +10,17 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class frmManageAllEmails : Form
+    public partial class FrmManageAllEmails : Form
     {
 
-        readonly MainProgramCode MPC = new MainProgramCode(); //Creating an instance of the class MainProgramCode containing specialised methods
-
-        public frmManageAllEmails()
+        public FrmManageAllEmails()
         {
             InitializeComponent();
         }
 
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MPC.CloseApplication(MPC.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "CONFIRMATION - Application Termination"));
+            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
         }
     }
 }

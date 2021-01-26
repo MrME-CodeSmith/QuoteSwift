@@ -20,9 +20,12 @@ namespace QuoteSwift
         private Customer mCustomerToChange = null; //In the event that a Customer's information needs to be changed
         private Quote mQuoteTOChange = null; //In the event that a Quote's information needs to be changed
         private Pump mPumpToChange = null; //In the event that a Pump's information needs to be changed
+        private Part mPartToChange = null; //In the event that a Part's information needs to be changed
         private bool mChangeSpecificObject = false; //To determine whether object should be viewed or changed
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList) //Pass All Constructor
+        //Pass All Constructor :
+
+        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList) 
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -31,7 +34,9 @@ namespace QuoteSwift
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
         }
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)  //Pass Quote Constructor
+        //Pass Quote Constructor:
+
+        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)  
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -42,7 +47,9 @@ namespace QuoteSwift
             ChangeSpecificObject = mChangeSpecificObject;
         }
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Business mBusinessToChange, bool mChangeSpecificObject = false) //Pass Business Constructor
+        //Pass Business Constructor:
+
+        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Business mBusinessToChange, bool mChangeSpecificObject = false) 
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -53,7 +60,9 @@ namespace QuoteSwift
             ChangeSpecificObject = mChangeSpecificObject;
         }
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false) //Pass Customer Constructor
+        //Pass Customer Constructor:
+
+        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false) 
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -64,7 +73,9 @@ namespace QuoteSwift
             ChangeSpecificObject = mChangeSpecificObject;
         }
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Pump mPumpToChange, bool mChangeSpecificObject = false) //Pass Pump Constructor
+        //Pass Pump Constructor:
+
+        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Pump mPumpToChange, bool mChangeSpecificObject = false) 
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -72,6 +83,19 @@ namespace QuoteSwift
             PassMandatoryPartList = mPassMandatoryPartList;
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
             PumpToChange = mPumpToChange;
+            ChangeSpecificObject = mChangeSpecificObject;
+        }
+
+        //Pass Part Constructor:
+
+        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Part mPartToChange, bool mChangeSpecificObject = false)
+        {
+            PassQuoteList = mPassQuoteList;
+            PassBusinessList = mPassBusinessList;
+            PassPumpList = mPassPumpList;
+            PassMandatoryPartList = mPassMandatoryPartList;
+            PassNonMandatoryPartList = mPassNonMandatoryPartList;
+            PartToChange = mPartToChange;
             ChangeSpecificObject = mChangeSpecificObject;
         }
 
@@ -83,6 +107,7 @@ namespace QuoteSwift
         public Quote QuoteTOChange { get => mQuoteTOChange; set => mQuoteTOChange = value; }
         public bool ChangeSpecificObject { get => mChangeSpecificObject; set => mChangeSpecificObject = value; }
         public Pump PumpToChange { get => mPumpToChange; set => mPumpToChange = value; }
+        public Part PartToChange { get => mPartToChange; set => mPartToChange = value; }
         public BindingList<Part> PassMandatoryPartList { get => mPassMandatoryPartList; set => mPassMandatoryPartList = value; }
         public BindingList<Part> PassNonMandatoryPartList { get => mPassNonMandatoryPartList; set => mPassNonMandatoryPartList = value; }
     }
