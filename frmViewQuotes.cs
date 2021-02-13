@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class frmViewQuotes : Form
+    public partial class FrmViewQuotes : Form
     {
 
         
@@ -19,7 +19,7 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public frmViewQuotes(ref Pass passed)
+        public FrmViewQuotes(ref Pass passed)
         {
             InitializeComponent();
             this.passed = passed;
@@ -43,7 +43,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
+            this.Close();
         }
 
         private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -142,14 +142,15 @@ namespace QuoteSwift
 
         private void ManageBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.viewAllBusinessesToolStripMenuItem.PerformClick();
+            this.ViewAllBusinessesToolStripMenuItem.PerformClick();
         }
 
         private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
+            int iGridSelection;
             if (dgvPreviousQuotes.SelectedCells.Count > 0)
             {
-                int iGridSelection = Convert.ToInt32(dgvPreviousQuotes.SelectedCells[0].Value);
+                iGridSelection = Convert.ToInt32(dgvPreviousQuotes.SelectedCells[0].Value);
 
                 Quote objQuoteSelection = this.passed.PassQuoteList.ElementAt(iGridSelection);
 
@@ -217,7 +218,7 @@ namespace QuoteSwift
 
         private void ManagePumpPartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            viewAllPartsToolStripMenuItem.PerformClick();
+           viewAllPartsToolStripMenuItem.PerformClick();
         }
 
         private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
@@ -231,6 +232,41 @@ namespace QuoteSwift
             catch (Exception)
             {
                 // Do Nothing - Since this only happens when Application.Exit() is called.
+            }
+        }
+
+        private void FrmViewQuotes_Load(object sender, EventArgs e)
+        {  
+            if (passed != null)
+            {
+                try
+                {
+                    byte[] RetreivedMandatoryPartList = MainProgramCode.RetreiveData("MandatoryParts.pbf");
+
+                    this.passed.PassMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+
+                    RetreivedMandatoryPartList = MainProgramCode.RetreiveData("NonMandatoryParts.pbf");
+
+                    this.passed.PassNonMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    
+                    byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.pbf");
+
+                    this.passed.PassPumpList = new BindingList<Pump>(MainProgramCode.DeserializePumpList(RetreivePumpList));
+                }
+                catch
+                {
+                    return;
+                }
+            }
+        }
+
+        int count = 0;
+        private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (count == 0)
+            {
+                count++;
+                MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
             }
         }
     }

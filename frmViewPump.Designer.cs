@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmViewPump
+    partial class FrmViewPump
     {
         /// <summary>
         /// Required designer variable.
@@ -40,7 +40,7 @@ namespace QuoteSwift
             this.clmPumpName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmPumpDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmNewPumpPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnUpdateSelectedPump = new System.Windows.Forms.Button();
+            this.btnViewSelectedPump = new System.Windows.Forms.Button();
             this.msViewAllPumpControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPumpList)).BeginInit();
             this.SuspendLayout();
@@ -111,6 +111,8 @@ namespace QuoteSwift
             this.dgvPumpList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvPumpList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvPumpList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvPumpList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPumpList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clmPumpName,
@@ -126,46 +128,48 @@ namespace QuoteSwift
             this.clmPumpName.HeaderText = "Pump Name";
             this.clmPumpName.Name = "clmPumpName";
             this.clmPumpName.ReadOnly = true;
+            this.clmPumpName.Width = 83;
             // 
             // clmPumpDescription
             // 
             this.clmPumpDescription.HeaderText = "Description";
             this.clmPumpDescription.Name = "clmPumpDescription";
             this.clmPumpDescription.ReadOnly = true;
-            this.clmPumpDescription.Width = 200;
+            this.clmPumpDescription.Width = 85;
             // 
             // clmNewPumpPrice
             // 
             this.clmNewPumpPrice.HeaderText = "New Pump Price";
             this.clmNewPumpPrice.Name = "clmNewPumpPrice";
             this.clmNewPumpPrice.ReadOnly = true;
+            this.clmNewPumpPrice.Width = 102;
             // 
-            // btnUpdateSelectedPump
+            // btnViewSelectedPump
             // 
-            this.btnUpdateSelectedPump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateSelectedPump.Location = new System.Drawing.Point(318, 28);
-            this.btnUpdateSelectedPump.Name = "btnUpdateSelectedPump";
-            this.btnUpdateSelectedPump.Size = new System.Drawing.Size(138, 23);
-            this.btnUpdateSelectedPump.TabIndex = 4;
-            this.btnUpdateSelectedPump.Text = "Update Selected Pump";
-            this.btnUpdateSelectedPump.UseVisualStyleBackColor = true;
-            this.btnUpdateSelectedPump.Click += new System.EventHandler(this.BtnUpdateSelectedPump_Click);
+            this.btnViewSelectedPump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnViewSelectedPump.Location = new System.Drawing.Point(318, 28);
+            this.btnViewSelectedPump.Name = "btnViewSelectedPump";
+            this.btnViewSelectedPump.Size = new System.Drawing.Size(138, 23);
+            this.btnViewSelectedPump.TabIndex = 4;
+            this.btnViewSelectedPump.Text = "View Selected Pump";
+            this.btnViewSelectedPump.UseVisualStyleBackColor = true;
+            this.btnViewSelectedPump.Click += new System.EventHandler(this.BtnUpdateSelectedPump_Click);
             // 
-            // frmViewPump
+            // FrmViewPump
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(465, 306);
-            this.Controls.Add(this.btnUpdateSelectedPump);
+            this.Controls.Add(this.btnViewSelectedPump);
             this.Controls.Add(this.dgvPumpList);
             this.Controls.Add(this.btnRemovePumpSelection);
             this.Controls.Add(this.btnAddPump);
             this.Controls.Add(this.msViewAllPumpControls);
             this.MainMenuStrip = this.msViewAllPumpControls;
-            this.Name = "frmViewPump";
+            this.Name = "FrmViewPump";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Viewing All Pumps";
-            this.Activated += new System.EventHandler(this.FrmViewPump_Activated);
+            this.Load += new System.EventHandler(this.FrmViewPump_Load);
             this.msViewAllPumpControls.ResumeLayout(false);
             this.msViewAllPumpControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPumpList)).EndInit();
@@ -183,7 +187,7 @@ namespace QuoteSwift
         private System.Windows.Forms.Button btnAddPump;
         private System.Windows.Forms.Button btnRemovePumpSelection;
         private System.Windows.Forms.DataGridView dgvPumpList;
-        private System.Windows.Forms.Button btnUpdateSelectedPump;
+        private System.Windows.Forms.Button btnViewSelectedPump;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPumpName;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPumpDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmNewPumpPrice;

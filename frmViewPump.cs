@@ -8,44 +8,45 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace QuoteSwift
+namespace QuoteSwift // Repair Quote Swift
 {
-
-    public partial class frmViewPump : Form
+    public partial class FrmViewPump : Form
     {
-        
-         
 
         Pass passed;
 
-        public frmViewPump(ref Pass passed)
+        public ref Pass Passed { get => ref passed; }
+
+        public FrmViewPump(ref Pass passed)
         {
             InitializeComponent();
             this.passed = passed;
         }
 
-        public ref Pass Passed { get => ref passed; }
-
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
+            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
         }
 
         private void BtnUpdateSelectedPump_Click(object sender, EventArgs e)
         {
+            int iGridSelection;
+
             if (dgvPumpList.SelectedCells.Count > 0)
             {
-                int iGridSelection = Convert.ToInt32(dgvPumpList.SelectedCells[0].Value);
-
-                Pump objPumpSelection = this.passed.PassPumpList.ElementAt(iGridSelection);
-
-                Pass ChangePumpPass = new Pass(passed.PassQuoteList, passed.PassBusinessList, passed.PassPumpList, passed.PassMandatoryPartList, passed.PassNonMandatoryPartList, ref objPumpSelection, true);
+                iGridSelection = dgvPumpList.CurrentCell.RowIndex;
+                
+                this.passed.PumpToChange = this.passed.PassPumpList.ElementAt(iGridSelection);
+                this.passed.ChangeSpecificObject = false;
 
                 this.Hide();
-                this.passed = MainProgramCode.CreateNewPump(ref ChangePumpPass);
+                this.passed = MainProgramCode.CreateNewPump(ref this.passed);
                 this.Show();
 
                 this.passed.ChangeSpecificObject = false;
+                this.passed.PumpToChange = null;
+
+                LoadInformation();
             }
             else
             {
@@ -60,16 +61,11 @@ namespace QuoteSwift
             this.Show();
         }
 
-        private void FrmViewPump_Activated(object sender, EventArgs e)
-        {
-            if(passed != null && passed.PassPumpList != null) dgvPumpList.DataSource = passed.PassPumpList;
-        }
-
         private void BtnRemovePumpSelection_Click(object sender, EventArgs e)
         {
             if (dgvPumpList.SelectedCells.Count > 0)
             {
-                int iGridSelection = Convert.ToInt32(dgvPumpList.SelectedCells[0].Value);
+                int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
                 Pump objPumpSelection = this.passed.PassPumpList.ElementAt(iGridSelection);
 
@@ -92,12 +88,31 @@ namespace QuoteSwift
             this.Hide();
         }
 
+        private void FrmViewPump_Load(object sender, EventArgs e)
+        {
+            LoadInformation();
+        }
+
         /** Form Specific Functions And Procedures: 
         *
         * Note: Not all Functions or Procedures below are being used more than once
         *       Some of them are only here to keep the above events easily understandable 
         *       and clutter free.                                                          
         */
+
+        private void LoadInformation()
+        {
+            //Manually Load Pump items:
+            dgvPumpList.Rows.Clear();
+
+            if (passed.PassPumpList != null)
+            {
+                for (int i = 0; i < passed.PassPumpList.Count; i++)
+                {
+                    dgvPumpList.Rows.Add(passed.PassPumpList[i].PumpName, passed.PassPumpList[i].PumpDescription, passed.PassPumpList[i].NewPumpPrice.ToString());
+                }
+            }
+        }
 
         /*********************************************************************************/
     }

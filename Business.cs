@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using ProtoBuf;
 
 namespace QuoteSwift
 {
-    [Serializable]
+    [ProtoContract(SkipConstructor = true)]
     public class Business
     {
         private string mBusinessName;
@@ -19,6 +15,20 @@ namespace QuoteSwift
         private BindingList<string> mBusinessCellphoneNumberList;
         private BindingList<string> mBusinessEmailAddressList;
         private BindingList<Customer> mBusinessCustomerList;
+
+        //Default Constructor
+        public Business()
+        {
+            BusinessName = "";
+            BusinessExtraInformation = "";
+            BusinessAddressList = null;
+            BusinessPOBoxAddressList = null;
+            BusinessLegalDetails = null;
+            BusinessTelephoneNumberList = null;
+            BusinessCellphoneNumberList = null;
+            BusinessEmailAddressList = null;
+            BusinessCustomerList = null;
+        }
 
         public Business(string mBusinessName, string mBusinessExtraInformation, BindingList<Address> mBusinessAddressList, BindingList<Address> mBusinessPOBoxAddressList, 
             Legal mBusinessLegalDetails, BindingList<string> mBusinessTelephoneNumberList, BindingList<string> mBusinessCellphoneNumberList, 

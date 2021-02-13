@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using ProtoBuf;
 
 namespace QuoteSwift
 {
-    [Serializable]
+    [ProtoContract(SkipConstructor = true)]
     public class Customer
     {
         private string mCustomerName;

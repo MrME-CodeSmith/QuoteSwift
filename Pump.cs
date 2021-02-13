@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using ProtoBuf;
 
 
 namespace QuoteSwift
 {
-    [Serializable]
+    [ProtoContract(SkipConstructor = true)]
     public class Pump
     {
-        string mPumpName;
-        string mPumpDescription;
-        BindingList<Pump_Part> mPartList;
-        float mNewPumpPrice;
+        [ProtoMember(1)]
+        private string mPumpName;
+        [ProtoMember(2)]
+        private string mPumpDescription;
+        [ProtoMember(3)]
+        private BindingList<Pump_Part> mPartList;
+        [ProtoMember(4)]
+        private float mNewPumpPrice;
 
         public Pump(string mPumpName, string mPumpDescription, float mNewPumpPrice,ref BindingList<Pump_Part> mPartList)
         {

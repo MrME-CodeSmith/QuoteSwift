@@ -12,6 +12,21 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,6 +37,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,10 +49,44 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="protobuf-net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>packages\protobuf-net.3.0.73\lib\net461\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>packages\protobuf-net.Core.3.0.73\lib\net461\protobuf-net.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Collections.Immutable.1.7.1\lib\net461\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,85 +100,109 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="Business.cs" />
-    <Compile Include="frmAddBusiness.cs">
+    <Compile Include="FrmAddBusiness.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAddBusiness.Designer.cs">
-      <DependentUpon>frmAddBusiness.cs</DependentUpon>
+    <Compile Include="FrmAddBusiness.Designer.cs">
+      <DependentUpon>FrmAddBusiness.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmAddCustomer.cs">
+    <Compile Include="FrmAddCustomer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAddCustomer.Designer.cs">
-      <DependentUpon>frmAddCustomer.cs</DependentUpon>
+    <Compile Include="FrmAddCustomer.Designer.cs">
+      <DependentUpon>FrmAddCustomer.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmAddPart.cs">
+    <Compile Include="FrmAddPart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAddPart.Designer.cs">
-      <DependentUpon>frmAddPart.cs</DependentUpon>
+    <Compile Include="FrmAddPart.Designer.cs">
+      <DependentUpon>FrmAddPart.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmAddPump.cs">
+    <Compile Include="FrmAddPump.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmAddPump.Designer.cs">
-      <DependentUpon>frmAddPump.cs</DependentUpon>
+    <Compile Include="FrmAddPump.Designer.cs">
+      <DependentUpon>FrmAddPump.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmCreateQuote.cs">
+    <Compile Include="FrmCreateQuote.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmCreateQuote.Designer.cs">
-      <DependentUpon>frmCreateQuote.cs</DependentUpon>
+    <Compile Include="FrmCreateQuote.Designer.cs">
+      <DependentUpon>FrmCreateQuote.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmManageAllEmails.cs">
+    <Compile Include="FrmEditBusinessAddress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmManageAllEmails.Designer.cs">
-      <DependentUpon>frmManageAllEmails.cs</DependentUpon>
+    <Compile Include="FrmEditBusinessAddress.Designer.cs">
+      <DependentUpon>FrmEditBusinessAddress.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmManagingPhoneNumbers.cs">
+    <Compile Include="FrmEditEmailAddress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmManagingPhoneNumbers.Designer.cs">
-      <DependentUpon>frmManagingPhoneNumbers.cs</DependentUpon>
+    <Compile Include="FrmEditEmailAddress.Designer.cs">
+      <DependentUpon>FrmEditEmailAddress.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmViewAllBusinesses.cs">
+    <Compile Include="FrmEditPhoneNumber.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmViewAllBusinesses.Designer.cs">
-      <DependentUpon>frmViewAllBusinesses.cs</DependentUpon>
+    <Compile Include="FrmEditPhoneNumber.Designer.cs">
+      <DependentUpon>FrmEditPhoneNumber.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmViewCustomers.cs">
+    <Compile Include="FrmManageAllEmails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmViewCustomers.Designer.cs">
-      <DependentUpon>frmViewCustomers.cs</DependentUpon>
+    <Compile Include="FrmManageAllEmails.Designer.cs">
+      <DependentUpon>FrmManageAllEmails.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmViewParts.cs">
+    <Compile Include="FrmManagingPhoneNumbers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmViewParts.Designer.cs">
-      <DependentUpon>frmViewParts.cs</DependentUpon>
+    <Compile Include="FrmManagingPhoneNumbers.Designer.cs">
+      <DependentUpon>FrmManagingPhoneNumbers.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmViewPOBoxAddresses.cs">
+    <Compile Include="FrmViewAllBusinesses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmViewPOBoxAddresses.Designer.cs">
-      <DependentUpon>frmViewPOBoxAddresses.cs</DependentUpon>
+    <Compile Include="FrmViewAllBusinesses.Designer.cs">
+      <DependentUpon>FrmViewAllBusinesses.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmViewPump.cs">
+    <Compile Include="FrmViewBusinessAddresses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmViewPump.Designer.cs">
-      <DependentUpon>frmViewPump.cs</DependentUpon>
+    <Compile Include="FrmViewBusinessAddresses.Designer.cs">
+      <DependentUpon>FrmViewBusinessAddresses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmViewCustomers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmViewCustomers.Designer.cs">
+      <DependentUpon>FrmViewCustomers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmViewParts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmViewParts.Designer.cs">
+      <DependentUpon>FrmViewParts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmViewPOBoxAddresses.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmViewPOBoxAddresses.Designer.cs">
+      <DependentUpon>FrmViewPOBoxAddresses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmViewPump.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmViewPump.Designer.cs">
+      <DependentUpon>FrmViewPump.cs</DependentUpon>
     </Compile>
     <Compile Include="MainProgramCode.cs" />
     <Compile Include="Customer.cs" />
-    <Compile Include="frmViewQuotes.cs">
+    <Compile Include="FrmViewQuotes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmViewQuotes.Designer.cs">
-      <DependentUpon>frmViewQuotes.cs</DependentUpon>
+    <Compile Include="FrmViewQuotes.Designer.cs">
+      <DependentUpon>FrmViewQuotes.cs</DependentUpon>
     </Compile>
     <Compile Include="Legal.cs" />
     <Compile Include="Part.cs" />
@@ -137,45 +212,57 @@
     <Compile Include="Pump.cs" />
     <Compile Include="PumpPart.cs" />
     <Compile Include="Quote.cs" />
-    <EmbeddedResource Include="frmAddBusiness.resx">
-      <DependentUpon>frmAddBusiness.cs</DependentUpon>
+    <EmbeddedResource Include="FrmAddBusiness.resx">
+      <DependentUpon>FrmAddBusiness.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmAddCustomer.resx">
-      <DependentUpon>frmAddCustomer.cs</DependentUpon>
+    <EmbeddedResource Include="FrmAddCustomer.resx">
+      <DependentUpon>FrmAddCustomer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmAddPart.resx">
-      <DependentUpon>frmAddPart.cs</DependentUpon>
+    <EmbeddedResource Include="FrmAddPart.resx">
+      <DependentUpon>FrmAddPart.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmAddPump.resx">
-      <DependentUpon>frmAddPump.cs</DependentUpon>
+    <EmbeddedResource Include="FrmAddPump.resx">
+      <DependentUpon>FrmAddPump.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmCreateQuote.resx">
-      <DependentUpon>frmCreateQuote.cs</DependentUpon>
+    <EmbeddedResource Include="FrmCreateQuote.resx">
+      <DependentUpon>FrmCreateQuote.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmManageAllEmails.resx">
-      <DependentUpon>frmManageAllEmails.cs</DependentUpon>
+    <EmbeddedResource Include="FrmEditBusinessAddress.resx">
+      <DependentUpon>FrmEditBusinessAddress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmManagingPhoneNumbers.resx">
-      <DependentUpon>frmManagingPhoneNumbers.cs</DependentUpon>
+    <EmbeddedResource Include="FrmEditEmailAddress.resx">
+      <DependentUpon>FrmEditEmailAddress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmViewAllBusinesses.resx">
-      <DependentUpon>frmViewAllBusinesses.cs</DependentUpon>
+    <EmbeddedResource Include="FrmEditPhoneNumber.resx">
+      <DependentUpon>FrmEditPhoneNumber.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmViewCustomers.resx">
-      <DependentUpon>frmViewCustomers.cs</DependentUpon>
+    <EmbeddedResource Include="FrmManageAllEmails.resx">
+      <DependentUpon>FrmManageAllEmails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmViewParts.resx">
-      <DependentUpon>frmViewParts.cs</DependentUpon>
+    <EmbeddedResource Include="FrmManagingPhoneNumbers.resx">
+      <DependentUpon>FrmManagingPhoneNumbers.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmViewPOBoxAddresses.resx">
-      <DependentUpon>frmViewPOBoxAddresses.cs</DependentUpon>
+    <EmbeddedResource Include="FrmViewAllBusinesses.resx">
+      <DependentUpon>FrmViewAllBusinesses.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmViewPump.resx">
-      <DependentUpon>frmViewPump.cs</DependentUpon>
+    <EmbeddedResource Include="FrmViewBusinessAddresses.resx">
+      <DependentUpon>FrmViewBusinessAddresses.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmViewQuotes.resx">
-      <DependentUpon>frmViewQuotes.cs</DependentUpon>
+    <EmbeddedResource Include="FrmViewCustomers.resx">
+      <DependentUpon>FrmViewCustomers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmViewParts.resx">
+      <DependentUpon>FrmViewParts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmViewPOBoxAddresses.resx">
+      <DependentUpon>FrmViewPOBoxAddresses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmViewPump.resx">
+      <DependentUpon>FrmViewPump.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmViewQuotes.resx">
+      <DependentUpon>FrmViewQuotes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -186,6 +273,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -198,6 +287,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,7 +25,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
+            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
@@ -37,27 +37,19 @@ namespace QuoteSwift
 
         private void BtnUpdateSelectedPart_Click(object sender, EventArgs e)
         {
-            if (dgvAllParts.SelectedCells.Count-1 > 0 )
+            Part objPartSelection = GetSelectedPart();
+
+            if (objPartSelection != null)
             {
-                int iGridSelection = Convert.ToInt32(dgvAllParts.SelectedCells[0].Value);
-
-                Part objPartSelection;
-                if (iGridSelection > passed.PassMandatoryPartList.Count - 1) // Selection is a mandatory part
-                {
-                    objPartSelection = this.passed.PassMandatoryPartList.ElementAt(iGridSelection);
-                }
-                else // Otherwise it is a non-mandatory part
-                {
-                    objPartSelection = this.passed.PassNonMandatoryPartList.ElementAt(iGridSelection - (passed.PassMandatoryPartList.Count - 1));
-                }
-
-                Pass ChangePartPass = new Pass(passed.PassQuoteList, passed.PassBusinessList, passed.PassPumpList, passed.PassMandatoryPartList, passed.PassNonMandatoryPartList, ref objPartSelection, true);
+                this.passed.ChangeSpecificObject = false;
+                this.passed.PartToChange = objPartSelection;
 
                 this.Hide();
-                this.passed = MainProgramCode.CreateNewPump(ref ChangePartPass);
+                this.passed = MainProgramCode.AddNewPart(ref this.passed);
                 this.Show();
 
                 this.passed.ChangeSpecificObject = false;
+                this.passed.PartToChange = null;
             }
             else
             {
@@ -77,39 +69,31 @@ namespace QuoteSwift
 
         private void BtnRemovePart_Click(object sender, EventArgs e)
         {
-            if (dgvAllParts.Rows.Count > 0 && passed != null && (passed.PassMandatoryPartList != null || passed.PassNonMandatoryPartList != null))
+            Part SelectedPart = GetSelectedPart();
+            if (SelectedPart != null)
             {
-                int iGridSelection = dgvAllParts.CurrentCell.RowIndex;
-
-                Part objPartSelection;
-                if (iGridSelection <= passed.PassMandatoryPartList.Count - 1) // Selection is a mandatory part
+                if (SelectedPart.MandatoryPart)
                 {
-                    objPartSelection = this.passed.PassMandatoryPartList.ElementAt(iGridSelection);
-
-                    if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPartSelection.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
+                    if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.PassMandatoryPartList.RemoveAt(iGridSelection);
-
-                        MainProgramCode.ShowInformation("Successfully deleted " + objPartSelection.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
+                        passed.PassMandatoryPartList.Remove(SelectedPart);
+                        MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
-                else // Otherwise it is a non-mandatory part
+                else
                 {
-                    objPartSelection = this.passed.PassNonMandatoryPartList.ElementAt(iGridSelection - (passed.PassMandatoryPartList.Count));
-
-                    if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPartSelection.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
+                    if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.PassNonMandatoryPartList.RemoveAt(iGridSelection - (passed.PassMandatoryPartList.Count));
-
-                        MainProgramCode.ShowInformation("Successfully deleted " + objPartSelection.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
+                        passed.PassNonMandatoryPartList.Remove(SelectedPart);
+                        MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
-
             }
             else
             {
                 MainProgramCode.ShowError("The current selection is invalid.\nPlease choose a valid Part from the list.", "ERROR - Invalid Selection");
             }
+
         }
 
         /** Form Specific Functions And Procedures: 
@@ -137,6 +121,48 @@ namespace QuoteSwift
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(passed.PassNonMandatoryPartList[k].PartName, passed.PassNonMandatoryPartList[k].PartDescription, passed.PassNonMandatoryPartList[k].OriginalItemPartNumber, passed.PassNonMandatoryPartList[k].NewPartNumber, false, passed.PassNonMandatoryPartList[k].PartPrice);
                 }
+        }
+        
+        Part GetSelectedPart()
+        {
+            Part SelectedPart;
+            string SearchName;
+            int iGridSelection = 0;
+            try
+            {
+                iGridSelection = dgvAllParts.CurrentCell.RowIndex;
+                SearchName = dgvAllParts.Rows[iGridSelection].Cells[2].Value.ToString();
+            }
+            catch (NullReferenceException)
+            {
+                return null;
+            }
+
+
+            if (passed.PassMandatoryPartList.Count > 0 || passed.PassNonMandatoryPartList.Count > 0 || passed != null || passed.PassMandatoryPartList != null || passed.PassNonMandatoryPartList != null)
+            {
+
+                if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
+                {
+                    //serach for part in mandatory
+
+                    SelectedPart = passed.PassMandatoryPartList.SingleOrDefault(p => p.OriginalItemPartNumber == SearchName);
+                    return SelectedPart;
+                    
+                }
+                else // Search in Non-Mandatory
+                {
+                    SelectedPart = passed.PassNonMandatoryPartList.SingleOrDefault(p => p.OriginalItemPartNumber == SearchName);
+                    return SelectedPart;
+                }
+            }
+
+            return null;
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to this current window to be lost.", "REQUEST - Cancelation")) this.Close();
         }
 
         /*********************************************************************************/

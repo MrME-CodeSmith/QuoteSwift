@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmViewAllBusinesses
+    partial class FrmViewAllBusinesses
     {
         /// <summary>
         /// Required designer variable.
@@ -30,22 +30,20 @@ namespace QuoteSwift
         private void InitializeComponent()
         {
             this.msViewAllBusinessesControls = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnAddBusiness = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.DgvBusinessList = new System.Windows.Forms.DataGridView();
             this.clmBusinessName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmChangeInformation = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.btnRemoveBusiness = new System.Windows.Forms.Button();
+            this.btnUpdateBusiness = new System.Windows.Forms.Button();
+            this.BtnRemoveSelected = new System.Windows.Forms.Button();
             this.msViewAllBusinessesControls.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvBusinessList)).BeginInit();
             this.SuspendLayout();
             // 
             // msViewAllBusinessesControls
             // 
             this.msViewAllBusinessesControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
             this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msViewAllBusinessesControls.Location = new System.Drawing.Point(0, 0);
@@ -53,12 +51,6 @@ namespace QuoteSwift
             this.msViewAllBusinessesControls.Size = new System.Drawing.Size(412, 24);
             this.msViewAllBusinessesControls.TabIndex = 0;
             this.msViewAllBusinessesControls.Text = "msViewAllBusinessesControls";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
             // 
             // helpToolStripMenuItem
             // 
@@ -81,17 +73,17 @@ namespace QuoteSwift
             this.btnAddBusiness.TabIndex = 1;
             this.btnAddBusiness.Text = "Add Business";
             this.btnAddBusiness.UseVisualStyleBackColor = true;
+            this.btnAddBusiness.Click += new System.EventHandler(this.BtnAddBusiness_Click);
             // 
-            // dataGridView1
+            // DgvBusinessList
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clmBusinessName,
-            this.clmChangeInformation});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 56);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(392, 200);
-            this.dataGridView1.TabIndex = 2;
+            this.DgvBusinessList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvBusinessList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clmBusinessName});
+            this.DgvBusinessList.Location = new System.Drawing.Point(12, 56);
+            this.DgvBusinessList.Name = "DgvBusinessList";
+            this.DgvBusinessList.Size = new System.Drawing.Size(392, 200);
+            this.DgvBusinessList.TabIndex = 2;
             // 
             // clmBusinessName
             // 
@@ -100,39 +92,45 @@ namespace QuoteSwift
             this.clmBusinessName.ReadOnly = true;
             this.clmBusinessName.Width = 200;
             // 
-            // clmChangeInformation
+            // btnUpdateBusiness
             // 
-            this.clmChangeInformation.HeaderText = "";
-            this.clmChangeInformation.Name = "clmChangeInformation";
-            this.clmChangeInformation.ReadOnly = true;
-            this.clmChangeInformation.Width = 150;
+            this.btnUpdateBusiness.Location = new System.Drawing.Point(248, 27);
+            this.btnUpdateBusiness.Name = "btnUpdateBusiness";
+            this.btnUpdateBusiness.Size = new System.Drawing.Size(156, 23);
+            this.btnUpdateBusiness.TabIndex = 3;
+            this.btnUpdateBusiness.Text = "View Business Information";
+            this.btnUpdateBusiness.UseVisualStyleBackColor = true;
+            this.btnUpdateBusiness.Click += new System.EventHandler(this.BtnUpdateBusiness_Click);
             // 
-            // btnRemoveBusiness
+            // BtnRemoveSelected
             // 
-            this.btnRemoveBusiness.Location = new System.Drawing.Point(303, 27);
-            this.btnRemoveBusiness.Name = "btnRemoveBusiness";
-            this.btnRemoveBusiness.Size = new System.Drawing.Size(101, 23);
-            this.btnRemoveBusiness.TabIndex = 3;
-            this.btnRemoveBusiness.Text = "Remove Business";
-            this.btnRemoveBusiness.UseVisualStyleBackColor = true;
-            this.btnRemoveBusiness.Click += new System.EventHandler(this.BtnRemoveBusiness_Click);
+            this.BtnRemoveSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnRemoveSelected.Location = new System.Drawing.Point(248, 262);
+            this.BtnRemoveSelected.Name = "BtnRemoveSelected";
+            this.BtnRemoveSelected.Size = new System.Drawing.Size(156, 23);
+            this.BtnRemoveSelected.TabIndex = 4;
+            this.BtnRemoveSelected.Text = "Remove Selected Business";
+            this.BtnRemoveSelected.UseVisualStyleBackColor = true;
+            this.BtnRemoveSelected.Click += new System.EventHandler(this.BtnRemoveSelected_Click);
             // 
-            // frmViewAllBusinesses
+            // FrmViewAllBusinesses
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 264);
-            this.Controls.Add(this.btnRemoveBusiness);
-            this.Controls.Add(this.dataGridView1);
+            this.ClientSize = new System.Drawing.Size(412, 290);
+            this.Controls.Add(this.BtnRemoveSelected);
+            this.Controls.Add(this.btnUpdateBusiness);
+            this.Controls.Add(this.DgvBusinessList);
             this.Controls.Add(this.btnAddBusiness);
             this.Controls.Add(this.msViewAllBusinessesControls);
             this.MainMenuStrip = this.msViewAllBusinessesControls;
-            this.Name = "frmViewAllBusinesses";
+            this.Name = "FrmViewAllBusinesses";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Viewing All Businesses";
+            this.Load += new System.EventHandler(this.FrmViewAllBusinesses_Load);
             this.msViewAllBusinessesControls.ResumeLayout(false);
             this.msViewAllBusinessesControls.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvBusinessList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -141,13 +139,12 @@ namespace QuoteSwift
         #endregion
 
         private System.Windows.Forms.MenuStrip msViewAllBusinessesControls;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.Button btnAddBusiness;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView DgvBusinessList;
+        private System.Windows.Forms.Button btnUpdateBusiness;
+        private System.Windows.Forms.Button BtnRemoveSelected;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmBusinessName;
-        private System.Windows.Forms.DataGridViewButtonColumn clmChangeInformation;
-        private System.Windows.Forms.Button btnRemoveBusiness;
     }
 }

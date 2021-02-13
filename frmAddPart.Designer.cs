@@ -32,7 +32,7 @@ namespace QuoteSwift
             this.msAddPartControls = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadPartBatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resetInputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updatePartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAddPartDescription = new System.Windows.Forms.Label();
@@ -73,7 +73,7 @@ namespace QuoteSwift
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadPartBatchToolStripMenuItem,
-            this.resetInputToolStripMenuItem});
+            this.updatePartToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -81,16 +81,16 @@ namespace QuoteSwift
             // loadPartBatchToolStripMenuItem
             // 
             this.loadPartBatchToolStripMenuItem.Name = "loadPartBatchToolStripMenuItem";
-            this.loadPartBatchToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.loadPartBatchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadPartBatchToolStripMenuItem.Text = "Import Batch";
             this.loadPartBatchToolStripMenuItem.Click += new System.EventHandler(this.LoadPartBatchToolStripMenuItem_Click);
             // 
-            // resetInputToolStripMenuItem
+            // updatePartToolStripMenuItem
             // 
-            this.resetInputToolStripMenuItem.Name = "resetInputToolStripMenuItem";
-            this.resetInputToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
-            this.resetInputToolStripMenuItem.Text = "Reset Input";
-            this.resetInputToolStripMenuItem.Click += new System.EventHandler(this.ResetInputToolStripMenuItem_Click);
+            this.updatePartToolStripMenuItem.Name = "updatePartToolStripMenuItem";
+            this.updatePartToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.updatePartToolStripMenuItem.Text = "Update Part";
+            this.updatePartToolStripMenuItem.Click += new System.EventHandler(this.UpdatePartToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -218,9 +218,9 @@ namespace QuoteSwift
             // 
             // btnAddPart
             // 
-            this.btnAddPart.Location = new System.Drawing.Point(278, 292);
+            this.btnAddPart.Location = new System.Drawing.Point(266, 292);
             this.btnAddPart.Name = "btnAddPart";
-            this.btnAddPart.Size = new System.Drawing.Size(75, 23);
+            this.btnAddPart.Size = new System.Drawing.Size(87, 23);
             this.btnAddPart.TabIndex = 14;
             this.btnAddPart.Text = "Add Part";
             this.btnAddPart.UseVisualStyleBackColor = true;
@@ -234,6 +234,7 @@ namespace QuoteSwift
             this.btnCancel.TabIndex = 15;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // lblnewPartQuantity
             // 
@@ -289,6 +290,7 @@ namespace QuoteSwift
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "frmAddPart";
             this.Activated += new System.EventHandler(this.FrmAddPart_Activated);
+            this.Load += new System.EventHandler(this.FrmAddPart_Load);
             this.msAddPartControls.ResumeLayout(false);
             this.msAddPartControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NudQuantity)).EndInit();
@@ -322,6 +324,6 @@ namespace QuoteSwift
         private System.Windows.Forms.NumericUpDown NudQuantity;
         private System.Windows.Forms.ToolStripMenuItem loadPartBatchToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog OfdOpenCSVFile;
-        private System.Windows.Forms.ToolStripMenuItem resetInputToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updatePartToolStripMenuItem;
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmViewQuotes
+    partial class FrmViewQuotes
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@ namespace QuoteSwift
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageBusinessesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewBusinessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewAllBusinessesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ViewAllBusinessesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageCustomersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewCustomerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewAllCustomersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +85,7 @@ namespace QuoteSwift
             // 
             this.manageBusinessesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewBusinessToolStripMenuItem,
-            this.viewAllBusinessesToolStripMenuItem});
+            this.ViewAllBusinessesToolStripMenuItem});
             this.manageBusinessesToolStripMenuItem.Name = "manageBusinessesToolStripMenuItem";
             this.manageBusinessesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.manageBusinessesToolStripMenuItem.Text = "Manage Businesses";
@@ -98,12 +98,12 @@ namespace QuoteSwift
             this.addNewBusinessToolStripMenuItem.Text = "Add New Business";
             this.addNewBusinessToolStripMenuItem.Click += new System.EventHandler(this.AddNewBusinessToolStripMenuItem_Click);
             // 
-            // viewAllBusinessesToolStripMenuItem
+            // ViewAllBusinessesToolStripMenuItem
             // 
-            this.viewAllBusinessesToolStripMenuItem.Name = "viewAllBusinessesToolStripMenuItem";
-            this.viewAllBusinessesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.viewAllBusinessesToolStripMenuItem.Text = "View All Businesses";
-            this.viewAllBusinessesToolStripMenuItem.Click += new System.EventHandler(this.ViewAllBusinessesToolStripMenuItem_Click);
+            this.ViewAllBusinessesToolStripMenuItem.Name = "ViewAllBusinessesToolStripMenuItem";
+            this.ViewAllBusinessesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.ViewAllBusinessesToolStripMenuItem.Text = "View All Businesses";
+            this.ViewAllBusinessesToolStripMenuItem.Click += new System.EventHandler(this.ViewAllBusinessesToolStripMenuItem_Click);
             // 
             // manageCustomersToolStripMenuItem
             // 
@@ -269,7 +269,7 @@ namespace QuoteSwift
             this.btnCreateNewQuoteOnSelection.UseVisualStyleBackColor = true;
             this.btnCreateNewQuoteOnSelection.Click += new System.EventHandler(this.BtnCreateNewQuoteOnSelection_Click);
             // 
-            // frmViewQuotes
+            // FrmViewQuotes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -280,9 +280,11 @@ namespace QuoteSwift
             this.Controls.Add(this.btnCreateNewQuote);
             this.Controls.Add(this.msQuoteControls);
             this.MainMenuStrip = this.msQuoteControls;
-            this.Name = "frmViewQuotes";
+            this.Name = "FrmViewQuotes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Viewing All Previous Quotes";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmViewQuotes_FormClosing);
+            this.Load += new System.EventHandler(this.FrmViewQuotes_Load);
             this.msQuoteControls.ResumeLayout(false);
             this.msQuoteControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPreviousQuotes)).EndInit();
@@ -314,7 +316,7 @@ namespace QuoteSwift
         private System.Windows.Forms.ToolStripMenuItem viewAllCustomersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manageBusinessesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addNewBusinessToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewAllBusinessesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ViewAllBusinessesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem managePumpPartsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addNewPartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewAllPartsToolStripMenuItem;

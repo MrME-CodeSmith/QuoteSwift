@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProtoBuf;
 using System.ComponentModel;
 
 
 namespace QuoteSwift
 {
-    [Serializable]
+    [ProtoContract(SkipConstructor = true)]
     public class Pass
     {
         private BindingList<Quote> mPassQuoteList;
@@ -21,7 +17,11 @@ namespace QuoteSwift
         private Quote mQuoteTOChange = null; //In the event that a Quote's information needs to be changed
         private Pump mPumpToChange = null; //In the event that a Pump's information needs to be changed
         private Part mPartToChange = null; //In the event that a Part's information needs to be changed
+        private Address mAddressToChange = null;//In the event that an Address needs to be changed
+        private string mEmailToChange = ""; //In the event that an Email needs to be changed.
+        private string mPhoneNumberToChange = "";//In the event that a Phone number needs to be changed.
         private bool mChangeSpecificObject = false; //To determine whether object should be viewed or changed
+        
 
         //Pass All Constructor :
 
@@ -110,5 +110,8 @@ namespace QuoteSwift
         public Part PartToChange { get => mPartToChange; set => mPartToChange = value; }
         public BindingList<Part> PassMandatoryPartList { get => mPassMandatoryPartList; set => mPassMandatoryPartList = value; }
         public BindingList<Part> PassNonMandatoryPartList { get => mPassNonMandatoryPartList; set => mPassNonMandatoryPartList = value; }
+        public Address AddressToChange { get => mAddressToChange; set => mAddressToChange = value; }
+        public string EmailToChange { get => mEmailToChange; set => mEmailToChange = value; }
+        public string PhoneNumberToChange { get => mPhoneNumberToChange; set => mPhoneNumberToChange = value; }
     }
 }

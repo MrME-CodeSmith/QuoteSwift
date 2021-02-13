@@ -42,7 +42,8 @@ namespace QuoteSwift
             this.clmPartPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAddPart = new System.Windows.Forms.Button();
             this.btnRemovePart = new System.Windows.Forms.Button();
-            this.btnUpdateSelectedPart = new System.Windows.Forms.Button();
+            this.btnViewSelectedPart = new System.Windows.Forms.Button();
+            this.BtnCancel = new System.Windows.Forms.Button();
             this.msViewPartsControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAllParts)).BeginInit();
             this.SuspendLayout();
@@ -156,23 +157,35 @@ namespace QuoteSwift
             this.btnRemovePart.UseVisualStyleBackColor = true;
             this.btnRemovePart.Click += new System.EventHandler(this.BtnRemovePart_Click);
             // 
-            // btnUpdateSelectedPart
+            // btnViewSelectedPart
             // 
-            this.btnUpdateSelectedPart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateSelectedPart.Location = new System.Drawing.Point(635, 30);
-            this.btnUpdateSelectedPart.Name = "btnUpdateSelectedPart";
-            this.btnUpdateSelectedPart.Size = new System.Drawing.Size(120, 23);
-            this.btnUpdateSelectedPart.TabIndex = 4;
-            this.btnUpdateSelectedPart.Text = "Update Selected Part";
-            this.btnUpdateSelectedPart.UseVisualStyleBackColor = true;
-            this.btnUpdateSelectedPart.Click += new System.EventHandler(this.BtnUpdateSelectedPart_Click);
+            this.btnViewSelectedPart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnViewSelectedPart.Location = new System.Drawing.Point(635, 30);
+            this.btnViewSelectedPart.Name = "btnViewSelectedPart";
+            this.btnViewSelectedPart.Size = new System.Drawing.Size(120, 23);
+            this.btnViewSelectedPart.TabIndex = 4;
+            this.btnViewSelectedPart.Text = "View Selected Part";
+            this.btnViewSelectedPart.UseVisualStyleBackColor = true;
+            this.btnViewSelectedPart.Click += new System.EventHandler(this.BtnUpdateSelectedPart_Click);
+            // 
+            // BtnCancel
+            // 
+            this.BtnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnCancel.Location = new System.Drawing.Point(12, 287);
+            this.BtnCancel.Name = "BtnCancel";
+            this.BtnCancel.Size = new System.Drawing.Size(75, 23);
+            this.BtnCancel.TabIndex = 5;
+            this.BtnCancel.Text = "Cancel";
+            this.BtnCancel.UseVisualStyleBackColor = true;
+            this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // FrmViewParts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(768, 318);
-            this.Controls.Add(this.btnUpdateSelectedPart);
+            this.Controls.Add(this.BtnCancel);
+            this.Controls.Add(this.btnViewSelectedPart);
             this.Controls.Add(this.btnRemovePart);
             this.Controls.Add(this.btnAddPart);
             this.Controls.Add(this.dgvAllParts);
@@ -199,12 +212,13 @@ namespace QuoteSwift
         private System.Windows.Forms.DataGridView dgvAllParts;
         private System.Windows.Forms.Button btnAddPart;
         private System.Windows.Forms.Button btnRemovePart;
-        private System.Windows.Forms.Button btnUpdateSelectedPart;
+        private System.Windows.Forms.Button btnViewSelectedPart;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPartName;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmOriginalPartNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmNewPartNumber;
         private System.Windows.Forms.DataGridViewCheckBoxColumn clmMandatoryPart;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPartPrice;
+        private System.Windows.Forms.Button BtnCancel;
     }
 }

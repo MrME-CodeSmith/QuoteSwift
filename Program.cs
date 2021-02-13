@@ -17,7 +17,7 @@ namespace QuoteSwift
             Pass passed = new Pass(null, null, null, null, null);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmViewQuotes(ref passed));
+            Application.Run(new FrmViewQuotes(ref passed));
         }
     }
 }

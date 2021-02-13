@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class frmAddCustomer : Form
+    public partial class FrmAddCustomer : Form
     {
 
          
@@ -19,7 +19,7 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public frmAddCustomer(ref Pass passed)
+        public FrmAddCustomer(ref Pass passed)
         {
             InitializeComponent();
             this.Passed = passed;
@@ -27,7 +27,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
+            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
         }
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)

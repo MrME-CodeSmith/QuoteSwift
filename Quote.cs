@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ProtoBuf;
 using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    [Serializable]
+    [ProtoContract(SkipConstructor = true)]
     public class Quote
     {
         private string mQuoteNumber;

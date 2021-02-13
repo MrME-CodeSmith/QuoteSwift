@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class frmAddCustomer
+    partial class FrmAddCustomer
     {
         /// <summary>
         /// Required designer variable.
