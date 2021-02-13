@@ -656,6 +656,7 @@ namespace QuoteSwift
             this.Name = "FrmAddBusiness";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Business";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAddBusiness_FormClosing);
             this.Load += new System.EventHandler(this.FrmAddBusiness_Load);
             this.msBusinessControls.ResumeLayout(false);
             this.msBusinessControls.PerformLayout();

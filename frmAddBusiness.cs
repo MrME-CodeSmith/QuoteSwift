@@ -536,6 +536,15 @@ namespace QuoteSwift
             return false;
         }
 
+        private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (passed != null)
+            {
+                if (passed.BusinessToChange != null) passed.BusinessToChange = null;
+                if (passed.ChangeSpecificObject) passed.ChangeSpecificObject = false;
+            }
+        }
+
         /**********************************************************************************/
     }
 }

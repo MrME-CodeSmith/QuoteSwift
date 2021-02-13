@@ -57,19 +57,18 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             Address address = GetAddressSelection();
+
+            if (address == null)
+            {
+                MainProgramCode.ShowError("Please select a valid Business P.O.Box Address, the current selection is invalid", "ERROR - Invalid P.O.Box Address Selection");
+                return;
+            }
+
             this.passed.AddressToChange = address;
+
             this.passed = MainProgramCode.EditBusinessAddress(ref this.passed);
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
-            {
-                for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
-                {
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i] == address)
-                    {
-                        passed.BusinessToChange.BusinessPOBoxAddressList[i] = this.passed.AddressToChange;
-                    }
-                }
-            }
+            if (!ReplacePOBoxAddress(address, this.passed.AddressToChange)) MainProgramCode.ShowError("An error occured during the updating procedure of the P.O.Box Address.\nUpdated P.O.Box address will not be stored.","ERROR - P.O.Box Address Not Updated");
 
             this.passed.AddressToChange = null;
             LoadInformation();
@@ -167,6 +166,18 @@ namespace QuoteSwift
             }
         }
 
+        private bool ReplacePOBoxAddress(Address Original, Address New)
+        {
+            if (New != null && Original != null && this.passed.BusinessToChange.BusinessPOBoxAddressList != null)
+                for (int i = 0; i < this.passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
+                    if (this.passed.BusinessToChange.BusinessPOBoxAddressList[i] == Original)
+                    {
+                        this.passed.BusinessToChange.BusinessPOBoxAddressList[i] = New;
+                        return true;
+                    }
+
+            return false;
+        }
 
         /**********************************************************************************/
     }

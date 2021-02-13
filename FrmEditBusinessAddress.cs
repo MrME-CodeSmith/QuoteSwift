@@ -40,24 +40,28 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnAddAddress_Click(object sender, EventArgs e)
+        private void BtnUpdateAddress_Click(object sender, EventArgs e)
         {
             if(ValidInput())
             {
-                passed.AddressToChange.AddressDescription = txtBusinessAddresssDescription.Text;
-                passed.AddressToChange.AddressStreetNumber = MainProgramCode.ParseInt(mtxtStreetnumber.Text);
-                passed.AddressToChange.AddressStreetName = txtStreetName.Text;
-                passed.AddressToChange.AddressSuburb = txtSuburb.Text;
-                passed.AddressToChange.AddressCity = txtCity.Text;
-                passed.AddressToChange.AddressAreaCode = MainProgramCode.ParseInt(mtxtAreaCode.Text);
-
-                if (passed.BusinessToChange.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == passed.AddressToChange.AddressDescription) == null)
+                Address UpdatedAddress = new Address
                 {
+                    AddressDescription = txtBusinessAddresssDescription.Text,
+                    AddressStreetNumber = MainProgramCode.ParseInt(mtxtStreetnumber.Text),
+                    AddressStreetName = txtStreetName.Text,
+                    AddressSuburb = txtSuburb.Text,
+                    AddressCity = txtCity.Text,
+                    AddressAreaCode = MainProgramCode.ParseInt(mtxtAreaCode.Text)
+                };
+
+
+                if (!AddressExists(UpdatedAddress))
+                {
+                    this.passed.AddressToChange = UpdatedAddress;
                     MainProgramCode.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
                     this.Close();
                 }
                 else MainProgramCode.ShowError("Address not updated since this address is already in the list of addresses.\nNOTE: Address Description should be unique.", "ERROR - Address Already Added");
-
             }
         }
 
@@ -66,7 +70,7 @@ namespace QuoteSwift
             MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
         }
 
-        bool ValidInput()
+        private bool ValidInput()
         {
             if (txtBusinessAddresssDescription.Text.Length < 2)
             {
@@ -105,6 +109,17 @@ namespace QuoteSwift
             }
 
             return true;
+        }
+
+        private bool AddressExists(Address a)
+        {
+            if(passed.BusinessToChange.BusinessPOBoxAddressList != null && a != null)
+                for(int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
+                {
+                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription == a.AddressDescription && passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription != passed.AddressToChange.AddressDescription) return false;
+                }
+            
+            return false;
         }
 
     }

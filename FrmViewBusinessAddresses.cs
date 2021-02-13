@@ -41,19 +41,18 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             Address address = GetAddressSelection();
+
+            if (address == null)
+            {
+                MainProgramCode.ShowError("Please select a valid Business Address, the current selection is invalid", "ERROR - Invalid Address Selection");
+                return;
+            }
+
             this.passed.AddressToChange = address;
+
             this.passed = MainProgramCode.EditBusinessAddress(ref this.passed);
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null)
-            {
-                for(int i = 0; i < passed.BusinessToChange.BusinessAddressList.Count; i++)
-                {
-                    if(passed.BusinessToChange.BusinessAddressList[i] == address)
-                    {
-                        passed.BusinessToChange.BusinessAddressList[i] = this.passed.AddressToChange;
-                    }
-                }
-            }
+            if (!ReplacePOBoxAddress(address, this.passed.AddressToChange)) MainProgramCode.ShowError("An error occured during the updating procedure of the Address.\nUpdated address will not be stored.", "ERROR - Address Not Updated");
 
             this.passed.AddressToChange = null;
             LoadInformation();
@@ -124,6 +123,20 @@ namespace QuoteSwift
                                                          passed.BusinessToChange.BusinessAddressList[i].AddressStreetName, passed.BusinessToChange.BusinessAddressList[i].AddressSuburb,
                                                          passed.BusinessToChange.BusinessAddressList[i].AddressCity, passed.BusinessToChange.BusinessAddressList[i].AddressAreaCode);
         }
+
+        private bool ReplacePOBoxAddress(Address Original, Address New)
+        {
+            if (New != null && Original != null && this.passed.BusinessToChange.BusinessAddressList != null)
+                for (int i = 0; i < this.passed.BusinessToChange.BusinessAddressList.Count; i++)
+                    if (this.passed.BusinessToChange.BusinessAddressList[i] == Original)
+                    {
+                        this.passed.BusinessToChange.BusinessAddressList[i] = New;
+                        return true;
+                    }
+
+            return false;
+        }
+
 
         /**********************************************************************************/
     }

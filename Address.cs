@@ -1,4 +1,5 @@
 ﻿using ProtoBuf;
+using System;
 
 namespace QuoteSwift
 {
@@ -21,6 +22,17 @@ namespace QuoteSwift
         [ProtoMember(6)]
         private int mAddressAreaCode;
 
+        //Default Constructor
+        public Address()
+        {
+            AddressDescription = "";
+            AddressStreetNumber = 0;
+            AddressStreetName = "";
+            AddressSuburb = "";
+            AddressCity = "";
+            AddressAreaCode = 0;
+        }
+
         public Address(string mAddressDescription, int mAddressStreetNumber, string mAddressStreetName, string mAddressSuburb, string mAddressCity, int mAddressAreaCode)
         {
             AddressDescription = mAddressDescription;
@@ -37,5 +49,10 @@ namespace QuoteSwift
         public string AddressSuburb { get => mAddressSuburb; set => mAddressSuburb = value; }
         public string AddressCity { get => mAddressCity; set => mAddressCity = value; }
         public int AddressAreaCode { get => mAddressAreaCode; set => mAddressAreaCode = value; }
+
+        internal object SingleOrDefault(Func<object, bool> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

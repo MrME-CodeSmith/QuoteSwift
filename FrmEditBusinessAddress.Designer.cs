@@ -32,7 +32,7 @@ namespace QuoteSwift
             this.lblBusinessAddressDescription = new System.Windows.Forms.Label();
             this.txtBusinessAddresssDescription = new System.Windows.Forms.TextBox();
             this.lblAreaCode = new System.Windows.Forms.Label();
-            this.btnAddAddress = new System.Windows.Forms.Button();
+            this.BtnUpdateAddress = new System.Windows.Forms.Button();
             this.mtxtAreaCode = new System.Windows.Forms.MaskedTextBox();
             this.txtCity = new System.Windows.Forms.TextBox();
             this.lblCity = new System.Windows.Forms.Label();
@@ -74,15 +74,15 @@ namespace QuoteSwift
             this.lblAreaCode.TabIndex = 23;
             this.lblAreaCode.Text = "Area Code:";
             // 
-            // btnAddAddress
+            // BtnUpdateAddress
             // 
-            this.btnAddAddress.Location = new System.Drawing.Point(250, 210);
-            this.btnAddAddress.Name = "btnAddAddress";
-            this.btnAddAddress.Size = new System.Drawing.Size(93, 23);
-            this.btnAddAddress.TabIndex = 22;
-            this.btnAddAddress.Text = "Update Address";
-            this.btnAddAddress.UseVisualStyleBackColor = true;
-            this.btnAddAddress.Click += new System.EventHandler(this.BtnAddAddress_Click);
+            this.BtnUpdateAddress.Location = new System.Drawing.Point(250, 210);
+            this.BtnUpdateAddress.Name = "BtnUpdateAddress";
+            this.BtnUpdateAddress.Size = new System.Drawing.Size(93, 23);
+            this.BtnUpdateAddress.TabIndex = 22;
+            this.BtnUpdateAddress.Text = "Update Address";
+            this.BtnUpdateAddress.UseVisualStyleBackColor = true;
+            this.BtnUpdateAddress.Click += new System.EventHandler(this.BtnUpdateAddress_Click);
             // 
             // mtxtAreaCode
             // 
@@ -203,7 +203,7 @@ namespace QuoteSwift
             this.Controls.Add(this.lblBusinessAddressDescription);
             this.Controls.Add(this.txtBusinessAddresssDescription);
             this.Controls.Add(this.lblAreaCode);
-            this.Controls.Add(this.btnAddAddress);
+            this.Controls.Add(this.BtnUpdateAddress);
             this.Controls.Add(this.mtxtAreaCode);
             this.Controls.Add(this.txtCity);
             this.Controls.Add(this.lblCity);
@@ -231,7 +231,7 @@ namespace QuoteSwift
         private System.Windows.Forms.Label lblBusinessAddressDescription;
         private System.Windows.Forms.TextBox txtBusinessAddresssDescription;
         private System.Windows.Forms.Label lblAreaCode;
-        private System.Windows.Forms.Button btnAddAddress;
+        private System.Windows.Forms.Button BtnUpdateAddress;
         private System.Windows.Forms.MaskedTextBox mtxtAreaCode;
         private System.Windows.Forms.TextBox txtCity;
         private System.Windows.Forms.Label lblCity;

@@ -31,7 +31,7 @@ namespace QuoteSwift
 
         private void BtnUpdateBusiness_Click(object sender, EventArgs e)
         {
-
+            //TODO: Implement Functionality
         }
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
@@ -39,6 +39,8 @@ namespace QuoteSwift
             this.Hide();
             MainProgramCode.AddBusiness(ref passed);
             this.Show();
+
+            LoadInformation();
         }
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
