@@ -33,7 +33,7 @@ namespace QuoteSwift
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
-            if(ValidBusiness())
+            if(ValidBusiness() && !passed.ChangeSpecificObject)
             {
                 //Add Final Details to Business object
                 Business.BusinessName = txtBusinessName.Text;
@@ -71,6 +71,15 @@ namespace QuoteSwift
                 MainProgramCode.ShowInformation(Business.BusinessName + " has been added.","INFORMATION - Business Sucessfully Added");
 
                 ResetScreenInput();
+            } 
+            else if(ValidBusiness() && passed.ChangeSpecificObject)
+            {
+                passed.BusinessToChange.BusinessName = txtBusinessName.Text;
+                passed.BusinessToChange.BusinessExtraInformation = rtxtExtraInformation.Text;
+                passed.BusinessToChange.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
+
+                MainProgramCode.ShowInformation(Business.BusinessName + " has been successfully updated.", "INFORMATION - Business Sucessfully Updated");
+                ConvertToViewOnly();
             }
         }
 
@@ -262,8 +271,10 @@ namespace QuoteSwift
             }
             else if(passed.BusinessToChange != null && !passed.ChangeSpecificObject) // View Existing Business Info
             {
-                DisableMainComponents();
                 Business = passed.BusinessToChange;
+                ConvertToViewOnly();
+                
+                LoadInformation();
             }
             else if(passed.BusinessToChange == null && !passed.ChangeSpecificObject) // Add New Business Info
             {
@@ -543,6 +554,56 @@ namespace QuoteSwift
                 if (passed.BusinessToChange != null) passed.BusinessToChange = null;
                 if (passed.ChangeSpecificObject) passed.ChangeSpecificObject = false;
             }
+        }
+
+        private void LoadInformation()
+        {
+            if (Business != null)
+            {
+                txtBusinessName.Text = Business.BusinessName;
+                rtxtExtraInformation.Text = Business.BusinessExtraInformation;
+                mtxtVATNumber.Text = Business.BusinessLegalDetails.VatNumber;
+                mtxtRegistrationNumber.Text = Business.BusinessLegalDetails.RegistrationNumber;
+            }
+        }
+
+        private void ConvertToViewOnly()
+        {
+            MainProgramCode.ReadOnlyComponents(gbxBusinessAddress.Controls);
+            MainProgramCode.ReadOnlyComponents(gbxBusinessInformation.Controls);
+            MainProgramCode.ReadOnlyComponents(gbxEmailRelated.Controls);
+            MainProgramCode.ReadOnlyComponents(gbxLegalInformation.Controls);
+            MainProgramCode.ReadOnlyComponents(gbxPhoneRelated.Controls);
+            MainProgramCode.ReadOnlyComponents(gbxPOBoxAddress.Controls);
+
+            btnViewAddresses.Enabled = true;
+            btnViewAll.Enabled = true;
+            btnViewAllPOBoxAddresses.Enabled = true;
+            btnViewEmailAddresses.Enabled = true;
+
+            btnAddBusiness.Visible = false;
+            this.Text.Replace("Add Business", "Viewing " + passed.BusinessToChange.BusinessName);
+        }
+
+        private void ConvertToEdit()
+        {
+            MainProgramCode.ReadWriteComponents(gbxBusinessAddress.Controls);
+            MainProgramCode.ReadWriteComponents(gbxBusinessInformation.Controls);
+            MainProgramCode.ReadWriteComponents(gbxEmailRelated.Controls);
+            MainProgramCode.ReadWriteComponents(gbxLegalInformation.Controls);
+            MainProgramCode.ReadWriteComponents(gbxPhoneRelated.Controls);
+            MainProgramCode.ReadWriteComponents(gbxPOBoxAddress.Controls);
+
+            btnAddBusiness.Visible = true;
+            btnAddBusiness.Text = "Update Business";
+            this.Text.Replace("Viewing " + passed.BusinessToChange.BusinessName, "Updating " + passed.BusinessToChange.BusinessName);
+        }
+
+        private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConvertToEdit();
+            this.passed.ChangeSpecificObject = true;
+            updateBusinessInformationToolStripMenuItem.Enabled = false;
         }
 
         /**********************************************************************************/

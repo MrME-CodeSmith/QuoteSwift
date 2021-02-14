@@ -32,6 +32,27 @@ namespace QuoteSwift
         private void BtnUpdateBusiness_Click(object sender, EventArgs e)
         {
             //TODO: Implement Functionality
+
+            Business Business = GetBusinessSelection();
+
+            if (Business == null)
+            {
+                MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                return;
+            }
+
+            this.passed.BusinessToChange = Business;
+            this.passed.ChangeSpecificObject = false;
+
+            this.passed = MainProgramCode.AddBusiness(ref this.passed);
+
+            if (!ReplaceBusiness(Business, this.passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occured during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
+
+            this.passed.BusinessToChange = null;
+            passed.ChangeSpecificObject = false;
+
+            LoadInformation();
+
         }
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
@@ -91,7 +112,7 @@ namespace QuoteSwift
                 return null;
             }
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null)
+            if (passed.PassBusinessList != null)
             {
                 business = passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
@@ -109,6 +130,19 @@ namespace QuoteSwift
                 {
                     DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
                 }
+        }
+
+        private bool ReplaceBusiness(Business Original, Business New)
+        {
+            if (New != null && Original != null && this.passed.PassBusinessList != null)
+                for (int i = 0; i < this.passed.PassBusinessList.Count; i++)
+                    if (this.passed.PassBusinessList[i] == Original)
+                    {
+                        this.passed.PassBusinessList[i] = New;
+                        return true;
+                    }
+
+            return false;
         }
 
         /**********************************************************************************/

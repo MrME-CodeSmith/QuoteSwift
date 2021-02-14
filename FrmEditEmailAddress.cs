@@ -44,6 +44,7 @@ namespace QuoteSwift
         private void FrmEditEmailAddress_Load(object sender, EventArgs e)
         {
             mtxtEmail.Text = passed.EmailToChange;
+
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

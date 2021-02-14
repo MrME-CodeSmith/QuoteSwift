@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using ProtoBuf;
@@ -10,6 +11,40 @@ namespace QuoteSwift
 {
     public static class MainProgramCode
     {
+
+        // Set Components To ReadWrite:
+
+        public static void ReadWriteComponents(Control.ControlCollection cc)
+        {
+            if (cc != null)
+            {
+                foreach (TextBox txt in cc.OfType<TextBox>()) txt.ReadOnly = false;
+                foreach (MaskedTextBox mtxt in cc.OfType<MaskedTextBox>()) mtxt.ReadOnly = false;
+                foreach (RichTextBox rtxt in cc.OfType<RichTextBox>()) rtxt.ReadOnly = false;
+                foreach (ComboBox cb in cc.OfType<ComboBox>()) cb.Enabled = true;
+                foreach (DateTimePicker dtp in cc.OfType<DateTimePicker>()) dtp.Enabled = true;
+                foreach (NumericUpDown nud in cc.OfType<NumericUpDown>()) nud.ReadOnly = false;
+                foreach (DataGridView dgv in cc.OfType<DataGridView>()) dgv.ReadOnly = false;
+                foreach (Button btn in cc.OfType<Button>()) btn.Enabled = true;
+            }
+        }
+
+        // Set Components To Read-Only:
+
+        public static void ReadOnlyComponents(Control.ControlCollection cc)
+        {
+            if (cc != null)
+            {
+                foreach (TextBox txt in cc.OfType<TextBox>()) txt.ReadOnly = true;
+                foreach (MaskedTextBox mtxt in cc.OfType<MaskedTextBox>()) mtxt.ReadOnly = true;
+                foreach (RichTextBox rtxt in cc.OfType<RichTextBox>()) rtxt.ReadOnly = true;
+                foreach (ComboBox cb in cc.OfType<ComboBox>()) cb.Enabled = false;
+                foreach (DateTimePicker dtp in cc.OfType<DateTimePicker>()) dtp.Enabled = false;
+                foreach (NumericUpDown nud in cc.OfType<NumericUpDown>()) nud.ReadOnly = true;
+                foreach (DataGridView dgv in cc.OfType<DataGridView>()) dgv.ReadOnly = true;
+                foreach (Button btn in cc.OfType<Button>()) btn.Enabled = false;
+            }
+        }
 
         /** Serialization Methods: */
 
@@ -200,7 +235,50 @@ namespace QuoteSwift
             }
         }
 
-        // Deserialize and load pump list:
+
+        // Serialize Business List Method
+
+        public static byte[] SerializeBusinessList(BindingList<Business> BusinessList)
+        {
+            byte[] tempByte;
+            try
+            {
+                tempByte = MainProgramCode.ProtoSerialize<BindingList<Business>>(BusinessList);
+            }
+            catch
+            {
+                throw;
+            }
+
+            return tempByte;
+        }
+
+        // Deserialize Pump List Method
+
+        public static BindingList<Business> DeserializeBusinessList(byte[] tempByte)
+        {
+            try
+            {
+                return MainProgramCode.ProtoDeserialize<BindingList<Business>>(tempByte);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // Serialize and Store Pump List Method
+
+        public static void SerializeBusinessList(ref Pass passed)
+        {
+            //Determine if Pump List exist:
+
+            if (passed != null && passed.PassBusinessList != null)
+            {
+                byte[] ToStore = MainProgramCode.SerializeBusinessList(passed.PassBusinessList);
+                MainProgramCode.SaveData("BusinessList.pbf", ToStore);
+            }
+        }
 
 
 
@@ -245,6 +323,8 @@ namespace QuoteSwift
                 MainProgramCode.SerializeNonMandatoryPartList(ref passed);
 
                 MainProgramCode.SerializePumpList(ref passed);
+
+                MainProgramCode.SerializeBusinessList(ref passed);
 
                 Application.Exit();
             }

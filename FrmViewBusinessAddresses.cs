@@ -34,6 +34,12 @@ namespace QuoteSwift
             {
                 this.Text = this.Text.Replace("<<Business name>>", passed.BusinessToChange.BusinessName);
 
+                if(!passed.ChangeSpecificObject)
+                {
+                    MainProgramCode.ReadOnlyComponents(this.Controls);
+                    BtnCancel.Enabled = true;
+                }
+
                 LoadInformation();
             }
         }

@@ -86,6 +86,8 @@ namespace QuoteSwift
             this.lblPOBoxStreetNumber = new System.Windows.Forms.Label();
             this.btnAddBusiness = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateBusinessInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.msBusinessControls.SuspendLayout();
             this.gbxBusinessInformation.SuspendLayout();
             this.gbxLegalInformation.SuspendLayout();
@@ -98,6 +100,7 @@ namespace QuoteSwift
             // msBusinessControls
             // 
             this.msBusinessControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
             this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msBusinessControls.Location = new System.Drawing.Point(0, 0);
@@ -621,9 +624,9 @@ namespace QuoteSwift
             // 
             // btnAddBusiness
             // 
-            this.btnAddBusiness.Location = new System.Drawing.Point(628, 478);
+            this.btnAddBusiness.Location = new System.Drawing.Point(607, 478);
             this.btnAddBusiness.Name = "btnAddBusiness";
-            this.btnAddBusiness.Size = new System.Drawing.Size(93, 23);
+            this.btnAddBusiness.Size = new System.Drawing.Size(114, 23);
             this.btnAddBusiness.TabIndex = 51;
             this.btnAddBusiness.Text = "Add Business";
             this.btnAddBusiness.UseVisualStyleBackColor = true;
@@ -638,6 +641,21 @@ namespace QuoteSwift
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateBusinessInformationToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // updateBusinessInformationToolStripMenuItem
+            // 
+            this.updateBusinessInformationToolStripMenuItem.Name = "updateBusinessInformationToolStripMenuItem";
+            this.updateBusinessInformationToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.updateBusinessInformationToolStripMenuItem.Text = "Update Business Information";
+            this.updateBusinessInformationToolStripMenuItem.Click += new System.EventHandler(this.UpdateBusinessInformationToolStripMenuItem_Click);
             // 
             // FrmAddBusiness
             // 
@@ -736,5 +754,7 @@ namespace QuoteSwift
         private System.Windows.Forms.TextBox txtBusinessAddresssDescription;
         private System.Windows.Forms.Label lblBusinessPODescription;
         private System.Windows.Forms.TextBox txtBusinessPODescription;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateBusinessInformationToolStripMenuItem;
     }
 }

@@ -252,6 +252,10 @@ namespace QuoteSwift
                     byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.pbf");
 
                     this.passed.PassPumpList = new BindingList<Pump>(MainProgramCode.DeserializePumpList(RetreivePumpList));
+
+                    byte[] RetreiveBusinessList = MainProgramCode.RetreiveData("BusinessList.pbf");
+
+                    this.passed.PassBusinessList = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
                 }
                 catch
                 {
