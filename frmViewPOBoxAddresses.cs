@@ -35,10 +35,18 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedAddress.AddressDescription + "' address from the list?", "REQUEST - Deletion Request"))
                 {
-                    passed.BusinessToChange.BusinessPOBoxAddressList.Remove(SelectedAddress);
-                    MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
-
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList.Count == 0) passed.BusinessToChange.BusinessPOBoxAddressList = null;
+                    if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
+                    {
+                        passed.BusinessToChange.BusinessPOBoxAddressList.Remove(SelectedAddress);
+                        MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
+                        if (passed.BusinessToChange.BusinessPOBoxAddressList.Count == 0) passed.BusinessToChange.BusinessPOBoxAddressList = null;
+                    }
+                    else if(passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
+                    {
+                        passed.CustomerToChange.CustomerPOBoxAddress.Remove(SelectedAddress);
+                        MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
+                        if (passed.CustomerToChange.CustomerPOBoxAddress.Count == 0) passed.CustomerToChange.CustomerPOBoxAddress = null;
+                    }
 
                     LoadInformation();
                 }
@@ -60,12 +68,13 @@ namespace QuoteSwift
 
             if (address == null)
             {
-                MainProgramCode.ShowError("Please select a valid Business P.O.Box Address, the current selection is invalid", "ERROR - Invalid P.O.Box Address Selection");
+                MainProgramCode.ShowError("Please select a valid P.O.Box Address, the current selection is invalid", "ERROR - Invalid P.O.Box Address Selection");
                 return;
             }
 
             this.passed.AddressToChange = address;
 
+            //if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
             this.passed = MainProgramCode.EditBusinessAddress(ref this.passed);
 
             if (!ReplacePOBoxAddress(address, this.passed.AddressToChange)) MainProgramCode.ShowError("An error occured during the updating procedure of the P.O.Box Address.\nUpdated P.O.Box address will not be stored.","ERROR - P.O.Box Address Not Updated");
@@ -80,7 +89,7 @@ namespace QuoteSwift
             {
                 this.Text = this.Text.Replace("<<Business name>>", passed.BusinessToChange.BusinessName);
 
-                if(!passed.ChangeSpecificObject == false)
+                if(!passed.ChangeSpecificObject)
                 {
                     MainProgramCode.ReadOnlyComponents(this.Controls);
                     BtnCancel.Enabled = true;
@@ -88,13 +97,21 @@ namespace QuoteSwift
 
                 LoadInformation();
             }
-        }
+            else if(passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
+            {
+                this.Text = this.Text.Replace("<<Business name>>", passed.CustomerToChange.CustomerName);
 
-        private void DgvPOBoxAddresses_Leave(object sender, EventArgs e)
-        {
-            if (ChangesMade())
-                if (MainProgramCode.RequestConfirmation("Changes were made to the P.O.Box Address List.\nWould you like to save these changes?", "REQUEST - Store Changed P.O.Box Addresses"))
-                    StoreChanges();
+                if (!passed.ChangeSpecificObject)
+                {
+                    MainProgramCode.ReadOnlyComponents(this.Controls);
+                    BtnCancel.Enabled = true;
+                }
+
+                LoadInformation();
+            }
+
+            this.dgvPOBoxAddresses.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.dgvPOBoxAddresses.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         /** Form Specific Functions And Procedures: 
@@ -118,9 +135,14 @@ namespace QuoteSwift
                 return null;
             }
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
             {
                 SelectedAddress = passed.BusinessToChange.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
+                return SelectedAddress;
+            }
+            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
+            {
+                SelectedAddress = passed.CustomerToChange.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == SearchName);
                 return SelectedAddress;
             }
 
@@ -130,57 +152,38 @@ namespace QuoteSwift
         void LoadInformation()
         {
             dgvPOBoxAddresses.Rows.Clear();
-            if (passed != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
             for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
                 dgvPOBoxAddresses.Rows.Add(passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription, passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressStreetNumber,
                                                      passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressStreetName, passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressSuburb,
                                                      passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressCity, passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressAreaCode);
-        }
 
-        private bool ChangesMade()
-        {
-            if (passed.BusinessToChange.BusinessPOBoxAddressList != null)
-                for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count ; i++)
-                {
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription != dgvPOBoxAddresses.Rows[i].Cells[0].Value.ToString()) return true;
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressStreetNumber != MainProgramCode.ParseInt(dgvPOBoxAddresses.Rows[i].Cells[1].Value.ToString())) return true;
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressStreetName != dgvPOBoxAddresses.Rows[i].Cells[2].Value.ToString()) return true;
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressSuburb != dgvPOBoxAddresses.Rows[i].Cells[3].Value.ToString()) return true;
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressSuburb != dgvPOBoxAddresses.Rows[i].Cells[4].Value.ToString()) return true;
-                    if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressAreaCode != MainProgramCode.ParseInt(dgvPOBoxAddresses.Rows[i].Cells[5].Value.ToString())) return true;
-                }
-
-            return false;
-        }
-
-        private void StoreChanges()
-        {
-            if (passed.BusinessToChange.BusinessPOBoxAddressList != null)
-            {
-                for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
-                {
-                    passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription = dgvPOBoxAddresses.Rows[i].Cells[0].Value.ToString();
-                    passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressStreetNumber = MainProgramCode.ParseInt(dgvPOBoxAddresses.Rows[i].Cells[1].Value.ToString());
-                    passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressStreetName = dgvPOBoxAddresses.Rows[i].Cells[2].Value.ToString();
-                    passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressSuburb = dgvPOBoxAddresses.Rows[i].Cells[3].Value.ToString();
-                    passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressSuburb = dgvPOBoxAddresses.Rows[i].Cells[4].Value.ToString();
-                    passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressAreaCode = MainProgramCode.ParseInt(dgvPOBoxAddresses.Rows[i].Cells[5].Value.ToString());
-
-                }
-                MainProgramCode.ShowInformation("The changes were successfully stored", "INFORMATION - Changes Successfully Stored");
-                LoadInformation();
-            }
+            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
+                for (int i = 0; i < passed.CustomerToChange.CustomerPOBoxAddress.Count; i++)
+                    dgvPOBoxAddresses.Rows.Add(passed.CustomerToChange.CustomerPOBoxAddress[i].AddressDescription, passed.CustomerToChange.CustomerPOBoxAddress[i].AddressStreetNumber,
+                                                         passed.CustomerToChange.CustomerPOBoxAddress[i].AddressStreetName, passed.CustomerToChange.CustomerPOBoxAddress[i].AddressSuburb,
+                                                         passed.CustomerToChange.CustomerPOBoxAddress[i].AddressCity, passed.CustomerToChange.CustomerPOBoxAddress[i].AddressAreaCode);
         }
 
         private bool ReplacePOBoxAddress(Address Original, Address New)
         {
-            if (New != null && Original != null && this.passed.BusinessToChange.BusinessPOBoxAddressList != null)
-                for (int i = 0; i < this.passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
-                    if (this.passed.BusinessToChange.BusinessPOBoxAddressList[i] == Original)
-                    {
-                        this.passed.BusinessToChange.BusinessPOBoxAddressList[i] = New;
-                        return true;
-                    }
+            if(passed != null && passed.BusinessToChange != null)
+                if (New != null && Original != null && this.passed.BusinessToChange.BusinessPOBoxAddressList != null)
+                    for (int i = 0; i < this.passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
+                        if (this.passed.BusinessToChange.BusinessPOBoxAddressList[i] == Original)
+                        {
+                            this.passed.BusinessToChange.BusinessPOBoxAddressList[i] = New;
+                            return true;
+                        }
+
+            if (passed != null && passed.CustomerToChange != null)
+                if (New != null && Original != null && this.passed.CustomerToChange.CustomerPOBoxAddress != null)
+                    for (int i = 0; i < this.passed.CustomerToChange.CustomerPOBoxAddress.Count; i++)
+                        if (this.passed.CustomerToChange.CustomerPOBoxAddress[i] == Original)
+                        {
+                            this.passed.CustomerToChange.CustomerPOBoxAddress[i] = New;
+                            return true;
+                        }
 
             return false;
         }

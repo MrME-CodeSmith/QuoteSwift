@@ -83,7 +83,6 @@ namespace QuoteSwift
             this.dgvTelephoneNumbers.Name = "dgvTelephoneNumbers";
             this.dgvTelephoneNumbers.Size = new System.Drawing.Size(350, 184);
             this.dgvTelephoneNumbers.TabIndex = 1;
-            this.dgvTelephoneNumbers.Leave += new System.EventHandler(this.DgvTelephoneNumbers_Leave);
             // 
             // clmTelephoneNumbers
             // 
@@ -122,7 +121,6 @@ namespace QuoteSwift
             this.dgvCellphoneNumbers.Name = "dgvCellphoneNumbers";
             this.dgvCellphoneNumbers.Size = new System.Drawing.Size(350, 184);
             this.dgvCellphoneNumbers.TabIndex = 3;
-            this.dgvCellphoneNumbers.Leave += new System.EventHandler(this.DgvCellphoneNumbers_Leave);
             // 
             // ClmCellphoneNumbers
             // 

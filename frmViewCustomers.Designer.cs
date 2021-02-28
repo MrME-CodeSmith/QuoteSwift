@@ -33,15 +33,17 @@ namespace QuoteSwift
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.DgvCustomerList = new System.Windows.Forms.DataGridView();
             this.clmCustomerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmCustomerCompanyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmPreviousQuoteDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnUpdateSelectedCustomer = new System.Windows.Forms.Button();
             this.btnAddCustomer = new System.Windows.Forms.Button();
             this.btnRemoveSelectedCustomer = new System.Windows.Forms.Button();
+            this.cbBusinessSelection = new System.Windows.Forms.ComboBox();
+            this.lblBusinessSelection = new System.Windows.Forms.Label();
             this.msViewCustomersControls.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvCustomerList)).BeginInit();
             this.SuspendLayout();
             // 
             // msViewCustomersControls
@@ -75,20 +77,20 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
-            // dataGridView1
+            // DgvCustomerList
             // 
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.DgvCustomerList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DgvCustomerList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvCustomerList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clmCustomerName,
             this.clmCustomerCompanyName,
             this.clmPreviousQuoteDate});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 56);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(643, 213);
-            this.dataGridView1.TabIndex = 1;
+            this.DgvCustomerList.Location = new System.Drawing.Point(12, 102);
+            this.DgvCustomerList.Name = "DgvCustomerList";
+            this.DgvCustomerList.Size = new System.Drawing.Size(643, 224);
+            this.DgvCustomerList.TabIndex = 1;
             // 
             // clmCustomerName
             // 
@@ -114,50 +116,76 @@ namespace QuoteSwift
             // btnUpdateSelectedCustomer
             // 
             this.btnUpdateSelectedCustomer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateSelectedCustomer.Location = new System.Drawing.Point(502, 277);
+            this.btnUpdateSelectedCustomer.Location = new System.Drawing.Point(500, 73);
             this.btnUpdateSelectedCustomer.Name = "btnUpdateSelectedCustomer";
-            this.btnUpdateSelectedCustomer.Size = new System.Drawing.Size(153, 23);
+            this.btnUpdateSelectedCustomer.Size = new System.Drawing.Size(155, 23);
             this.btnUpdateSelectedCustomer.TabIndex = 3;
-            this.btnUpdateSelectedCustomer.Text = "Update Selected Customer";
+            this.btnUpdateSelectedCustomer.Text = "View Selected Customer";
             this.btnUpdateSelectedCustomer.UseVisualStyleBackColor = true;
             this.btnUpdateSelectedCustomer.Click += new System.EventHandler(this.BtnUpdateSelectedCustomer_Click);
             // 
             // btnAddCustomer
             // 
-            this.btnAddCustomer.Location = new System.Drawing.Point(12, 27);
+            this.btnAddCustomer.Location = new System.Drawing.Point(12, 73);
             this.btnAddCustomer.Name = "btnAddCustomer";
             this.btnAddCustomer.Size = new System.Drawing.Size(82, 23);
             this.btnAddCustomer.TabIndex = 1;
             this.btnAddCustomer.Text = "Add Customer";
             this.btnAddCustomer.UseVisualStyleBackColor = true;
+            this.btnAddCustomer.Click += new System.EventHandler(this.BtnAddCustomer_Click);
             // 
             // btnRemoveSelectedCustomer
             // 
             this.btnRemoveSelectedCustomer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveSelectedCustomer.Location = new System.Drawing.Point(502, 27);
+            this.btnRemoveSelectedCustomer.Location = new System.Drawing.Point(500, 330);
             this.btnRemoveSelectedCustomer.Name = "btnRemoveSelectedCustomer";
             this.btnRemoveSelectedCustomer.Size = new System.Drawing.Size(153, 23);
             this.btnRemoveSelectedCustomer.TabIndex = 2;
             this.btnRemoveSelectedCustomer.Text = "Remove Selected Customer";
             this.btnRemoveSelectedCustomer.UseVisualStyleBackColor = true;
+            this.btnRemoveSelectedCustomer.Click += new System.EventHandler(this.BtnRemoveSelectedCustomer_Click);
+            // 
+            // cbBusinessSelection
+            // 
+            this.cbBusinessSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbBusinessSelection.FormattingEnabled = true;
+            this.cbBusinessSelection.Location = new System.Drawing.Point(236, 40);
+            this.cbBusinessSelection.Name = "cbBusinessSelection";
+            this.cbBusinessSelection.Size = new System.Drawing.Size(173, 21);
+            this.cbBusinessSelection.TabIndex = 4;
+            // 
+            // lblBusinessSelection
+            // 
+            this.lblBusinessSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblBusinessSelection.AutoSize = true;
+            this.lblBusinessSelection.Location = new System.Drawing.Point(233, 24);
+            this.lblBusinessSelection.Name = "lblBusinessSelection";
+            this.lblBusinessSelection.Size = new System.Drawing.Size(88, 13);
+            this.lblBusinessSelection.TabIndex = 5;
+            this.lblBusinessSelection.Text = "Customer List for:";
             // 
             // FrmViewCustomers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(665, 308);
+            this.ClientSize = new System.Drawing.Size(665, 365);
+            this.Controls.Add(this.lblBusinessSelection);
+            this.Controls.Add(this.cbBusinessSelection);
             this.Controls.Add(this.btnRemoveSelectedCustomer);
             this.Controls.Add(this.btnAddCustomer);
             this.Controls.Add(this.btnUpdateSelectedCustomer);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.DgvCustomerList);
             this.Controls.Add(this.msViewCustomersControls);
             this.MainMenuStrip = this.msViewCustomersControls;
             this.Name = "FrmViewCustomers";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "111111111";
+            this.Text = "Viewing All Customers";
+            this.Load += new System.EventHandler(this.FrmViewCustomers_Load);
             this.msViewCustomersControls.ResumeLayout(false);
             this.msViewCustomersControls.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvCustomerList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -169,12 +197,14 @@ namespace QuoteSwift
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView DgvCustomerList;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmCustomerName;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmCustomerCompanyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPreviousQuoteDate;
         private System.Windows.Forms.Button btnUpdateSelectedCustomer;
         private System.Windows.Forms.Button btnAddCustomer;
         private System.Windows.Forms.Button btnRemoveSelectedCustomer;
+        private System.Windows.Forms.ComboBox cbBusinessSelection;
+        private System.Windows.Forms.Label lblBusinessSelection;
     }
 }

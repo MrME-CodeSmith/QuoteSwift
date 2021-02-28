@@ -33,6 +33,16 @@ namespace QuoteSwift
             AddressAreaCode = 0;
         }
 
+        public Address(Address a)
+        {
+            AddressDescription = a.mAddressDescription;
+            AddressStreetNumber = a.mAddressStreetNumber;
+            AddressStreetName = a.mAddressStreetName;
+            AddressSuburb = a.mAddressSuburb;
+            AddressCity = a.mAddressCity;
+            AddressAreaCode = a.mAddressAreaCode;
+        }
+
         public Address(string mAddressDescription, int mAddressStreetNumber, string mAddressStreetName, string mAddressSuburb, string mAddressCity, int mAddressAreaCode)
         {
             AddressDescription = mAddressDescription;

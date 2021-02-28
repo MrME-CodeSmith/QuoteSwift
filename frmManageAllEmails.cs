@@ -34,7 +34,7 @@ namespace QuoteSwift
             {
                 this.Text = this.Text.Replace("< Business Name >", passed.BusinessToChange.BusinessName);
 
-                if(!passed.ChangeSpecificObject)
+                if (!passed.ChangeSpecificObject)
                 {
                     MainProgramCode.ReadOnlyComponents(this.Controls);
                     BtnCancel.Enabled = true;
@@ -42,16 +42,26 @@ namespace QuoteSwift
 
                 LoadInformation();
             }
+            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            {
+                this.Text = this.Text.Replace("< Business Name >", passed.CustomerToChange.CustomerName);
+
+                if (!passed.ChangeSpecificObject)
+                {
+                    MainProgramCode.ReadOnlyComponents(this.Controls);
+                    BtnCancel.Enabled = true;
+                }
+
+                LoadInformation();
+            }
+
+            this.DgvEmails.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.DgvEmails.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) this.Close();
-        }
-
-        private void DgvEmails_Leave(object sender, EventArgs e)
-        {
-            //TODO: Determine if changes were made, if so then request if user wants to save changes.
         }
 
         private void BtnRemoveAddress_Click(object sender, EventArgs e)
@@ -61,12 +71,22 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedEmail + "' email address from the list?", "REQUEST - Deletion Request"))
                 {
-                    passed.BusinessToChange.BusinessEmailAddressList.Remove(SelectedEmail);
-                    MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
+                    if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+                    {
+                        passed.BusinessToChange.BusinessEmailAddressList.Remove(SelectedEmail);
+                        MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
+                        if (passed.BusinessToChange.BusinessEmailAddressList.Count == 0) passed.BusinessToChange.BusinessEmailAddressList = null;
+                    }
+                    else if(passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+                    {
+                        passed.CustomerToChange.CustomerEmailList.Remove(SelectedEmail);
+                        MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
+                        if (passed.CustomerToChange.CustomerEmailList.Count == 0) passed.CustomerToChange.CustomerEmailList = null;
+                    }
+
+
                     LoadInformation();
                 }
-
-                if (passed.BusinessToChange.BusinessEmailAddressList.Count == 0) passed.BusinessToChange.BusinessEmailAddressList = null;
             }
             else
             {
@@ -87,6 +107,16 @@ namespace QuoteSwift
                     if (passed.BusinessToChange.BusinessEmailAddressList[i] == email)
                     {
                         passed.BusinessToChange.BusinessEmailAddressList[i] = this.passed.EmailToChange;
+                    }
+                }
+            } 
+            else if(passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            {
+                for (int i = 0; i < passed.CustomerToChange.CustomerEmailList.Count; i++)
+                {
+                    if (passed.CustomerToChange.CustomerEmailList[i] == email)
+                    {
+                        passed.CustomerToChange.CustomerEmailList[i] = this.passed.EmailToChange;
                     }
                 }
             }
@@ -113,6 +143,11 @@ namespace QuoteSwift
                 SearchName = passed.BusinessToChange.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName);
                 return SearchName;
             }
+            else if(passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            {
+                SearchName = passed.CustomerToChange.CustomerEmailList.SingleOrDefault(p => p == SearchName);
+                return SearchName;
+            }
 
             return "";
         }
@@ -120,9 +155,19 @@ namespace QuoteSwift
         private void LoadInformation()
         {
             DgvEmails.Rows.Clear();
-            for (int i = 0; i < passed.BusinessToChange.BusinessEmailAddressList.Count; i++)
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                DgvEmails.Rows.Add(passed.BusinessToChange.BusinessEmailAddressList[i]);
+                for (int i = 0; i < passed.BusinessToChange.BusinessEmailAddressList.Count; i++)
+                {
+                    DgvEmails.Rows.Add(passed.BusinessToChange.BusinessEmailAddressList[i]);
+                }
+            }
+            else if(passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            {
+                for (int i = 0; i < passed.CustomerToChange.CustomerEmailList.Count; i++)
+                {
+                    DgvEmails.Rows.Add(passed.CustomerToChange.CustomerEmailList[i]);
+                }
             }
         }
     }

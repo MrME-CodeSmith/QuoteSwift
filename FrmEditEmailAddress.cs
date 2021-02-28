@@ -29,14 +29,26 @@ namespace QuoteSwift
             {
                 string oldEmail = passed.EmailToChange;
                 passed.EmailToChange = mtxtEmail.Text;
-
-                FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref this.passed);
-                if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
+                if (passed != null && passed.BusinessToChange != null)
                 {
-                    MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
-                    this.Close();
+                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref this.passed);
+                    if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
+                    {
+                        MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
+                        this.Close();
+                    }
+                    else passed.EmailToChange = oldEmail;
                 }
-                else passed.EmailToChange = oldEmail;
+                else if(passed != null && passed.CustomerToChange != null)
+                {
+                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref this.passed);
+                    if (!frmAddCustomer.EmailAddressExisting(mtxtEmail.Text))
+                    {
+                        MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
+                        this.Close();
+                    }
+                    else passed.EmailToChange = oldEmail;
+                }
             }
             else MainProgramCode.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
         }

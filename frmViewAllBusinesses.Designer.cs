@@ -98,7 +98,7 @@ namespace QuoteSwift
             this.btnUpdateBusiness.Name = "btnUpdateBusiness";
             this.btnUpdateBusiness.Size = new System.Drawing.Size(156, 23);
             this.btnUpdateBusiness.TabIndex = 3;
-            this.btnUpdateBusiness.Text = "View Business Information";
+            this.btnUpdateBusiness.Text = "View Selected Business";
             this.btnUpdateBusiness.UseVisualStyleBackColor = true;
             this.btnUpdateBusiness.Click += new System.EventHandler(this.BtnUpdateBusiness_Click);
             // 

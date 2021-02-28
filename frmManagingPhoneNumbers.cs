@@ -30,30 +30,60 @@ namespace QuoteSwift
 
         private void BtnChangePhoneNumberInfo_Click(object sender, EventArgs e)
         {
-            string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
-            this.passed.PhoneNumberToChange = OldNumber;
-            this.passed.ChangeSpecificObject = true;
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
+            {
+                string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
+                this.passed.PhoneNumberToChange = OldNumber;
+                this.passed.ChangeSpecificObject = true;
 
-            this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
-            SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.BusinessToChange.BusinessCellphoneNumberList);
+                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
+                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.BusinessToChange.BusinessCellphoneNumberList);
 
-            this.passed.PhoneNumberToChange = "";
-            this.passed.ChangeSpecificObject = false;
+                this.passed.PhoneNumberToChange = "";
+                this.passed.ChangeSpecificObject = false;
+            }
+            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
+            {
+                string OldNumber = GetNumberSelection(passed.CustomerToChange.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
+                this.passed.PhoneNumberToChange = OldNumber;
+                this.passed.ChangeSpecificObject = true;
 
-            LoadInformation();
+                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
+                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.CustomerToChange.CustomerCellphoneNumberList);
+
+                this.passed.PhoneNumberToChange = "";
+                this.passed.ChangeSpecificObject = false;
+            }
+
+                LoadInformation();
         }
 
         private void BtnUpdateTelephoneNumber_Click(object sender, EventArgs e)
         {
-            string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
-            this.passed.PhoneNumberToChange = OldNumber;
-            this.passed.ChangeSpecificObject = true;
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
+            {
+                string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
+                this.passed.PhoneNumberToChange = OldNumber;
+                this.passed.ChangeSpecificObject = true;
 
-            this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
-            SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.BusinessToChange.BusinessTelephoneNumberList);
+                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
+                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.BusinessToChange.BusinessTelephoneNumberList);
 
-            this.passed.PhoneNumberToChange = "";
-            this.passed.ChangeSpecificObject = false;
+                this.passed.PhoneNumberToChange = "";
+                this.passed.ChangeSpecificObject = false;
+            }
+            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
+            {
+                string OldNumber = GetNumberSelection(passed.CustomerToChange.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
+                this.passed.PhoneNumberToChange = OldNumber;
+                this.passed.ChangeSpecificObject = true;
+
+                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
+                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.CustomerToChange.CustomerTelephoneNumberList);
+
+                this.passed.PhoneNumberToChange = "";
+                this.passed.ChangeSpecificObject = false;
+            }
 
             LoadInformation();
         }
@@ -72,19 +102,52 @@ namespace QuoteSwift
 
                 LoadInformation();
             }
+            else if(passed != null && passed.CustomerToChange != null && (passed.CustomerToChange.CustomerCellphoneNumberList != null || passed.CustomerToChange.CustomerTelephoneNumberList != null))
+            {
+                this.Text = this.Text.Replace("< Business Name >", passed.CustomerToChange.CustomerName);
+
+                if (!passed.ChangeSpecificObject)
+                {
+                    MainProgramCode.ReadOnlyComponents(this.Controls);
+                    BtnCancel.Enabled = true;
+                }
+
+                LoadInformation();
+            }
+
+            this.dgvCellphoneNumbers.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.dgvCellphoneNumbers.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+
+            this.dgvTelephoneNumbers.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.dgvTelephoneNumbers.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         private void BtnRemoveTelNumber_Click(object sender, EventArgs e)
         {
-            string SelectedNumber = GetNumberSelection(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
+            string SelectedNumber = "";
+
+            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
+                SelectedNumber = GetNumberSelection(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
+
+            if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
+                SelectedNumber = GetNumberSelection(passed.CustomerToChange.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
+
             if (SelectedNumber != "")
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
                 {
-                    passed.BusinessToChange.BusinessTelephoneNumberList.Remove(SelectedNumber);
-                    MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-
-                    if (passed.BusinessToChange.BusinessTelephoneNumberList.Count == 0) passed.BusinessToChange.BusinessTelephoneNumberList = null;
+                    if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
+                    {
+                        passed.BusinessToChange.BusinessTelephoneNumberList.Remove(SelectedNumber);
+                        MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
+                        if (passed.BusinessToChange.BusinessTelephoneNumberList.Count == 0) passed.BusinessToChange.BusinessTelephoneNumberList = null;
+                    }
+                    else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
+                    {
+                        passed.CustomerToChange.CustomerTelephoneNumberList.Remove(SelectedNumber);
+                        MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
+                        if (passed.CustomerToChange.CustomerTelephoneNumberList.Count == 0) passed.CustomerToChange.CustomerTelephoneNumberList = null;
+                    }
 
                     LoadInformation();
                 }
@@ -100,15 +163,20 @@ namespace QuoteSwift
             string SelectedNumber = GetNumberSelection(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
             if (SelectedNumber != "")
             {
-                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
+                if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
                 {
                     passed.BusinessToChange.BusinessCellphoneNumberList.Remove(SelectedNumber);
                     MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-
                     if (passed.BusinessToChange.BusinessCellphoneNumberList.Count == 0) passed.BusinessToChange.BusinessCellphoneNumberList = null;
-
-                    LoadInformation();
                 }
+                else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
+                {
+                    passed.CustomerToChange.CustomerCellphoneNumberList.Remove(SelectedNumber);
+                    MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
+                    if (passed.CustomerToChange.CustomerCellphoneNumberList.Count == 0) passed.CustomerToChange.CustomerCellphoneNumberList = null;
+                }
+
+                LoadInformation();
             }
             else
             {
@@ -119,26 +187,6 @@ namespace QuoteSwift
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) this.Close();
-        }
-
-        private void DgvTelephoneNumbers_Leave(object sender, EventArgs e)
-        {
-            if (!dgvTelephoneNumbers.Columns["clmTelephoneNumbers"].ReadOnly)
-            {
-                if (ChangesMade(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers)) 
-                    if(MainProgramCode.RequestConfirmation("Changes were made to the Telephone List.\nWould you like to save these changes?","REQUEST - Store Changed Telephone Numbers"))
-                        StoreChanges(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
-            }
-        }
-
-        private void DgvCellphoneNumbers_Leave(object sender, EventArgs e)
-        {
-            if (!dgvCellphoneNumbers.Columns["ClmCellphoneNumbers"].ReadOnly)
-            {
-                if (ChangesMade(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers))
-                    if (MainProgramCode.RequestConfirmation("Changes were made to the Cellphone number List.\nWould you like to save these changes?", "REQUEST - Store Changed Cellphone Numbers"))
-                        StoreChanges(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
-            }
         }
 
         string GetNumberSelection(BindingList<string> b,ref DataGridView d)
@@ -168,7 +216,7 @@ namespace QuoteSwift
             dgvTelephoneNumbers.Rows.Clear();
             dgvCellphoneNumbers.Rows.Clear();
 
-            if (passed.BusinessToChange.BusinessTelephoneNumberList != null)
+            if(passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
             {
                 for (int i = 0; i < passed.BusinessToChange.BusinessTelephoneNumberList.Count; i++)
                 {
@@ -176,46 +224,30 @@ namespace QuoteSwift
                 }
             }
 
-            if (passed.BusinessToChange.BusinessCellphoneNumberList != null)
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
             {
                 for (int i = 0; i < passed.BusinessToChange.BusinessCellphoneNumberList.Count; i++)
                 {
                     dgvCellphoneNumbers.Rows.Add(passed.BusinessToChange.BusinessCellphoneNumberList[i]);
                 }
             }
-        } 
 
-        private bool ChangesMade(BindingList<string> b, ref DataGridView d)
-        {
-            if (b != null)
-                for (int i = 0; i < b.Count; i++)
-                {
-                    if(b[i] != (string)d.Rows[i].Cells[0].Value)
-                    {
-                        return true;
-                    }
-                }
-
-            return false;
-        }
-
-        private void StoreChanges(BindingList<string> b, ref DataGridView d)
-        {
-            if (b != null)
+            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
             {
-                for (int i = 0; i < b.Count; i++)
+                for (int i = 0; i < passed.CustomerToChange.CustomerCellphoneNumberList.Count; i++)
                 {
-
-                    string temp = (string)d.Rows[i].Cells[0].Value;
-
-                    if (b[i] != temp) b[i] = temp;
-
+                    dgvCellphoneNumbers.Rows.Add(passed.CustomerToChange.CustomerCellphoneNumberList[i]);
                 }
-                MainProgramCode.ShowInformation("The changes were successfully stored","INFORMATION - Changes Successfully Stored");
-                LoadInformation();
             }
-        }
 
+            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
+            {
+                for (int i = 0; i < passed.CustomerToChange.CustomerTelephoneNumberList.Count; i++)
+                {
+                    dgvTelephoneNumbers.Rows.Add(passed.CustomerToChange.CustomerTelephoneNumberList[i]);
+                }
+            }
+        } 
 
         private void SetNewNumber(string OldNumber, string NewNumber, BindingList<string> b)
         {

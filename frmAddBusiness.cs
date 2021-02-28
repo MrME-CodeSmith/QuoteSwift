@@ -212,7 +212,7 @@ namespace QuoteSwift
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
         {
-            if (Business != null)
+            if (Business.BusinessEmailAddressList != null)
             {
                 this.passed.BusinessToChange = Business;
                 this.Hide();
@@ -226,7 +226,7 @@ namespace QuoteSwift
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
         {
-            if(Business != null)
+            if(Business.BusinessAddressList != null)
             {
                 this.passed.BusinessToChange = Business;
                 this.Hide();
@@ -239,7 +239,7 @@ namespace QuoteSwift
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
         {
-            if (Business != null)
+            if (Business.BusinessPOBoxAddressList != null)
             {
                 this.passed.BusinessToChange = Business;
                 this.Hide();
@@ -252,7 +252,7 @@ namespace QuoteSwift
 
         private void BtnViewAll_Click(object sender, EventArgs e)
         {
-            if (Business != null)
+            if (Business.BusinessTelephoneNumberList != null || Business.BusinessCellphoneNumberList != null)
             {
                 this.passed.BusinessToChange = Business;
                 this.Hide();
@@ -260,7 +260,7 @@ namespace QuoteSwift
                 this.Show();
                 Business = this.passed.BusinessToChange;
             }
-            else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
+            else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
         }
 
         private void FrmAddBusiness_Load(object sender, EventArgs e)
@@ -287,7 +287,21 @@ namespace QuoteSwift
             }
         }
 
-       
+        private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (passed != null)
+            {
+                if (passed.BusinessToChange != null) passed.BusinessToChange = null;
+                if (passed.ChangeSpecificObject) passed.ChangeSpecificObject = false;
+            }
+        }
+
+        private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConvertToEdit();
+            this.passed.ChangeSpecificObject = true;
+            updateBusinessInformationToolStripMenuItem.Enabled = false;
+        }
 
         /** Form Specific Functions And Procedures: 
         *
@@ -547,15 +561,6 @@ namespace QuoteSwift
             return false;
         }
 
-        private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (passed != null)
-            {
-                if (passed.BusinessToChange != null) passed.BusinessToChange = null;
-                if (passed.ChangeSpecificObject) passed.ChangeSpecificObject = false;
-            }
-        }
-
         private void LoadInformation()
         {
             if (Business != null)
@@ -582,7 +587,7 @@ namespace QuoteSwift
             btnViewEmailAddresses.Enabled = true;
 
             btnAddBusiness.Visible = false;
-            this.Text.Replace("Add Business", "Viewing " + passed.BusinessToChange.BusinessName);
+            this.Text = this.Text.Replace("Add Business", "Viewing " + passed.BusinessToChange.BusinessName);
         }
 
         private void ConvertToEdit()
@@ -596,14 +601,7 @@ namespace QuoteSwift
 
             btnAddBusiness.Visible = true;
             btnAddBusiness.Text = "Update Business";
-            this.Text.Replace("Viewing " + passed.BusinessToChange.BusinessName, "Updating " + passed.BusinessToChange.BusinessName);
-        }
-
-        private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ConvertToEdit();
-            this.passed.ChangeSpecificObject = true;
-            updateBusinessInformationToolStripMenuItem.Enabled = false;
+            this.Text = this.Text.Replace("Viewing " + passed.BusinessToChange.BusinessName, "Updating " + passed.BusinessToChange.BusinessName);
         }
 
         /**********************************************************************************/

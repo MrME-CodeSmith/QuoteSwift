@@ -89,7 +89,6 @@ namespace QuoteSwift
             this.dgvPOBoxAddresses.Name = "dgvPOBoxAddresses";
             this.dgvPOBoxAddresses.Size = new System.Drawing.Size(527, 166);
             this.dgvPOBoxAddresses.TabIndex = 1;
-            this.dgvPOBoxAddresses.Leave += new System.EventHandler(this.DgvPOBoxAddresses_Leave);
             // 
             // clmDescription
             // 

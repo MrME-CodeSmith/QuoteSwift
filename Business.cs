@@ -39,6 +39,22 @@ namespace QuoteSwift
             BusinessCustomerList = null;
         }
 
+        // Copy Constructor
+
+        public Business(Business b)
+        {
+            BusinessName = b.mBusinessName;
+            BusinessExtraInformation = b.mBusinessExtraInformation;
+            BusinessAddressList = b.mBusinessAddressList;
+            BusinessPOBoxAddressList = b.mBusinessPOBoxAddressList;
+            BusinessLegalDetails = b.mBusinessLegalDetails;
+            BusinessTelephoneNumberList = b.mBusinessTelephoneNumberList;
+            BusinessCellphoneNumberList = b.mBusinessCellphoneNumberList;
+            BusinessEmailAddressList = b.mBusinessEmailAddressList;
+            BusinessCustomerList = b.mBusinessCustomerList;
+        }
+
+
         public Business(string mBusinessName, string mBusinessExtraInformation, BindingList<Address> mBusinessAddressList, BindingList<Address> mBusinessPOBoxAddressList, 
             Legal mBusinessLegalDetails, BindingList<string> mBusinessTelephoneNumberList, BindingList<string> mBusinessCellphoneNumberList, 
             BindingList<string> mBusinessEmailAddressList, BindingList<Customer> mBusinessCustomerList)

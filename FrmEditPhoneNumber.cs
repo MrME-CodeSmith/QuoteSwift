@@ -30,12 +30,25 @@ namespace QuoteSwift
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
-            FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
-            if(!frmAddBusiness.PhoneNumberExisting(txtPhoneNumber.Text))
+            if (passed != null && passed.BusinessToChange != null)
             {
-                passed.PhoneNumberToChange = txtPhoneNumber.Text;
-                MainProgramCode.ShowInformation("The phone number was updated successfully.","INFORMATION - Phone Number Updated Successfully");
-                this.Close();
+                FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
+                if (!frmAddBusiness.PhoneNumberExisting(txtPhoneNumber.Text))
+                {
+                    passed.PhoneNumberToChange = txtPhoneNumber.Text;
+                    MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
+                    this.Close();
+                }
+            }
+            else if(passed != null && passed.CustomerToChange != null)
+            {
+                FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref this.passed);
+                if(!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
+                {
+                    passed.PhoneNumberToChange = txtPhoneNumber.Text;
+                    MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
+                    this.Close();
+                }
             }
         }
 

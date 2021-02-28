@@ -195,6 +195,7 @@ namespace QuoteSwift
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "View All Parts";
             this.Activated += new System.EventHandler(this.FrmViewParts_Activated);
+            this.Load += new System.EventHandler(this.FrmViewParts_Load);
             this.msViewPartsControls.ResumeLayout(false);
             this.msViewPartsControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAllParts)).EndInit();

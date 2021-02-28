@@ -58,7 +58,7 @@ namespace QuoteSwift
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
             this.Hide();
-            MainProgramCode.AddBusiness(ref passed);
+            this.passed = MainProgramCode.AddBusiness(ref passed);
             this.Show();
 
             LoadInformation();
@@ -71,6 +71,9 @@ namespace QuoteSwift
                 for (int i = 0; i < passed.PassBusinessList.Count; i++)
                     DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
             }
+
+            this.DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.DgvBusinessList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         private void BtnRemoveSelected_Click(object sender, EventArgs e)
@@ -102,9 +105,10 @@ namespace QuoteSwift
         {
             Business business;
             string SearchName;
-            int iGridSelection = DgvBusinessList.CurrentCell.RowIndex;
+            int iGridSelection;
             try
             {
+                iGridSelection = DgvBusinessList.CurrentCell.RowIndex;
                 SearchName = DgvBusinessList.Rows[iGridSelection].Cells[0].Value.ToString();
             }
             catch

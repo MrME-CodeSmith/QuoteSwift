@@ -29,6 +29,12 @@ namespace QuoteSwift
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.msCreateNewQuoteControls = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,6 +47,8 @@ namespace QuoteSwift
             this.lblBusinessVATNumber = new System.Windows.Forms.Label();
             this.lblBusinessRegistrationNumber = new System.Windows.Forms.Label();
             this.gbxBusinessPOBoxDetails = new System.Windows.Forms.GroupBox();
+            this.lblBusinessPOBoxStreetName = new System.Windows.Forms.Label();
+            this.CbxPOBoxSelection = new System.Windows.Forms.ComboBox();
             this.lblBusinessPOBoxAreaCode = new System.Windows.Forms.Label();
             this.lblBusinessPOBoxCity = new System.Windows.Forms.Label();
             this.lblBusinessPOBoxSuburb = new System.Windows.Forms.Label();
@@ -58,8 +66,10 @@ namespace QuoteSwift
             this.lblQuoteNumber = new System.Windows.Forms.Label();
             this.lblQuote = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblCustomerVendorNumber = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.CbxCustomerPOBoxSelection = new System.Windows.Forms.ComboBox();
+            this.lblCustomerPOBoxStreetName = new System.Windows.Forms.Label();
             this.lblCustomerPOBoxAreaCode = new System.Windows.Forms.Label();
             this.lblCustomerPOBoxCity = new System.Windows.Forms.Label();
             this.lblCustomerPOBoxSuburb = new System.Windows.Forms.Label();
@@ -85,29 +95,34 @@ namespace QuoteSwift
             this.panel5 = new System.Windows.Forms.Panel();
             this.gbxPumpRestorationDetails = new System.Windows.Forms.GroupBox();
             this.lblNewParts = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.DgvNonMandatoryPartReplacement = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmNMQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmNMMissing_Scrap = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmNMRepaired = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmNMNewPartQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmNMPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmNMUnitPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmNMRepairDevider = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblMandatoryParts = new System.Windows.Forms.Label();
             this.dgvMandatoryPartReplacement = new System.Windows.Forms.DataGridView();
             this.clmPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmMissing = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmScrap = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmMMissing_Scrap = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmMRepaired = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmNew = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmUnitPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmRepairDevider = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cbxPumpSelection = new System.Windows.Forms.ComboBox();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.BtnCalculateRebate = new System.Windows.Forms.Button();
+            this.mtxtRebate = new System.Windows.Forms.MaskedTextBox();
+            this.lblRebateTestInput = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
             this.lblTotalDueValue = new System.Windows.Forms.Label();
             this.lblTotalDue = new System.Windows.Forms.Label();
@@ -137,7 +152,7 @@ namespace QuoteSwift
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.gbxPumpRestorationDetails.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvNonMandatoryPartReplacement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartReplacement)).BeginInit();
             this.panel6.SuspendLayout();
             this.panel10.SuspendLayout();
@@ -185,7 +200,7 @@ namespace QuoteSwift
             this.pnlBusinessDetails.Controls.Add(this.cbxBusinessSelection);
             this.pnlBusinessDetails.Location = new System.Drawing.Point(10, 27);
             this.pnlBusinessDetails.Name = "pnlBusinessDetails";
-            this.pnlBusinessDetails.Size = new System.Drawing.Size(300, 314);
+            this.pnlBusinessDetails.Size = new System.Drawing.Size(300, 364);
             this.pnlBusinessDetails.TabIndex = 1;
             // 
             // gbxBusinessInformation
@@ -195,7 +210,7 @@ namespace QuoteSwift
             this.gbxBusinessInformation.Controls.Add(this.cbxBusinessTelephoneNumberSelection);
             this.gbxBusinessInformation.Controls.Add(this.lblBusinessVATNumber);
             this.gbxBusinessInformation.Controls.Add(this.lblBusinessRegistrationNumber);
-            this.gbxBusinessInformation.Location = new System.Drawing.Point(3, 154);
+            this.gbxBusinessInformation.Location = new System.Drawing.Point(3, 203);
             this.gbxBusinessInformation.Name = "gbxBusinessInformation";
             this.gbxBusinessInformation.Size = new System.Drawing.Size(292, 155);
             this.gbxBusinessInformation.TabIndex = 3;
@@ -249,21 +264,42 @@ namespace QuoteSwift
             // 
             // gbxBusinessPOBoxDetails
             // 
+            this.gbxBusinessPOBoxDetails.Controls.Add(this.lblBusinessPOBoxStreetName);
+            this.gbxBusinessPOBoxDetails.Controls.Add(this.CbxPOBoxSelection);
             this.gbxBusinessPOBoxDetails.Controls.Add(this.lblBusinessPOBoxAreaCode);
             this.gbxBusinessPOBoxDetails.Controls.Add(this.lblBusinessPOBoxCity);
             this.gbxBusinessPOBoxDetails.Controls.Add(this.lblBusinessPOBoxSuburb);
             this.gbxBusinessPOBoxDetails.Controls.Add(this.lblBusinessPOBoxNumber);
-            this.gbxBusinessPOBoxDetails.Location = new System.Drawing.Point(3, 30);
+            this.gbxBusinessPOBoxDetails.Location = new System.Drawing.Point(5, 33);
             this.gbxBusinessPOBoxDetails.Name = "gbxBusinessPOBoxDetails";
-            this.gbxBusinessPOBoxDetails.Size = new System.Drawing.Size(290, 123);
+            this.gbxBusinessPOBoxDetails.Size = new System.Drawing.Size(290, 164);
             this.gbxBusinessPOBoxDetails.TabIndex = 2;
             this.gbxBusinessPOBoxDetails.TabStop = false;
             this.gbxBusinessPOBoxDetails.Text = "Business P.O. Box Address:";
             // 
+            // lblBusinessPOBoxStreetName
+            // 
+            this.lblBusinessPOBoxStreetName.AutoSize = true;
+            this.lblBusinessPOBoxStreetName.Location = new System.Drawing.Point(3, 43);
+            this.lblBusinessPOBoxStreetName.Name = "lblBusinessPOBoxStreetName";
+            this.lblBusinessPOBoxStreetName.Size = new System.Drawing.Size(148, 13);
+            this.lblBusinessPOBoxStreetName.TabIndex = 6;
+            this.lblBusinessPOBoxStreetName.Text = "lblBusinessPOBoxStreetName";
+            // 
+            // CbxPOBoxSelection
+            // 
+            this.CbxPOBoxSelection.FormattingEnabled = true;
+            this.CbxPOBoxSelection.Location = new System.Drawing.Point(6, 18);
+            this.CbxPOBoxSelection.Name = "CbxPOBoxSelection";
+            this.CbxPOBoxSelection.Size = new System.Drawing.Size(278, 21);
+            this.CbxPOBoxSelection.TabIndex = 5;
+            this.CbxPOBoxSelection.Text = "Business Selection";
+            this.CbxPOBoxSelection.SelectedIndexChanged += new System.EventHandler(this.CbxPOBoxSelection_SelectedIndexChanged);
+            // 
             // lblBusinessPOBoxAreaCode
             // 
             this.lblBusinessPOBoxAreaCode.AutoSize = true;
-            this.lblBusinessPOBoxAreaCode.Location = new System.Drawing.Point(5, 105);
+            this.lblBusinessPOBoxAreaCode.Location = new System.Drawing.Point(3, 143);
             this.lblBusinessPOBoxAreaCode.Name = "lblBusinessPOBoxAreaCode";
             this.lblBusinessPOBoxAreaCode.Size = new System.Drawing.Size(139, 13);
             this.lblBusinessPOBoxAreaCode.TabIndex = 4;
@@ -272,7 +308,7 @@ namespace QuoteSwift
             // lblBusinessPOBoxCity
             // 
             this.lblBusinessPOBoxCity.AutoSize = true;
-            this.lblBusinessPOBoxCity.Location = new System.Drawing.Point(5, 80);
+            this.lblBusinessPOBoxCity.Location = new System.Drawing.Point(3, 118);
             this.lblBusinessPOBoxCity.Name = "lblBusinessPOBoxCity";
             this.lblBusinessPOBoxCity.Size = new System.Drawing.Size(109, 13);
             this.lblBusinessPOBoxCity.TabIndex = 2;
@@ -281,7 +317,7 @@ namespace QuoteSwift
             // lblBusinessPOBoxSuburb
             // 
             this.lblBusinessPOBoxSuburb.AutoSize = true;
-            this.lblBusinessPOBoxSuburb.Location = new System.Drawing.Point(5, 55);
+            this.lblBusinessPOBoxSuburb.Location = new System.Drawing.Point(3, 93);
             this.lblBusinessPOBoxSuburb.Name = "lblBusinessPOBoxSuburb";
             this.lblBusinessPOBoxSuburb.Size = new System.Drawing.Size(126, 13);
             this.lblBusinessPOBoxSuburb.TabIndex = 1;
@@ -290,7 +326,7 @@ namespace QuoteSwift
             // lblBusinessPOBoxNumber
             // 
             this.lblBusinessPOBoxNumber.AutoSize = true;
-            this.lblBusinessPOBoxNumber.Location = new System.Drawing.Point(5, 30);
+            this.lblBusinessPOBoxNumber.Location = new System.Drawing.Point(3, 68);
             this.lblBusinessPOBoxNumber.Name = "lblBusinessPOBoxNumber";
             this.lblBusinessPOBoxNumber.Size = new System.Drawing.Size(129, 13);
             this.lblBusinessPOBoxNumber.TabIndex = 0;
@@ -304,6 +340,7 @@ namespace QuoteSwift
             this.cbxBusinessSelection.Size = new System.Drawing.Size(292, 21);
             this.cbxBusinessSelection.TabIndex = 1;
             this.cbxBusinessSelection.Text = "Business Selection";
+            this.cbxBusinessSelection.SelectedIndexChanged += new System.EventHandler(this.CbxBusinessSelection_SelectedIndexChanged);
             // 
             // panel1
             // 
@@ -316,22 +353,24 @@ namespace QuoteSwift
             this.panel1.Controls.Add(this.lblQuote);
             this.panel1.Location = new System.Drawing.Point(320, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(300, 314);
+            this.panel1.Size = new System.Drawing.Size(300, 364);
             this.panel1.TabIndex = 4;
             // 
             // dtpQuoteExpiryDate
             // 
             this.dtpQuoteExpiryDate.Location = new System.Drawing.Point(5, 256);
             this.dtpQuoteExpiryDate.Name = "dtpQuoteExpiryDate";
-            this.dtpQuoteExpiryDate.Size = new System.Drawing.Size(200, 20);
+            this.dtpQuoteExpiryDate.Size = new System.Drawing.Size(219, 20);
             this.dtpQuoteExpiryDate.TabIndex = 5;
+            this.dtpQuoteExpiryDate.ValueChanged += new System.EventHandler(this.DtpQuoteExpiryDate_ValueChanged);
             // 
             // dtpQuoteCreationDate
             // 
             this.dtpQuoteCreationDate.Location = new System.Drawing.Point(5, 203);
             this.dtpQuoteCreationDate.Name = "dtpQuoteCreationDate";
-            this.dtpQuoteCreationDate.Size = new System.Drawing.Size(200, 20);
+            this.dtpQuoteCreationDate.Size = new System.Drawing.Size(219, 20);
             this.dtpQuoteCreationDate.TabIndex = 4;
+            this.dtpQuoteCreationDate.ValueChanged += new System.EventHandler(this.DtpQuoteCreationDate_ValueChanged);
             // 
             // lblQuoteExpiryDate
             // 
@@ -375,6 +414,7 @@ namespace QuoteSwift
             this.cbxUseAutomaticNumberingScheme.TabIndex = 4;
             this.cbxUseAutomaticNumberingScheme.Text = "Continue Automatic Numbering Scheme";
             this.cbxUseAutomaticNumberingScheme.UseVisualStyleBackColor = true;
+            this.cbxUseAutomaticNumberingScheme.CheckedChanged += new System.EventHandler(this.CbxUseAutomaticNumberingScheme_CheckedChanged);
             // 
             // lblQuoteNumberText
             // 
@@ -415,40 +455,61 @@ namespace QuoteSwift
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.label1);
+            this.panel2.Controls.Add(this.lblCustomerVendorNumber);
             this.panel2.Controls.Add(this.groupBox2);
             this.panel2.Controls.Add(this.cbxCustomerSelection);
-            this.panel2.Location = new System.Drawing.Point(10, 347);
+            this.panel2.Location = new System.Drawing.Point(10, 397);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(300, 179);
+            this.panel2.Size = new System.Drawing.Size(300, 245);
             this.panel2.TabIndex = 5;
             // 
-            // label1
+            // lblCustomerVendorNumber
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 161);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(132, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "lblCustomerVendorNumber";
+            this.lblCustomerVendorNumber.AutoSize = true;
+            this.lblCustomerVendorNumber.Location = new System.Drawing.Point(7, 223);
+            this.lblCustomerVendorNumber.Name = "lblCustomerVendorNumber";
+            this.lblCustomerVendorNumber.Size = new System.Drawing.Size(132, 13);
+            this.lblCustomerVendorNumber.TabIndex = 3;
+            this.lblCustomerVendorNumber.Text = "lblCustomerVendorNumber";
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.CbxCustomerPOBoxSelection);
+            this.groupBox2.Controls.Add(this.lblCustomerPOBoxStreetName);
             this.groupBox2.Controls.Add(this.lblCustomerPOBoxAreaCode);
             this.groupBox2.Controls.Add(this.lblCustomerPOBoxCity);
             this.groupBox2.Controls.Add(this.lblCustomerPOBoxSuburb);
             this.groupBox2.Controls.Add(this.lblCustomerPOBoxNumber);
-            this.groupBox2.Location = new System.Drawing.Point(3, 30);
+            this.groupBox2.Location = new System.Drawing.Point(5, 43);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(290, 123);
+            this.groupBox2.Size = new System.Drawing.Size(290, 174);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Customer P.O. Box Address:";
             // 
+            // CbxCustomerPOBoxSelection
+            // 
+            this.CbxCustomerPOBoxSelection.FormattingEnabled = true;
+            this.CbxCustomerPOBoxSelection.Location = new System.Drawing.Point(10, 19);
+            this.CbxCustomerPOBoxSelection.Name = "CbxCustomerPOBoxSelection";
+            this.CbxCustomerPOBoxSelection.Size = new System.Drawing.Size(274, 21);
+            this.CbxCustomerPOBoxSelection.TabIndex = 4;
+            this.CbxCustomerPOBoxSelection.Text = "Customer P.O.Box Selection";
+            this.CbxCustomerPOBoxSelection.SelectedIndexChanged += new System.EventHandler(this.CbxCustomerPOBoxSelection_SelectedIndexChanged);
+            // 
+            // lblCustomerPOBoxStreetName
+            // 
+            this.lblCustomerPOBoxStreetName.AutoSize = true;
+            this.lblCustomerPOBoxStreetName.Location = new System.Drawing.Point(6, 75);
+            this.lblCustomerPOBoxStreetName.Name = "lblCustomerPOBoxStreetName";
+            this.lblCustomerPOBoxStreetName.Size = new System.Drawing.Size(150, 13);
+            this.lblCustomerPOBoxStreetName.TabIndex = 4;
+            this.lblCustomerPOBoxStreetName.Text = "lblCustomerPOBoxStreetName";
+            // 
             // lblCustomerPOBoxAreaCode
             // 
             this.lblCustomerPOBoxAreaCode.AutoSize = true;
-            this.lblCustomerPOBoxAreaCode.Location = new System.Drawing.Point(5, 105);
+            this.lblCustomerPOBoxAreaCode.Location = new System.Drawing.Point(6, 150);
             this.lblCustomerPOBoxAreaCode.Name = "lblCustomerPOBoxAreaCode";
             this.lblCustomerPOBoxAreaCode.Size = new System.Drawing.Size(141, 13);
             this.lblCustomerPOBoxAreaCode.TabIndex = 3;
@@ -457,7 +518,7 @@ namespace QuoteSwift
             // lblCustomerPOBoxCity
             // 
             this.lblCustomerPOBoxCity.AutoSize = true;
-            this.lblCustomerPOBoxCity.Location = new System.Drawing.Point(5, 80);
+            this.lblCustomerPOBoxCity.Location = new System.Drawing.Point(6, 125);
             this.lblCustomerPOBoxCity.Name = "lblCustomerPOBoxCity";
             this.lblCustomerPOBoxCity.Size = new System.Drawing.Size(111, 13);
             this.lblCustomerPOBoxCity.TabIndex = 2;
@@ -466,7 +527,7 @@ namespace QuoteSwift
             // lblCustomerPOBoxSuburb
             // 
             this.lblCustomerPOBoxSuburb.AutoSize = true;
-            this.lblCustomerPOBoxSuburb.Location = new System.Drawing.Point(5, 55);
+            this.lblCustomerPOBoxSuburb.Location = new System.Drawing.Point(6, 100);
             this.lblCustomerPOBoxSuburb.Name = "lblCustomerPOBoxSuburb";
             this.lblCustomerPOBoxSuburb.Size = new System.Drawing.Size(128, 13);
             this.lblCustomerPOBoxSuburb.TabIndex = 1;
@@ -475,7 +536,7 @@ namespace QuoteSwift
             // lblCustomerPOBoxNumber
             // 
             this.lblCustomerPOBoxNumber.AutoSize = true;
-            this.lblCustomerPOBoxNumber.Location = new System.Drawing.Point(5, 30);
+            this.lblCustomerPOBoxNumber.Location = new System.Drawing.Point(6, 50);
             this.lblCustomerPOBoxNumber.Name = "lblCustomerPOBoxNumber";
             this.lblCustomerPOBoxNumber.Size = new System.Drawing.Size(131, 13);
             this.lblCustomerPOBoxNumber.TabIndex = 0;
@@ -489,15 +550,16 @@ namespace QuoteSwift
             this.cbxCustomerSelection.Size = new System.Drawing.Size(292, 21);
             this.cbxCustomerSelection.TabIndex = 1;
             this.cbxCustomerSelection.Text = "Customer Selection";
+            this.cbxCustomerSelection.SelectedIndexChanged += new System.EventHandler(this.CbxCustomerSelection_SelectedIndexChanged);
             // 
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Controls.Add(this.gbxCustomerDeliveryAddressInformation);
             this.panel3.Controls.Add(this.cbxCustomerDeliveryAddress);
-            this.panel3.Location = new System.Drawing.Point(320, 347);
+            this.panel3.Location = new System.Drawing.Point(320, 397);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(300, 179);
+            this.panel3.Size = new System.Drawing.Size(300, 245);
             this.panel3.TabIndex = 6;
             // 
             // gbxCustomerDeliveryAddressInformation
@@ -505,16 +567,16 @@ namespace QuoteSwift
             this.gbxCustomerDeliveryAddressInformation.Controls.Add(this.rtxCustomerDeliveryDescripton);
             this.gbxCustomerDeliveryAddressInformation.Location = new System.Drawing.Point(3, 30);
             this.gbxCustomerDeliveryAddressInformation.Name = "gbxCustomerDeliveryAddressInformation";
-            this.gbxCustomerDeliveryAddressInformation.Size = new System.Drawing.Size(290, 144);
+            this.gbxCustomerDeliveryAddressInformation.Size = new System.Drawing.Size(290, 206);
             this.gbxCustomerDeliveryAddressInformation.TabIndex = 2;
             this.gbxCustomerDeliveryAddressInformation.TabStop = false;
             this.gbxCustomerDeliveryAddressInformation.Text = "Customer Delivery Address Information:";
             // 
             // rtxCustomerDeliveryDescripton
             // 
-            this.rtxCustomerDeliveryDescripton.Location = new System.Drawing.Point(9, 30);
+            this.rtxCustomerDeliveryDescripton.Location = new System.Drawing.Point(9, 32);
             this.rtxCustomerDeliveryDescripton.Name = "rtxCustomerDeliveryDescripton";
-            this.rtxCustomerDeliveryDescripton.Size = new System.Drawing.Size(275, 108);
+            this.rtxCustomerDeliveryDescripton.Size = new System.Drawing.Size(275, 157);
             this.rtxCustomerDeliveryDescripton.TabIndex = 0;
             this.rtxCustomerDeliveryDescripton.Text = "rtxCustomerDeliveryDescripton";
             // 
@@ -526,6 +588,7 @@ namespace QuoteSwift
             this.cbxCustomerDeliveryAddress.Size = new System.Drawing.Size(292, 21);
             this.cbxCustomerDeliveryAddress.TabIndex = 1;
             this.cbxCustomerDeliveryAddress.Text = "Customer Delivery Address Selection";
+            this.cbxCustomerDeliveryAddress.SelectedIndexChanged += new System.EventHandler(this.CbxCustomerDeliveryAddress_SelectedIndexChanged);
             // 
             // panel4
             // 
@@ -542,7 +605,7 @@ namespace QuoteSwift
             this.panel4.Controls.Add(this.lblReferenceNumber);
             this.panel4.Controls.Add(this.lblJobNumber);
             this.panel4.Controls.Add(this.lblCustomerVATNumber);
-            this.panel4.Location = new System.Drawing.Point(10, 532);
+            this.panel4.Location = new System.Drawing.Point(10, 648);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(610, 85);
             this.panel4.TabIndex = 7;
@@ -645,23 +708,27 @@ namespace QuoteSwift
             // 
             // panel5
             // 
+            this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel5.Controls.Add(this.gbxPumpRestorationDetails);
             this.panel5.Location = new System.Drawing.Point(626, 27);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(767, 499);
+            this.panel5.Size = new System.Drawing.Size(767, 615);
             this.panel5.TabIndex = 6;
             // 
             // gbxPumpRestorationDetails
             // 
+            this.gbxPumpRestorationDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxPumpRestorationDetails.Controls.Add(this.lblNewParts);
-            this.gbxPumpRestorationDetails.Controls.Add(this.dataGridView1);
+            this.gbxPumpRestorationDetails.Controls.Add(this.DgvNonMandatoryPartReplacement);
             this.gbxPumpRestorationDetails.Controls.Add(this.lblMandatoryParts);
             this.gbxPumpRestorationDetails.Controls.Add(this.dgvMandatoryPartReplacement);
             this.gbxPumpRestorationDetails.Controls.Add(this.cbxPumpSelection);
             this.gbxPumpRestorationDetails.Location = new System.Drawing.Point(3, 14);
             this.gbxPumpRestorationDetails.Name = "gbxPumpRestorationDetails";
-            this.gbxPumpRestorationDetails.Size = new System.Drawing.Size(754, 480);
+            this.gbxPumpRestorationDetails.Size = new System.Drawing.Size(759, 592);
             this.gbxPumpRestorationDetails.TabIndex = 9;
             this.gbxPumpRestorationDetails.TabStop = false;
             this.gbxPumpRestorationDetails.Text = "Pump Restoration Details";
@@ -669,94 +736,128 @@ namespace QuoteSwift
             // lblNewParts
             // 
             this.lblNewParts.AutoSize = true;
-            this.lblNewParts.Location = new System.Drawing.Point(6, 263);
+            this.lblNewParts.Location = new System.Drawing.Point(9, 336);
             this.lblNewParts.Name = "lblNewParts";
             this.lblNewParts.Size = new System.Drawing.Size(120, 13);
             this.lblNewParts.TabIndex = 4;
             this.lblNewParts.Text = "New Part Replacement:";
             // 
-            // dataGridView1
+            // DgvNonMandatoryPartReplacement
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DgvNonMandatoryPartReplacement.AllowUserToAddRows = false;
+            this.DgvNonMandatoryPartReplacement.AllowUserToDeleteRows = false;
+            this.DgvNonMandatoryPartReplacement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DgvNonMandatoryPartReplacement.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.DgvNonMandatoryPartReplacement.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.DgvNonMandatoryPartReplacement.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvNonMandatoryPartReplacement.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2,
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4,
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6,
-            this.dataGridViewTextBoxColumn7,
-            this.dataGridViewTextBoxColumn8,
-            this.dataGridViewTextBoxColumn9});
-            this.dataGridView1.Location = new System.Drawing.Point(6, 279);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(742, 195);
-            this.dataGridView1.TabIndex = 3;
+            this.ClmNMQuantity,
+            this.ClmNMMissing_Scrap,
+            this.ClmNMRepaired,
+            this.ClmNMNewPartQuantity,
+            this.ClmNMPrice,
+            this.ClmNMUnitPrice,
+            this.dataGridViewTextBoxColumn9,
+            this.ClmNMRepairDevider});
+            this.DgvNonMandatoryPartReplacement.Location = new System.Drawing.Point(9, 352);
+            this.DgvNonMandatoryPartReplacement.Name = "DgvNonMandatoryPartReplacement";
+            this.DgvNonMandatoryPartReplacement.Size = new System.Drawing.Size(742, 234);
+            this.DgvNonMandatoryPartReplacement.TabIndex = 3;
+            this.DgvNonMandatoryPartReplacement.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvNonMandatoryPartReplacement_CellEndEdit);
             // 
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.HeaderText = "Part No.";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 50;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn1.Width = 32;
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.HeaderText = "Description";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.Width = 150;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn2.Width = 66;
             // 
-            // dataGridViewTextBoxColumn3
+            // ClmNMQuantity
             // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "QTY";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.Width = 50;
+            this.ClmNMQuantity.HeaderText = "QTY";
+            this.ClmNMQuantity.Name = "ClmNMQuantity";
+            this.ClmNMQuantity.ReadOnly = true;
+            this.ClmNMQuantity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmNMQuantity.Width = 35;
             // 
-            // dataGridViewTextBoxColumn4
+            // ClmNMMissing_Scrap
             // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "Missing";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.Width = 50;
+            this.ClmNMMissing_Scrap.HeaderText = "Missing / Scrap";
+            this.ClmNMMissing_Scrap.Name = "ClmNMMissing_Scrap";
+            this.ClmNMMissing_Scrap.ReadOnly = true;
+            this.ClmNMMissing_Scrap.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmNMMissing_Scrap.Width = 53;
             // 
-            // dataGridViewTextBoxColumn5
+            // ClmNMRepaired
             // 
-            this.dataGridViewTextBoxColumn5.HeaderText = "Scrap";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.ReadOnly = true;
-            this.dataGridViewTextBoxColumn5.Width = 50;
+            this.ClmNMRepaired.HeaderText = "Repaired";
+            this.ClmNMRepaired.Name = "ClmNMRepaired";
+            this.ClmNMRepaired.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmNMRepaired.Width = 56;
             // 
-            // dataGridViewTextBoxColumn6
+            // ClmNMNewPartQuantity
             // 
-            this.dataGridViewTextBoxColumn6.HeaderText = "New";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.ReadOnly = true;
-            this.dataGridViewTextBoxColumn6.Width = 50;
+            this.ClmNMNewPartQuantity.HeaderText = "New";
+            this.ClmNMNewPartQuantity.Name = "ClmNMNewPartQuantity";
+            this.ClmNMNewPartQuantity.ReadOnly = true;
+            this.ClmNMNewPartQuantity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmNMNewPartQuantity.Width = 35;
             // 
-            // dataGridViewTextBoxColumn7
+            // ClmNMPrice
             // 
-            this.dataGridViewTextBoxColumn7.HeaderText = "Price";
-            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            this.dataGridViewTextBoxColumn7.ReadOnly = true;
+            dataGridViewCellStyle1.Format = "C2";
+            dataGridViewCellStyle1.NullValue = null;
+            this.ClmNMPrice.DefaultCellStyle = dataGridViewCellStyle1;
+            this.ClmNMPrice.HeaderText = "Price";
+            this.ClmNMPrice.Name = "ClmNMPrice";
+            this.ClmNMPrice.ReadOnly = true;
+            this.ClmNMPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmNMPrice.Width = 37;
             // 
-            // dataGridViewTextBoxColumn8
+            // ClmNMUnitPrice
             // 
-            this.dataGridViewTextBoxColumn8.HeaderText = "Unit Price";
-            this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
-            this.dataGridViewTextBoxColumn8.ReadOnly = true;
+            dataGridViewCellStyle2.Format = "C2";
+            dataGridViewCellStyle2.NullValue = null;
+            this.ClmNMUnitPrice.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ClmNMUnitPrice.HeaderText = "Unit Price";
+            this.ClmNMUnitPrice.Name = "ClmNMUnitPrice";
+            this.ClmNMUnitPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmNMUnitPrice.Width = 53;
             // 
             // dataGridViewTextBoxColumn9
             // 
+            dataGridViewCellStyle3.Format = "C2";
+            dataGridViewCellStyle3.NullValue = "0";
+            this.dataGridViewTextBoxColumn9.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewTextBoxColumn9.HeaderText = "Total";
             this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
             this.dataGridViewTextBoxColumn9.ReadOnly = true;
+            this.dataGridViewTextBoxColumn9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn9.Width = 37;
+            // 
+            // ClmNMRepairDevider
+            // 
+            this.ClmNMRepairDevider.HeaderText = "Repair Devider";
+            this.ClmNMRepairDevider.Name = "ClmNMRepairDevider";
+            this.ClmNMRepairDevider.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmNMRepairDevider.Width = 76;
             // 
             // lblMandatoryParts
             // 
             this.lblMandatoryParts.AutoSize = true;
-            this.lblMandatoryParts.Location = new System.Drawing.Point(6, 45);
+            this.lblMandatoryParts.Location = new System.Drawing.Point(9, 45);
             this.lblMandatoryParts.Name = "lblMandatoryParts";
             this.lblMandatoryParts.Size = new System.Drawing.Size(148, 13);
             this.lblMandatoryParts.TabIndex = 2;
@@ -764,107 +865,176 @@ namespace QuoteSwift
             // 
             // dgvMandatoryPartReplacement
             // 
+            this.dgvMandatoryPartReplacement.AllowUserToAddRows = false;
+            this.dgvMandatoryPartReplacement.AllowUserToDeleteRows = false;
+            this.dgvMandatoryPartReplacement.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvMandatoryPartReplacement.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvMandatoryPartReplacement.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvMandatoryPartReplacement.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMandatoryPartReplacement.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clmPartNumber,
             this.clmDescription,
             this.clmQuantity,
-            this.clmMissing,
-            this.clmScrap,
+            this.clmMMissing_Scrap,
+            this.clmMRepaired,
             this.clmNew,
             this.clmPrice,
             this.clmUnitPrice,
-            this.clmTotal});
-            this.dgvMandatoryPartReplacement.Location = new System.Drawing.Point(6, 61);
+            this.clmTotal,
+            this.ClmRepairDevider});
+            this.dgvMandatoryPartReplacement.Location = new System.Drawing.Point(11, 64);
             this.dgvMandatoryPartReplacement.Name = "dgvMandatoryPartReplacement";
-            this.dgvMandatoryPartReplacement.Size = new System.Drawing.Size(742, 195);
+            this.dgvMandatoryPartReplacement.Size = new System.Drawing.Size(742, 263);
             this.dgvMandatoryPartReplacement.TabIndex = 1;
+            this.dgvMandatoryPartReplacement.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvMandatoryPartReplacement_CellEndEdit);
             // 
             // clmPartNumber
             // 
             this.clmPartNumber.HeaderText = "Part No.";
             this.clmPartNumber.Name = "clmPartNumber";
             this.clmPartNumber.ReadOnly = true;
-            this.clmPartNumber.Width = 50;
+            this.clmPartNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmPartNumber.Width = 32;
             // 
             // clmDescription
             // 
             this.clmDescription.HeaderText = "Description";
             this.clmDescription.Name = "clmDescription";
             this.clmDescription.ReadOnly = true;
-            this.clmDescription.Width = 150;
+            this.clmDescription.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmDescription.Width = 66;
             // 
             // clmQuantity
             // 
             this.clmQuantity.HeaderText = "QTY";
             this.clmQuantity.Name = "clmQuantity";
             this.clmQuantity.ReadOnly = true;
-            this.clmQuantity.Width = 50;
+            this.clmQuantity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmQuantity.Width = 35;
             // 
-            // clmMissing
+            // clmMMissing_Scrap
             // 
-            this.clmMissing.HeaderText = "Missing";
-            this.clmMissing.Name = "clmMissing";
-            this.clmMissing.ReadOnly = true;
-            this.clmMissing.Width = 50;
+            this.clmMMissing_Scrap.HeaderText = "Missing / Scrap";
+            this.clmMMissing_Scrap.Name = "clmMMissing_Scrap";
+            this.clmMMissing_Scrap.ReadOnly = true;
+            this.clmMMissing_Scrap.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmMMissing_Scrap.Width = 53;
             // 
-            // clmScrap
+            // clmMRepaired
             // 
-            this.clmScrap.HeaderText = "Scrap";
-            this.clmScrap.Name = "clmScrap";
-            this.clmScrap.ReadOnly = true;
-            this.clmScrap.Width = 50;
+            this.clmMRepaired.HeaderText = "Repaired";
+            this.clmMRepaired.Name = "clmMRepaired";
+            this.clmMRepaired.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmMRepaired.Width = 56;
             // 
             // clmNew
             // 
             this.clmNew.HeaderText = "New";
             this.clmNew.Name = "clmNew";
             this.clmNew.ReadOnly = true;
-            this.clmNew.Width = 50;
+            this.clmNew.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmNew.Width = 35;
             // 
             // clmPrice
             // 
+            dataGridViewCellStyle4.Format = "C2";
+            dataGridViewCellStyle4.NullValue = null;
+            this.clmPrice.DefaultCellStyle = dataGridViewCellStyle4;
             this.clmPrice.HeaderText = "Price";
             this.clmPrice.Name = "clmPrice";
             this.clmPrice.ReadOnly = true;
+            this.clmPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmPrice.Width = 37;
             // 
             // clmUnitPrice
             // 
+            dataGridViewCellStyle5.Format = "C2";
+            dataGridViewCellStyle5.NullValue = null;
+            this.clmUnitPrice.DefaultCellStyle = dataGridViewCellStyle5;
             this.clmUnitPrice.HeaderText = "Unit Price";
             this.clmUnitPrice.Name = "clmUnitPrice";
-            this.clmUnitPrice.ReadOnly = true;
+            this.clmUnitPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmUnitPrice.Width = 53;
             // 
             // clmTotal
             // 
+            dataGridViewCellStyle6.Format = "C2";
+            dataGridViewCellStyle6.NullValue = "0";
+            this.clmTotal.DefaultCellStyle = dataGridViewCellStyle6;
             this.clmTotal.HeaderText = "Total";
             this.clmTotal.Name = "clmTotal";
             this.clmTotal.ReadOnly = true;
+            this.clmTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmTotal.Width = 37;
+            // 
+            // ClmRepairDevider
+            // 
+            this.ClmRepairDevider.HeaderText = "Repair Devider";
+            this.ClmRepairDevider.Name = "ClmRepairDevider";
+            this.ClmRepairDevider.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ClmRepairDevider.Width = 76;
             // 
             // cbxPumpSelection
             // 
+            this.cbxPumpSelection.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbxPumpSelection.FormattingEnabled = true;
             this.cbxPumpSelection.Location = new System.Drawing.Point(281, 19);
             this.cbxPumpSelection.Name = "cbxPumpSelection";
             this.cbxPumpSelection.Size = new System.Drawing.Size(230, 21);
             this.cbxPumpSelection.TabIndex = 0;
             this.cbxPumpSelection.Text = "Pump Selection";
+            this.cbxPumpSelection.SelectedIndexChanged += new System.EventHandler(this.CbxPumpSelection_SelectedIndexChanged);
             // 
             // panel6
             // 
+            this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel6.Controls.Add(this.BtnCalculateRebate);
+            this.panel6.Controls.Add(this.mtxtRebate);
+            this.panel6.Controls.Add(this.lblRebateTestInput);
             this.panel6.Controls.Add(this.panel10);
             this.panel6.Controls.Add(this.panel9);
             this.panel6.Controls.Add(this.panel8);
             this.panel6.Controls.Add(this.panel7);
             this.panel6.Controls.Add(this.lblRepairPercentage);
             this.panel6.Controls.Add(this.lblNewPumpUnitPrice);
-            this.panel6.Location = new System.Drawing.Point(626, 532);
+            this.panel6.Location = new System.Drawing.Point(626, 648);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(767, 85);
             this.panel6.TabIndex = 11;
             // 
+            // BtnCalculateRebate
+            // 
+            this.BtnCalculateRebate.Location = new System.Drawing.Point(153, 42);
+            this.BtnCalculateRebate.Name = "BtnCalculateRebate";
+            this.BtnCalculateRebate.Size = new System.Drawing.Size(75, 23);
+            this.BtnCalculateRebate.TabIndex = 17;
+            this.BtnCalculateRebate.Text = "Recalculate";
+            this.BtnCalculateRebate.UseVisualStyleBackColor = true;
+            this.BtnCalculateRebate.Click += new System.EventHandler(this.BtnCalculateRebate_Click);
+            // 
+            // mtxtRebate
+            // 
+            this.mtxtRebate.Location = new System.Drawing.Point(70, 17);
+            this.mtxtRebate.Name = "mtxtRebate";
+            this.mtxtRebate.Size = new System.Drawing.Size(158, 20);
+            this.mtxtRebate.TabIndex = 16;
+            this.mtxtRebate.Text = "0";
+            // 
+            // lblRebateTestInput
+            // 
+            this.lblRebateTestInput.AutoSize = true;
+            this.lblRebateTestInput.Location = new System.Drawing.Point(19, 20);
+            this.lblRebateTestInput.Name = "lblRebateTestInput";
+            this.lblRebateTestInput.Size = new System.Drawing.Size(45, 13);
+            this.lblRebateTestInput.TabIndex = 15;
+            this.lblRebateTestInput.Text = "Rebate:";
+            // 
             // panel10
             // 
+            this.panel10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel10.Controls.Add(this.lblTotalDueValue);
             this.panel10.Controls.Add(this.lblTotalDue);
@@ -893,6 +1063,7 @@ namespace QuoteSwift
             // 
             // panel9
             // 
+            this.panel9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel9.Controls.Add(this.lblVATValue);
             this.panel9.Controls.Add(this.lblVAT);
@@ -921,6 +1092,7 @@ namespace QuoteSwift
             // 
             // panel8
             // 
+            this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel8.Controls.Add(this.lblSubTotalValue);
             this.panel8.Controls.Add(this.lblSubTotal);
@@ -949,6 +1121,7 @@ namespace QuoteSwift
             // 
             // panel7
             // 
+            this.panel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel7.Controls.Add(this.lblRebateValue);
             this.panel7.Controls.Add(this.lblRebate);
@@ -977,17 +1150,20 @@ namespace QuoteSwift
             // 
             // lblRepairPercentage
             // 
+            this.lblRepairPercentage.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lblRepairPercentage.AutoSize = true;
-            this.lblRepairPercentage.Location = new System.Drawing.Point(247, 57);
+            this.lblRepairPercentage.Location = new System.Drawing.Point(346, 44);
             this.lblRepairPercentage.Name = "lblRepairPercentage";
             this.lblRepairPercentage.Size = new System.Drawing.Size(103, 13);
             this.lblRepairPercentage.TabIndex = 1;
             this.lblRepairPercentage.Text = "lblRepairPercentage";
+            this.lblRepairPercentage.Click += new System.EventHandler(this.lblRepairPercentage_Click);
             // 
             // lblNewPumpUnitPrice
             // 
+            this.lblNewPumpUnitPrice.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lblNewPumpUnitPrice.AutoSize = true;
-            this.lblNewPumpUnitPrice.Location = new System.Drawing.Point(247, 24);
+            this.lblNewPumpUnitPrice.Location = new System.Drawing.Point(346, 17);
             this.lblNewPumpUnitPrice.Name = "lblNewPumpUnitPrice";
             this.lblNewPumpUnitPrice.Size = new System.Drawing.Size(109, 13);
             this.lblNewPumpUnitPrice.TabIndex = 0;
@@ -995,7 +1171,8 @@ namespace QuoteSwift
             // 
             // btnComplete
             // 
-            this.btnComplete.Location = new System.Drawing.Point(1318, 620);
+            this.btnComplete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnComplete.Location = new System.Drawing.Point(1318, 739);
             this.btnComplete.Name = "btnComplete";
             this.btnComplete.Size = new System.Drawing.Size(75, 23);
             this.btnComplete.TabIndex = 12;
@@ -1005,18 +1182,20 @@ namespace QuoteSwift
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(10, 620);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCancel.Location = new System.Drawing.Point(10, 739);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 13;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
-            // frmCreateQuote
+            // FrmCreateQuote
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1401, 644);
+            this.ClientSize = new System.Drawing.Size(1401, 770);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnComplete);
             this.Controls.Add(this.panel6);
@@ -1028,9 +1207,10 @@ namespace QuoteSwift
             this.Controls.Add(this.pnlBusinessDetails);
             this.Controls.Add(this.msCreateNewQuoteControls);
             this.MainMenuStrip = this.msCreateNewQuoteControls;
-            this.Name = "frmCreateQuote";
+            this.Name = "FrmCreateQuote";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Creating New Quote For << Business Name >>";
+            this.Load += new System.EventHandler(this.FrmCreateQuote_Load);
             this.msCreateNewQuoteControls.ResumeLayout(false);
             this.msCreateNewQuoteControls.PerformLayout();
             this.pnlBusinessDetails.ResumeLayout(false);
@@ -1053,7 +1233,7 @@ namespace QuoteSwift
             this.panel5.ResumeLayout(false);
             this.gbxPumpRestorationDetails.ResumeLayout(false);
             this.gbxPumpRestorationDetails.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvNonMandatoryPartReplacement)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartReplacement)).EndInit();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -1103,7 +1283,7 @@ namespace QuoteSwift
         private System.Windows.Forms.ComboBox cbxCustomerSelection;
         private System.Windows.Forms.Label lblCustomerPOBoxAreaCode;
         private System.Windows.Forms.Label lblBusinessPOBoxAreaCode;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblCustomerVendorNumber;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.GroupBox gbxCustomerDeliveryAddressInformation;
         private System.Windows.Forms.ComboBox cbxCustomerDeliveryAddress;
@@ -1128,27 +1308,8 @@ namespace QuoteSwift
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.GroupBox gbxPumpRestorationDetails;
         private System.Windows.Forms.Label lblNewParts;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
         private System.Windows.Forms.Label lblMandatoryParts;
         private System.Windows.Forms.DataGridView dgvMandatoryPartReplacement;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmPartNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmDescription;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmQuantity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmMissing;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmScrap;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmNew;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmUnitPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmTotal;
         private System.Windows.Forms.ComboBox cbxPumpSelection;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Label lblRepairPercentage;
@@ -1167,5 +1328,33 @@ namespace QuoteSwift
         private System.Windows.Forms.Label lblTotalDueValue;
         private System.Windows.Forms.Button btnComplete;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.ComboBox CbxPOBoxSelection;
+        private System.Windows.Forms.Label lblCustomerPOBoxStreetName;
+        private System.Windows.Forms.Label lblBusinessPOBoxStreetName;
+        private System.Windows.Forms.DataGridView DgvNonMandatoryPartReplacement;
+        private System.Windows.Forms.ComboBox CbxCustomerPOBoxSelection;
+        private System.Windows.Forms.MaskedTextBox mtxtRebate;
+        private System.Windows.Forms.Label lblRebateTestInput;
+        private System.Windows.Forms.Button BtnCalculateRebate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmNMQuantity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmNMMissing_Scrap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmNMRepaired;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmNMNewPartQuantity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmNMPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmNMUnitPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmNMRepairDevider;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmPartNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmQuantity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmMMissing_Scrap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmMRepaired;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmNew;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmUnitPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmTotal;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmRepairDevider;
     }
 }

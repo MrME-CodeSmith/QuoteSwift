@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,25 @@ namespace QuoteSwift
 {
     public static class MainProgramCode
     {
+        //Get Last Quote
+
+        public static Quote GetLastQuote(ref Pass passed)
+        {
+            if(passed != null && passed.PassQuoteList != null )
+            {
+                int Index = 0;
+                DateTime dt = passed.PassQuoteList[0].QuoteCreationDate;
+                for(int i = 1; i < passed.PassQuoteList.Count; i++)
+                    if(passed.PassQuoteList[i].QuoteCreationDate.Date > dt)
+                    {
+                        dt = passed.PassQuoteList[i].QuoteCreationDate.Date;
+                        Index = i;
+                    }
+                return passed.PassQuoteList[Index];
+            }
+            
+            return null;
+        }
 
         // Set Components To ReadWrite:
 
@@ -253,7 +273,7 @@ namespace QuoteSwift
             return tempByte;
         }
 
-        // Deserialize Pump List Method
+        // Deserialize Business List Method
 
         public static BindingList<Business> DeserializeBusinessList(byte[] tempByte)
         {
@@ -267,7 +287,7 @@ namespace QuoteSwift
             }
         }
 
-        // Serialize and Store Pump List Method
+        // Serialize and Store Business List Method
 
         public static void SerializeBusinessList(ref Pass passed)
         {
@@ -279,8 +299,6 @@ namespace QuoteSwift
                 MainProgramCode.SaveData("BusinessList.pbf", ToStore);
             }
         }
-
-
 
         /****************************************************/
 
@@ -368,7 +386,15 @@ namespace QuoteSwift
         public static ref Pass CreateNewQuote(ref Pass passed)
         {
             FrmCreateQuote newQuote = new FrmCreateQuote(ref passed);
-            newQuote.ShowDialog();
+            try
+            {
+                newQuote.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                MainProgramCode.ShowError(e.ToString(), "ERROR - Error Ocured");
+                //Do Nothing
+            }
             return ref newQuote.Passed;
         }
 

@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Reflection;
+using System.Security.Principal;
 
 namespace QuoteSwift
 {
     public partial class FrmViewQuotes : Form
     {
-
-        
 
         Pass passed;
 
@@ -261,6 +262,9 @@ namespace QuoteSwift
                 {
                     return;
                 }
+
+                this.dgvPreviousQuotes.RowsDefaultCellStyle.BackColor = Color.Bisque;
+                this.dgvPreviousQuotes.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
             }
         }
 
@@ -273,5 +277,6 @@ namespace QuoteSwift
                 MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
             }
         }
+
     }
 }

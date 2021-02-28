@@ -91,6 +91,8 @@ namespace QuoteSwift // Repair Quote Swift
         private void FrmViewPump_Load(object sender, EventArgs e)
         {
             LoadInformation();
+            this.dgvPumpList.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.dgvPumpList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         /** Form Specific Functions And Procedures: 

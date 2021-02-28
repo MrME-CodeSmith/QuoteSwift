@@ -122,6 +122,12 @@ namespace QuoteSwift
 
                 Read_OnlyMainComponents();
             }
+
+            this.dgvMandatoryPartView.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.dgvMandatoryPartView.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+
+            this.dgvNonMandatoryPartView.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.dgvNonMandatoryPartView.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         /** Form Specific Functions And Procedures: 

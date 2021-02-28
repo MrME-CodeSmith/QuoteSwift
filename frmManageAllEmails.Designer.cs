@@ -77,7 +77,6 @@ namespace QuoteSwift
             this.DgvEmails.Name = "DgvEmails";
             this.DgvEmails.Size = new System.Drawing.Size(391, 168);
             this.DgvEmails.TabIndex = 1;
-            this.DgvEmails.Leave += new System.EventHandler(this.DgvEmails_Leave);
             // 
             // clmEmailAddresses
             // 

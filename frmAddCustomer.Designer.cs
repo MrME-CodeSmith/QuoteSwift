@@ -35,10 +35,12 @@ namespace QuoteSwift
             this.btnAddCustomer = new System.Windows.Forms.Button();
             this.gbxEmailRelated = new System.Windows.Forms.GroupBox();
             this.btnViewEmailAddresses = new System.Windows.Forms.Button();
-            this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.mtxtEmailAddress = new System.Windows.Forms.MaskedTextBox();
+            this.BtnAddEmail = new System.Windows.Forms.Button();
             this.lblEmailAddress = new System.Windows.Forms.Label();
             this.gbxPOBoxAddress = new System.Windows.Forms.GroupBox();
+            this.lblBusinessPODescription = new System.Windows.Forms.Label();
+            this.txtCustomerPODescription = new System.Windows.Forms.TextBox();
             this.btnViewAllPOBoxAddresses = new System.Windows.Forms.Button();
             this.lblPOBoxAreaCode = new System.Windows.Forms.Label();
             this.btnAddPOBoxAddress = new System.Windows.Forms.Button();
@@ -56,21 +58,24 @@ namespace QuoteSwift
             this.txtCity = new System.Windows.Forms.TextBox();
             this.msCustomerControls = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updatedCustomerInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbxCustomerInformation = new System.Windows.Forms.GroupBox();
             this.cbBusinessSelection = new System.Windows.Forms.ComboBox();
             this.lblLinkCustomerTo = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtCustomerCompanyName = new System.Windows.Forms.TextBox();
             this.gbxLegalInformation = new System.Windows.Forms.GroupBox();
             this.mtxtRegistrationNumber = new System.Windows.Forms.MaskedTextBox();
             this.mtxtVATNumber = new System.Windows.Forms.MaskedTextBox();
             this.lblRegistrationNumber = new System.Windows.Forms.Label();
             this.lblVATNumber = new System.Windows.Forms.Label();
-            this.txtBusinessName = new System.Windows.Forms.TextBox();
+            this.txtCustomerName = new System.Windows.Forms.TextBox();
             this.lblExtraInformation = new System.Windows.Forms.Label();
             this.lblCustomerName = new System.Windows.Forms.Label();
             this.gbxCustomerAddress = new System.Windows.Forms.GroupBox();
+            this.lblBusinessAddressDescription = new System.Windows.Forms.Label();
+            this.txtCustomerAddresssDescription = new System.Windows.Forms.TextBox();
             this.lblCity = new System.Windows.Forms.Label();
             this.txtSuburb = new System.Windows.Forms.TextBox();
             this.lblSuburb = new System.Windows.Forms.Label();
@@ -85,6 +90,8 @@ namespace QuoteSwift
             this.lblCellphoneNumber = new System.Windows.Forms.Label();
             this.gbxPhoneRelated = new System.Windows.Forms.GroupBox();
             this.lblTelephoneNumber = new System.Windows.Forms.Label();
+            this.mtxtVendorNumber = new System.Windows.Forms.MaskedTextBox();
+            this.lblVendorNumebr = new System.Windows.Forms.Label();
             this.gbxEmailRelated.SuspendLayout();
             this.gbxPOBoxAddress.SuspendLayout();
             this.msCustomerControls.SuspendLayout();
@@ -97,7 +104,7 @@ namespace QuoteSwift
             // lblAreaCode
             // 
             this.lblAreaCode.AutoSize = true;
-            this.lblAreaCode.Location = new System.Drawing.Point(24, 145);
+            this.lblAreaCode.Location = new System.Drawing.Point(27, 170);
             this.lblAreaCode.Name = "lblAreaCode";
             this.lblAreaCode.Size = new System.Drawing.Size(60, 13);
             this.lblAreaCode.TabIndex = 9;
@@ -105,16 +112,17 @@ namespace QuoteSwift
             // 
             // btnAddAddress
             // 
-            this.btnAddAddress.Location = new System.Drawing.Point(246, 173);
+            this.btnAddAddress.Location = new System.Drawing.Point(249, 198);
             this.btnAddAddress.Name = "btnAddAddress";
             this.btnAddAddress.Size = new System.Drawing.Size(93, 23);
             this.btnAddAddress.TabIndex = 6;
             this.btnAddAddress.Text = "Add Address";
             this.btnAddAddress.UseVisualStyleBackColor = true;
+            this.btnAddAddress.Click += new System.EventHandler(this.BtnAddAddress_Click);
             // 
             // mtxtAreaCode
             // 
-            this.mtxtAreaCode.Location = new System.Drawing.Point(90, 142);
+            this.mtxtAreaCode.Location = new System.Drawing.Point(93, 167);
             this.mtxtAreaCode.Mask = "00000";
             this.mtxtAreaCode.Name = "mtxtAreaCode";
             this.mtxtAreaCode.Size = new System.Drawing.Size(49, 20);
@@ -123,9 +131,9 @@ namespace QuoteSwift
             // 
             // btnAddCustomer
             // 
-            this.btnAddCustomer.Location = new System.Drawing.Point(623, 443);
+            this.btnAddCustomer.Location = new System.Drawing.Point(602, 502);
             this.btnAddCustomer.Name = "btnAddCustomer";
-            this.btnAddCustomer.Size = new System.Drawing.Size(93, 23);
+            this.btnAddCustomer.Size = new System.Drawing.Size(112, 23);
             this.btnAddCustomer.TabIndex = 17;
             this.btnAddCustomer.Text = "Add Customer";
             this.btnAddCustomer.UseVisualStyleBackColor = true;
@@ -134,10 +142,10 @@ namespace QuoteSwift
             // gbxEmailRelated
             // 
             this.gbxEmailRelated.Controls.Add(this.btnViewEmailAddresses);
-            this.gbxEmailRelated.Controls.Add(this.maskedTextBox2);
-            this.gbxEmailRelated.Controls.Add(this.button2);
+            this.gbxEmailRelated.Controls.Add(this.mtxtEmailAddress);
+            this.gbxEmailRelated.Controls.Add(this.BtnAddEmail);
             this.gbxEmailRelated.Controls.Add(this.lblEmailAddress);
-            this.gbxEmailRelated.Location = new System.Drawing.Point(365, 140);
+            this.gbxEmailRelated.Location = new System.Drawing.Point(366, 141);
             this.gbxEmailRelated.Name = "gbxEmailRelated";
             this.gbxEmailRelated.Size = new System.Drawing.Size(352, 89);
             this.gbxEmailRelated.TabIndex = 15;
@@ -152,22 +160,24 @@ namespace QuoteSwift
             this.btnViewEmailAddresses.TabIndex = 7;
             this.btnViewEmailAddresses.Text = "View All Email Addresses";
             this.btnViewEmailAddresses.UseVisualStyleBackColor = true;
+            this.btnViewEmailAddresses.Click += new System.EventHandler(this.BtnViewEmailAddresses_Click);
             // 
-            // maskedTextBox2
+            // mtxtEmailAddress
             // 
-            this.maskedTextBox2.Location = new System.Drawing.Point(88, 26);
-            this.maskedTextBox2.Name = "maskedTextBox2";
-            this.maskedTextBox2.Size = new System.Drawing.Size(257, 20);
-            this.maskedTextBox2.TabIndex = 2;
+            this.mtxtEmailAddress.Location = new System.Drawing.Point(88, 26);
+            this.mtxtEmailAddress.Name = "mtxtEmailAddress";
+            this.mtxtEmailAddress.Size = new System.Drawing.Size(257, 20);
+            this.mtxtEmailAddress.TabIndex = 2;
             // 
-            // button2
+            // BtnAddEmail
             // 
-            this.button2.Location = new System.Drawing.Point(237, 58);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(108, 23);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Add Email Address";
-            this.button2.UseVisualStyleBackColor = true;
+            this.BtnAddEmail.Location = new System.Drawing.Point(237, 58);
+            this.BtnAddEmail.Name = "BtnAddEmail";
+            this.BtnAddEmail.Size = new System.Drawing.Size(108, 23);
+            this.BtnAddEmail.TabIndex = 6;
+            this.BtnAddEmail.Text = "Add Email Address";
+            this.BtnAddEmail.UseVisualStyleBackColor = true;
+            this.BtnAddEmail.Click += new System.EventHandler(this.BtnAddEmail_Click);
             // 
             // lblEmailAddress
             // 
@@ -180,6 +190,8 @@ namespace QuoteSwift
             // 
             // gbxPOBoxAddress
             // 
+            this.gbxPOBoxAddress.Controls.Add(this.lblBusinessPODescription);
+            this.gbxPOBoxAddress.Controls.Add(this.txtCustomerPODescription);
             this.gbxPOBoxAddress.Controls.Add(this.btnViewAllPOBoxAddresses);
             this.gbxPOBoxAddress.Controls.Add(this.lblPOBoxAreaCode);
             this.gbxPOBoxAddress.Controls.Add(this.btnAddPOBoxAddress);
@@ -192,26 +204,43 @@ namespace QuoteSwift
             this.gbxPOBoxAddress.Controls.Add(this.txtPOBoxStreetName);
             this.gbxPOBoxAddress.Controls.Add(this.mtxtPOBoxStreetNumber);
             this.gbxPOBoxAddress.Controls.Add(this.lblPOBoxStreetNumber);
-            this.gbxPOBoxAddress.Location = new System.Drawing.Point(365, 235);
+            this.gbxPOBoxAddress.Location = new System.Drawing.Point(365, 264);
             this.gbxPOBoxAddress.Name = "gbxPOBoxAddress";
-            this.gbxPOBoxAddress.Size = new System.Drawing.Size(351, 202);
+            this.gbxPOBoxAddress.Size = new System.Drawing.Size(351, 232);
             this.gbxPOBoxAddress.TabIndex = 18;
             this.gbxPOBoxAddress.TabStop = false;
             this.gbxPOBoxAddress.Text = "Customer P.O.Box Address:";
             // 
+            // lblBusinessPODescription
+            // 
+            this.lblBusinessPODescription.AutoSize = true;
+            this.lblBusinessPODescription.Location = new System.Drawing.Point(26, 22);
+            this.lblBusinessPODescription.Name = "lblBusinessPODescription";
+            this.lblBusinessPODescription.Size = new System.Drawing.Size(63, 13);
+            this.lblBusinessPODescription.TabIndex = 15;
+            this.lblBusinessPODescription.Text = "Description:";
+            // 
+            // txtCustomerPODescription
+            // 
+            this.txtCustomerPODescription.Location = new System.Drawing.Point(95, 19);
+            this.txtCustomerPODescription.Name = "txtCustomerPODescription";
+            this.txtCustomerPODescription.Size = new System.Drawing.Size(249, 20);
+            this.txtCustomerPODescription.TabIndex = 14;
+            // 
             // btnViewAllPOBoxAddresses
             // 
-            this.btnViewAllPOBoxAddresses.Location = new System.Drawing.Point(6, 173);
+            this.btnViewAllPOBoxAddresses.Location = new System.Drawing.Point(11, 198);
             this.btnViewAllPOBoxAddresses.Name = "btnViewAllPOBoxAddresses";
             this.btnViewAllPOBoxAddresses.Size = new System.Drawing.Size(112, 23);
             this.btnViewAllPOBoxAddresses.TabIndex = 7;
             this.btnViewAllPOBoxAddresses.Text = "View All Addresses";
             this.btnViewAllPOBoxAddresses.UseVisualStyleBackColor = true;
+            this.btnViewAllPOBoxAddresses.Click += new System.EventHandler(this.BtnViewAllPOBoxAddresses_Click);
             // 
             // lblPOBoxAreaCode
             // 
             this.lblPOBoxAreaCode.AutoSize = true;
-            this.lblPOBoxAreaCode.Location = new System.Drawing.Point(24, 145);
+            this.lblPOBoxAreaCode.Location = new System.Drawing.Point(29, 170);
             this.lblPOBoxAreaCode.Name = "lblPOBoxAreaCode";
             this.lblPOBoxAreaCode.Size = new System.Drawing.Size(60, 13);
             this.lblPOBoxAreaCode.TabIndex = 9;
@@ -219,16 +248,17 @@ namespace QuoteSwift
             // 
             // btnAddPOBoxAddress
             // 
-            this.btnAddPOBoxAddress.Location = new System.Drawing.Point(246, 173);
+            this.btnAddPOBoxAddress.Location = new System.Drawing.Point(251, 198);
             this.btnAddPOBoxAddress.Name = "btnAddPOBoxAddress";
             this.btnAddPOBoxAddress.Size = new System.Drawing.Size(93, 23);
             this.btnAddPOBoxAddress.TabIndex = 6;
             this.btnAddPOBoxAddress.Text = "Add Address";
             this.btnAddPOBoxAddress.UseVisualStyleBackColor = true;
+            this.btnAddPOBoxAddress.Click += new System.EventHandler(this.BtnAddPOBoxAddress_Click);
             // 
             // mtxtPOBoxAreaCode
             // 
-            this.mtxtPOBoxAreaCode.Location = new System.Drawing.Point(90, 142);
+            this.mtxtPOBoxAreaCode.Location = new System.Drawing.Point(95, 167);
             this.mtxtPOBoxAreaCode.Mask = "00000";
             this.mtxtPOBoxAreaCode.Name = "mtxtPOBoxAreaCode";
             this.mtxtPOBoxAreaCode.Size = new System.Drawing.Size(49, 20);
@@ -237,7 +267,7 @@ namespace QuoteSwift
             // 
             // txtPOBoxCity
             // 
-            this.txtPOBoxCity.Location = new System.Drawing.Point(90, 112);
+            this.txtPOBoxCity.Location = new System.Drawing.Point(95, 137);
             this.txtPOBoxCity.Name = "txtPOBoxCity";
             this.txtPOBoxCity.Size = new System.Drawing.Size(249, 20);
             this.txtPOBoxCity.TabIndex = 7;
@@ -245,7 +275,7 @@ namespace QuoteSwift
             // lblPOBoxCity
             // 
             this.lblPOBoxCity.AutoSize = true;
-            this.lblPOBoxCity.Location = new System.Drawing.Point(57, 115);
+            this.lblPOBoxCity.Location = new System.Drawing.Point(62, 140);
             this.lblPOBoxCity.Name = "lblPOBoxCity";
             this.lblPOBoxCity.Size = new System.Drawing.Size(27, 13);
             this.lblPOBoxCity.TabIndex = 6;
@@ -253,7 +283,7 @@ namespace QuoteSwift
             // 
             // txtPOBoxSuburb
             // 
-            this.txtPOBoxSuburb.Location = new System.Drawing.Point(90, 82);
+            this.txtPOBoxSuburb.Location = new System.Drawing.Point(95, 107);
             this.txtPOBoxSuburb.Name = "txtPOBoxSuburb";
             this.txtPOBoxSuburb.Size = new System.Drawing.Size(249, 20);
             this.txtPOBoxSuburb.TabIndex = 5;
@@ -261,7 +291,7 @@ namespace QuoteSwift
             // lblPOBoxSuburb
             // 
             this.lblPOBoxSuburb.AutoSize = true;
-            this.lblPOBoxSuburb.Location = new System.Drawing.Point(40, 85);
+            this.lblPOBoxSuburb.Location = new System.Drawing.Point(45, 110);
             this.lblPOBoxSuburb.Name = "lblPOBoxSuburb";
             this.lblPOBoxSuburb.Size = new System.Drawing.Size(44, 13);
             this.lblPOBoxSuburb.TabIndex = 4;
@@ -270,7 +300,7 @@ namespace QuoteSwift
             // lblPOBoxStreetName
             // 
             this.lblPOBoxStreetName.AutoSize = true;
-            this.lblPOBoxStreetName.Location = new System.Drawing.Point(15, 55);
+            this.lblPOBoxStreetName.Location = new System.Drawing.Point(20, 80);
             this.lblPOBoxStreetName.Name = "lblPOBoxStreetName";
             this.lblPOBoxStreetName.Size = new System.Drawing.Size(69, 13);
             this.lblPOBoxStreetName.TabIndex = 3;
@@ -278,14 +308,14 @@ namespace QuoteSwift
             // 
             // txtPOBoxStreetName
             // 
-            this.txtPOBoxStreetName.Location = new System.Drawing.Point(90, 52);
+            this.txtPOBoxStreetName.Location = new System.Drawing.Point(95, 77);
             this.txtPOBoxStreetName.Name = "txtPOBoxStreetName";
             this.txtPOBoxStreetName.Size = new System.Drawing.Size(249, 20);
             this.txtPOBoxStreetName.TabIndex = 2;
             // 
             // mtxtPOBoxStreetNumber
             // 
-            this.mtxtPOBoxStreetNumber.Location = new System.Drawing.Point(90, 23);
+            this.mtxtPOBoxStreetNumber.Location = new System.Drawing.Point(95, 48);
             this.mtxtPOBoxStreetNumber.Mask = "00000";
             this.mtxtPOBoxStreetNumber.Name = "mtxtPOBoxStreetNumber";
             this.mtxtPOBoxStreetNumber.Size = new System.Drawing.Size(49, 20);
@@ -295,7 +325,7 @@ namespace QuoteSwift
             // lblPOBoxStreetNumber
             // 
             this.lblPOBoxStreetNumber.AutoSize = true;
-            this.lblPOBoxStreetNumber.Location = new System.Drawing.Point(6, 25);
+            this.lblPOBoxStreetNumber.Location = new System.Drawing.Point(11, 50);
             this.lblPOBoxStreetNumber.Name = "lblPOBoxStreetNumber";
             this.lblPOBoxStreetNumber.Size = new System.Drawing.Size(78, 13);
             this.lblPOBoxStreetNumber.TabIndex = 0;
@@ -303,25 +333,27 @@ namespace QuoteSwift
             // 
             // btnViewAddresses
             // 
-            this.btnViewAddresses.Location = new System.Drawing.Point(6, 173);
+            this.btnViewAddresses.Location = new System.Drawing.Point(9, 198);
             this.btnViewAddresses.Name = "btnViewAddresses";
             this.btnViewAddresses.Size = new System.Drawing.Size(112, 23);
             this.btnViewAddresses.TabIndex = 7;
             this.btnViewAddresses.Text = "View All Addresses";
             this.btnViewAddresses.UseVisualStyleBackColor = true;
+            this.btnViewAddresses.Click += new System.EventHandler(this.BtnViewAddresses_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(8, 443);
+            this.btnCancel.Location = new System.Drawing.Point(8, 502);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(93, 23);
             this.btnCancel.TabIndex = 19;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // txtCity
             // 
-            this.txtCity.Location = new System.Drawing.Point(90, 112);
+            this.txtCity.Location = new System.Drawing.Point(93, 137);
             this.txtCity.Name = "txtCity";
             this.txtCity.Size = new System.Drawing.Size(249, 20);
             this.txtCity.TabIndex = 7;
@@ -340,9 +372,18 @@ namespace QuoteSwift
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updatedCustomerInformationToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // updatedCustomerInformationToolStripMenuItem
+            // 
+            this.updatedCustomerInformationToolStripMenuItem.Name = "updatedCustomerInformationToolStripMenuItem";
+            this.updatedCustomerInformationToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+            this.updatedCustomerInformationToolStripMenuItem.Text = "Updated Customer Information";
+            this.updatedCustomerInformationToolStripMenuItem.Click += new System.EventHandler(this.UpdatedCustomerInformationToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -359,16 +400,18 @@ namespace QuoteSwift
             // 
             // gbxCustomerInformation
             // 
+            this.gbxCustomerInformation.Controls.Add(this.mtxtVendorNumber);
+            this.gbxCustomerInformation.Controls.Add(this.lblVendorNumebr);
             this.gbxCustomerInformation.Controls.Add(this.cbBusinessSelection);
             this.gbxCustomerInformation.Controls.Add(this.lblLinkCustomerTo);
-            this.gbxCustomerInformation.Controls.Add(this.textBox1);
+            this.gbxCustomerInformation.Controls.Add(this.txtCustomerCompanyName);
             this.gbxCustomerInformation.Controls.Add(this.gbxLegalInformation);
-            this.gbxCustomerInformation.Controls.Add(this.txtBusinessName);
+            this.gbxCustomerInformation.Controls.Add(this.txtCustomerName);
             this.gbxCustomerInformation.Controls.Add(this.lblExtraInformation);
             this.gbxCustomerInformation.Controls.Add(this.lblCustomerName);
             this.gbxCustomerInformation.Location = new System.Drawing.Point(8, 27);
             this.gbxCustomerInformation.Name = "gbxCustomerInformation";
-            this.gbxCustomerInformation.Size = new System.Drawing.Size(351, 202);
+            this.gbxCustomerInformation.Size = new System.Drawing.Size(351, 231);
             this.gbxCustomerInformation.TabIndex = 13;
             this.gbxCustomerInformation.TabStop = false;
             this.gbxCustomerInformation.Text = "Customer Information:";
@@ -390,12 +433,12 @@ namespace QuoteSwift
             this.lblLinkCustomerTo.TabIndex = 6;
             this.lblLinkCustomerTo.Text = "Link Customer To:";
             // 
-            // textBox1
+            // txtCustomerCompanyName
             // 
-            this.textBox1.Location = new System.Drawing.Point(148, 52);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(197, 20);
-            this.textBox1.TabIndex = 5;
+            this.txtCustomerCompanyName.Location = new System.Drawing.Point(148, 52);
+            this.txtCustomerCompanyName.Name = "txtCustomerCompanyName";
+            this.txtCustomerCompanyName.Size = new System.Drawing.Size(197, 20);
+            this.txtCustomerCompanyName.TabIndex = 5;
             // 
             // gbxLegalInformation
             // 
@@ -403,7 +446,7 @@ namespace QuoteSwift
             this.gbxLegalInformation.Controls.Add(this.mtxtVATNumber);
             this.gbxLegalInformation.Controls.Add(this.lblRegistrationNumber);
             this.gbxLegalInformation.Controls.Add(this.lblVATNumber);
-            this.gbxLegalInformation.Location = new System.Drawing.Point(6, 107);
+            this.gbxLegalInformation.Location = new System.Drawing.Point(6, 136);
             this.gbxLegalInformation.Name = "gbxLegalInformation";
             this.gbxLegalInformation.Size = new System.Drawing.Size(339, 89);
             this.gbxLegalInformation.TabIndex = 4;
@@ -442,12 +485,12 @@ namespace QuoteSwift
             this.lblVATNumber.TabIndex = 0;
             this.lblVATNumber.Text = "VAT Number:";
             // 
-            // txtBusinessName
+            // txtCustomerName
             // 
-            this.txtBusinessName.Location = new System.Drawing.Point(148, 22);
-            this.txtBusinessName.Name = "txtBusinessName";
-            this.txtBusinessName.Size = new System.Drawing.Size(197, 20);
-            this.txtBusinessName.TabIndex = 2;
+            this.txtCustomerName.Location = new System.Drawing.Point(148, 22);
+            this.txtCustomerName.Name = "txtCustomerName";
+            this.txtCustomerName.Size = new System.Drawing.Size(197, 20);
+            this.txtCustomerName.TabIndex = 2;
             // 
             // lblExtraInformation
             // 
@@ -463,13 +506,15 @@ namespace QuoteSwift
             this.lblCustomerName.AutoSize = true;
             this.lblCustomerName.Location = new System.Drawing.Point(59, 25);
             this.lblCustomerName.Name = "lblCustomerName";
-            this.lblCustomerName.Size = new System.Drawing.Size(83, 13);
+            this.lblCustomerName.Size = new System.Drawing.Size(85, 13);
             this.lblCustomerName.TabIndex = 0;
-            this.lblCustomerName.Text = "Business Name:";
+            this.lblCustomerName.Text = "Customer Name:";
             this.lblCustomerName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // gbxCustomerAddress
             // 
+            this.gbxCustomerAddress.Controls.Add(this.lblBusinessAddressDescription);
+            this.gbxCustomerAddress.Controls.Add(this.txtCustomerAddresssDescription);
             this.gbxCustomerAddress.Controls.Add(this.btnViewAddresses);
             this.gbxCustomerAddress.Controls.Add(this.lblAreaCode);
             this.gbxCustomerAddress.Controls.Add(this.btnAddAddress);
@@ -482,17 +527,33 @@ namespace QuoteSwift
             this.gbxCustomerAddress.Controls.Add(this.txtStreetName);
             this.gbxCustomerAddress.Controls.Add(this.mtxtStreetnumber);
             this.gbxCustomerAddress.Controls.Add(this.lblBusinessStreetNumber);
-            this.gbxCustomerAddress.Location = new System.Drawing.Point(8, 235);
+            this.gbxCustomerAddress.Location = new System.Drawing.Point(8, 264);
             this.gbxCustomerAddress.Name = "gbxCustomerAddress";
-            this.gbxCustomerAddress.Size = new System.Drawing.Size(351, 202);
+            this.gbxCustomerAddress.Size = new System.Drawing.Size(351, 232);
             this.gbxCustomerAddress.TabIndex = 16;
             this.gbxCustomerAddress.TabStop = false;
             this.gbxCustomerAddress.Text = "Customer Address:";
             // 
+            // lblBusinessAddressDescription
+            // 
+            this.lblBusinessAddressDescription.AutoSize = true;
+            this.lblBusinessAddressDescription.Location = new System.Drawing.Point(24, 20);
+            this.lblBusinessAddressDescription.Name = "lblBusinessAddressDescription";
+            this.lblBusinessAddressDescription.Size = new System.Drawing.Size(63, 13);
+            this.lblBusinessAddressDescription.TabIndex = 13;
+            this.lblBusinessAddressDescription.Text = "Description:";
+            // 
+            // txtCustomerAddresssDescription
+            // 
+            this.txtCustomerAddresssDescription.Location = new System.Drawing.Point(93, 17);
+            this.txtCustomerAddresssDescription.Name = "txtCustomerAddresssDescription";
+            this.txtCustomerAddresssDescription.Size = new System.Drawing.Size(249, 20);
+            this.txtCustomerAddresssDescription.TabIndex = 12;
+            // 
             // lblCity
             // 
             this.lblCity.AutoSize = true;
-            this.lblCity.Location = new System.Drawing.Point(57, 115);
+            this.lblCity.Location = new System.Drawing.Point(60, 140);
             this.lblCity.Name = "lblCity";
             this.lblCity.Size = new System.Drawing.Size(27, 13);
             this.lblCity.TabIndex = 6;
@@ -500,7 +561,7 @@ namespace QuoteSwift
             // 
             // txtSuburb
             // 
-            this.txtSuburb.Location = new System.Drawing.Point(90, 82);
+            this.txtSuburb.Location = new System.Drawing.Point(93, 107);
             this.txtSuburb.Name = "txtSuburb";
             this.txtSuburb.Size = new System.Drawing.Size(249, 20);
             this.txtSuburb.TabIndex = 5;
@@ -508,7 +569,7 @@ namespace QuoteSwift
             // lblSuburb
             // 
             this.lblSuburb.AutoSize = true;
-            this.lblSuburb.Location = new System.Drawing.Point(40, 85);
+            this.lblSuburb.Location = new System.Drawing.Point(43, 110);
             this.lblSuburb.Name = "lblSuburb";
             this.lblSuburb.Size = new System.Drawing.Size(44, 13);
             this.lblSuburb.TabIndex = 4;
@@ -517,7 +578,7 @@ namespace QuoteSwift
             // lblStreetName
             // 
             this.lblStreetName.AutoSize = true;
-            this.lblStreetName.Location = new System.Drawing.Point(15, 55);
+            this.lblStreetName.Location = new System.Drawing.Point(18, 80);
             this.lblStreetName.Name = "lblStreetName";
             this.lblStreetName.Size = new System.Drawing.Size(69, 13);
             this.lblStreetName.TabIndex = 3;
@@ -525,14 +586,14 @@ namespace QuoteSwift
             // 
             // txtStreetName
             // 
-            this.txtStreetName.Location = new System.Drawing.Point(90, 52);
+            this.txtStreetName.Location = new System.Drawing.Point(93, 77);
             this.txtStreetName.Name = "txtStreetName";
             this.txtStreetName.Size = new System.Drawing.Size(249, 20);
             this.txtStreetName.TabIndex = 2;
             // 
             // mtxtStreetnumber
             // 
-            this.mtxtStreetnumber.Location = new System.Drawing.Point(90, 23);
+            this.mtxtStreetnumber.Location = new System.Drawing.Point(93, 48);
             this.mtxtStreetnumber.Mask = "00000";
             this.mtxtStreetnumber.Name = "mtxtStreetnumber";
             this.mtxtStreetnumber.Size = new System.Drawing.Size(49, 20);
@@ -542,7 +603,7 @@ namespace QuoteSwift
             // lblBusinessStreetNumber
             // 
             this.lblBusinessStreetNumber.AutoSize = true;
-            this.lblBusinessStreetNumber.Location = new System.Drawing.Point(6, 25);
+            this.lblBusinessStreetNumber.Location = new System.Drawing.Point(9, 50);
             this.lblBusinessStreetNumber.Name = "lblBusinessStreetNumber";
             this.lblBusinessStreetNumber.Size = new System.Drawing.Size(78, 13);
             this.lblBusinessStreetNumber.TabIndex = 0;
@@ -556,6 +617,7 @@ namespace QuoteSwift
             this.btnViewAll.TabIndex = 5;
             this.btnViewAll.Text = "View All Numbers";
             this.btnViewAll.UseVisualStyleBackColor = true;
+            this.btnViewAll.Click += new System.EventHandler(this.BtnViewAll_Click);
             // 
             // mtxtCellphoneNumber
             // 
@@ -581,6 +643,7 @@ namespace QuoteSwift
             this.btnAddNumber.TabIndex = 2;
             this.btnAddNumber.Text = "Add Number/s";
             this.btnAddNumber.UseVisualStyleBackColor = true;
+            this.btnAddNumber.Click += new System.EventHandler(this.BtnAddNumber_Click);
             // 
             // lblCellphoneNumber
             // 
@@ -600,7 +663,7 @@ namespace QuoteSwift
             this.gbxPhoneRelated.Controls.Add(this.btnAddNumber);
             this.gbxPhoneRelated.Controls.Add(this.lblCellphoneNumber);
             this.gbxPhoneRelated.Controls.Add(this.lblTelephoneNumber);
-            this.gbxPhoneRelated.Location = new System.Drawing.Point(365, 27);
+            this.gbxPhoneRelated.Location = new System.Drawing.Point(366, 27);
             this.gbxPhoneRelated.Name = "gbxPhoneRelated";
             this.gbxPhoneRelated.Size = new System.Drawing.Size(351, 108);
             this.gbxPhoneRelated.TabIndex = 14;
@@ -617,11 +680,27 @@ namespace QuoteSwift
             this.lblTelephoneNumber.Text = "Telephone Number:";
             this.lblTelephoneNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // frmAddCustomer
+            // mtxtVendorNumber
+            // 
+            this.mtxtVendorNumber.Location = new System.Drawing.Point(148, 112);
+            this.mtxtVendorNumber.Name = "mtxtVendorNumber";
+            this.mtxtVendorNumber.Size = new System.Drawing.Size(197, 20);
+            this.mtxtVendorNumber.TabIndex = 9;
+            // 
+            // lblVendorNumebr
+            // 
+            this.lblVendorNumebr.AutoSize = true;
+            this.lblVendorNumebr.Location = new System.Drawing.Point(58, 115);
+            this.lblVendorNumebr.Name = "lblVendorNumebr";
+            this.lblVendorNumebr.Size = new System.Drawing.Size(84, 13);
+            this.lblVendorNumebr.TabIndex = 8;
+            this.lblVendorNumebr.Text = "Vendor Number:";
+            // 
+            // FrmAddCustomer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(726, 471);
+            this.ClientSize = new System.Drawing.Size(726, 535);
             this.Controls.Add(this.btnAddCustomer);
             this.Controls.Add(this.gbxEmailRelated);
             this.Controls.Add(this.gbxPOBoxAddress);
@@ -630,9 +709,11 @@ namespace QuoteSwift
             this.Controls.Add(this.gbxCustomerInformation);
             this.Controls.Add(this.gbxCustomerAddress);
             this.Controls.Add(this.gbxPhoneRelated);
-            this.Name = "frmAddCustomer";
+            this.Name = "FrmAddCustomer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "frmAddCustomer";
+            this.Text = "Add Customer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAddCustomer_FormClosing);
+            this.Load += new System.EventHandler(this.FrmAddCustomer_Load);
             this.gbxEmailRelated.ResumeLayout(false);
             this.gbxEmailRelated.PerformLayout();
             this.gbxPOBoxAddress.ResumeLayout(false);
@@ -660,8 +741,8 @@ namespace QuoteSwift
         private System.Windows.Forms.Button btnAddCustomer;
         private System.Windows.Forms.GroupBox gbxEmailRelated;
         private System.Windows.Forms.Button btnViewEmailAddresses;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox2;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.MaskedTextBox mtxtEmailAddress;
+        private System.Windows.Forms.Button BtnAddEmail;
         private System.Windows.Forms.Label lblEmailAddress;
         private System.Windows.Forms.GroupBox gbxPOBoxAddress;
         private System.Windows.Forms.Button btnViewAllPOBoxAddresses;
@@ -689,7 +770,7 @@ namespace QuoteSwift
         private System.Windows.Forms.MaskedTextBox mtxtVATNumber;
         private System.Windows.Forms.Label lblRegistrationNumber;
         private System.Windows.Forms.Label lblVATNumber;
-        private System.Windows.Forms.TextBox txtBusinessName;
+        private System.Windows.Forms.TextBox txtCustomerName;
         private System.Windows.Forms.Label lblExtraInformation;
         private System.Windows.Forms.Label lblCustomerName;
         private System.Windows.Forms.GroupBox gbxCustomerAddress;
@@ -707,8 +788,15 @@ namespace QuoteSwift
         private System.Windows.Forms.Label lblCellphoneNumber;
         private System.Windows.Forms.GroupBox gbxPhoneRelated;
         private System.Windows.Forms.Label lblTelephoneNumber;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtCustomerCompanyName;
         private System.Windows.Forms.ComboBox cbBusinessSelection;
         private System.Windows.Forms.Label lblLinkCustomerTo;
+        private System.Windows.Forms.ToolStripMenuItem updatedCustomerInformationToolStripMenuItem;
+        private System.Windows.Forms.Label lblBusinessAddressDescription;
+        private System.Windows.Forms.TextBox txtCustomerAddresssDescription;
+        private System.Windows.Forms.Label lblBusinessPODescription;
+        private System.Windows.Forms.TextBox txtCustomerPODescription;
+        private System.Windows.Forms.MaskedTextBox mtxtVendorNumber;
+        private System.Windows.Forms.Label lblVendorNumebr;
     }
 }

@@ -165,6 +165,12 @@ namespace QuoteSwift
             if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to this current window to be lost.", "REQUEST - Cancelation")) this.Close();
         }
 
+        private void FrmViewParts_Load(object sender, EventArgs e)
+        {
+            this.dgvAllParts.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            this.dgvAllParts.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+        }
+
         /*********************************************************************************/
     }
 }
