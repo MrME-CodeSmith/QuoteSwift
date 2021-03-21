@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -25,38 +20,39 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private void FrmViewBusinessAddresses_Load(object sender, EventArgs e)
         {
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null) // View Business Address
             {
-                this.Text = this.Text.Replace("<<Business name>>", passed.BusinessToChange.BusinessName);
-
-                if(!passed.ChangeSpecificObject)
-                {
-                    MainProgramCode.ReadOnlyComponents(this.Controls);
-                    BtnCancel.Enabled = true;
-                }
-
-                LoadInformation();
-            }
-            else if(passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerDeliveryAddressList != null) //View Customer Address
-            {
-                this.Text = this.Text.Replace("<<Business name>>", passed.CustomerToChange.CustomerName);
+                Text = Text.Replace("<<Business name>>", passed.BusinessToChange.BusinessName);
 
                 if (!passed.ChangeSpecificObject)
                 {
-                    MainProgramCode.ReadOnlyComponents(this.Controls);
+                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
+                    BtnCancel.Enabled = true;
+                }
+
+                LoadInformation();
+            }
+            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerDeliveryAddressList != null) //View Customer Address
+            {
+                Text = Text.Replace("<<Business name>>", passed.CustomerToChange.CustomerName);
+
+                if (!passed.ChangeSpecificObject)
+                {
+                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
                     BtnCancel.Enabled = true;
                 }
 
                 LoadInformation();
             }
 
-            this.DgvViewAllBusinessAddresses.RowsDefaultCellStyle.BackColor = Color.Bisque;
-            this.DgvViewAllBusinessAddresses.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            DgvViewAllBusinessAddresses.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            DgvViewAllBusinessAddresses.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
@@ -69,19 +65,22 @@ namespace QuoteSwift
                 return;
             }
 
-            this.passed.AddressToChange = address;
+            passed.AddressToChange = address;
+            passed.ChangeSpecificObject = false;
 
-            this.passed = MainProgramCode.EditBusinessAddress(ref this.passed);
+            passed = QuoteSwiftMainCode.EditBusinessAddress(ref passed);
 
-            if (!ReplacePOBoxAddress(address, this.passed.AddressToChange)) MainProgramCode.ShowError("An error occured during the updating procedure of the Address.\nUpdated address will not be stored.", "ERROR - Address Not Updated");
+            if (!ReplacePOBoxAddress(address, passed.AddressToChange)) MainProgramCode.ShowError("An error occurred during the updating procedure of the Address.\nUpdated address will not be stored.", "ERROR - Address Not Updated");
 
-            this.passed.AddressToChange = null;
+            passed.AddressToChange = null;
+            passed.ChangeSpecificObject = false;
+
             LoadInformation();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) this.Close();
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void BtnRemoveSelected_Click(object sender, EventArgs e)
@@ -133,7 +132,7 @@ namespace QuoteSwift
             {
                 return null;
             }
-             
+
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null)
             {
                 SelectedAddress = passed.BusinessToChange.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
@@ -145,7 +144,7 @@ namespace QuoteSwift
                 return SelectedAddress;
             }
 
-                return null;
+            return null;
         }
 
         private void LoadInformation()
@@ -166,25 +165,35 @@ namespace QuoteSwift
 
         private bool ReplacePOBoxAddress(Address Original, Address New)
         {
-            if(passed != null && passed.BusinessToChange != null)
-                if (New != null && Original != null && this.passed.BusinessToChange.BusinessAddressList != null)
-                    for (int i = 0; i < this.passed.BusinessToChange.BusinessAddressList.Count; i++)
-                        if (this.passed.BusinessToChange.BusinessAddressList[i] == Original)
+            if (passed != null && passed.BusinessToChange != null)
+                if (New != null && Original != null && passed.BusinessToChange.BusinessAddressList != null)
+                    for (int i = 0; i < passed.BusinessToChange.BusinessAddressList.Count; i++)
+                        if (passed.BusinessToChange.BusinessAddressList[i] == Original)
                         {
-                            this.passed.BusinessToChange.BusinessAddressList[i] = New;
+                            passed.BusinessToChange.BusinessAddressList[i] = New;
                             return true;
                         }
 
             if (passed != null && passed.CustomerToChange != null)
-                if (New != null && Original != null && this.passed.CustomerToChange.CustomerDeliveryAddressList != null)
-                    for (int i = 0; i < this.passed.CustomerToChange.CustomerDeliveryAddressList.Count; i++)
-                        if (this.passed.CustomerToChange.CustomerDeliveryAddressList[i] == Original)
+                if (New != null && Original != null && passed.CustomerToChange.CustomerDeliveryAddressList != null)
+                    for (int i = 0; i < passed.CustomerToChange.CustomerDeliveryAddressList.Count; i++)
+                        if (passed.CustomerToChange.CustomerDeliveryAddressList[i] == Original)
                         {
-                            this.passed.CustomerToChange.CustomerDeliveryAddressList[i] = New;
+                            passed.CustomerToChange.CustomerDeliveryAddressList[i] = New;
                             return true;
                         }
 
             return false;
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmViewBusinessAddresses_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
 

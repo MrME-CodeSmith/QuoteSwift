@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift // Repair Quote Swift
@@ -25,7 +20,8 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private void BtnUpdateSelectedPump_Click(object sender, EventArgs e)
@@ -35,16 +31,16 @@ namespace QuoteSwift // Repair Quote Swift
             if (dgvPumpList.SelectedCells.Count > 0)
             {
                 iGridSelection = dgvPumpList.CurrentCell.RowIndex;
-                
-                this.passed.PumpToChange = this.passed.PassPumpList.ElementAt(iGridSelection);
-                this.passed.ChangeSpecificObject = false;
 
-                this.Hide();
-                this.passed = MainProgramCode.CreateNewPump(ref this.passed);
-                this.Show();
+                passed.PumpToChange = passed.PassPumpList.ElementAt(iGridSelection);
+                passed.ChangeSpecificObject = false;
 
-                this.passed.ChangeSpecificObject = false;
-                this.passed.PumpToChange = null;
+                Hide();
+                passed = QuoteSwiftMainCode.CreateNewPump(ref passed);
+                Show();
+
+                passed.ChangeSpecificObject = false;
+                passed.PumpToChange = null;
 
                 LoadInformation();
             }
@@ -56,9 +52,9 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            this.passed = MainProgramCode.CreateNewPump(ref this.passed);
-            this.Show();
+            Hide();
+            passed = QuoteSwiftMainCode.CreateNewPump(ref passed);
+            Show();
         }
 
         private void BtnRemovePumpSelection_Click(object sender, EventArgs e)
@@ -67,9 +63,9 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                Pump objPumpSelection = this.passed.PassPumpList.ElementAt(iGridSelection);
+                Pump objPumpSelection = passed.PassPumpList.ElementAt(iGridSelection);
 
-                if(MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
+                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
                     passed.PassPumpList.RemoveAt(iGridSelection);
 
@@ -84,15 +80,15 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void MainScreenViewQuotesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
-            this.Hide();
+            Close();
+            Hide();
         }
 
         private void FrmViewPump_Load(object sender, EventArgs e)
         {
             LoadInformation();
-            this.dgvPumpList.RowsDefaultCellStyle.BackColor = Color.Bisque;
-            this.dgvPumpList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            dgvPumpList.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            dgvPumpList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         /** Form Specific Functions And Procedures: 
@@ -114,6 +110,16 @@ namespace QuoteSwift // Repair Quote Swift
                     dgvPumpList.Rows.Add(passed.PassPumpList[i].PumpName, passed.PassPumpList[i].PumpDescription, passed.PassPumpList[i].NewPumpPrice.ToString());
                 }
             }
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmViewPump_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         /*********************************************************************************/

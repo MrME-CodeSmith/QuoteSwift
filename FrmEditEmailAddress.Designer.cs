@@ -34,34 +34,36 @@ namespace QuoteSwift
             this.btnUpdateBusinessEmail = new System.Windows.Forms.Button();
             this.lblEmailAddress = new System.Windows.Forms.Label();
             this.msEditEmailControls = new System.Windows.Forms.MenuStrip();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.msEditEmailControls.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(9, 69);
+            this.btnCancel.Location = new System.Drawing.Point(19, 81);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(73, 23);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.Size = new System.Drawing.Size(110, 32);
+            this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // mtxtEmail
             // 
-            this.mtxtEmail.Location = new System.Drawing.Point(88, 37);
+            this.mtxtEmail.Location = new System.Drawing.Point(126, 39);
+            this.mtxtEmail.Margin = new System.Windows.Forms.Padding(4);
             this.mtxtEmail.Name = "mtxtEmail";
-            this.mtxtEmail.Size = new System.Drawing.Size(257, 20);
-            this.mtxtEmail.TabIndex = 5;
+            this.mtxtEmail.Size = new System.Drawing.Size(384, 24);
+            this.mtxtEmail.TabIndex = 0;
             // 
             // btnUpdateBusinessEmail
             // 
-            this.btnUpdateBusinessEmail.Location = new System.Drawing.Point(237, 69);
+            this.btnUpdateBusinessEmail.Location = new System.Drawing.Point(348, 81);
+            this.btnUpdateBusinessEmail.Margin = new System.Windows.Forms.Padding(4);
             this.btnUpdateBusinessEmail.Name = "btnUpdateBusinessEmail";
-            this.btnUpdateBusinessEmail.Size = new System.Drawing.Size(108, 23);
-            this.btnUpdateBusinessEmail.TabIndex = 6;
+            this.btnUpdateBusinessEmail.Size = new System.Drawing.Size(162, 32);
+            this.btnUpdateBusinessEmail.TabIndex = 1;
             this.btnUpdateBusinessEmail.Text = "Update Email";
             this.btnUpdateBusinessEmail.UseVisualStyleBackColor = true;
             this.btnUpdateBusinessEmail.Click += new System.EventHandler(this.BtnUpdateBusinessEmail_Click);
@@ -69,46 +71,45 @@ namespace QuoteSwift
             // lblEmailAddress
             // 
             this.lblEmailAddress.AutoSize = true;
-            this.lblEmailAddress.Location = new System.Drawing.Point(6, 40);
+            this.lblEmailAddress.Location = new System.Drawing.Point(11, 42);
+            this.lblEmailAddress.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblEmailAddress.Name = "lblEmailAddress";
-            this.lblEmailAddress.Size = new System.Drawing.Size(76, 13);
+            this.lblEmailAddress.Size = new System.Drawing.Size(107, 18);
             this.lblEmailAddress.TabIndex = 4;
             this.lblEmailAddress.Text = "Email Address:";
             // 
             // msEditEmailControls
             // 
+            this.msEditEmailControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msEditEmailControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msEditEmailControls.Location = new System.Drawing.Point(0, 0);
             this.msEditEmailControls.Name = "msEditEmailControls";
-            this.msEditEmailControls.Size = new System.Drawing.Size(357, 24);
+            this.msEditEmailControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.msEditEmailControls.Size = new System.Drawing.Size(536, 30);
             this.msEditEmailControls.TabIndex = 8;
             this.msEditEmailControls.Text = "menuStrip1";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click_1);
             // 
             // FrmEditEmailAddress
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(357, 101);
+            this.ClientSize = new System.Drawing.Size(536, 127);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.mtxtEmail);
             this.Controls.Add(this.btnUpdateBusinessEmail);
             this.Controls.Add(this.lblEmailAddress);
             this.Controls.Add(this.msEditEmailControls);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.msEditEmailControls;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmEditEmailAddress";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Update Email Address";
@@ -127,7 +128,6 @@ namespace QuoteSwift
         private System.Windows.Forms.Button btnUpdateBusinessEmail;
         private System.Windows.Forms.Label lblEmailAddress;
         private System.Windows.Forms.MenuStrip msEditEmailControls;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
     }
 }

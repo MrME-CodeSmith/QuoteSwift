@@ -30,9 +30,6 @@ namespace QuoteSwift
         private void InitializeComponent()
         {
             this.msViewAllPumpControls = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mainScreenViewQuotesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnAddPump = new System.Windows.Forms.Button();
             this.btnRemovePumpSelection = new System.Windows.Forms.Button();
@@ -47,49 +44,29 @@ namespace QuoteSwift
             // 
             // msViewAllPumpControls
             // 
+            this.msViewAllPumpControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msViewAllPumpControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msViewAllPumpControls.Location = new System.Drawing.Point(0, 0);
             this.msViewAllPumpControls.Name = "msViewAllPumpControls";
-            this.msViewAllPumpControls.Size = new System.Drawing.Size(465, 24);
+            this.msViewAllPumpControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.msViewAllPumpControls.Size = new System.Drawing.Size(698, 30);
             this.msViewAllPumpControls.TabIndex = 0;
             this.msViewAllPumpControls.Text = "msViewAllPumpControls";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mainScreenViewQuotesToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // mainScreenViewQuotesToolStripMenuItem
-            // 
-            this.mainScreenViewQuotesToolStripMenuItem.Name = "mainScreenViewQuotesToolStripMenuItem";
-            this.mainScreenViewQuotesToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
-            this.mainScreenViewQuotesToolStripMenuItem.Text = "Open Main Screen (View Quotes)";
-            this.mainScreenViewQuotesToolStripMenuItem.Click += new System.EventHandler(this.MainScreenViewQuotesToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // btnAddPump
             // 
-            this.btnAddPump.Location = new System.Drawing.Point(13, 28);
+            this.btnAddPump.Location = new System.Drawing.Point(20, 39);
+            this.btnAddPump.Margin = new System.Windows.Forms.Padding(4);
             this.btnAddPump.Name = "btnAddPump";
-            this.btnAddPump.Size = new System.Drawing.Size(75, 23);
+            this.btnAddPump.Size = new System.Drawing.Size(112, 32);
             this.btnAddPump.TabIndex = 1;
             this.btnAddPump.Text = "Add Pump";
             this.btnAddPump.UseVisualStyleBackColor = true;
@@ -98,9 +75,10 @@ namespace QuoteSwift
             // btnRemovePumpSelection
             // 
             this.btnRemovePumpSelection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemovePumpSelection.Location = new System.Drawing.Point(318, 277);
+            this.btnRemovePumpSelection.Location = new System.Drawing.Point(477, 384);
+            this.btnRemovePumpSelection.Margin = new System.Windows.Forms.Padding(4);
             this.btnRemovePumpSelection.Name = "btnRemovePumpSelection";
-            this.btnRemovePumpSelection.Size = new System.Drawing.Size(138, 23);
+            this.btnRemovePumpSelection.Size = new System.Drawing.Size(207, 32);
             this.btnRemovePumpSelection.TabIndex = 2;
             this.btnRemovePumpSelection.Text = "Remove Selected Pump";
             this.btnRemovePumpSelection.UseVisualStyleBackColor = true;
@@ -118,9 +96,10 @@ namespace QuoteSwift
             this.clmPumpName,
             this.clmPumpDescription,
             this.clmNewPumpPrice});
-            this.dgvPumpList.Location = new System.Drawing.Point(13, 57);
+            this.dgvPumpList.Location = new System.Drawing.Point(20, 79);
+            this.dgvPumpList.Margin = new System.Windows.Forms.Padding(4);
             this.dgvPumpList.Name = "dgvPumpList";
-            this.dgvPumpList.Size = new System.Drawing.Size(443, 214);
+            this.dgvPumpList.Size = new System.Drawing.Size(664, 296);
             this.dgvPumpList.TabIndex = 3;
             // 
             // clmPumpName
@@ -128,28 +107,29 @@ namespace QuoteSwift
             this.clmPumpName.HeaderText = "Pump Name";
             this.clmPumpName.Name = "clmPumpName";
             this.clmPumpName.ReadOnly = true;
-            this.clmPumpName.Width = 83;
+            this.clmPumpName.Width = 106;
             // 
             // clmPumpDescription
             // 
             this.clmPumpDescription.HeaderText = "Description";
             this.clmPumpDescription.Name = "clmPumpDescription";
             this.clmPumpDescription.ReadOnly = true;
-            this.clmPumpDescription.Width = 85;
+            this.clmPumpDescription.Width = 108;
             // 
             // clmNewPumpPrice
             // 
             this.clmNewPumpPrice.HeaderText = "New Pump Price";
             this.clmNewPumpPrice.Name = "clmNewPumpPrice";
             this.clmNewPumpPrice.ReadOnly = true;
-            this.clmNewPumpPrice.Width = 102;
+            this.clmNewPumpPrice.Width = 132;
             // 
             // btnViewSelectedPump
             // 
             this.btnViewSelectedPump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewSelectedPump.Location = new System.Drawing.Point(318, 28);
+            this.btnViewSelectedPump.Location = new System.Drawing.Point(477, 39);
+            this.btnViewSelectedPump.Margin = new System.Windows.Forms.Padding(4);
             this.btnViewSelectedPump.Name = "btnViewSelectedPump";
-            this.btnViewSelectedPump.Size = new System.Drawing.Size(138, 23);
+            this.btnViewSelectedPump.Size = new System.Drawing.Size(207, 32);
             this.btnViewSelectedPump.TabIndex = 4;
             this.btnViewSelectedPump.Text = "View Selected Pump";
             this.btnViewSelectedPump.UseVisualStyleBackColor = true;
@@ -157,15 +137,17 @@ namespace QuoteSwift
             // 
             // FrmViewPump
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 306);
+            this.ClientSize = new System.Drawing.Size(698, 424);
             this.Controls.Add(this.btnViewSelectedPump);
             this.Controls.Add(this.dgvPumpList);
             this.Controls.Add(this.btnRemovePumpSelection);
             this.Controls.Add(this.btnAddPump);
             this.Controls.Add(this.msViewAllPumpControls);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.msViewAllPumpControls;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmViewPump";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Viewing All Pumps";
@@ -181,8 +163,6 @@ namespace QuoteSwift
         #endregion
 
         private System.Windows.Forms.MenuStrip msViewAllPumpControls;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.Button btnAddPump;
         private System.Windows.Forms.Button btnRemovePumpSelection;
@@ -191,6 +171,5 @@ namespace QuoteSwift
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPumpName;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmPumpDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmNewPumpPrice;
-        private System.Windows.Forms.ToolStripMenuItem mainScreenViewQuotesToolStripMenuItem;
     }
 }

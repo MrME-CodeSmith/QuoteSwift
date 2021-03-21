@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -31,21 +24,21 @@ namespace QuoteSwift
                 passed.EmailToChange = mtxtEmail.Text;
                 if (passed != null && passed.BusinessToChange != null)
                 {
-                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref this.passed);
+                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
                     if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
-                        this.Close();
+                        Close();
                     }
                     else passed.EmailToChange = oldEmail;
                 }
-                else if(passed != null && passed.CustomerToChange != null)
+                else if (passed != null && passed.CustomerToChange != null)
                 {
-                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref this.passed);
+                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
                     if (!frmAddCustomer.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
-                        this.Close();
+                        Close();
                     }
                     else passed.EmailToChange = oldEmail;
                 }
@@ -61,13 +54,28 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) this.Close();
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            QuoteSwiftMainCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref passed);
         }
 
+        private void CloseToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmEditEmailAddress_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+        }
     }
 }

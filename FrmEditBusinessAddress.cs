@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -24,12 +17,12 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) this.Close();
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void FrmEditBusinessAddress_Load(object sender, EventArgs e)
         {
-            if(passed.AddressToChange != null)
+            if (passed.AddressToChange != null)
             {
                 txtBusinessAddresssDescription.Text = passed.AddressToChange.AddressDescription;
                 mtxtStreetnumber.Text = passed.AddressToChange.AddressStreetNumber.ToString();
@@ -37,29 +30,30 @@ namespace QuoteSwift
                 txtSuburb.Text = passed.AddressToChange.AddressSuburb;
                 txtCity.Text = passed.AddressToChange.AddressCity;
                 mtxtAreaCode.Text = passed.AddressToChange.AddressAreaCode.ToString();
+                txtStreetName.Enabled = false;
             }
         }
 
         private void BtnUpdateAddress_Click(object sender, EventArgs e)
         {
-            if(ValidInput())
+            if (ValidInput())
             {
                 Address UpdatedAddress = new Address
                 {
                     AddressDescription = txtBusinessAddresssDescription.Text,
-                    AddressStreetNumber = MainProgramCode.ParseInt(mtxtStreetnumber.Text),
+                    AddressStreetNumber = QuoteSwiftMainCode.ParseInt(mtxtStreetnumber.Text),
                     AddressStreetName = txtStreetName.Text,
                     AddressSuburb = txtSuburb.Text,
                     AddressCity = txtCity.Text,
-                    AddressAreaCode = MainProgramCode.ParseInt(mtxtAreaCode.Text)
+                    AddressAreaCode = QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text)
                 };
 
 
                 if (!AddressExists(UpdatedAddress))
                 {
-                    this.passed.AddressToChange = UpdatedAddress;
+                    passed.AddressToChange = UpdatedAddress;
                     MainProgramCode.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
-                    this.Close();
+                    Close();
                 }
                 else MainProgramCode.ShowError("Address not updated since this address is already in the list of addresses.\nNOTE: Address Description should be unique.", "ERROR - Address Already Added");
             }
@@ -67,7 +61,8 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private bool ValidInput()
@@ -78,13 +73,13 @@ namespace QuoteSwift
                 return (false);
             }
 
-            if (MainProgramCode.ParseInt(mtxtStreetnumber.Text) == 0)
+            if (QuoteSwiftMainCode.ParseInt(mtxtStreetnumber.Text) == 0)
             {
                 MainProgramCode.ShowError("The provided Business Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business Address Street Number");
                 return (false);
             }
 
-            if (txtStreetName.Text.Length < 2)
+            if (txtStreetName.Text.Length < 2 && passed.AddressToChange == null)
             {
                 MainProgramCode.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
                 return (false);
@@ -102,7 +97,7 @@ namespace QuoteSwift
                 return (false);
             }
 
-            if (MainProgramCode.ParseInt(mtxtAreaCode.Text) == 0)
+            if (QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text) == 0)
             {
                 MainProgramCode.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business Address Area Code");
                 return (false);
@@ -113,14 +108,14 @@ namespace QuoteSwift
 
         private bool AddressExists(Address a)
         {
-            if(passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
-                if(passed.BusinessToChange.BusinessPOBoxAddressList != null && a != null)
-                    for(int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
+                if (passed.BusinessToChange.BusinessPOBoxAddressList != null && a != null)
+                    for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
                     {
                         if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription == a.AddressDescription && passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription != passed.AddressToChange.AddressDescription) return false;
                     }
 
-            if(passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
+            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
                 if (passed.CustomerToChange.CustomerPOBoxAddress != null && a != null)
                     for (int i = 0; i < passed.CustomerToChange.CustomerPOBoxAddress.Count; i++)
                     {
@@ -129,5 +124,14 @@ namespace QuoteSwift
             return false;
         }
 
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmEditBusinessAddress_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+        }
     }
 }

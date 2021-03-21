@@ -31,7 +31,7 @@ namespace QuoteSwift
         {
             this.msAddPumpControls = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updatePumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblMandatoryParts = new System.Windows.Forms.Label();
             this.dgvMandatoryPartView = new System.Windows.Forms.DataGridView();
@@ -54,28 +54,29 @@ namespace QuoteSwift
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAddPump = new System.Windows.Forms.Button();
             this.gbxPartInformation = new System.Windows.Forms.GroupBox();
-            this.mtxtNewPumpPrice = new System.Windows.Forms.MaskedTextBox();
+            this.mtxtNewPumpPrice = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
             this.mtxtPumpDescription = new System.Windows.Forms.MaskedTextBox();
             this.mtxtPumpName = new System.Windows.Forms.MaskedTextBox();
             this.lblNewPumpPrice = new System.Windows.Forms.Label();
             this.lblPumpDescription = new System.Windows.Forms.Label();
             this.lblPumpName = new System.Windows.Forms.Label();
-            this.updatePumpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.msAddPumpControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNonMandatoryPartView)).BeginInit();
             this.gbxPartInformation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mtxtNewPumpPrice)).BeginInit();
             this.SuspendLayout();
             // 
             // msAddPumpControls
             // 
+            this.msAddPumpControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msAddPumpControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msAddPumpControls.Location = new System.Drawing.Point(0, 0);
             this.msAddPumpControls.Name = "msAddPumpControls";
-            this.msAddPumpControls.Size = new System.Drawing.Size(868, 24);
+            this.msAddPumpControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.msAddPumpControls.Size = new System.Drawing.Size(1302, 30);
             this.msAddPumpControls.TabIndex = 1;
             this.msAddPumpControls.Text = "msAddPumpControls";
             // 
@@ -84,19 +85,21 @@ namespace QuoteSwift
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.updatePumpToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // helpToolStripMenuItem
+            // updatePumpToolStripMenuItem
             // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
+            this.updatePumpToolStripMenuItem.Enabled = false;
+            this.updatePumpToolStripMenuItem.Name = "updatePumpToolStripMenuItem";
+            this.updatePumpToolStripMenuItem.Size = new System.Drawing.Size(173, 24);
+            this.updatePumpToolStripMenuItem.Text = "Update Pump ";
+            this.updatePumpToolStripMenuItem.Click += new System.EventHandler(this.UpdatePumpToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
@@ -105,9 +108,10 @@ namespace QuoteSwift
             this.lblMandatoryParts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMandatoryParts.AutoSize = true;
-            this.lblMandatoryParts.Location = new System.Drawing.Point(9, 165);
+            this.lblMandatoryParts.Location = new System.Drawing.Point(19, 187);
+            this.lblMandatoryParts.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMandatoryParts.Name = "lblMandatoryParts";
-            this.lblMandatoryParts.Size = new System.Drawing.Size(129, 13);
+            this.lblMandatoryParts.Size = new System.Drawing.Size(178, 18);
             this.lblMandatoryParts.TabIndex = 8;
             this.lblMandatoryParts.Text = "Mandatory Part Selection:";
             // 
@@ -126,9 +130,10 @@ namespace QuoteSwift
             this.clmPartPrice,
             this.clmAddToPumpSelection,
             this.clmMPartQuantity});
-            this.dgvMandatoryPartView.Location = new System.Drawing.Point(12, 181);
+            this.dgvMandatoryPartView.Location = new System.Drawing.Point(23, 210);
+            this.dgvMandatoryPartView.Margin = new System.Windows.Forms.Padding(4);
             this.dgvMandatoryPartView.Name = "dgvMandatoryPartView";
-            this.dgvMandatoryPartView.Size = new System.Drawing.Size(844, 222);
+            this.dgvMandatoryPartView.Size = new System.Drawing.Size(1266, 307);
             this.dgvMandatoryPartView.TabIndex = 9;
             this.dgvMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvMandatoryPartView_CellContentClick);
             // 
@@ -137,28 +142,28 @@ namespace QuoteSwift
             this.ClmPartName.HeaderText = "Part Name";
             this.ClmPartName.Name = "ClmPartName";
             this.ClmPartName.ReadOnly = true;
-            this.ClmPartName.Width = 76;
+            this.ClmPartName.Width = 96;
             // 
             // clmDescription
             // 
             this.clmDescription.HeaderText = "Description";
             this.clmDescription.Name = "clmDescription";
             this.clmDescription.ReadOnly = true;
-            this.clmDescription.Width = 85;
+            this.clmDescription.Width = 108;
             // 
             // clmOriginalPartNumber
             // 
             this.clmOriginalPartNumber.HeaderText = "Original Part Number";
             this.clmOriginalPartNumber.Name = "clmOriginalPartNumber";
             this.clmOriginalPartNumber.ReadOnly = true;
-            this.clmOriginalPartNumber.Width = 118;
+            this.clmOriginalPartNumber.Width = 156;
             // 
             // clmNewPartNumber
             // 
             this.clmNewPartNumber.HeaderText = "New Part Number";
             this.clmNewPartNumber.Name = "clmNewPartNumber";
             this.clmNewPartNumber.ReadOnly = true;
-            this.clmNewPartNumber.Width = 106;
+            this.clmNewPartNumber.Width = 138;
             // 
             // clmPartPrice
             // 
@@ -167,19 +172,19 @@ namespace QuoteSwift
             this.clmPartPrice.ReadOnly = true;
             this.clmPartPrice.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.clmPartPrice.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.clmPartPrice.Width = 53;
+            this.clmPartPrice.Width = 71;
             // 
             // clmAddToPumpSelection
             // 
             this.clmAddToPumpSelection.HeaderText = "Add To Current Pump";
             this.clmAddToPumpSelection.Name = "clmAddToPumpSelection";
-            this.clmAddToPumpSelection.Width = 79;
+            this.clmAddToPumpSelection.Width = 106;
             // 
             // clmMPartQuantity
             // 
             this.clmMPartQuantity.HeaderText = "Part Quantity";
             this.clmMPartQuantity.Name = "clmMPartQuantity";
-            this.clmMPartQuantity.Width = 86;
+            this.clmMPartQuantity.Width = 108;
             // 
             // dgvNonMandatoryPartView
             // 
@@ -197,9 +202,10 @@ namespace QuoteSwift
             this.dataGridViewTextBoxColumn4,
             this.ClmNonMandatoryPartSelection,
             this.clmNMPartQuantity});
-            this.dgvNonMandatoryPartView.Location = new System.Drawing.Point(12, 436);
+            this.dgvNonMandatoryPartView.Location = new System.Drawing.Point(23, 563);
+            this.dgvNonMandatoryPartView.Margin = new System.Windows.Forms.Padding(4);
             this.dgvNonMandatoryPartView.Name = "dgvNonMandatoryPartView";
-            this.dgvNonMandatoryPartView.Size = new System.Drawing.Size(844, 222);
+            this.dgvNonMandatoryPartView.Size = new System.Drawing.Size(1266, 286);
             this.dgvNonMandatoryPartView.TabIndex = 11;
             this.dgvNonMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvNonMandatoryPartView_CellContentClick);
             // 
@@ -208,28 +214,28 @@ namespace QuoteSwift
             this.ClmNMPartName.HeaderText = "Part Name";
             this.ClmNMPartName.Name = "ClmNMPartName";
             this.ClmNMPartName.ReadOnly = true;
-            this.ClmNMPartName.Width = 76;
+            this.ClmNMPartName.Width = 96;
             // 
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.HeaderText = "Description";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 85;
+            this.dataGridViewTextBoxColumn1.Width = 108;
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.HeaderText = "Original Part Number";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.Width = 118;
+            this.dataGridViewTextBoxColumn2.Width = 156;
             // 
             // dataGridViewTextBoxColumn3
             // 
             this.dataGridViewTextBoxColumn3.HeaderText = "New Part Number";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.Width = 106;
+            this.dataGridViewTextBoxColumn3.Width = 138;
             // 
             // dataGridViewTextBoxColumn4
             // 
@@ -238,36 +244,38 @@ namespace QuoteSwift
             this.dataGridViewTextBoxColumn4.ReadOnly = true;
             this.dataGridViewTextBoxColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn4.Width = 53;
+            this.dataGridViewTextBoxColumn4.Width = 71;
             // 
             // ClmNonMandatoryPartSelection
             // 
             this.ClmNonMandatoryPartSelection.HeaderText = "Add To Current Pump";
             this.ClmNonMandatoryPartSelection.Name = "ClmNonMandatoryPartSelection";
-            this.ClmNonMandatoryPartSelection.Width = 79;
+            this.ClmNonMandatoryPartSelection.Width = 106;
             // 
             // clmNMPartQuantity
             // 
             this.clmNMPartQuantity.HeaderText = "Part Quantity";
             this.clmNMPartQuantity.Name = "clmNMPartQuantity";
-            this.clmNMPartQuantity.Width = 86;
+            this.clmNMPartQuantity.Width = 108;
             // 
             // lblOtherParts
             // 
             this.lblOtherParts.AutoSize = true;
-            this.lblOtherParts.Location = new System.Drawing.Point(9, 420);
+            this.lblOtherParts.Location = new System.Drawing.Point(19, 541);
+            this.lblOtherParts.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblOtherParts.Name = "lblOtherParts";
-            this.lblOtherParts.Size = new System.Drawing.Size(152, 13);
+            this.lblOtherParts.Size = new System.Drawing.Size(211, 18);
             this.lblOtherParts.TabIndex = 10;
             this.lblOtherParts.Text = "Non-Mandatory Part Selection:";
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCancel.Location = new System.Drawing.Point(12, 664);
+            this.btnCancel.Location = new System.Drawing.Point(22, 857);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 12;
+            this.btnCancel.Size = new System.Drawing.Size(112, 32);
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
@@ -275,10 +283,11 @@ namespace QuoteSwift
             // btnAddPump
             // 
             this.btnAddPump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddPump.Location = new System.Drawing.Point(775, 664);
+            this.btnAddPump.Location = new System.Drawing.Point(1167, 857);
+            this.btnAddPump.Margin = new System.Windows.Forms.Padding(4);
             this.btnAddPump.Name = "btnAddPump";
-            this.btnAddPump.Size = new System.Drawing.Size(81, 23);
-            this.btnAddPump.TabIndex = 13;
+            this.btnAddPump.Size = new System.Drawing.Size(122, 32);
+            this.btnAddPump.TabIndex = 3;
             this.btnAddPump.Text = "Add Pump";
             this.btnAddPump.UseVisualStyleBackColor = true;
             this.btnAddPump.Click += new System.EventHandler(this.BtnAddPump_Click);
@@ -293,75 +302,79 @@ namespace QuoteSwift
             this.gbxPartInformation.Controls.Add(this.lblNewPumpPrice);
             this.gbxPartInformation.Controls.Add(this.lblPumpDescription);
             this.gbxPartInformation.Controls.Add(this.lblPumpName);
-            this.gbxPartInformation.Location = new System.Drawing.Point(259, 27);
+            this.gbxPartInformation.Location = new System.Drawing.Point(388, 37);
+            this.gbxPartInformation.Margin = new System.Windows.Forms.Padding(4);
             this.gbxPartInformation.Name = "gbxPartInformation";
-            this.gbxPartInformation.Size = new System.Drawing.Size(369, 124);
+            this.gbxPartInformation.Padding = new System.Windows.Forms.Padding(4);
+            this.gbxPartInformation.Size = new System.Drawing.Size(554, 139);
             this.gbxPartInformation.TabIndex = 14;
             this.gbxPartInformation.TabStop = false;
             this.gbxPartInformation.Text = "Part Information:";
             // 
             // mtxtNewPumpPrice
             // 
-            this.mtxtNewPumpPrice.Location = new System.Drawing.Point(116, 79);
-            this.mtxtNewPumpPrice.Mask = "00000000";
+            this.mtxtNewPumpPrice.BeforeTouchSize = new System.Drawing.Size(148, 24);
+            this.mtxtNewPumpPrice.DoubleValue = 0D;
+            this.mtxtNewPumpPrice.Location = new System.Drawing.Point(174, 90);
+            this.mtxtNewPumpPrice.Margin = new System.Windows.Forms.Padding(4);
+            this.mtxtNewPumpPrice.MaxValue = 5000000D;
+            this.mtxtNewPumpPrice.MinValue = 0D;
             this.mtxtNewPumpPrice.Name = "mtxtNewPumpPrice";
-            this.mtxtNewPumpPrice.Size = new System.Drawing.Size(115, 20);
-            this.mtxtNewPumpPrice.TabIndex = 12;
-            this.mtxtNewPumpPrice.ValidatingType = typeof(int);
+            this.mtxtNewPumpPrice.Size = new System.Drawing.Size(139, 24);
+            this.mtxtNewPumpPrice.TabIndex = 2;
+            this.mtxtNewPumpPrice.Text = "0.00";
             // 
             // mtxtPumpDescription
             // 
-            this.mtxtPumpDescription.Location = new System.Drawing.Point(116, 49);
+            this.mtxtPumpDescription.Location = new System.Drawing.Point(174, 58);
+            this.mtxtPumpDescription.Margin = new System.Windows.Forms.Padding(4);
             this.mtxtPumpDescription.Name = "mtxtPumpDescription";
-            this.mtxtPumpDescription.Size = new System.Drawing.Size(230, 20);
-            this.mtxtPumpDescription.TabIndex = 11;
+            this.mtxtPumpDescription.Size = new System.Drawing.Size(343, 24);
+            this.mtxtPumpDescription.TabIndex = 1;
             // 
             // mtxtPumpName
             // 
-            this.mtxtPumpName.Location = new System.Drawing.Point(116, 19);
+            this.mtxtPumpName.Location = new System.Drawing.Point(174, 26);
+            this.mtxtPumpName.Margin = new System.Windows.Forms.Padding(4);
             this.mtxtPumpName.Name = "mtxtPumpName";
-            this.mtxtPumpName.Size = new System.Drawing.Size(230, 20);
-            this.mtxtPumpName.TabIndex = 10;
+            this.mtxtPumpName.Size = new System.Drawing.Size(343, 24);
+            this.mtxtPumpName.TabIndex = 0;
             // 
             // lblNewPumpPrice
             // 
             this.lblNewPumpPrice.AutoSize = true;
-            this.lblNewPumpPrice.Location = new System.Drawing.Point(21, 82);
+            this.lblNewPumpPrice.Location = new System.Drawing.Point(42, 93);
+            this.lblNewPumpPrice.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblNewPumpPrice.Name = "lblNewPumpPrice";
-            this.lblNewPumpPrice.Size = new System.Drawing.Size(89, 13);
+            this.lblNewPumpPrice.Size = new System.Drawing.Size(123, 18);
             this.lblNewPumpPrice.TabIndex = 9;
             this.lblNewPumpPrice.Text = "New Pump Price:";
             // 
             // lblPumpDescription
             // 
             this.lblPumpDescription.AutoSize = true;
-            this.lblPumpDescription.Location = new System.Drawing.Point(17, 52);
+            this.lblPumpDescription.Location = new System.Drawing.Point(35, 61);
+            this.lblPumpDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPumpDescription.Name = "lblPumpDescription";
-            this.lblPumpDescription.Size = new System.Drawing.Size(93, 13);
+            this.lblPumpDescription.Size = new System.Drawing.Size(130, 18);
             this.lblPumpDescription.TabIndex = 8;
             this.lblPumpDescription.Text = "Pump Description:";
             // 
             // lblPumpName
             // 
             this.lblPumpName.AutoSize = true;
-            this.lblPumpName.Location = new System.Drawing.Point(42, 22);
+            this.lblPumpName.Location = new System.Drawing.Point(70, 29);
+            this.lblPumpName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPumpName.Name = "lblPumpName";
-            this.lblPumpName.Size = new System.Drawing.Size(68, 13);
+            this.lblPumpName.Size = new System.Drawing.Size(95, 18);
             this.lblPumpName.TabIndex = 7;
             this.lblPumpName.Text = "Pump Name:";
             // 
-            // updatePumpToolStripMenuItem
-            // 
-            this.updatePumpToolStripMenuItem.Name = "updatePumpToolStripMenuItem";
-            this.updatePumpToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.updatePumpToolStripMenuItem.Text = "Update Pump ";
-            this.updatePumpToolStripMenuItem.Click += new System.EventHandler(this.UpdatePumpToolStripMenuItem_Click);
-            // 
             // FrmAddPump
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(868, 694);
+            this.ClientSize = new System.Drawing.Size(1302, 902);
             this.Controls.Add(this.gbxPartInformation);
             this.Controls.Add(this.btnAddPump);
             this.Controls.Add(this.btnCancel);
@@ -370,7 +383,9 @@ namespace QuoteSwift
             this.Controls.Add(this.dgvMandatoryPartView);
             this.Controls.Add(this.lblMandatoryParts);
             this.Controls.Add(this.msAddPumpControls);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.msAddPumpControls;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmAddPump";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Adding New Pump";
@@ -381,6 +396,7 @@ namespace QuoteSwift
             ((System.ComponentModel.ISupportInitialize)(this.dgvNonMandatoryPartView)).EndInit();
             this.gbxPartInformation.ResumeLayout(false);
             this.gbxPartInformation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mtxtNewPumpPrice)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -389,7 +405,6 @@ namespace QuoteSwift
         #endregion
         private System.Windows.Forms.MenuStrip msAddPumpControls;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.Label lblMandatoryParts;
         private System.Windows.Forms.DataGridView dgvMandatoryPartView;
@@ -405,7 +420,6 @@ namespace QuoteSwift
         private System.Windows.Forms.DataGridViewCheckBoxColumn clmAddToPumpSelection;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmMPartQuantity;
         private System.Windows.Forms.GroupBox gbxPartInformation;
-        private System.Windows.Forms.MaskedTextBox mtxtNewPumpPrice;
         private System.Windows.Forms.MaskedTextBox mtxtPumpDescription;
         private System.Windows.Forms.MaskedTextBox mtxtPumpName;
         private System.Windows.Forms.Label lblNewPumpPrice;
@@ -419,5 +433,6 @@ namespace QuoteSwift
         private System.Windows.Forms.DataGridViewCheckBoxColumn ClmNonMandatoryPartSelection;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmNMPartQuantity;
         private System.Windows.Forms.ToolStripMenuItem updatePumpToolStripMenuItem;
+        private Syncfusion.Windows.Forms.Tools.DoubleTextBox mtxtNewPumpPrice;
     }
 }

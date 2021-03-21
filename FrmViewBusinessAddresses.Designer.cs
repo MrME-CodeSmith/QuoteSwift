@@ -37,7 +37,6 @@ namespace QuoteSwift
             this.ClmCity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmAreaCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MsViewAddressesControls = new System.Windows.Forms.MenuStrip();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnCancel = new System.Windows.Forms.Button();
             this.BtnRemoveSelected = new System.Windows.Forms.Button();
@@ -61,9 +60,10 @@ namespace QuoteSwift
             this.ClmSuburb,
             this.ClmCity,
             this.ClmAreaCode});
-            this.DgvViewAllBusinessAddresses.Location = new System.Drawing.Point(14, 56);
+            this.DgvViewAllBusinessAddresses.Location = new System.Drawing.Point(21, 78);
+            this.DgvViewAllBusinessAddresses.Margin = new System.Windows.Forms.Padding(4);
             this.DgvViewAllBusinessAddresses.Name = "DgvViewAllBusinessAddresses";
-            this.DgvViewAllBusinessAddresses.Size = new System.Drawing.Size(525, 150);
+            this.DgvViewAllBusinessAddresses.Size = new System.Drawing.Size(788, 208);
             this.DgvViewAllBusinessAddresses.TabIndex = 0;
             // 
             // ClmAddressDescription
@@ -71,73 +71,69 @@ namespace QuoteSwift
             this.ClmAddressDescription.HeaderText = "Address Description";
             this.ClmAddressDescription.Name = "ClmAddressDescription";
             this.ClmAddressDescription.ReadOnly = true;
-            this.ClmAddressDescription.Width = 115;
+            this.ClmAddressDescription.Width = 151;
             // 
             // ClmStreetNumber
             // 
             this.ClmStreetNumber.HeaderText = "Street Number";
             this.ClmStreetNumber.Name = "ClmStreetNumber";
             this.ClmStreetNumber.ReadOnly = true;
-            this.ClmStreetNumber.Width = 92;
+            this.ClmStreetNumber.Width = 118;
             // 
             // ClmStreetName
             // 
             this.ClmStreetName.HeaderText = "Street Name";
             this.ClmStreetName.Name = "ClmStreetName";
             this.ClmStreetName.ReadOnly = true;
-            this.ClmStreetName.Width = 84;
+            this.ClmStreetName.Width = 106;
             // 
             // ClmSuburb
             // 
             this.ClmSuburb.HeaderText = "Suburb";
             this.ClmSuburb.Name = "ClmSuburb";
             this.ClmSuburb.ReadOnly = true;
-            this.ClmSuburb.Width = 66;
+            this.ClmSuburb.Width = 80;
             // 
             // ClmCity
             // 
             this.ClmCity.HeaderText = "City";
             this.ClmCity.Name = "ClmCity";
             this.ClmCity.ReadOnly = true;
-            this.ClmCity.Width = 49;
+            this.ClmCity.Width = 58;
             // 
             // ClmAreaCode
             // 
             this.ClmAreaCode.HeaderText = "Area Code";
             this.ClmAreaCode.Name = "ClmAreaCode";
             this.ClmAreaCode.ReadOnly = true;
-            this.ClmAreaCode.Width = 76;
+            this.ClmAreaCode.Width = 95;
             // 
             // MsViewAddressesControls
             // 
+            this.MsViewAddressesControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.MsViewAddressesControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.MsViewAddressesControls.Location = new System.Drawing.Point(0, 0);
             this.MsViewAddressesControls.Name = "MsViewAddressesControls";
-            this.MsViewAddressesControls.Size = new System.Drawing.Size(551, 24);
+            this.MsViewAddressesControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.MsViewAddressesControls.Size = new System.Drawing.Size(826, 30);
             this.MsViewAddressesControls.TabIndex = 1;
             this.MsViewAddressesControls.Text = "menuStrip1";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // BtnCancel
             // 
             this.BtnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnCancel.Location = new System.Drawing.Point(14, 212);
+            this.BtnCancel.Location = new System.Drawing.Point(21, 294);
+            this.BtnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(75, 23);
+            this.BtnCancel.Size = new System.Drawing.Size(112, 32);
             this.BtnCancel.TabIndex = 2;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
@@ -146,9 +142,10 @@ namespace QuoteSwift
             // BtnRemoveSelected
             // 
             this.BtnRemoveSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnRemoveSelected.Location = new System.Drawing.Point(383, 212);
+            this.BtnRemoveSelected.Location = new System.Drawing.Point(574, 294);
+            this.BtnRemoveSelected.Margin = new System.Windows.Forms.Padding(4);
             this.BtnRemoveSelected.Name = "BtnRemoveSelected";
-            this.BtnRemoveSelected.Size = new System.Drawing.Size(156, 23);
+            this.BtnRemoveSelected.Size = new System.Drawing.Size(234, 32);
             this.BtnRemoveSelected.TabIndex = 3;
             this.BtnRemoveSelected.Text = "Remove Selected Address";
             this.BtnRemoveSelected.UseVisualStyleBackColor = true;
@@ -157,9 +154,10 @@ namespace QuoteSwift
             // BtnChangeAddressInfo
             // 
             this.BtnChangeAddressInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnChangeAddressInfo.Location = new System.Drawing.Point(383, 27);
+            this.BtnChangeAddressInfo.Location = new System.Drawing.Point(574, 37);
+            this.BtnChangeAddressInfo.Margin = new System.Windows.Forms.Padding(4);
             this.BtnChangeAddressInfo.Name = "BtnChangeAddressInfo";
-            this.BtnChangeAddressInfo.Size = new System.Drawing.Size(156, 23);
+            this.BtnChangeAddressInfo.Size = new System.Drawing.Size(234, 32);
             this.BtnChangeAddressInfo.TabIndex = 4;
             this.BtnChangeAddressInfo.Text = "Update Selected Address";
             this.BtnChangeAddressInfo.UseVisualStyleBackColor = true;
@@ -167,15 +165,17 @@ namespace QuoteSwift
             // 
             // FrmViewBusinessAddresses
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(551, 241);
+            this.ClientSize = new System.Drawing.Size(826, 334);
             this.Controls.Add(this.BtnChangeAddressInfo);
             this.Controls.Add(this.BtnRemoveSelected);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.DgvViewAllBusinessAddresses);
             this.Controls.Add(this.MsViewAddressesControls);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.MsViewAddressesControls;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmViewBusinessAddresses";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Viewing <<Business name>> Addresses";
@@ -198,7 +198,6 @@ namespace QuoteSwift
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmCity;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmAreaCode;
         private System.Windows.Forms.MenuStrip MsViewAddressesControls;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.Button BtnRemoveSelected;

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -25,7 +21,8 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private void BtnChangePhoneNumberInfo_Click(object sender, EventArgs e)
@@ -33,29 +30,29 @@ namespace QuoteSwift
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
             {
                 string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
-                this.passed.PhoneNumberToChange = OldNumber;
-                this.passed.ChangeSpecificObject = true;
+                passed.PhoneNumberToChange = OldNumber;
+                passed.ChangeSpecificObject = true;
 
-                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
-                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.BusinessToChange.BusinessCellphoneNumberList);
+                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.BusinessToChange.BusinessCellphoneNumberList);
 
-                this.passed.PhoneNumberToChange = "";
-                this.passed.ChangeSpecificObject = false;
+                passed.PhoneNumberToChange = "";
+                passed.ChangeSpecificObject = false;
             }
             else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
             {
                 string OldNumber = GetNumberSelection(passed.CustomerToChange.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
-                this.passed.PhoneNumberToChange = OldNumber;
-                this.passed.ChangeSpecificObject = true;
+                passed.PhoneNumberToChange = OldNumber;
+                passed.ChangeSpecificObject = true;
 
-                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
-                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.CustomerToChange.CustomerCellphoneNumberList);
+                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.CustomerToChange.CustomerCellphoneNumberList);
 
-                this.passed.PhoneNumberToChange = "";
-                this.passed.ChangeSpecificObject = false;
+                passed.PhoneNumberToChange = "";
+                passed.ChangeSpecificObject = false;
             }
 
-                LoadInformation();
+            LoadInformation();
         }
 
         private void BtnUpdateTelephoneNumber_Click(object sender, EventArgs e)
@@ -63,26 +60,26 @@ namespace QuoteSwift
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
             {
                 string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
-                this.passed.PhoneNumberToChange = OldNumber;
-                this.passed.ChangeSpecificObject = true;
+                passed.PhoneNumberToChange = OldNumber;
+                passed.ChangeSpecificObject = true;
 
-                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
-                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.BusinessToChange.BusinessTelephoneNumberList);
+                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.BusinessToChange.BusinessTelephoneNumberList);
 
-                this.passed.PhoneNumberToChange = "";
-                this.passed.ChangeSpecificObject = false;
+                passed.PhoneNumberToChange = "";
+                passed.ChangeSpecificObject = false;
             }
             else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
             {
                 string OldNumber = GetNumberSelection(passed.CustomerToChange.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
-                this.passed.PhoneNumberToChange = OldNumber;
-                this.passed.ChangeSpecificObject = true;
+                passed.PhoneNumberToChange = OldNumber;
+                passed.ChangeSpecificObject = true;
 
-                this.passed = MainProgramCode.EditPhoneNumber(ref this.passed);
-                SetNewNumber(OldNumber, this.passed.PhoneNumberToChange, passed.CustomerToChange.CustomerTelephoneNumberList);
+                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.CustomerToChange.CustomerTelephoneNumberList);
 
-                this.passed.PhoneNumberToChange = "";
-                this.passed.ChangeSpecificObject = false;
+                passed.PhoneNumberToChange = "";
+                passed.ChangeSpecificObject = false;
             }
 
             LoadInformation();
@@ -92,34 +89,34 @@ namespace QuoteSwift
         {
             if (passed != null && passed.BusinessToChange != null && (passed.BusinessToChange.BusinessTelephoneNumberList != null || passed.BusinessToChange.BusinessCellphoneNumberList != null))
             {
-                this.Text = this.Text.Replace("< Business Name >", passed.BusinessToChange.BusinessName);
-
-                if(!passed.ChangeSpecificObject)
-                {
-                    MainProgramCode.ReadOnlyComponents(this.Controls);
-                    BtnCancel.Enabled = true;
-                }
-
-                LoadInformation();
-            }
-            else if(passed != null && passed.CustomerToChange != null && (passed.CustomerToChange.CustomerCellphoneNumberList != null || passed.CustomerToChange.CustomerTelephoneNumberList != null))
-            {
-                this.Text = this.Text.Replace("< Business Name >", passed.CustomerToChange.CustomerName);
+                Text = Text.Replace("< Business Name >", passed.BusinessToChange.BusinessName);
 
                 if (!passed.ChangeSpecificObject)
                 {
-                    MainProgramCode.ReadOnlyComponents(this.Controls);
+                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
+                    BtnCancel.Enabled = true;
+                }
+
+                LoadInformation();
+            }
+            else if (passed != null && passed.CustomerToChange != null && (passed.CustomerToChange.CustomerCellphoneNumberList != null || passed.CustomerToChange.CustomerTelephoneNumberList != null))
+            {
+                Text = Text.Replace("< Business Name >", passed.CustomerToChange.CustomerName);
+
+                if (!passed.ChangeSpecificObject)
+                {
+                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
                     BtnCancel.Enabled = true;
                 }
 
                 LoadInformation();
             }
 
-            this.dgvCellphoneNumbers.RowsDefaultCellStyle.BackColor = Color.Bisque;
-            this.dgvCellphoneNumbers.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            dgvCellphoneNumbers.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            dgvCellphoneNumbers.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
 
-            this.dgvTelephoneNumbers.RowsDefaultCellStyle.BackColor = Color.Bisque;
-            this.dgvTelephoneNumbers.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            dgvTelephoneNumbers.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            dgvTelephoneNumbers.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         private void BtnRemoveTelNumber_Click(object sender, EventArgs e)
@@ -186,10 +183,10 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) this.Close();
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
         }
 
-        string GetNumberSelection(BindingList<string> b,ref DataGridView d)
+        string GetNumberSelection(BindingList<string> b, ref DataGridView d)
         {
             string SearchName;
             int iGridSelection = d.CurrentCell.RowIndex;
@@ -216,7 +213,7 @@ namespace QuoteSwift
             dgvTelephoneNumbers.Rows.Clear();
             dgvCellphoneNumbers.Rows.Clear();
 
-            if(passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
+            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
             {
                 for (int i = 0; i < passed.BusinessToChange.BusinessTelephoneNumberList.Count; i++)
                 {
@@ -247,18 +244,28 @@ namespace QuoteSwift
                     dgvTelephoneNumbers.Rows.Add(passed.CustomerToChange.CustomerTelephoneNumberList[i]);
                 }
             }
-        } 
+        }
 
         private void SetNewNumber(string OldNumber, string NewNumber, BindingList<string> b)
         {
             if (b != null)
             {
-                for (int i = 0; i < b.Count ; i++)
+                for (int i = 0; i < b.Count; i++)
                 {
                     if (b[i] == OldNumber) b[i] = NewNumber;
                     break;
                 }
             }
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmManagingPhoneNumbers_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
     }
 }

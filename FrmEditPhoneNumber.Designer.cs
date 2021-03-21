@@ -33,7 +33,6 @@ namespace QuoteSwift
             this.btnUpdateNumber = new System.Windows.Forms.Button();
             this.lblPhoneNumber = new System.Windows.Forms.Label();
             this.msEditPhoneNumberControls = new System.Windows.Forms.MenuStrip();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtPhoneNumber = new System.Windows.Forms.TextBox();
             this.msEditPhoneNumberControls.SuspendLayout();
@@ -41,20 +40,22 @@ namespace QuoteSwift
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(12, 74);
+            this.BtnCancel.Location = new System.Drawing.Point(18, 102);
+            this.BtnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(68, 23);
-            this.BtnCancel.TabIndex = 7;
+            this.BtnCancel.Size = new System.Drawing.Size(102, 32);
+            this.BtnCancel.TabIndex = 2;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // btnUpdateNumber
             // 
-            this.btnUpdateNumber.Location = new System.Drawing.Point(148, 74);
+            this.btnUpdateNumber.Location = new System.Drawing.Point(222, 102);
+            this.btnUpdateNumber.Margin = new System.Windows.Forms.Padding(4);
             this.btnUpdateNumber.Name = "btnUpdateNumber";
-            this.btnUpdateNumber.Size = new System.Drawing.Size(93, 23);
-            this.btnUpdateNumber.TabIndex = 6;
+            this.btnUpdateNumber.Size = new System.Drawing.Size(140, 32);
+            this.btnUpdateNumber.TabIndex = 1;
             this.btnUpdateNumber.Text = "Update Number";
             this.btnUpdateNumber.UseVisualStyleBackColor = true;
             this.btnUpdateNumber.Click += new System.EventHandler(this.BtnUpdateNumber_Click);
@@ -62,54 +63,54 @@ namespace QuoteSwift
             // lblPhoneNumber
             // 
             this.lblPhoneNumber.AutoSize = true;
-            this.lblPhoneNumber.Location = new System.Drawing.Point(9, 32);
+            this.lblPhoneNumber.Location = new System.Drawing.Point(14, 44);
+            this.lblPhoneNumber.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPhoneNumber.Name = "lblPhoneNumber";
-            this.lblPhoneNumber.Size = new System.Drawing.Size(81, 13);
+            this.lblPhoneNumber.Size = new System.Drawing.Size(112, 18);
             this.lblPhoneNumber.TabIndex = 5;
             this.lblPhoneNumber.Text = "Phone Number:";
             this.lblPhoneNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // msEditPhoneNumberControls
             // 
+            this.msEditPhoneNumberControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msEditPhoneNumberControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msEditPhoneNumberControls.Location = new System.Drawing.Point(0, 0);
             this.msEditPhoneNumberControls.Name = "msEditPhoneNumberControls";
-            this.msEditPhoneNumberControls.Size = new System.Drawing.Size(253, 24);
+            this.msEditPhoneNumberControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.msEditPhoneNumberControls.Size = new System.Drawing.Size(380, 30);
             this.msEditPhoneNumberControls.TabIndex = 8;
             this.msEditPhoneNumberControls.Text = "menuStrip1";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // txtPhoneNumber
             // 
-            this.txtPhoneNumber.Location = new System.Drawing.Point(12, 48);
+            this.txtPhoneNumber.Location = new System.Drawing.Point(18, 66);
+            this.txtPhoneNumber.Margin = new System.Windows.Forms.Padding(4);
             this.txtPhoneNumber.Name = "txtPhoneNumber";
-            this.txtPhoneNumber.Size = new System.Drawing.Size(229, 20);
-            this.txtPhoneNumber.TabIndex = 9;
+            this.txtPhoneNumber.Size = new System.Drawing.Size(342, 24);
+            this.txtPhoneNumber.TabIndex = 0;
             // 
             // FrmEditPhoneNumber
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(253, 111);
+            this.ClientSize = new System.Drawing.Size(380, 154);
             this.Controls.Add(this.txtPhoneNumber);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.btnUpdateNumber);
             this.Controls.Add(this.lblPhoneNumber);
             this.Controls.Add(this.msEditPhoneNumberControls);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.msEditPhoneNumberControls;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmEditPhoneNumber";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Update Phone Number";
@@ -127,7 +128,6 @@ namespace QuoteSwift
         private System.Windows.Forms.Button btnUpdateNumber;
         private System.Windows.Forms.Label lblPhoneNumber;
         private System.Windows.Forms.MenuStrip msEditPhoneNumberControls;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.TextBox txtPhoneNumber;
     }

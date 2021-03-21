@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Bogus">
+      <HintPath>..\QuoteSwift\packages\Bogus.33.0.2\lib\net40\Bogus.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\QuoteSwift\packages\protobuf-net.3.0.73\lib\net461\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net.Core">
+      <HintPath>..\QuoteSwift\packages\protobuf-net.Core.3.0.73\lib\net461\protobuf-net.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Compression.Base">
+      <HintPath>..\QuoteSwift\packages\Syncfusion.Compression.Base.18.4.0.43\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Core.WinForms">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.Core.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Data.WinForms">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.Data.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.GridCommon.WinForms">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.GridCommon.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDataGrid.WinForms">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.SfDataGrid.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfInput.WinForms">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.SfInput.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfListView.WinForms">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.SfListView.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.Base">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.Shared.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.XlsIO.Base">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\Windows\18.4.0.30\Assemblies\4.6\Syncfusion.XlsIO.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>..\QuoteSwift\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

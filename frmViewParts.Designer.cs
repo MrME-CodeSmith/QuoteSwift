@@ -30,8 +30,6 @@ namespace QuoteSwift
         private void InitializeComponent()
         {
             this.msViewPartsControls = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dgvAllParts = new System.Windows.Forms.DataGridView();
             this.clmPartName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,32 +48,20 @@ namespace QuoteSwift
             // 
             // msViewPartsControls
             // 
+            this.msViewPartsControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msViewPartsControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msViewPartsControls.Location = new System.Drawing.Point(0, 0);
             this.msViewPartsControls.Name = "msViewPartsControls";
-            this.msViewPartsControls.Size = new System.Drawing.Size(768, 24);
+            this.msViewPartsControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.msViewPartsControls.Size = new System.Drawing.Size(1152, 30);
             this.msViewPartsControls.TabIndex = 0;
             this.msViewPartsControls.Text = "msViewPartsControls";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
@@ -92,9 +78,10 @@ namespace QuoteSwift
             this.clmNewPartNumber,
             this.clmMandatoryPart,
             this.clmPartPrice});
-            this.dgvAllParts.Location = new System.Drawing.Point(12, 59);
+            this.dgvAllParts.Location = new System.Drawing.Point(18, 82);
+            this.dgvAllParts.Margin = new System.Windows.Forms.Padding(4);
             this.dgvAllParts.Name = "dgvAllParts";
-            this.dgvAllParts.Size = new System.Drawing.Size(743, 222);
+            this.dgvAllParts.Size = new System.Drawing.Size(1114, 307);
             this.dgvAllParts.TabIndex = 1;
             // 
             // clmPartName
@@ -138,9 +125,10 @@ namespace QuoteSwift
             // 
             // btnAddPart
             // 
-            this.btnAddPart.Location = new System.Drawing.Point(12, 30);
+            this.btnAddPart.Location = new System.Drawing.Point(18, 42);
+            this.btnAddPart.Margin = new System.Windows.Forms.Padding(4);
             this.btnAddPart.Name = "btnAddPart";
-            this.btnAddPart.Size = new System.Drawing.Size(75, 23);
+            this.btnAddPart.Size = new System.Drawing.Size(112, 32);
             this.btnAddPart.TabIndex = 2;
             this.btnAddPart.Text = "Add Part";
             this.btnAddPart.UseVisualStyleBackColor = true;
@@ -149,9 +137,10 @@ namespace QuoteSwift
             // btnRemovePart
             // 
             this.btnRemovePart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemovePart.Location = new System.Drawing.Point(632, 287);
+            this.btnRemovePart.Location = new System.Drawing.Point(948, 397);
+            this.btnRemovePart.Margin = new System.Windows.Forms.Padding(4);
             this.btnRemovePart.Name = "btnRemovePart";
-            this.btnRemovePart.Size = new System.Drawing.Size(123, 23);
+            this.btnRemovePart.Size = new System.Drawing.Size(184, 32);
             this.btnRemovePart.TabIndex = 3;
             this.btnRemovePart.Text = "Remove Selected Part";
             this.btnRemovePart.UseVisualStyleBackColor = true;
@@ -160,9 +149,10 @@ namespace QuoteSwift
             // btnViewSelectedPart
             // 
             this.btnViewSelectedPart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewSelectedPart.Location = new System.Drawing.Point(635, 30);
+            this.btnViewSelectedPart.Location = new System.Drawing.Point(952, 42);
+            this.btnViewSelectedPart.Margin = new System.Windows.Forms.Padding(4);
             this.btnViewSelectedPart.Name = "btnViewSelectedPart";
-            this.btnViewSelectedPart.Size = new System.Drawing.Size(120, 23);
+            this.btnViewSelectedPart.Size = new System.Drawing.Size(180, 32);
             this.btnViewSelectedPart.TabIndex = 4;
             this.btnViewSelectedPart.Text = "View Selected Part";
             this.btnViewSelectedPart.UseVisualStyleBackColor = true;
@@ -171,9 +161,10 @@ namespace QuoteSwift
             // BtnCancel
             // 
             this.BtnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnCancel.Location = new System.Drawing.Point(12, 287);
+            this.BtnCancel.Location = new System.Drawing.Point(18, 397);
+            this.BtnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(75, 23);
+            this.BtnCancel.Size = new System.Drawing.Size(112, 32);
             this.BtnCancel.TabIndex = 5;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
@@ -181,16 +172,18 @@ namespace QuoteSwift
             // 
             // FrmViewParts
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(768, 318);
+            this.ClientSize = new System.Drawing.Size(1152, 440);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.btnViewSelectedPart);
             this.Controls.Add(this.btnRemovePart);
             this.Controls.Add(this.btnAddPart);
             this.Controls.Add(this.dgvAllParts);
             this.Controls.Add(this.msViewPartsControls);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.msViewPartsControls;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmViewParts";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "View All Parts";
@@ -207,8 +200,6 @@ namespace QuoteSwift
         #endregion
 
         private System.Windows.Forms.MenuStrip msViewPartsControls;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.DataGridView dgvAllParts;
         private System.Windows.Forms.Button btnAddPart;

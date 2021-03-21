@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -25,14 +20,15 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            this.passed = MainProgramCode.AddNewPart(ref this.passed);
-            this.Show();
+            Hide();
+            passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+            Show();
         }
 
         private void BtnUpdateSelectedPart_Click(object sender, EventArgs e)
@@ -41,15 +37,15 @@ namespace QuoteSwift
 
             if (objPartSelection != null)
             {
-                this.passed.ChangeSpecificObject = false;
-                this.passed.PartToChange = objPartSelection;
+                passed.ChangeSpecificObject = false;
+                passed.PartToChange = objPartSelection;
 
-                this.Hide();
-                this.passed = MainProgramCode.AddNewPart(ref this.passed);
-                this.Show();
+                Hide();
+                passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+                Show();
 
-                this.passed.ChangeSpecificObject = false;
-                this.passed.PartToChange = null;
+                passed.ChangeSpecificObject = false;
+                passed.PartToChange = null;
             }
             else
             {
@@ -105,7 +101,7 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if(passed.PassMandatoryPartList != null)
+            if (passed.PassMandatoryPartList != null)
                 for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
                 {
                     //Manually setting the data grid's rows' values:
@@ -115,14 +111,14 @@ namespace QuoteSwift
 
         void LoadNonMandatoryParts()
         {
-            if(passed.PassNonMandatoryPartList != null)
+            if (passed.PassNonMandatoryPartList != null)
                 for (int k = 0; k < passed.PassNonMandatoryPartList.Count; k++)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(passed.PassNonMandatoryPartList[k].PartName, passed.PassNonMandatoryPartList[k].PartDescription, passed.PassNonMandatoryPartList[k].OriginalItemPartNumber, passed.PassNonMandatoryPartList[k].NewPartNumber, false, passed.PassNonMandatoryPartList[k].PartPrice);
                 }
         }
-        
+
         Part GetSelectedPart()
         {
             Part SelectedPart;
@@ -144,11 +140,11 @@ namespace QuoteSwift
 
                 if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
                 {
-                    //serach for part in mandatory
+                    //Search for part in mandatory
 
                     SelectedPart = passed.PassMandatoryPartList.SingleOrDefault(p => p.OriginalItemPartNumber == SearchName);
                     return SelectedPart;
-                    
+
                 }
                 else // Search in Non-Mandatory
                 {
@@ -162,13 +158,23 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to this current window to be lost.", "REQUEST - Cancelation")) this.Close();
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void FrmViewParts_Load(object sender, EventArgs e)
         {
-            this.dgvAllParts.RowsDefaultCellStyle.BackColor = Color.Bisque;
-            this.dgvAllParts.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            dgvAllParts.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            dgvAllParts.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         /*********************************************************************************/

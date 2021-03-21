@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -21,17 +16,17 @@ namespace QuoteSwift
         public FrmViewAllBusinesses(ref Pass passed)
         {
             InitializeComponent();
-            this.Passed = passed;
+            Passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private void BtnUpdateBusiness_Click(object sender, EventArgs e)
         {
-            //TODO: Implement Functionality
 
             Business Business = GetBusinessSelection();
 
@@ -41,14 +36,13 @@ namespace QuoteSwift
                 return;
             }
 
-            this.passed.BusinessToChange = Business;
-            this.passed.ChangeSpecificObject = false;
+            passed.BusinessToChange = Business;
+            passed.ChangeSpecificObject = false;
+            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
 
-            this.passed = MainProgramCode.AddBusiness(ref this.passed);
+            if (!ReplaceBusiness(Business, passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
 
-            if (!ReplaceBusiness(Business, this.passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occured during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
-
-            this.passed.BusinessToChange = null;
+            passed.BusinessToChange = null;
             passed.ChangeSpecificObject = false;
 
             LoadInformation();
@@ -57,9 +51,9 @@ namespace QuoteSwift
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            this.passed = MainProgramCode.AddBusiness(ref passed);
-            this.Show();
+            Hide();
+            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
+            Show();
 
             LoadInformation();
         }
@@ -72,8 +66,8 @@ namespace QuoteSwift
                     DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
             }
 
-            this.DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
-            this.DgvBusinessList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            DgvBusinessList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         private void BtnRemoveSelected_Click(object sender, EventArgs e)
@@ -129,8 +123,8 @@ namespace QuoteSwift
         {
             DgvBusinessList.Rows.Clear();
 
-            if(passed.PassBusinessList != null)
-                for(int i = 0; i < passed.PassBusinessList.Count; i++)
+            if (passed.PassBusinessList != null)
+                for (int i = 0; i < passed.PassBusinessList.Count; i++)
                 {
                     DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
                 }
@@ -138,15 +132,30 @@ namespace QuoteSwift
 
         private bool ReplaceBusiness(Business Original, Business New)
         {
-            if (New != null && Original != null && this.passed.PassBusinessList != null)
-                for (int i = 0; i < this.passed.PassBusinessList.Count; i++)
-                    if (this.passed.PassBusinessList[i] == Original)
+            if (New != null && Original != null && passed.PassBusinessList != null)
+                for (int i = 0; i < passed.PassBusinessList.Count; i++)
+                    if (passed.PassBusinessList[i] == Original)
                     {
-                        this.passed.PassBusinessList[i] = New;
+                        passed.PassBusinessList[i] = New;
                         return true;
                     }
 
             return false;
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmViewAllBusinesses_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         /**********************************************************************************/

@@ -30,7 +30,6 @@ namespace QuoteSwift
         private void InitializeComponent()
         {
             this.msManagePhoneNumbersControls = new System.Windows.Forms.MenuStrip();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dgvTelephoneNumbers = new System.Windows.Forms.DataGridView();
             this.clmTelephoneNumbers = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,25 +49,20 @@ namespace QuoteSwift
             // 
             // msManagePhoneNumbersControls
             // 
+            this.msManagePhoneNumbersControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msManagePhoneNumbersControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msManagePhoneNumbersControls.Location = new System.Drawing.Point(0, 0);
             this.msManagePhoneNumbersControls.Name = "msManagePhoneNumbersControls";
-            this.msManagePhoneNumbersControls.Size = new System.Drawing.Size(774, 24);
+            this.msManagePhoneNumbersControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.msManagePhoneNumbersControls.Size = new System.Drawing.Size(1161, 30);
             this.msManagePhoneNumbersControls.TabIndex = 0;
             this.msManagePhoneNumbersControls.Text = "msManagePhoneNumbersControls";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
@@ -79,9 +73,10 @@ namespace QuoteSwift
             this.dgvTelephoneNumbers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTelephoneNumbers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clmTelephoneNumbers});
-            this.dgvTelephoneNumbers.Location = new System.Drawing.Point(12, 56);
+            this.dgvTelephoneNumbers.Location = new System.Drawing.Point(18, 78);
+            this.dgvTelephoneNumbers.Margin = new System.Windows.Forms.Padding(4);
             this.dgvTelephoneNumbers.Name = "dgvTelephoneNumbers";
-            this.dgvTelephoneNumbers.Size = new System.Drawing.Size(350, 184);
+            this.dgvTelephoneNumbers.Size = new System.Drawing.Size(525, 255);
             this.dgvTelephoneNumbers.TabIndex = 1;
             // 
             // clmTelephoneNumbers
@@ -90,23 +85,25 @@ namespace QuoteSwift
             this.clmTelephoneNumbers.HeaderText = "Telephone Numbers";
             this.clmTelephoneNumbers.Name = "clmTelephoneNumbers";
             this.clmTelephoneNumbers.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.clmTelephoneNumbers.Width = 98;
+            this.clmTelephoneNumbers.Width = 133;
             // 
             // lblTelephoneNumberList
             // 
             this.lblTelephoneNumberList.AutoSize = true;
-            this.lblTelephoneNumberList.Location = new System.Drawing.Point(12, 40);
+            this.lblTelephoneNumberList.Location = new System.Drawing.Point(18, 55);
+            this.lblTelephoneNumberList.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTelephoneNumberList.Name = "lblTelephoneNumberList";
-            this.lblTelephoneNumberList.Size = new System.Drawing.Size(137, 13);
+            this.lblTelephoneNumberList.Size = new System.Drawing.Size(190, 18);
             this.lblTelephoneNumberList.TabIndex = 2;
             this.lblTelephoneNumberList.Text = "List of Telephone Numbers:";
             // 
             // x
             // 
             this.x.AutoSize = true;
-            this.x.Location = new System.Drawing.Point(403, 40);
+            this.x.Location = new System.Drawing.Point(604, 55);
+            this.x.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.x.Name = "x";
-            this.x.Size = new System.Drawing.Size(133, 13);
+            this.x.Size = new System.Drawing.Size(187, 18);
             this.x.TabIndex = 4;
             this.x.Text = "List of Cellphone Numbers:";
             // 
@@ -117,9 +114,10 @@ namespace QuoteSwift
             this.dgvCellphoneNumbers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCellphoneNumbers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClmCellphoneNumbers});
-            this.dgvCellphoneNumbers.Location = new System.Drawing.Point(406, 56);
+            this.dgvCellphoneNumbers.Location = new System.Drawing.Point(609, 78);
+            this.dgvCellphoneNumbers.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCellphoneNumbers.Name = "dgvCellphoneNumbers";
-            this.dgvCellphoneNumbers.Size = new System.Drawing.Size(350, 184);
+            this.dgvCellphoneNumbers.Size = new System.Drawing.Size(525, 255);
             this.dgvCellphoneNumbers.TabIndex = 3;
             // 
             // ClmCellphoneNumbers
@@ -129,14 +127,15 @@ namespace QuoteSwift
             this.ClmCellphoneNumbers.Name = "ClmCellphoneNumbers";
             this.ClmCellphoneNumbers.ReadOnly = true;
             this.ClmCellphoneNumbers.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ClmCellphoneNumbers.Width = 95;
+            this.ClmCellphoneNumbers.Width = 131;
             // 
             // btnRemoveTelNumber
             // 
             this.btnRemoveTelNumber.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnRemoveTelNumber.Location = new System.Drawing.Point(184, 246);
+            this.btnRemoveTelNumber.Location = new System.Drawing.Point(276, 341);
+            this.btnRemoveTelNumber.Margin = new System.Windows.Forms.Padding(4);
             this.btnRemoveTelNumber.Name = "btnRemoveTelNumber";
-            this.btnRemoveTelNumber.Size = new System.Drawing.Size(178, 23);
+            this.btnRemoveTelNumber.Size = new System.Drawing.Size(267, 32);
             this.btnRemoveTelNumber.TabIndex = 5;
             this.btnRemoveTelNumber.Text = "Remove Selected Phone Number";
             this.btnRemoveTelNumber.UseVisualStyleBackColor = true;
@@ -145,9 +144,10 @@ namespace QuoteSwift
             // btnRemoveCellNumber
             // 
             this.btnRemoveCellNumber.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnRemoveCellNumber.Location = new System.Drawing.Point(577, 246);
+            this.btnRemoveCellNumber.Location = new System.Drawing.Point(866, 341);
+            this.btnRemoveCellNumber.Margin = new System.Windows.Forms.Padding(4);
             this.btnRemoveCellNumber.Name = "btnRemoveCellNumber";
-            this.btnRemoveCellNumber.Size = new System.Drawing.Size(179, 23);
+            this.btnRemoveCellNumber.Size = new System.Drawing.Size(268, 32);
             this.btnRemoveCellNumber.TabIndex = 6;
             this.btnRemoveCellNumber.Text = "Remove Selected Phone Number";
             this.btnRemoveCellNumber.UseVisualStyleBackColor = true;
@@ -156,9 +156,10 @@ namespace QuoteSwift
             // BtnCancel
             // 
             this.BtnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnCancel.Location = new System.Drawing.Point(12, 246);
+            this.BtnCancel.Location = new System.Drawing.Point(18, 341);
+            this.BtnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.BtnCancel.Name = "BtnCancel";
-            this.BtnCancel.Size = new System.Drawing.Size(75, 23);
+            this.BtnCancel.Size = new System.Drawing.Size(112, 32);
             this.BtnCancel.TabIndex = 7;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
@@ -167,9 +168,10 @@ namespace QuoteSwift
             // BtnUpdateCellphoneNumber
             // 
             this.BtnUpdateCellphoneNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnUpdateCellphoneNumber.Location = new System.Drawing.Point(577, 27);
+            this.BtnUpdateCellphoneNumber.Location = new System.Drawing.Point(866, 37);
+            this.BtnUpdateCellphoneNumber.Margin = new System.Windows.Forms.Padding(4);
             this.BtnUpdateCellphoneNumber.Name = "BtnUpdateCellphoneNumber";
-            this.BtnUpdateCellphoneNumber.Size = new System.Drawing.Size(179, 23);
+            this.BtnUpdateCellphoneNumber.Size = new System.Drawing.Size(268, 32);
             this.BtnUpdateCellphoneNumber.TabIndex = 6;
             this.BtnUpdateCellphoneNumber.Text = "Update Selected Phone Number";
             this.BtnUpdateCellphoneNumber.UseVisualStyleBackColor = true;
@@ -178,9 +180,10 @@ namespace QuoteSwift
             // BtnUpdateTelephoneNumber
             // 
             this.BtnUpdateTelephoneNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnUpdateTelephoneNumber.Location = new System.Drawing.Point(184, 27);
+            this.BtnUpdateTelephoneNumber.Location = new System.Drawing.Point(276, 37);
+            this.BtnUpdateTelephoneNumber.Margin = new System.Windows.Forms.Padding(4);
             this.BtnUpdateTelephoneNumber.Name = "BtnUpdateTelephoneNumber";
-            this.BtnUpdateTelephoneNumber.Size = new System.Drawing.Size(178, 23);
+            this.BtnUpdateTelephoneNumber.Size = new System.Drawing.Size(267, 32);
             this.BtnUpdateTelephoneNumber.TabIndex = 8;
             this.BtnUpdateTelephoneNumber.Text = "Update Selected Phone Number";
             this.BtnUpdateTelephoneNumber.UseVisualStyleBackColor = true;
@@ -188,9 +191,9 @@ namespace QuoteSwift
             // 
             // FrmManagingPhoneNumbers
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(774, 275);
+            this.ClientSize = new System.Drawing.Size(1161, 381);
             this.Controls.Add(this.BtnUpdateTelephoneNumber);
             this.Controls.Add(this.BtnUpdateCellphoneNumber);
             this.Controls.Add(this.BtnCancel);
@@ -201,7 +204,9 @@ namespace QuoteSwift
             this.Controls.Add(this.lblTelephoneNumberList);
             this.Controls.Add(this.dgvTelephoneNumbers);
             this.Controls.Add(this.msManagePhoneNumbersControls);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.msManagePhoneNumbersControls;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmManagingPhoneNumbers";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Managing < Business Name > Phone Numbers";
@@ -218,7 +223,6 @@ namespace QuoteSwift
         #endregion
 
         private System.Windows.Forms.MenuStrip msManagePhoneNumbersControls;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.DataGridView dgvTelephoneNumbers;
         private System.Windows.Forms.Label lblTelephoneNumberList;

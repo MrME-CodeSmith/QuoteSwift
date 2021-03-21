@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using Microsoft.VisualBasic.FileIO;
 
 namespace QuoteSwift
 {
@@ -20,7 +20,8 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
@@ -28,7 +29,7 @@ namespace QuoteSwift
 
             if (passed.ChangeSpecificObject)
             {
-                
+
                 if (ValidInput())
                 {
                     Part BeforeUpdatePart = new Part(passed.PartToChange);
@@ -37,29 +38,29 @@ namespace QuoteSwift
                     passed.PartToChange.PartDescription = mtxtPartDescription.Text;
                     passed.PartToChange.OriginalItemPartNumber = mtxtOriginalPartNumber.Text;
                     passed.PartToChange.NewPartNumber = mtxtNewPartNumber.Text;
-                    passed.PartToChange.PartPrice = MainProgramCode.ParseFloat(mtxtPartPrice.Text);
+                    passed.PartToChange.PartPrice = QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text);
                     passed.PartToChange.MandatoryPart = cbxMandatoryPart.Checked;
 
-                    if(BeforeUpdatePart.MandatoryPart && !passed.PartToChange.MandatoryPart)//Determine if it was a mandatory part that changed into a non-mandatory part
+                    if (BeforeUpdatePart.MandatoryPart && !passed.PartToChange.MandatoryPart)//Determine if it was a mandatory part that changed into a non-mandatory part
                     {
-                        if(!ChangeToNonMandatory(passed.PartToChange))
+                        if (!ChangeToNonMandatory(passed.PartToChange))
                         {
-                            MainProgramCode.ShowError("An error occured while transfering the part to the non-mandatory part list","ERROR - Transfer Failed");
+                            MainProgramCode.ShowError("An error occurred while transferring the part to the non-mandatory part list", "ERROR - Transfer Failed");
                             return;
                         }
                     }
-                    else if(!BeforeUpdatePart.MandatoryPart && passed.PartToChange.MandatoryPart)//Determine if it was a non-mandatory part that changed into a mandatory part
+                    else if (!BeforeUpdatePart.MandatoryPart && passed.PartToChange.MandatoryPart)//Determine if it was a non-mandatory part that changed into a mandatory part
                     {
                         if (!ChangeToMandatory(passed.PartToChange))
                         {
-                            MainProgramCode.ShowError("An error occured while transfering the part to the mandatory part list", "ERROR - Transfer Failed");
+                            MainProgramCode.ShowError("An error occurred while transferring the part to the mandatory part list", "ERROR - Transfer Failed");
                             return;
                         }
                     }
 
-                    MainProgramCode.ShowInformation("Successfully updated the part" , "CONFIRMATION - Update Successful");
+                    MainProgramCode.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
                     passed.ChangeSpecificObject = false;
-                    this.Close();
+                    Close();
                 }
                 else return;
 
@@ -69,16 +70,16 @@ namespace QuoteSwift
                 Part newPart;
                 if (ValidInput())
                 {
-                    newPart = new Part(mtxtPartName.Text, mtxtPartDescription.Text, mtxtOriginalPartNumber.Text, mtxtNewPartNumber.Text, cbxMandatoryPart.Checked, MainProgramCode.ParseFloat(mtxtPartPrice.Text));
+                    newPart = new Part(mtxtPartName.Text, mtxtPartDescription.Text, mtxtOriginalPartNumber.Text, mtxtNewPartNumber.Text, cbxMandatoryPart.Checked, QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text));
                 }
                 else return;
 
-                
+
 
                 if (newPart.MandatoryPart)
                 {
-                    if(passed.PassMandatoryPartList != null) if (!DistinctInput(ref newPart)) return;
-                    
+                    if (passed.PassMandatoryPartList != null) if (!DistinctInput(ref newPart)) return;
+
 
                     if (passed.PassMandatoryPartList == null)
                     {
@@ -119,30 +120,30 @@ namespace QuoteSwift
 
 
                 ClearInput();
-                
+
             }
         }
 
         private void FrmAddPart_Activated(object sender, EventArgs e)
         {
-            
+
         }
 
         private void LoadPartBatchToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Load a csv file and add the items to the appropriate list
+            //Load a CSV file and add the items to the appropriate list
 
-            string message = "Please ensure that the selected csv file has the following items in this exact order:\n\n" +
+            string message = "Please ensure that the selected CSV file has the following items in this exact order:\n\n" +
                              "First Column: Original Part Number\n" +
                              "Second Column: Part Name\n" +
                              "Third Column: Part Description\n" +
                              "Fourth Column: New Part Number\n" +
-                             "Fith Column: Part Price\n" +
-                             "Sixth Column: Part Quantity ( To add this amount of parts to the pump specified ) \n" +
-                             "Seventh Column: TRUE / FALSE value ( Mandatory part )\n" +
-                             "Eighth Column: Pump Name( To add a part to a specific pump )\n" +
-                             "Nineth Column: Pump Price (Price when pump is bought new)\n" +
-                             "Click the OK button to select the file or alternitivley chooce cancel to abort this action.";
+                             "Fifth Column: Part Price\n" +
+                             "Sixth Column: Part Quantity (To add this amount of parts to the pump specified) \n" +
+                             "Seventh Column: TRUE / FALSE value (Mandatory part)\n" +
+                             "Eighth Column: Pump Name(To add a part to a specific pump)\n" +
+                             "Ninth Column: Pump Price (Price when pump is bought new)\n" +
+                             "Click the OK button to select the file or alternative choose cancel to abort this action.";
 
             DialogResult MessageBoxResult = MessageBox.Show(message, "INFORMATION - CSV Batch Part Import", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
 
@@ -153,6 +154,10 @@ namespace QuoteSwift
                 {
                     fieldParser.TextFieldType = FieldType.Delimited;
                     fieldParser.SetDelimiters(",");
+
+                    bool UpdateDuplicated = false;
+                    if (MainProgramCode.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part")) UpdateDuplicated = true;
+
                     while (!fieldParser.EndOfData)
                     {
                         //Process each row:
@@ -160,16 +165,54 @@ namespace QuoteSwift
                         Part newPart = null;
                         try
                         {
-                            newPart = new Part(readFields[1], readFields[2], readFields[0], readFields[3], MainProgramCode.ParseBoolean(readFields[6]), MainProgramCode.ParseFloat(readFields[4]));
-                            if(!DistinctInput(ref newPart))
+                            newPart = new Part(readFields[1], readFields[2], readFields[0], readFields[3], QuoteSwiftMainCode.ParseBoolean(readFields[6]), QuoteSwiftMainCode.ParseFloat(readFields[4]));
+                            Part OldPartToChange = passed.PartToChange;
+                            passed.PartToChange = newPart;
+                            if (!DistinctInput(ref newPart))
                             {
-                                MainProgramCode.ShowError("Provided CSV File contains Part Items which do not have distinct Original Part Numbers or New part Number.\n Part items up until the first occurence of an ununique part has been added to the Part list. ", "ERROR - CSV Part Items Not Unique");
-                                return;
+                                passed.PartToChange = OldPartToChange;
+
+                                if (UpdateDuplicated)
+                                {
+                                    if (newPart.MandatoryPart)
+                                        for (int i = 0; i < passed.PassMandatoryPartList.Count - 1; i++)
+                                        {
+                                            if (passed.PassMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
+                                            {
+
+                                                Part data = passed.PassMandatoryPartList[i];
+                                                data.MandatoryPart = newPart.MandatoryPart;
+                                                data.PartDescription = newPart.PartDescription;
+                                                data.PartName = newPart.PartName;
+                                                data.PartPrice = newPart.PartPrice;
+
+                                                break;
+                                            }
+                                        }
+
+                                    if (!newPart.MandatoryPart)
+                                        for (int i = 0; i < passed.PassNonMandatoryPartList.Count - 1; i++)
+                                        {
+                                            if (passed.PassNonMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
+                                            {
+
+
+                                                Part data = passed.PassNonMandatoryPartList[i];
+                                                data.MandatoryPart = newPart.MandatoryPart;
+                                                data.PartDescription = newPart.PartDescription;
+                                                data.PartName = newPart.PartName;
+                                                data.PartPrice = newPart.PartPrice;
+
+                                                break;
+                                            }
+                                        }
+
+                                }
                             }
                         }
                         catch
                         {
-                            MainProgramCode.ShowError("The provided CSV File's format is inccorrect, please try again once the format has been corrected.", "ERROR - CSV File Format Incorrect");
+                            MainProgramCode.ShowError("The provided CSV File's format is incorrect, please try again once the format has been corrected.", "ERROR - CSV File Format Incorrect");
                             return;
                         }
 
@@ -177,58 +220,56 @@ namespace QuoteSwift
                         if (passed.PassNonMandatoryPartList == null) passed.PassNonMandatoryPartList = new BindingList<Part>();
 
 
-                        if (newPart != null && newPart.MandatoryPart)
+                        if (newPart != null && newPart.MandatoryPart && DistinctInput(ref newPart))
                         {
                             passed.PassMandatoryPartList.Add(newPart);
                         }
-                        else if (newPart != null) passed.PassNonMandatoryPartList.Add(newPart);
+                        else if (newPart != null && DistinctInput(ref newPart)) passed.PassNonMandatoryPartList.Add(newPart);
 
                         bool FoundPump = false;
-
-                        //TODO: Check pump exists and/or Part exists, 
-                        //      in case pump not found but part found - create new pump with part
-                        //      in case pump found but not part       - create new part and add to pump
 
                         BindingList<Pump_Part> NewPumpPartList = new BindingList<Pump_Part>();
 
                         if (passed.PassPumpList != null)
                         {
-                            Pump pump = new Pump(readFields[7], "", MainProgramCode.ParseFloat(readFields[8]), ref NewPumpPartList);
-                            
+                            Pump NewPump = new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList);
+                            Pump OldPump = null;
                             for (int i = 0; i < passed.PassPumpList.Count; i++)
                             {
-                                if (passed.PassPumpList[i].PumpName == pump.PumpName)
+                                if (passed.PassPumpList[i].PumpName == NewPump.PumpName)
                                 {
                                     FoundPump = true;
-                                    pump = passed.PassPumpList[i];
+                                    OldPump = passed.PassPumpList[i];
                                     break;
                                 }
                             }
 
-                            if(!FoundPump) //Pump non existing
+                            if (FoundPump == false) //Pump non existing
                             {
                                 NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
-                                pump.PartList = NewPumpPartList;
-                                passed.PassPumpList.Add(pump);
+                                NewPump.PartList = NewPumpPartList;
+                                passed.PassPumpList.Add(NewPump);
                             }
                             else // Pump Existing
                             {
-                                pump.PartList.Add(new Pump_Part(newPart, int.Parse(readFields[5])));
+                                OldPump.PartList.Add(new Pump_Part(newPart, int.Parse(readFields[5])));
+                                if (OldPump.NewPumpPrice != NewPump.NewPumpPrice) OldPump.NewPumpPrice = NewPump.NewPumpPrice;
                             }
                         }
                         else // passed.PassPumpList is empty
                         {
                             NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
-                            passed.PassPumpList = new BindingList<Pump> { new Pump(readFields[7], "", MainProgramCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
+                            passed.PassPumpList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
                         }
-                        
+
                     }
 
-                 MainProgramCode.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
+                    MainProgramCode.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
 
                 }
-            } else return;
-            this.Close();
+            }
+            else return;
+            Close();
         }
 
         private void CbAddToPumpSelection_ContextMenuStripChanged(object sender, EventArgs e)
@@ -248,21 +289,21 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancelation")) this.Close();
+            if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
         }
 
         private void FrmAddPart_Load(object sender, EventArgs e)
         {
             if (passed != null && passed.PassPumpList != null)
             {
-                //Created a Binding Source for the pumplist to link the pumps
-                //directly to the combobox's datasource:
+                //Created a Binding Source for the pump list to link the pumps
+                //directly to the combo-box's data-source:
 
-                var ComboBoxPumpSource = new BindingSource { DataSource = passed.PassPumpList };
+                BindingSource ComboBoxPumpSource = new BindingSource { DataSource = passed.PassPumpList };
 
                 cbAddToPumpSelection.DataSource = ComboBoxPumpSource.DataSource;
 
-                //Linking the specific item from the Pump class to display in the combobox:
+                //Linking the specific item from the Pump class to display in the combo-box:
 
                 cbAddToPumpSelection.DisplayMember = "PumpName";
                 cbAddToPumpSelection.ValueMember = "PumpName";
@@ -270,19 +311,21 @@ namespace QuoteSwift
 
             // Determine is an item is to be edited / added.
 
-            if (this.passed.ChangeSpecificObject && this.passed.PartToChange != null)
+            if (passed.ChangeSpecificObject && passed.PartToChange != null)
             {
                 //Updating 
                 LoadInformation();
                 ReadWriteComponents();
                 btnAddPart.Text = "Update";
+                updatePartToolStripMenuItem.Enabled = false;
             }
-            else if (!this.passed.ChangeSpecificObject && this.passed.PartToChange != null)
+            else if (!passed.ChangeSpecificObject && passed.PartToChange != null)
             {
                 //Viewing
                 btnAddPart.Visible = false;
                 Read_OnlyComponents();
                 LoadInformation();
+                updatePartToolStripMenuItem.Enabled = true;
             }   //Otherwise its Add
 
         }
@@ -324,7 +367,7 @@ namespace QuoteSwift
                 return false;
             }
 
-            if (MainProgramCode.ParseFloat(mtxtPartPrice.Text) == 0)
+            if (QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text) == 0)
             {
                 MainProgramCode.ShowError("Please ensure that the price of the Item is valid and it has a value greater than R99.", "ERROR - Invalid Input");
                 mtxtPartPrice.Focus();
@@ -379,7 +422,8 @@ namespace QuoteSwift
                     {
                         if (passed.PassMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
                         {
-                            MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
+                            if (passed.PartToChange == null)
+                                MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
                             return false;
                         }
                     }
@@ -393,7 +437,8 @@ namespace QuoteSwift
                     {
                         if (passed.PassNonMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
                         {
-                            MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
+                            if (passed.PartToChange == null)
+                                MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
                             return false;
                         }
                     }
@@ -443,13 +488,23 @@ namespace QuoteSwift
 
         private void UpdatePartToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(!passed.ChangeSpecificObject)
-                if(MainProgramCode.RequestConfirmation("You are curently only viewing " + passed.PartToChange.PartName +" part, would you like to update it's details instead?","REQUEST - Update Specific Part Details"))
+            if (!passed.ChangeSpecificObject)
+                if (MainProgramCode.RequestConfirmation("You are currently only viewing " + passed.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
                 {
                     ReadWriteComponents();
                     updatePartToolStripMenuItem.Enabled = false;
                     passed.ChangeSpecificObject = true;
-                }    
+                }
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmAddPart_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         /*********************************************************************************/

@@ -43,30 +43,24 @@ namespace QuoteSwift
             this.managePumpPartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewPartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewAllPartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCreateNewQuote = new System.Windows.Forms.Button();
-            this.dgvPreviousQuotes = new System.Windows.Forms.DataGridView();
-            this.clmQuoteNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmCreationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmExpiryDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmCustomer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmJobNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnViewSelectedQuote = new System.Windows.Forms.Button();
             this.btnCreateNewQuoteOnSelection = new System.Windows.Forms.Button();
+            this.dgvPreviousQuotes = new Syncfusion.WinForms.DataGrid.SfDataGrid();
             this.msQuoteControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPreviousQuotes)).BeginInit();
             this.SuspendLayout();
             // 
             // msQuoteControls
             // 
+            this.msQuoteControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msQuoteControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.helpToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.msQuoteControls.Location = new System.Drawing.Point(0, 0);
             this.msQuoteControls.Name = "msQuoteControls";
-            this.msQuoteControls.Size = new System.Drawing.Size(568, 24);
+            this.msQuoteControls.Size = new System.Drawing.Size(684, 28);
             this.msQuoteControls.TabIndex = 1;
             this.msQuoteControls.Text = "menuStrip1";
             // 
@@ -78,7 +72,7 @@ namespace QuoteSwift
             this.managePumpsToolStripMenuItem,
             this.managePumpPartsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // manageBusinessesToolStripMenuItem
@@ -87,21 +81,21 @@ namespace QuoteSwift
             this.addNewBusinessToolStripMenuItem,
             this.ViewAllBusinessesToolStripMenuItem});
             this.manageBusinessesToolStripMenuItem.Name = "manageBusinessesToolStripMenuItem";
-            this.manageBusinessesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.manageBusinessesToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.manageBusinessesToolStripMenuItem.Text = "Manage Businesses";
             this.manageBusinessesToolStripMenuItem.Click += new System.EventHandler(this.ManageBusinessesToolStripMenuItem_Click);
             // 
             // addNewBusinessToolStripMenuItem
             // 
             this.addNewBusinessToolStripMenuItem.Name = "addNewBusinessToolStripMenuItem";
-            this.addNewBusinessToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.addNewBusinessToolStripMenuItem.Size = new System.Drawing.Size(205, 24);
             this.addNewBusinessToolStripMenuItem.Text = "Add New Business";
             this.addNewBusinessToolStripMenuItem.Click += new System.EventHandler(this.AddNewBusinessToolStripMenuItem_Click);
             // 
             // ViewAllBusinessesToolStripMenuItem
             // 
             this.ViewAllBusinessesToolStripMenuItem.Name = "ViewAllBusinessesToolStripMenuItem";
-            this.ViewAllBusinessesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.ViewAllBusinessesToolStripMenuItem.Size = new System.Drawing.Size(205, 24);
             this.ViewAllBusinessesToolStripMenuItem.Text = "View All Businesses";
             this.ViewAllBusinessesToolStripMenuItem.Click += new System.EventHandler(this.ViewAllBusinessesToolStripMenuItem_Click);
             // 
@@ -111,21 +105,21 @@ namespace QuoteSwift
             this.addNewCustomerToolStripMenuItem,
             this.viewAllCustomersToolStripMenuItem});
             this.manageCustomersToolStripMenuItem.Name = "manageCustomersToolStripMenuItem";
-            this.manageCustomersToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.manageCustomersToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.manageCustomersToolStripMenuItem.Text = "Manage Customers";
             this.manageCustomersToolStripMenuItem.Click += new System.EventHandler(this.ManageCustomersToolStripMenuItem_Click);
             // 
             // addNewCustomerToolStripMenuItem
             // 
             this.addNewCustomerToolStripMenuItem.Name = "addNewCustomerToolStripMenuItem";
-            this.addNewCustomerToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.addNewCustomerToolStripMenuItem.Size = new System.Drawing.Size(207, 24);
             this.addNewCustomerToolStripMenuItem.Text = "Add New Customer";
             this.addNewCustomerToolStripMenuItem.Click += new System.EventHandler(this.AddNewCustomerToolStripMenuItem_Click);
             // 
             // viewAllCustomersToolStripMenuItem
             // 
             this.viewAllCustomersToolStripMenuItem.Name = "viewAllCustomersToolStripMenuItem";
-            this.viewAllCustomersToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.viewAllCustomersToolStripMenuItem.Size = new System.Drawing.Size(207, 24);
             this.viewAllCustomersToolStripMenuItem.Text = "View All Customers";
             this.viewAllCustomersToolStripMenuItem.Click += new System.EventHandler(this.ViewAllCustomersToolStripMenuItem_Click);
             // 
@@ -135,21 +129,21 @@ namespace QuoteSwift
             this.createNewPumpToolStripMenuItem,
             this.viewAllPumpsToolStripMenuItem});
             this.managePumpsToolStripMenuItem.Name = "managePumpsToolStripMenuItem";
-            this.managePumpsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.managePumpsToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.managePumpsToolStripMenuItem.Text = "Manage Pumps";
             this.managePumpsToolStripMenuItem.Click += new System.EventHandler(this.ManagePumpsToolStripMenuItem_Click);
             // 
             // createNewPumpToolStripMenuItem
             // 
             this.createNewPumpToolStripMenuItem.Name = "createNewPumpToolStripMenuItem";
-            this.createNewPumpToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.createNewPumpToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
             this.createNewPumpToolStripMenuItem.Text = "Create New Pump";
             this.createNewPumpToolStripMenuItem.Click += new System.EventHandler(this.CreateNewPumpToolStripMenuItem_Click);
             // 
             // viewAllPumpsToolStripMenuItem
             // 
             this.viewAllPumpsToolStripMenuItem.Name = "viewAllPumpsToolStripMenuItem";
-            this.viewAllPumpsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.viewAllPumpsToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
             this.viewAllPumpsToolStripMenuItem.Text = "View All Pumps";
             this.viewAllPumpsToolStripMenuItem.Click += new System.EventHandler(this.ViewAllPumpsToolStripMenuItem_Click);
             // 
@@ -159,100 +153,49 @@ namespace QuoteSwift
             this.addNewPartToolStripMenuItem,
             this.viewAllPartsToolStripMenuItem});
             this.managePumpPartsToolStripMenuItem.Name = "managePumpPartsToolStripMenuItem";
-            this.managePumpPartsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.managePumpPartsToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.managePumpPartsToolStripMenuItem.Text = "Manage Pump Parts";
             this.managePumpPartsToolStripMenuItem.Click += new System.EventHandler(this.ManagePumpPartsToolStripMenuItem_Click);
             // 
             // addNewPartToolStripMenuItem
             // 
             this.addNewPartToolStripMenuItem.Name = "addNewPartToolStripMenuItem";
-            this.addNewPartToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.addNewPartToolStripMenuItem.Size = new System.Drawing.Size(169, 24);
             this.addNewPartToolStripMenuItem.Text = "Add New Part";
             this.addNewPartToolStripMenuItem.Click += new System.EventHandler(this.AddNewPartToolStripMenuItem_Click);
             // 
             // viewAllPartsToolStripMenuItem
             // 
             this.viewAllPartsToolStripMenuItem.Name = "viewAllPartsToolStripMenuItem";
-            this.viewAllPartsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.viewAllPartsToolStripMenuItem.Size = new System.Drawing.Size(169, 24);
             this.viewAllPartsToolStripMenuItem.Text = "View All Parts";
             this.viewAllPartsToolStripMenuItem.Click += new System.EventHandler(this.ViewAllPartsToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
-            this.helpToolStripMenuItem.Text = "Help!";
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // btnCreateNewQuote
             // 
-            this.btnCreateNewQuote.Location = new System.Drawing.Point(12, 27);
+            this.btnCreateNewQuote.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreateNewQuote.Location = new System.Drawing.Point(12, 43);
             this.btnCreateNewQuote.Name = "btnCreateNewQuote";
-            this.btnCreateNewQuote.Size = new System.Drawing.Size(120, 23);
+            this.btnCreateNewQuote.Size = new System.Drawing.Size(160, 35);
             this.btnCreateNewQuote.TabIndex = 2;
             this.btnCreateNewQuote.Text = "Create New Quote";
             this.btnCreateNewQuote.UseVisualStyleBackColor = true;
             this.btnCreateNewQuote.Click += new System.EventHandler(this.BtnCreateNewQuote_Click);
             // 
-            // dgvPreviousQuotes
-            // 
-            this.dgvPreviousQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvPreviousQuotes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPreviousQuotes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clmQuoteNumber,
-            this.clmCreationDate,
-            this.clmExpiryDate,
-            this.clmCustomer,
-            this.clmJobNumber});
-            this.dgvPreviousQuotes.Location = new System.Drawing.Point(12, 56);
-            this.dgvPreviousQuotes.Name = "dgvPreviousQuotes";
-            this.dgvPreviousQuotes.Size = new System.Drawing.Size(543, 293);
-            this.dgvPreviousQuotes.TabIndex = 3;
-            // 
-            // clmQuoteNumber
-            // 
-            this.clmQuoteNumber.HeaderText = "Quote Number";
-            this.clmQuoteNumber.Name = "clmQuoteNumber";
-            this.clmQuoteNumber.ReadOnly = true;
-            // 
-            // clmCreationDate
-            // 
-            this.clmCreationDate.HeaderText = "Creation Date";
-            this.clmCreationDate.Name = "clmCreationDate";
-            this.clmCreationDate.ReadOnly = true;
-            // 
-            // clmExpiryDate
-            // 
-            this.clmExpiryDate.HeaderText = "Expiry Date";
-            this.clmExpiryDate.Name = "clmExpiryDate";
-            this.clmExpiryDate.ReadOnly = true;
-            // 
-            // clmCustomer
-            // 
-            this.clmCustomer.HeaderText = "Customer";
-            this.clmCustomer.Name = "clmCustomer";
-            this.clmCustomer.ReadOnly = true;
-            // 
-            // clmJobNumber
-            // 
-            this.clmJobNumber.HeaderText = "Job Number";
-            this.clmJobNumber.Name = "clmJobNumber";
-            this.clmJobNumber.ReadOnly = true;
-            // 
             // btnViewSelectedQuote
             // 
             this.btnViewSelectedQuote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewSelectedQuote.Location = new System.Drawing.Point(435, 27);
+            this.btnViewSelectedQuote.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnViewSelectedQuote.Location = new System.Drawing.Point(512, 43);
             this.btnViewSelectedQuote.Name = "btnViewSelectedQuote";
-            this.btnViewSelectedQuote.Size = new System.Drawing.Size(120, 23);
+            this.btnViewSelectedQuote.Size = new System.Drawing.Size(160, 35);
             this.btnViewSelectedQuote.TabIndex = 4;
             this.btnViewSelectedQuote.Text = "View Selected Quote";
             this.btnViewSelectedQuote.UseVisualStyleBackColor = true;
@@ -261,28 +204,46 @@ namespace QuoteSwift
             // btnCreateNewQuoteOnSelection
             // 
             this.btnCreateNewQuoteOnSelection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreateNewQuoteOnSelection.Location = new System.Drawing.Point(383, 355);
+            this.btnCreateNewQuoteOnSelection.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreateNewQuoteOnSelection.Location = new System.Drawing.Point(431, 458);
             this.btnCreateNewQuoteOnSelection.Name = "btnCreateNewQuoteOnSelection";
-            this.btnCreateNewQuoteOnSelection.Size = new System.Drawing.Size(172, 23);
+            this.btnCreateNewQuoteOnSelection.Size = new System.Drawing.Size(241, 35);
             this.btnCreateNewQuoteOnSelection.TabIndex = 5;
             this.btnCreateNewQuoteOnSelection.Text = "Create New Quote On Selection";
             this.btnCreateNewQuoteOnSelection.UseVisualStyleBackColor = true;
             this.btnCreateNewQuoteOnSelection.Click += new System.EventHandler(this.BtnCreateNewQuoteOnSelection_Click);
             // 
+            // dgvPreviousQuotes
+            // 
+            this.dgvPreviousQuotes.AccessibleName = "Table";
+            this.dgvPreviousQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvPreviousQuotes.AutoSizeColumnsMode = Syncfusion.WinForms.DataGrid.Enums.AutoSizeColumnsMode.AllCells;
+            this.dgvPreviousQuotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.dgvPreviousQuotes.Location = new System.Drawing.Point(12, 84);
+            this.dgvPreviousQuotes.Name = "dgvPreviousQuotes";
+            this.dgvPreviousQuotes.Size = new System.Drawing.Size(659, 368);
+            this.dgvPreviousQuotes.Style.AddNewRowStyle.Font.Size = 11F;
+            this.dgvPreviousQuotes.SummaryCalculationUnit = Syncfusion.Data.SummaryCalculationUnit.SelectedRows;
+            this.dgvPreviousQuotes.TabIndex = 6;
+            this.dgvPreviousQuotes.Text = "Previous Quotes";
+            // 
             // FrmViewQuotes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 388);
+            this.ClientSize = new System.Drawing.Size(684, 505);
+            this.Controls.Add(this.dgvPreviousQuotes);
             this.Controls.Add(this.btnCreateNewQuoteOnSelection);
             this.Controls.Add(this.btnViewSelectedQuote);
-            this.Controls.Add(this.dgvPreviousQuotes);
             this.Controls.Add(this.btnCreateNewQuote);
             this.Controls.Add(this.msQuoteControls);
             this.MainMenuStrip = this.msQuoteControls;
             this.Name = "FrmViewQuotes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Viewing All Previous Quotes";
+            this.Activated += new System.EventHandler(this.FrmViewQuotes_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmViewQuotes_FormClosing);
             this.Load += new System.EventHandler(this.FrmViewQuotes_Load);
             this.msQuoteControls.ResumeLayout(false);
@@ -297,15 +258,8 @@ namespace QuoteSwift
 
         private System.Windows.Forms.MenuStrip msQuoteControls;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.Button btnCreateNewQuote;
-        private System.Windows.Forms.DataGridView dgvPreviousQuotes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmQuoteNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmCreationDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmExpiryDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmCustomer;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmJobNumber;
         private System.Windows.Forms.Button btnViewSelectedQuote;
         private System.Windows.Forms.Button btnCreateNewQuoteOnSelection;
         private System.Windows.Forms.ToolStripMenuItem managePumpsToolStripMenuItem;
@@ -320,6 +274,7 @@ namespace QuoteSwift
         private System.Windows.Forms.ToolStripMenuItem managePumpPartsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addNewPartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewAllPartsToolStripMenuItem;
+        private Syncfusion.WinForms.DataGrid.SfDataGrid dgvPreviousQuotes;
     }
 }
 

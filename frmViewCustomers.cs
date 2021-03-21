@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
 {
     public partial class FrmViewCustomers : Form
-    { 
+    {
         Pass passed;
 
         public ref Pass Passed { get => ref passed; }
@@ -24,7 +19,8 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref this.passed);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e)
@@ -32,32 +28,34 @@ namespace QuoteSwift
             Customer customer = GetCustomerSelection();
             Business container = GetSelectedBusiness();
 
-            if(customer == null)
+            if (customer == null)
             {
                 MainProgramCode.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
                 return;
             }
 
-            this.passed.CustomerToChange = customer;
-            this.passed.ChangeSpecificObject = false;
-            this.passed.BusinessToChange = container;
+            passed.CustomerToChange = customer;
+            passed.ChangeSpecificObject = false;
+            passed.BusinessToChange = container;
 
-            this.passed = MainProgramCode.AddCustomer(ref this.passed);
+            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
 
-            if (!ReplaceCustomer(customer, this.passed.CustomerToChange, container) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occured during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
+            if (!ReplaceCustomer(customer, passed.CustomerToChange, container) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
 
-            this.passed.CustomerToChange = null;
-            this.passed.BusinessToChange = null;
+            passed.CustomerToChange = null;
+            passed.BusinessToChange = null;
             passed.ChangeSpecificObject = false;
 
             LoadInformation();
+
+
         }
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            this.passed = MainProgramCode.AddCustomer(ref this.passed);
-            this.Show();
+            Hide();
+            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
+            Show();
 
             LoadInformation();
         }
@@ -68,8 +66,8 @@ namespace QuoteSwift
 
             LoadInformation();
 
-            this.DgvCustomerList.RowsDefaultCellStyle.BackColor = Color.Bisque;
-            this.DgvCustomerList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            DgvCustomerList.RowsDefaultCellStyle.BackColor = Color.Bisque;
+            DgvCustomerList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
         private void BtnRemoveSelectedCustomer_Click(object sender, EventArgs e)
@@ -107,17 +105,17 @@ namespace QuoteSwift
                     if (cbBusinessSelection.Text == passed.PassBusinessList[i].BusinessName)
                         if (passed.PassBusinessList[i].BusinessCustomerList != null)
                             for (int j = 0; j < passed.PassBusinessList[i].BusinessCustomerList.Count; j++)
-                                DgvCustomerList.Rows.Add(passed.PassBusinessList[i].BusinessCustomerList[j].CustomerName,
-                                                         passed.PassBusinessList[i].BusinessCustomerList[j].CustomerCompanyName,
+                                DgvCustomerList.Rows.Add(passed.PassBusinessList[i].BusinessCustomerList[j].CustomerCompanyName,
                                                          GetPreviousQuoteDate(passed.PassBusinessList[i].BusinessCustomerList[j]));
+
         }
 
         private string GetPreviousQuoteDate(Customer c)
         {
-            if(this.passed.PassQuoteList != null)
+            if (passed.PassQuoteList != null)
             {
                 //TODO: Implement
-            } 
+            }
 
             return "No Previous Quote Date Available";
         }
@@ -152,7 +150,7 @@ namespace QuoteSwift
 
             if (GetSelectedBusiness() != null)
             {
-                customer = GetSelectedBusiness().BusinessCustomerList.SingleOrDefault(p => p.CustomerName == SearchName);
+                customer = GetSelectedBusiness().BusinessCustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
                 return customer;
             }
 
@@ -161,12 +159,13 @@ namespace QuoteSwift
 
         private Business GetSelectedBusiness()
         {
-            if(passed.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
+            Business business;
+            string SearchName = cbBusinessSelection.Text;
+
+            if (passed.PassBusinessList != null && SearchName.Length > 1)
             {
-                for(int i = 0; i < passed.PassBusinessList.Count; i++)
-                {
-                    if (passed.PassBusinessList[i].BusinessName == cbBusinessSelection.Text) return passed.PassBusinessList[i];
-                }
+                business = passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                return business;
             }
 
             return null;
@@ -176,18 +175,33 @@ namespace QuoteSwift
         {
             if (passed != null && passed.PassBusinessList != null)
             {
-                //Created a Binding Source for the Business list to link the source
-                //directly to the combobox's datasource:
-
-                var ComboBoxBusinessSource = new BindingSource { DataSource = passed.PassBusinessList };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = passed.PassBusinessList };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
-
-                //Linking the specific item from the Business class to display in the combobox:
 
                 cb.DisplayMember = "BusinessName";
                 cb.ValueMember = "BusinessName";
             }
+        }
+
+        private void CbBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadInformation();
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.", "REQUEST - Cancellation")) Close();
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmViewCustomers_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
 
         /**********************************************************************************/

@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -25,7 +18,7 @@ namespace QuoteSwift
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
         {
-            if(passed.PhoneNumberToChange != "") txtPhoneNumber.Text = passed.PhoneNumberToChange;
+            if (passed.PhoneNumberToChange != "") txtPhoneNumber.Text = passed.PhoneNumberToChange;
         }
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
@@ -37,24 +30,40 @@ namespace QuoteSwift
                 {
                     passed.PhoneNumberToChange = txtPhoneNumber.Text;
                     MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
-                    this.Close();
+                    Close();
                 }
             }
-            else if(passed != null && passed.CustomerToChange != null)
+            else if (passed != null && passed.CustomerToChange != null)
             {
-                FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref this.passed);
-                if(!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
+                FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
+                if (!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
                     passed.PhoneNumberToChange = txtPhoneNumber.Text;
                     MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
-                    this.Close();
+                    Close();
                 }
             }
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-           if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancelation")) this.Close();
+            if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+        }
+
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+        }
+
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Still Needs Implementation.
+        }
+
+        private void FrmEditPhoneNumber_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            QuoteSwiftMainCode.CloseApplication(true, ref passed);
         }
     }
 }
