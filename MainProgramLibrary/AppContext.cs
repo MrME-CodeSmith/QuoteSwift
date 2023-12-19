@@ -13,10 +13,10 @@ namespace QuoteSwift
         {
             Context = new AppContext(
                 new Dictionary<string, Quote>(), 
-                new BindingList<Business>(),
-                new BindingList<Product>(), 
-                new BindingList<Part>(), 
-                new BindingList<Part>()
+                new Dictionary<string, Business>(),
+                new Dictionary<string, Product>(), 
+                new Dictionary<string, Part>(), 
+                new Dictionary<string, Part>()
              );
         }
     }

@@ -12,6 +12,7 @@ namespace QuoteSwift
         [STAThread]
         static void Main()
         {
+            Global.InitializeContext();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmViewQuotes());
