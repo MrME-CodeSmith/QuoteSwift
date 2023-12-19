@@ -8,23 +8,22 @@ namespace QuoteSwift
     public partial class FrmAddBusiness : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
         Business Business;
 
-        public FrmAddBusiness(ref Pass passed)
+        public FrmAddBusiness()
         {
             InitializeComponent();
-            this.passed = passed;
             Business = passed.BusinessToChange;
         }
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
@@ -36,29 +35,29 @@ namespace QuoteSwift
                 Business.BusinessExtraInformation = rtxtExtraInformation.Text;
                 Business.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
-                if (passed.PassBusinessList == null)
+                if (passed.BusinessList == null)
                 {
                     //Create New business List
-                    passed.PassBusinessList = new BindingList<Business> { Business };
+                    passed.BusinessList = new BindingList<Business> { Business };
                 }
                 else //Add To List
                 {
-                    if (passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == Business.BusinessName) != null)
+                    if (passed.BusinessList.SingleOrDefault(p => p.BusinessName == Business.BusinessName) != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
                         return;
                     }
-                    else if (passed.PassBusinessList.SingleOrDefault(p => p.BusinessLegalDetails.VatNumber == Business.BusinessLegalDetails.VatNumber) != null)
+                    else if (passed.BusinessList.SingleOrDefault(p => p.BusinessLegalDetails.VatNumber == Business.BusinessLegalDetails.VatNumber) != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
                         return;
                     }
-                    else if (passed.PassBusinessList.SingleOrDefault(p => p.BusinessLegalDetails.RegistrationNumber == Business.BusinessLegalDetails.RegistrationNumber) != null)
+                    else if (passed.BusinessList.SingleOrDefault(p => p.BusinessLegalDetails.RegistrationNumber == Business.BusinessLegalDetails.RegistrationNumber) != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
                         return;
                     }
-                    else passed.PassBusinessList.Add(Business);
+                    else passed.BusinessList.Add(Business);
                 }
 
                 passed.BusinessToChange = null;
@@ -214,7 +213,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesEmailAddresses(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesEmailAddresses();
                 Show();
 
                 Business = passed.BusinessToChange;
@@ -233,7 +232,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesAddresses(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesAddresses();
                 Show();
 
                 Business = passed.BusinessToChange;
@@ -251,7 +250,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses();
                 Show();
 
                 Business = passed.BusinessToChange;
@@ -269,7 +268,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPhoneNumbers(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesPhoneNumbers();
                 Show();
 
                 Business = passed.BusinessToChange;
@@ -304,7 +303,7 @@ namespace QuoteSwift
 
         private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)

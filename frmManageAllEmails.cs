@@ -8,20 +8,19 @@ namespace QuoteSwift
     public partial class FrmManageAllEmails : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmManageAllEmails(ref Pass passed)
+        public FrmManageAllEmails()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void FrmManageAllEmails_Load(object sender, EventArgs e)
@@ -95,7 +94,7 @@ namespace QuoteSwift
             string email = GetEmailSelection();
             passed.EmailToChange = email;
             passed.ChangeSpecificObject = true;
-            passed = QuoteSwiftMainCode.EditBusinessEmailAddress(ref passed);
+            QuoteSwiftMainCode.EditBusinessEmailAddress();
 
             if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
             {
@@ -176,7 +175,7 @@ namespace QuoteSwift
 
         private void FrmManageAllEmails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
     }
 

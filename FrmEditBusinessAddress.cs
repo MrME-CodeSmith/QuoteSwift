@@ -5,14 +5,13 @@ namespace QuoteSwift
 {
     public partial class FrmEditBusinessAddress : Form
     {
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmEditBusinessAddress(ref Pass passed)
+        public FrmEditBusinessAddress()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -62,7 +61,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private bool ValidInput()
@@ -131,7 +130,7 @@ namespace QuoteSwift
 
         private void FrmEditBusinessAddress_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
     }
 }

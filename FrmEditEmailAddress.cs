@@ -6,14 +6,13 @@ namespace QuoteSwift
     public partial class FrmEditEmailAddress : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmEditEmailAddress(ref Pass passed)
+        public FrmEditEmailAddress()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
@@ -24,7 +23,7 @@ namespace QuoteSwift
                 passed.EmailToChange = mtxtEmail.Text;
                 if (passed != null && passed.BusinessToChange != null)
                 {
-                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
+                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness();
                     if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
@@ -34,7 +33,7 @@ namespace QuoteSwift
                 }
                 else if (passed != null && passed.CustomerToChange != null)
                 {
-                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
+                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer();
                     if (!frmAddCustomer.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
@@ -59,13 +58,13 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"), ref passed);
+            QuoteSwiftMainCode.CloseApplication(MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"));
         }
 
         private void CloseToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -75,7 +74,7 @@ namespace QuoteSwift
 
         private void FrmEditEmailAddress_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
     }
 }

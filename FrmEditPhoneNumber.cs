@@ -6,14 +6,13 @@ namespace QuoteSwift
     public partial class FrmEditPhoneNumber : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmEditPhoneNumber(ref Pass passed)
+        public FrmEditPhoneNumber()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
@@ -25,7 +24,7 @@ namespace QuoteSwift
         {
             if (passed != null && passed.BusinessToChange != null)
             {
-                FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
+                FrmAddBusiness frmAddBusiness = new FrmAddBusiness();
                 if (!frmAddBusiness.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
                     passed.PhoneNumberToChange = txtPhoneNumber.Text;
@@ -35,7 +34,7 @@ namespace QuoteSwift
             }
             else if (passed != null && passed.CustomerToChange != null)
             {
-                FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
+                FrmAddCustomer frmAddCustomer = new FrmAddCustomer();
                 if (!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
                     passed.PhoneNumberToChange = txtPhoneNumber.Text;
@@ -53,7 +52,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -63,7 +62,7 @@ namespace QuoteSwift
 
         private void FrmEditPhoneNumber_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
     }
 }

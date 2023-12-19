@@ -9,20 +9,19 @@ namespace QuoteSwift
     {
 
 
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmViewAllBusinesses(ref Pass passed)
+        public FrmViewAllBusinesses()
         {
             InitializeComponent();
-            Passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnUpdateBusiness_Click(object sender, EventArgs e)
@@ -38,7 +37,7 @@ namespace QuoteSwift
 
             passed.BusinessToChange = Business;
             passed.ChangeSpecificObject = false;
-            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
+            QuoteSwiftMainCode.AddBusiness();
 
             if (!ReplaceBusiness(Business, passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
 
@@ -52,7 +51,7 @@ namespace QuoteSwift
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
+            QuoteSwiftMainCode.AddBusiness();
             Show();
 
             LoadInformation();
@@ -60,10 +59,10 @@ namespace QuoteSwift
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {
-            if (passed.PassBusinessList != null)
+            if (passed.BusinessList != null)
             {
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
-                    DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
+                for (int i = 0; i < passed.BusinessList.Count; i++)
+                    DgvBusinessList.Rows.Add(passed.BusinessList[i].BusinessName);
             }
 
             DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
@@ -74,14 +73,14 @@ namespace QuoteSwift
         {
             Business business = GetBusinessSelection();
 
-            if (business != null && passed.PassBusinessList != null)
+            if (business != null && passed.BusinessList != null)
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
-                    passed.PassBusinessList.Remove(business);
+                    passed.BusinessList.Remove(business);
                     MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
 
-                    if (passed.PassBusinessList.Count == 0) passed.PassBusinessList = null;
+                    if (passed.BusinessList.Count == 0) passed.BusinessList = null;
 
                     LoadInformation();
                 }
@@ -110,9 +109,9 @@ namespace QuoteSwift
                 return null;
             }
 
-            if (passed.PassBusinessList != null)
+            if (passed.BusinessList != null)
             {
-                business = passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -123,20 +122,20 @@ namespace QuoteSwift
         {
             DgvBusinessList.Rows.Clear();
 
-            if (passed.PassBusinessList != null)
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
+            if (passed.BusinessList != null)
+                for (int i = 0; i < passed.BusinessList.Count; i++)
                 {
-                    DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
+                    DgvBusinessList.Rows.Add(passed.BusinessList[i].BusinessName);
                 }
         }
 
         private bool ReplaceBusiness(Business Original, Business New)
         {
-            if (New != null && Original != null && passed.PassBusinessList != null)
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
-                    if (passed.PassBusinessList[i] == Original)
+            if (New != null && Original != null && passed.BusinessList != null)
+                for (int i = 0; i < passed.BusinessList.Count; i++)
+                    if (passed.BusinessList[i] == Original)
                     {
-                        passed.PassBusinessList[i] = New;
+                        passed.BusinessList[i] = New;
                         return true;
                     }
 
@@ -155,7 +154,7 @@ namespace QuoteSwift
 
         private void FrmViewAllBusinesses_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         /**********************************************************************************/

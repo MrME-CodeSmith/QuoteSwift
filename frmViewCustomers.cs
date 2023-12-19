@@ -7,20 +7,19 @@ namespace QuoteSwift
 {
     public partial class FrmViewCustomers : Form
     {
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmViewCustomers(ref Pass passed)
+        public FrmViewCustomers()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e)
@@ -38,7 +37,7 @@ namespace QuoteSwift
             passed.ChangeSpecificObject = false;
             passed.BusinessToChange = container;
 
-            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
+            QuoteSwiftMainCode.AddCustomer();
 
             if (!ReplaceCustomer(customer, passed.CustomerToChange, container) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
 
@@ -54,7 +53,7 @@ namespace QuoteSwift
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
+            QuoteSwiftMainCode.AddCustomer();
             Show();
 
             LoadInformation();
@@ -79,10 +78,10 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?", "REQUEST - Deletion Request"))
                 {
-                    container.BusinessCustomerList.Remove(customer);
+                    container.CustomerList.Remove(customer);
                     MainProgramCode.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
 
-                    if (container.BusinessCustomerList.Count == 0) container.BusinessCustomerList = null;
+                    if (container.CustomerList.Count == 0) container.CustomerList = null;
 
                     LoadInformation();
                 }
@@ -100,13 +99,13 @@ namespace QuoteSwift
         {
             DgvCustomerList.Rows.Clear();
 
-            if (passed != null && passed.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
-                    if (cbBusinessSelection.Text == passed.PassBusinessList[i].BusinessName)
-                        if (passed.PassBusinessList[i].BusinessCustomerList != null)
-                            for (int j = 0; j < passed.PassBusinessList[i].BusinessCustomerList.Count; j++)
-                                DgvCustomerList.Rows.Add(passed.PassBusinessList[i].BusinessCustomerList[j].CustomerCompanyName,
-                                                         GetPreviousQuoteDate(passed.PassBusinessList[i].BusinessCustomerList[j]));
+            if (passed != null && passed.BusinessList != null && cbBusinessSelection.Text.Length > 0)
+                for (int i = 0; i < passed.BusinessList.Count; i++)
+                    if (cbBusinessSelection.Text == passed.BusinessList[i].BusinessName)
+                        if (passed.BusinessList[i].CustomerList != null)
+                            for (int j = 0; j < passed.BusinessList[i].CustomerList.Count; j++)
+                                DgvCustomerList.Rows.Add(passed.BusinessList[i].CustomerList[j].CustomerCompanyName,
+                                                         GetPreviousQuoteDate(passed.BusinessList[i].CustomerList[j]));
 
         }
 
@@ -122,11 +121,11 @@ namespace QuoteSwift
 
         private bool ReplaceCustomer(Customer Original, Customer New, Business Container)
         {
-            if (New != null && Original != null && Container != null && Container.BusinessCustomerList != null)
-                for (int i = 0; i < Container.BusinessCustomerList.Count; i++)
-                    if (Container.BusinessCustomerList[i] == Original)
+            if (New != null && Original != null && Container != null && Container.CustomerList != null)
+                for (int i = 0; i < Container.CustomerList.Count; i++)
+                    if (Container.CustomerList[i] == Original)
                     {
-                        Container.BusinessCustomerList[i] = New;
+                        Container.CustomerList[i] = New;
                         return true;
                     }
 
@@ -150,7 +149,7 @@ namespace QuoteSwift
 
             if (GetSelectedBusiness() != null)
             {
-                customer = GetSelectedBusiness().BusinessCustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
+                customer = GetSelectedBusiness().CustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
                 return customer;
             }
 
@@ -162,9 +161,9 @@ namespace QuoteSwift
             Business business;
             string SearchName = cbBusinessSelection.Text;
 
-            if (passed.PassBusinessList != null && SearchName.Length > 1)
+            if (passed.BusinessList != null && SearchName.Length > 1)
             {
-                business = passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -173,9 +172,9 @@ namespace QuoteSwift
 
         public void LinkBusinessToSource(ref ComboBox cb)
         {
-            if (passed != null && passed.PassBusinessList != null)
+            if (passed != null && passed.BusinessList != null)
             {
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = passed.PassBusinessList };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = passed.BusinessList };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 
@@ -201,7 +200,7 @@ namespace QuoteSwift
 
         private void FrmViewCustomers_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         /**********************************************************************************/

@@ -7,20 +7,19 @@ namespace QuoteSwift
 {
     public partial class FrmAddPump : Form
     {
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmAddPump(ref Pass passed)
+        public FrmAddPump()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnAddPump_Click(object sender, EventArgs e)
@@ -54,7 +53,7 @@ namespace QuoteSwift
                 else //Create New Pump And Add To Pump List
                 {
                     Pump newPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, (float)Convert.ToDouble(mtxtNewPumpPrice.Text), ref NewPumpParts); // Cast used since Convert.To does not support float
-                    if (passed.PassPumpList == null) passed.PassPumpList = new BindingList<Pump> { newPump }; else passed.PassPumpList.Add(newPump);
+                    if (passed.ProductList == null) passed.ProductList = new BindingList<Pump> { newPump }; else passed.ProductList.Add(newPump);
                     MainProgramCode.ShowInformation(newPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
                 }
             }
@@ -375,7 +374,7 @@ namespace QuoteSwift
 
         private void FrmAddPump_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         /*********************************************************************************/

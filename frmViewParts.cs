@@ -8,26 +8,25 @@ namespace QuoteSwift
     public partial class FrmViewParts : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
-        public FrmViewParts(ref Pass passed)
+        public FrmViewParts()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+            QuoteSwiftMainCode.AddNewPart();
             Show();
         }
 
@@ -41,7 +40,7 @@ namespace QuoteSwift
                 passed.PartToChange = objPartSelection;
 
                 Hide();
-                passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+                QuoteSwiftMainCode.AddNewPart();
                 Show();
 
                 passed.ChangeSpecificObject = false;
@@ -174,7 +173,7 @@ namespace QuoteSwift
 
         private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         /*********************************************************************************/

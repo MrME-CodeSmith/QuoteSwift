@@ -8,20 +8,19 @@ namespace QuoteSwift
     public partial class FrmViewPOBoxAddresses : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmViewPOBoxAddresses(ref Pass passed)
+        public FrmViewPOBoxAddresses()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnRemoveAddress_Click(object sender, EventArgs e)
@@ -72,7 +71,7 @@ namespace QuoteSwift
             passed.AddressToChange = address;
 
             //if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
-            passed = QuoteSwiftMainCode.EditBusinessAddress(ref passed);
+            QuoteSwiftMainCode.EditBusinessAddress();
 
             if (!ReplacePOBoxAddress(address, passed.AddressToChange)) MainProgramCode.ShowError("An error occurred during the updating procedure of the P.O.Box Address.\nUpdated P.O.Box address will not be stored.", "ERROR - P.O.Box Address Not Updated");
 
@@ -194,7 +193,7 @@ namespace QuoteSwift
 
         private void FrmViewPOBoxAddresses_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         /**********************************************************************************/

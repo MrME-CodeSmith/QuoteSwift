@@ -8,20 +8,19 @@ namespace QuoteSwift
     public partial class FrmAddPart : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmAddPart(ref Pass passed)
+        public FrmAddPart()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
@@ -230,16 +229,16 @@ namespace QuoteSwift
 
                         BindingList<Pump_Part> NewPumpPartList = new BindingList<Pump_Part>();
 
-                        if (passed.PassPumpList != null)
+                        if (passed.ProductList != null)
                         {
                             Pump NewPump = new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList);
                             Pump OldPump = null;
-                            for (int i = 0; i < passed.PassPumpList.Count; i++)
+                            for (int i = 0; i < passed.ProductList.Count; i++)
                             {
-                                if (passed.PassPumpList[i].PumpName == NewPump.PumpName)
+                                if (passed.ProductList[i].PumpName == NewPump.PumpName)
                                 {
                                     FoundPump = true;
-                                    OldPump = passed.PassPumpList[i];
+                                    OldPump = passed.ProductList[i];
                                     break;
                                 }
                             }
@@ -248,7 +247,7 @@ namespace QuoteSwift
                             {
                                 NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
                                 NewPump.PartList = NewPumpPartList;
-                                passed.PassPumpList.Add(NewPump);
+                                passed.ProductList.Add(NewPump);
                             }
                             else // Pump Existing
                             {
@@ -259,7 +258,7 @@ namespace QuoteSwift
                         else // passed.PassPumpList is empty
                         {
                             NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
-                            passed.PassPumpList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
+                            passed.ProductList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
                         }
 
                     }
@@ -294,12 +293,12 @@ namespace QuoteSwift
 
         private void FrmAddPart_Load(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassPumpList != null)
+            if (passed != null && passed.ProductList != null)
             {
                 //Created a Binding Source for the pump list to link the pumps
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxPumpSource = new BindingSource { DataSource = passed.PassPumpList };
+                BindingSource ComboBoxPumpSource = new BindingSource { DataSource = passed.ProductList };
 
                 cbAddToPumpSelection.DataSource = ComboBoxPumpSource.DataSource;
 
@@ -504,7 +503,7 @@ namespace QuoteSwift
 
         private void FrmAddPart_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         /*********************************************************************************/

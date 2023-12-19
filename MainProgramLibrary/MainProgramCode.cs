@@ -1,32 +1,33 @@
 ﻿using ProtoBuf;
 using System;
-using System.Windows.Forms;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 
 
 
 namespace QuoteSwift
 {
+
+
     public static class MainProgramCode
     {
         //Get Last Quote
 
-        public static Quote GetLastQuote(ref Pass passed)
+        public static Quote GetLastQuote()
         {
-            if (passed != null && passed.PassQuoteList != null)
+            if (Global.Context.PassQuoteList != null)
             {
                 int Index = 0;
-                DateTime dt = passed.PassQuoteList[0].QuoteCreationDate;
-                for (int i = 1; i < passed.PassQuoteList.Count; i++)
-                    if (passed.PassQuoteList[i].QuoteCreationDate.Date > dt)
+                DateTime dt = Global.Context.PassQuoteList[0].QuoteCreationDate;
+                for (int i = 1; i < Global.Context.PassQuoteList.Count; i++)
+                    if (Global.Context.PassQuoteList[i].QuoteCreationDate.Date > dt)
                     {
-                        dt = passed.PassQuoteList[i].QuoteCreationDate.Date;
+                        dt = Global.Context.PassQuoteList[i].QuoteCreationDate.Date;
                         Index = i;
                     }
-                return passed.PassQuoteList[Index];
+                return Global.Context.PassQuoteList[Index];
             }
 
             return null;
@@ -77,7 +78,7 @@ namespace QuoteSwift
                 if (FileName != "ExportQuote.pbf")
                     if (MainProgramCode.RequestConfirmation(FileName + " could not be found.\nWould you like to continue the execution? (Recommended for first launch)", "REQUEST - Execution Continuation")) return Data;
                 MainProgramCode.ShowError(FileName + " Could not be found, please contact the developer to fix this issue.", "ERROR - " + FileName + " Not Found");
-                
+
             }
             catch
             {
@@ -181,26 +182,26 @@ namespace QuoteSwift
 
         // Serialize Mandatory Part List Method
 
-        public static void SerializeMandatoryPartList(ref Pass passed)
+        public static void SerializeMandatoryPartList()
         {
             //Determine if Mandatory Parts exist:
 
-            if (passed != null && passed.PassMandatoryPartList != null && passed.PassMandatoryPartList.Count > 0)
+            if (Global.Context != null && Global.Context.PassMandatoryPartList != null && Global.Context.PassMandatoryPartList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePartList(passed.PassMandatoryPartList);
-                MainProgramCode.SaveData("MandatoryParts.pbf", ToStore);
+                byte[] ToStore = SerializePartList(Global.Context.PassMandatoryPartList);
+                SaveData("MandatoryParts.pbf", ToStore);
             }
         }
 
         // Serialize Non-Mandatory Part List Method
 
-        public static void SerializeNonMandatoryPartList(ref Pass passed)
+        public static void SerializeNonMandatoryPartList()
         {
             //Determine if Non-Mandatory Parts exist:
 
-            if (passed != null && passed.PassNonMandatoryPartList != null && passed.PassNonMandatoryPartList.Count > 0)
+            if (Global.Context != null && Global.Context.PassNonMandatoryPartList != null && Global.Context.PassNonMandatoryPartList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePartList(passed.PassNonMandatoryPartList);
+                byte[] ToStore = MainProgramCode.SerializePartList(Global.Context.PassNonMandatoryPartList);
                 MainProgramCode.SaveData("NonMandatoryParts.pbf", ToStore);
             }
         }
@@ -238,13 +239,13 @@ namespace QuoteSwift
 
         // Serialize and Store Pump List Method
 
-        public static void SerializePumpList(ref Pass passed)
+        public static void SerializePumpList()
         {
             //Determine if Pump List exist:
 
-            if (passed != null && passed.PassPumpList != null && passed.PassPumpList.Count > 0)
+            if (Global.Context != null && Global.Context.ProductList != null && Global.Context.ProductList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePumpList(passed.PassPumpList);
+                byte[] ToStore = MainProgramCode.SerializePumpList(Global.Context.ProductList);
                 MainProgramCode.SaveData("PumpList.pbf", ToStore);
             }
         }
@@ -283,13 +284,13 @@ namespace QuoteSwift
 
         // Serialize and Store Business List Method
 
-        public static void SerializeBusinessList(ref Pass passed)
+        public static void SerializeBusinessList()
         {
             //Determine if Pump List exist:
 
-            if (passed != null && passed.PassBusinessList != null && passed.PassBusinessList.Count > 0)
+            if (Global.Context != null && Global.Context.BusinessList != null && Global.Context.BusinessList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeBusinessList(passed.PassBusinessList);
+                byte[] ToStore = MainProgramCode.SerializeBusinessList(Global.Context.BusinessList);
                 MainProgramCode.SaveData("BusinessList.pbf", ToStore);
             }
         }
@@ -327,13 +328,13 @@ namespace QuoteSwift
 
         // Serialize and Store Quote List Method
 
-        public static void SerializeQuoteList(ref Pass passed)
+        public static void SerializeQuoteList()
         {
             //Determine if Pump List exist:
 
-            if (passed != null && passed.PassQuoteList != null && passed.PassQuoteList.Count > 0)
+            if (Global.Context != null && Global.Context.PassQuoteList != null && Global.Context.PassQuoteList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeQuoteList(passed.PassQuoteList);
+                byte[] ToStore = MainProgramCode.SerializeQuoteList(Global.Context.PassQuoteList);
                 MainProgramCode.SaveData("QuoteList.pbf", ToStore);
             }
         }
@@ -373,23 +374,23 @@ namespace QuoteSwift
             }
         }
 
-        
+
 
 
 
         //Procedure Handling The Closing Of The Application
-        public static void CloseApplication(bool b , ref Pass passed)
+        public static void CloseApplication(bool b)
         {
 
-            MainProgramCode.SerializeMandatoryPartList(ref passed);
+            MainProgramCode.SerializeMandatoryPartList();
 
-            MainProgramCode.SerializeNonMandatoryPartList(ref passed);
+            MainProgramCode.SerializeNonMandatoryPartList();
 
-            MainProgramCode.SerializePumpList(ref passed);
+            MainProgramCode.SerializePumpList();
 
-            MainProgramCode.SerializeBusinessList(ref passed);
+            MainProgramCode.SerializeBusinessList();
 
-            MainProgramCode.SerializeQuoteList(ref passed);
+            MainProgramCode.SerializeQuoteList();
 
             if (b)
             {

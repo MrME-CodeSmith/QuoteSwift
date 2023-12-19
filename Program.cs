@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -11,10 +12,9 @@ namespace QuoteSwift
         [STAThread]
         static void Main()
         {
-            Pass passed = new Pass(null, null, null, null, null);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmViewQuotes(ref passed));
+            Application.Run(new FrmViewQuotes());
         }
     }
 }

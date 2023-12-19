@@ -56,19 +56,19 @@ namespace QuoteSwift
 
         //Get Last Quote
 
-        public static Quote GetLastQuote(ref Pass passed)
+        public static Quote GetLastQuote()
         {
-            if (passed != null && passed.PassQuoteList != null)
+            if (Global.Context != null && Global.Context.PassQuoteList != null)
             {
                 int Index = 0;
-                DateTime dt = passed.PassQuoteList[0].QuoteCreationDate;
-                for (int i = 1; i < passed.PassQuoteList.Count; i++)
-                    if (passed.PassQuoteList[i].QuoteCreationDate.Date > dt)
+                DateTime dt = Global.Context.PassQuoteList[0].QuoteCreationDate;
+                for (int i = 1; i < Global.Context.PassQuoteList.Count; i++)
+                    if (Global.Context.PassQuoteList[i].QuoteCreationDate.Date > dt)
                     {
-                        dt = passed.PassQuoteList[i].QuoteCreationDate.Date;
+                        dt = Global.Context.PassQuoteList[i].QuoteCreationDate.Date;
                         Index = i;
                     }
-                return passed.PassQuoteList[Index];
+                return Global.Context.PassQuoteList[Index];
             }
 
             return null;
@@ -86,22 +86,22 @@ namespace QuoteSwift
 
 
         //Procedure Handling The Closing Of The Application
-        public static void CloseApplication(bool b, ref Pass passed)
+        public static void CloseApplication(bool b)
         {
             if (b)
             {
                 try
                 {
 
-                    MainProgramCode.SerializeMandatoryPartList(ref passed);
+                    MainProgramCode.SerializeMandatoryPartList();
 
-                    MainProgramCode.SerializeNonMandatoryPartList(ref passed);
+                    MainProgramCode.SerializeNonMandatoryPartList();
 
-                    MainProgramCode.SerializePumpList(ref passed);
+                    MainProgramCode.SerializePumpList();
 
-                    MainProgramCode.SerializeBusinessList(ref passed);
+                    MainProgramCode.SerializeBusinessList();
 
-                    MainProgramCode.SerializeQuoteList(ref passed);
+                    MainProgramCode.SerializeQuoteList();
 
                 }
                 catch (Exception Ex)
@@ -156,9 +156,9 @@ namespace QuoteSwift
 
         // New Quote:
 
-        public static ref Pass CreateNewQuote(ref Pass passed)
+        public static void CreateNewQuote()
         {
-            FrmCreateQuote newQuote = new FrmCreateQuote(ref passed);
+            FrmCreateQuote newQuote = new FrmCreateQuote();
             try
             {
                 newQuote.ShowDialog();
@@ -168,41 +168,37 @@ namespace QuoteSwift
                 MainProgramCode.ShowError(e.ToString(), "ERROR - Error Occurred");
                 //Do Nothing
             }
-            return ref newQuote.Passed;
         }
 
         //View Quote:
 
-        public static ref Pass ViewAllQuotes(ref Pass passed)
+        public static void ViewAllQuotes()
         {
-            FrmViewQuotes frmViewQuotes = new FrmViewQuotes(ref passed);
+            FrmViewQuotes frmViewQuotes = new FrmViewQuotes();
             frmViewQuotes.ShowDialog();
-            return ref frmViewQuotes.Passed;
         }
 
         // View Pumps:
 
-        public static ref Pass ViewAllPumps(ref Pass passed)
+        public static void ViewAllPumps()
         {
-            FrmViewPump frmViewPump = new FrmViewPump(ref passed);
+            FrmViewPump frmViewPump = new FrmViewPump();
             frmViewPump.ShowDialog();
-            return ref frmViewPump.Passed;
         }
 
         // New Pump:
 
-        public static ref Pass CreateNewPump(ref Pass passed)
+        public static void CreateNewPump()
         {
-            FrmAddPump frmAddPump = new FrmAddPump(ref passed);
+            FrmAddPump frmAddPump = new FrmAddPump();
             frmAddPump.ShowDialog();
-            return ref frmAddPump.Passed;
         }
 
         // View Pump Parts:
 
-        public static ref Pass ViewAllParts(ref Pass passed)
+        public static void ViewAllParts()
         {
-            FrmViewParts frmViewParts = new FrmViewParts(ref passed);
+            FrmViewParts frmViewParts = new FrmViewParts();
             try
             {
                 frmViewParts.ShowDialog();
@@ -211,115 +207,102 @@ namespace QuoteSwift
             {
                 //do nothing
             }
-            return ref frmViewParts.Passed;
         }
 
         // New Parts:
 
-        public static ref Pass AddNewPart(ref Pass passed)
+        public static void AddNewPart()
         {
-            FrmAddPart frmAddPart = new FrmAddPart(ref passed);
+            FrmAddPart frmAddPart = new FrmAddPart();
             frmAddPart.ShowDialog();
-            return ref frmAddPart.Passed;
         }
 
         // New Customer:
 
-        public static ref Pass AddCustomer(ref Pass passed)
+        public static void AddCustomer()
         {
-            FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
+            FrmAddCustomer frmAddCustomer = new FrmAddCustomer();
             frmAddCustomer.ShowDialog();
-            return ref frmAddCustomer.Passed;
         }
 
         // View Customers:
 
-        public static ref Pass ViewCustomers(ref Pass passed)
+        public static void ViewCustomers()
         {
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(ref passed);
+            FrmViewCustomers frmViewCustomers = new FrmViewCustomers();
             frmViewCustomers.ShowDialog();
-            return ref frmViewCustomers.Passed;
         }
 
         // New Business:
 
-        public static ref Pass AddBusiness(ref Pass passed)
+        public static void AddBusiness()
         {
-            FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
+            FrmAddBusiness frmAddBusiness = new FrmAddBusiness();
             frmAddBusiness.ShowDialog();
-            return ref frmAddBusiness.Passed;
         }
 
         // View Businesses
 
-        public static ref Pass ViewBusinesses(ref Pass passed)
+        public static void ViewBusinesses()
         {
-            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses(ref passed);
+            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses();
             frmViewAllBusinesses.ShowDialog();
-            return ref frmViewAllBusinesses.Passed;
         }
 
         // View Business Addresses
 
-        public static ref Pass ViewBusinessesAddresses(ref Pass passed)
+        public static void ViewBusinessesAddresses()
         {
-            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(ref passed);
+            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses();
             FrmViewBusinessAddresses.ShowDialog();
-            return ref FrmViewBusinessAddresses.Passed;
         }
 
         // View Business P.O.Box Addresses
 
-        public static ref Pass ViewBusinessesPOBoxAddresses(ref Pass passed)
+        public static void ViewBusinessesPOBoxAddresses()
         {
-            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(ref passed);
+            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses();
             FrmViewPOBoxAddresses.ShowDialog();
-            return ref FrmViewPOBoxAddresses.Passed;
         }
 
         // View Business Email Addresses
 
-        public static ref Pass ViewBusinessesEmailAddresses(ref Pass passed)
+        public static void ViewBusinessesEmailAddresses()
         {
-            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(ref passed);
+            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails();
             FrmManageAllEmails.ShowDialog();
-            return ref FrmManageAllEmails.Passed;
         }
 
         // View Business Phone Numbers
 
-        public static ref Pass ViewBusinessesPhoneNumbers(ref Pass passed)
+        public static void ViewBusinessesPhoneNumbers()
         {
-            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(ref passed);
+            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers();
             FrmManagingPhoneNumbers.ShowDialog();
-            return ref FrmManagingPhoneNumbers.Passed;
         }
 
         // Edit Business Address:
 
-        public static ref Pass EditBusinessAddress(ref Pass passed)
+        public static void EditBusinessAddress()
         {
-            FrmEditBusinessAddress frmEditBusinessAddress = new FrmEditBusinessAddress(ref passed);
+            FrmEditBusinessAddress frmEditBusinessAddress = new FrmEditBusinessAddress();
             frmEditBusinessAddress.ShowDialog();
-            return ref frmEditBusinessAddress.Passed;
         }
 
         // Edit Business Email Address:
 
-        public static ref Pass EditBusinessEmailAddress(ref Pass passed)
+        public static void EditBusinessEmailAddress()
         {
-            FrmEditEmailAddress FrmEditEmailAddress = new FrmEditEmailAddress(ref passed);
+            FrmEditEmailAddress FrmEditEmailAddress = new FrmEditEmailAddress();
             FrmEditEmailAddress.ShowDialog();
-            return ref FrmEditEmailAddress.Passed;
         }
 
         // Edit Business Phone nUmbers
 
-        public static ref Pass EditPhoneNumber(ref Pass passed)
+        public static void EditPhoneNumber()
         {
-            FrmEditPhoneNumber frmEditPhoneNumber = new FrmEditPhoneNumber(ref passed);
+            FrmEditPhoneNumber frmEditPhoneNumber = new FrmEditPhoneNumber();
             frmEditPhoneNumber.ShowDialog();
-            return ref frmEditPhoneNumber.Passed;
         }
 
         /***************************************/

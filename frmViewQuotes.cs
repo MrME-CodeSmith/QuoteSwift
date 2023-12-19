@@ -7,24 +7,17 @@ namespace QuoteSwift
     public partial class FrmViewQuotes : Form
     {
 
-        Pass passed;
-
-        public ref Pass Passed { get => ref passed; }
-
-        public FrmViewQuotes(ref Pass passed)
+        public FrmViewQuotes()
         {
             InitializeComponent();
-            this.passed = passed;
-            if (this.passed == null) passed = new Pass(new BindingList<Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new BindingList<Part>(), new BindingList<Part>());
-
         }
 
         private void BtnCreateNewQuote_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassBusinessList != null && passed.PassPumpList != null && passed.PassBusinessList[0].BusinessCustomerList != null)
+            if (Global.Context.BusinessList != null && Global.Context.ProductList != null && Global.Context.BusinessList[0].CustomerList != null)
             {
                 Hide();
-                passed = QuoteSwiftMainCode.CreateNewQuote(ref passed);
+                QuoteSwiftMainCode.CreateNewQuote();
                 try
                 {
                     Show();
@@ -46,13 +39,13 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewAllPumps(ref passed);
+            QuoteSwiftMainCode.ViewAllPumps();
             try
             {
                 Show();
@@ -66,7 +59,7 @@ namespace QuoteSwift
         private void CreateNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.CreateNewPump(ref passed);
+            QuoteSwiftMainCode.CreateNewPump();
             try
             {
                 Show();
@@ -85,7 +78,7 @@ namespace QuoteSwift
         private void AddNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
+            QuoteSwiftMainCode.AddCustomer();
             try
             {
                 Show();
@@ -99,7 +92,7 @@ namespace QuoteSwift
         private void ViewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewCustomers(ref passed);
+            QuoteSwiftMainCode.ViewCustomers();
             try
             {
                 Show();
@@ -118,7 +111,7 @@ namespace QuoteSwift
         private void AddNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
+            QuoteSwiftMainCode.AddBusiness();
             try
             {
                 Show();
@@ -132,7 +125,7 @@ namespace QuoteSwift
         private void ViewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewBusinesses(ref passed);
+            QuoteSwiftMainCode.ViewBusinesses();
             try
             {
                 Show();
@@ -150,28 +143,28 @@ namespace QuoteSwift
 
         private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (Global.Context != null && Global.Context.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 Hide();
-                passed.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
-                passed.ChangeSpecificObject = false;
-                QuoteSwiftMainCode.CreateNewQuote(ref passed);
-                passed.QuoteTOChange = null;
-                passed.ChangeSpecificObject = false;
+                Global.Context.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
+                Global.Context. ChangeSpecificObject = false;
+                QuoteSwiftMainCode.CreateNewQuote();
+                Global.Context.QuoteTOChange = null;
+                Global.Context.ChangeSpecificObject = false;
                 Show();
             }
         }
 
         private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (Global.Context != null && Global.Context.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 this.Hide();
-                passed.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
-                passed.ChangeSpecificObject = true;
-                QuoteSwiftMainCode.CreateNewQuote(ref passed);
-                passed.QuoteTOChange = null;
-                passed.ChangeSpecificObject = false;
+                Global.Context.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
+                Global.Context.ChangeSpecificObject = true;
+                QuoteSwiftMainCode.CreateNewQuote();
+                Global.Context.QuoteTOChange = null;
+                Global.Context.ChangeSpecificObject = false;
                 this.Show();
             }
         }
@@ -179,7 +172,7 @@ namespace QuoteSwift
         private void ViewAllPartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewAllParts(ref passed);
+            QuoteSwiftMainCode.ViewAllParts();
             try
             {
                 Show();
@@ -198,7 +191,7 @@ namespace QuoteSwift
         private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+            QuoteSwiftMainCode.AddNewPart();
             try
             {
                 Show();
@@ -212,30 +205,30 @@ namespace QuoteSwift
         private void FrmViewQuotes_Load(object sender, EventArgs e)
         {
 
-            if (passed != null)
+            if (Global.Context != null)
             {
                 try
                 {
 
                     byte[] RetreivedMandatoryPartList = MainProgramCode.RetreiveData("MandatoryParts.pbf");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.PassMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
 
                     RetreivedMandatoryPartList = MainProgramCode.RetreiveData("NonMandatoryParts.pbf");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassNonMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.PassNonMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
 
                     byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.pbf");
 
-                    if (RetreivePumpList != null && RetreivePumpList.Length > 0) passed.PassPumpList = new BindingList<Pump>(MainProgramCode.DeserializePumpList(RetreivePumpList));
+                    if (RetreivePumpList != null && RetreivePumpList.Length > 0) Global.Context.ProductList = new BindingList<Pump>(MainProgramCode.DeserializePumpList(RetreivePumpList));
 
                     byte[] RetreiveBusinessList = MainProgramCode.RetreiveData("BusinessList.pbf");
 
-                    if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) passed.PassBusinessList = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
+                    if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) Global.Context.BusinessList = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
 
                     byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.pbf");
 
-                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) passed.PassQuoteList = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
+                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) Global.Context.PassQuoteList = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
                 }
                 catch (Exception Ex)
                 {
@@ -254,7 +247,7 @@ namespace QuoteSwift
         readonly int count = 0;
         private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         void LoadDataGrid()
@@ -262,8 +255,8 @@ namespace QuoteSwift
 
 
             BindingSource PreviousQuotesDatagridBindingSource = null;
-            if (passed != null && passed.PassQuoteList != null)
-                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = passed.PassQuoteList };
+            if (Global.Context != null && Global.Context.PassQuoteList != null)
+                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = Global.Context.PassQuoteList };
 
             if (PreviousQuotesDatagridBindingSource != null)
             {

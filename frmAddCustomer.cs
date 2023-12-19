@@ -8,25 +8,24 @@ namespace QuoteSwift
     public partial class FrmAddCustomer : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
         Customer Customer;
 
         Business Container;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmAddCustomer(ref Pass passed)
+        public FrmAddCustomer()
         {
             InitializeComponent();
-            Passed = passed;
             Customer = passed.CustomerToChange;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
@@ -41,19 +40,19 @@ namespace QuoteSwift
                 Customer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
                 Customer.VendorNumber = mtxtVendorNumber.Text;
 
-                if (LinkBusiness.BusinessCustomerList == null)
+                if (LinkBusiness.CustomerList == null)
                 {
                     //Create New Customer List
-                    LinkBusiness.BusinessCustomerList = new BindingList<Customer> { Customer };
+                    LinkBusiness.CustomerList = new BindingList<Customer> { Customer };
                 }
                 else //Add To List
                 {
-                    if (LinkBusiness.BusinessCustomerList.SingleOrDefault(p => p.CustomerName == Customer.CustomerName) != null)
+                    if (LinkBusiness.CustomerList.SingleOrDefault(p => p.CustomerName == Customer.CustomerName) != null)
                     {
                         MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
                         return;
                     }
-                    else LinkBusiness.BusinessCustomerList.Add(Customer);
+                    else LinkBusiness.CustomerList.Add(Customer);
                 }
 
                 passed.CustomerToChange = null;
@@ -77,7 +76,7 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_Load(object sender, EventArgs e)
         {
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(ref passed);
+            FrmViewCustomers frmViewCustomers = new FrmViewCustomers();
             frmViewCustomers.LinkBusinessToSource(ref cbBusinessSelection);
 
             if (passed.CustomerToChange != null && passed.ChangeSpecificObject) // Change Existing Customer Info
@@ -212,7 +211,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPhoneNumbers(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesPhoneNumbers();
                 Show();
 
                 Customer = passed.CustomerToChange;
@@ -230,7 +229,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses();
                 Show();
 
                 Customer = passed.CustomerToChange;
@@ -248,7 +247,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesEmailAddresses(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesEmailAddresses();
                 Show();
 
                 Customer = passed.CustomerToChange;
@@ -267,7 +266,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesAddresses(ref passed);
+                QuoteSwiftMainCode.ViewBusinessesAddresses();
                 Show();
 
                 Customer = passed.CustomerToChange;
@@ -310,7 +309,7 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
 
         /** Form Specific Functions And Procedures: 
@@ -604,11 +603,11 @@ namespace QuoteSwift
 
         private Business GetSelectedBusiness()
         {
-            if (passed.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
+            if (passed.BusinessList != null && cbBusinessSelection.Text.Length > 0)
             {
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
+                for (int i = 0; i < passed.BusinessList.Count; i++)
                 {
-                    if (passed.PassBusinessList[i].BusinessName == cbBusinessSelection.Text) return passed.PassBusinessList[i];
+                    if (passed.BusinessList[i].BusinessName == cbBusinessSelection.Text) return passed.BusinessList[i];
                 }
             }
 

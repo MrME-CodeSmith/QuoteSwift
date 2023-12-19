@@ -12,19 +12,18 @@ namespace QuoteSwift
 {
     public partial class FrmCreateQuote : Form
     {
-        Pass passed;
+        AppContext passed;
 
         public Quote NewQuote;
 
         readonly Pricing P = new Pricing();
 
-        public FrmCreateQuote(ref Pass passed)
+        public FrmCreateQuote()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
         private void BtnComplete_Click(object sender, EventArgs e)
         {
@@ -77,7 +76,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void CbxPumpSelection_SelectedIndexChanged(object sender, EventArgs e)
@@ -184,9 +183,9 @@ namespace QuoteSwift
             Business business;
             string SearchName = cbxBusinessSelection.Text;
 
-            if (passed.PassBusinessList != null && SearchName.Length > 1)
+            if (passed.BusinessList != null && SearchName.Length > 1)
             {
-                business = passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -197,10 +196,10 @@ namespace QuoteSwift
         {
             string SearchName = cbxCustomerSelection.Text;
             if (SearchName.Length > 1)
-                if (passed.PassBusinessList != null)
-                    if (GetBusinessSelection().BusinessCustomerList != null)
+                if (passed.BusinessList != null)
+                    if (GetBusinessSelection().CustomerList != null)
                     {
-                        return GetBusinessSelection().BusinessCustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
+                        return GetBusinessSelection().CustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
                     }
 
             return null;
@@ -210,7 +209,7 @@ namespace QuoteSwift
         {
             string SearchName = cbxPumpSelection.Text;
 
-            if (passed.PassPumpList != null) return passed.PassPumpList.SingleOrDefault(p => p.PumpName == SearchName);
+            if (passed.ProductList != null) return passed.ProductList.SingleOrDefault(p => p.PumpName == SearchName);
 
             return null;
         }
@@ -246,7 +245,7 @@ namespace QuoteSwift
 
         private void LinkBusinessTelephone(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.PassBusinessList != null && b != null)
+            if (passed != null && passed.BusinessList != null && b != null)
             {
                 //Created a Binding Source for the Business' Telephone list to link the source
                 //directly to the combo-box's data-source:
@@ -259,7 +258,7 @@ namespace QuoteSwift
 
         private void LinkBusinessCellphone(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.PassBusinessList != null && b != null)
+            if (passed != null && passed.BusinessList != null && b != null)
             {
                 //Created a Binding Source for the Business' Cellphone list to link the source
                 //directly to the combo-box's data-source:
@@ -272,7 +271,7 @@ namespace QuoteSwift
 
         private void LinkBusinessEmail(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.PassBusinessList != null && b != null)
+            if (passed != null && passed.BusinessList != null && b != null)
             {
                 //Created a Binding Source for the Business' Email list to link the source
                 //directly to the combo-box's data-source:
@@ -301,12 +300,12 @@ namespace QuoteSwift
 
         private void LinkCustomers(Business b, ref ComboBox cb)
         {
-            if (b != null && b.BusinessCustomerList != null)
+            if (b != null && b.CustomerList != null)
             {
                 //Created a Binding Source for the Business' Customers list to link the source
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessCustomerList };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.CustomerList };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 
@@ -335,12 +334,12 @@ namespace QuoteSwift
 
         private void LinkPumpList(ref ComboBox cb)
         {
-            if (passed != null && passed.PassPumpList != null)
+            if (passed != null && passed.ProductList != null)
             {
                 //Created a Binding Source for the Pumps list to link the source
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxSource = new BindingSource { DataSource = passed.PassPumpList };
+                BindingSource ComboBoxSource = new BindingSource { DataSource = passed.ProductList };
 
                 cb.DataSource = ComboBoxSource.DataSource;
 
@@ -373,7 +372,7 @@ namespace QuoteSwift
 
         private void LoadComboBoxes()
         {
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(ref passed);
+            FrmViewCustomers frmViewCustomers = new FrmViewCustomers();
             frmViewCustomers.LinkBusinessToSource(ref cbxBusinessSelection);
 
             LinkBusinessTelephone(GetBusinessSelection(), ref cbxBusinessTelephoneNumberSelection);
@@ -391,7 +390,7 @@ namespace QuoteSwift
             dgvMandatoryPartReplacement.Rows.Clear();
             DgvNonMandatoryPartReplacement.Rows.Clear();
 
-            if (passed != null && passed.PassPumpList != null && cbxPumpSelection.SelectedIndex > -1)
+            if (passed != null && passed.ProductList != null && cbxPumpSelection.SelectedIndex > -1)
             {
                 Pump display = GetPumpSelection();
 
@@ -977,7 +976,7 @@ namespace QuoteSwift
 
         private void FrmCreateQuote_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
     }
 

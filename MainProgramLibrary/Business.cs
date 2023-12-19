@@ -36,7 +36,7 @@ namespace QuoteSwift
             BusinessTelephoneNumberList = null;
             BusinessCellphoneNumberList = null;
             BusinessEmailAddressList = null;
-            BusinessCustomerList = null;
+            CustomerList = null;
         }
 
         // Copy Constructor
@@ -51,7 +51,7 @@ namespace QuoteSwift
             BusinessTelephoneNumberList = b.mBusinessTelephoneNumberList;
             BusinessCellphoneNumberList = b.mBusinessCellphoneNumberList;
             BusinessEmailAddressList = b.mBusinessEmailAddressList;
-            BusinessCustomerList = b.mBusinessCustomerList;
+            CustomerList = b.mBusinessCustomerList;
         }
 
 
@@ -67,7 +67,7 @@ namespace QuoteSwift
             BusinessTelephoneNumberList = mBusinessTelephoneNumberList;
             BusinessCellphoneNumberList = mBusinessCellphoneNumberList;
             BusinessEmailAddressList = mBusinessEmailAddressList;
-            BusinessCustomerList = mBusinessCustomerList;
+            CustomerList = mBusinessCustomerList;
         }
 
         public string BusinessName { get => mBusinessName; set => mBusinessName = value; }
@@ -78,6 +78,6 @@ namespace QuoteSwift
         public BindingList<string> BusinessTelephoneNumberList { get => mBusinessTelephoneNumberList; set => mBusinessTelephoneNumberList = value; }
         public BindingList<string> BusinessCellphoneNumberList { get => mBusinessCellphoneNumberList; set => mBusinessCellphoneNumberList = value; }
         public BindingList<string> BusinessEmailAddressList { get => mBusinessEmailAddressList; set => mBusinessEmailAddressList = value; }
-        public BindingList<Customer> BusinessCustomerList { get => mBusinessCustomerList; set => mBusinessCustomerList = value; }
+        public BindingList<Customer> CustomerList { get => mBusinessCustomerList; set => mBusinessCustomerList = value; }
     }
 }

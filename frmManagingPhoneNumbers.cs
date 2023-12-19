@@ -9,20 +9,19 @@ namespace QuoteSwift
     public partial class FrmManagingPhoneNumbers : Form
     {
 
-        Pass passed;
+        AppContext passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref passed; }
 
-        public FrmManagingPhoneNumbers(ref Pass passed)
+        public FrmManagingPhoneNumbers()
         {
             InitializeComponent();
-            this.passed = passed;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnChangePhoneNumberInfo_Click(object sender, EventArgs e)
@@ -33,7 +32,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                QuoteSwiftMainCode.EditPhoneNumber();
                 SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.BusinessToChange.BusinessCellphoneNumberList);
 
                 passed.PhoneNumberToChange = "";
@@ -45,7 +44,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                QuoteSwiftMainCode.EditPhoneNumber();
                 SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.CustomerToChange.CustomerCellphoneNumberList);
 
                 passed.PhoneNumberToChange = "";
@@ -63,7 +62,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                QuoteSwiftMainCode.EditPhoneNumber();
                 SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.BusinessToChange.BusinessTelephoneNumberList);
 
                 passed.PhoneNumberToChange = "";
@@ -75,7 +74,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                QuoteSwiftMainCode.EditPhoneNumber();
                 SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.CustomerToChange.CustomerTelephoneNumberList);
 
                 passed.PhoneNumberToChange = "";
@@ -265,7 +264,7 @@ namespace QuoteSwift
 
         private void FrmManagingPhoneNumbers_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            QuoteSwiftMainCode.CloseApplication(true);
         }
     }
 }
