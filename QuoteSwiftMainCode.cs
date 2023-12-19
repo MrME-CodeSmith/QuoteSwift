@@ -58,17 +58,17 @@ namespace QuoteSwift
 
         public static Quote GetLastQuote()
         {
-            if (Global.Context != null && Global.Context.PassQuoteList != null)
+            if (Global.Context != null && Global.Context.QuoteMap != null)
             {
                 int Index = 0;
-                DateTime dt = Global.Context.PassQuoteList[0].QuoteCreationDate;
-                for (int i = 1; i < Global.Context.PassQuoteList.Count; i++)
-                    if (Global.Context.PassQuoteList[i].QuoteCreationDate.Date > dt)
+                DateTime dt = Global.Context.QuoteMap[0].QuoteCreationDate;
+                for (int i = 1; i < Global.Context.QuoteMap.Count; i++)
+                    if (Global.Context.QuoteMap[i].QuoteCreationDate.Date > dt)
                     {
-                        dt = Global.Context.PassQuoteList[i].QuoteCreationDate.Date;
+                        dt = Global.Context.QuoteMap[i].QuoteCreationDate.Date;
                         Index = i;
                     }
-                return Global.Context.PassQuoteList[Index];
+                return Global.Context.QuoteMap[Index];
             }
 
             return null;

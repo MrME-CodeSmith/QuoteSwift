@@ -45,7 +45,7 @@ namespace QuoteSwift
             this.mtxtPartDescription = new System.Windows.Forms.MaskedTextBox();
             this.mtxtOriginalPartNumber = new System.Windows.Forms.MaskedTextBox();
             this.mtxtNewPartNumber = new System.Windows.Forms.MaskedTextBox();
-            this.cbAddToPumpSelection = new System.Windows.Forms.ComboBox();
+            this.cbAddToProductSelection = new System.Windows.Forms.ComboBox();
             this.btnAddPart = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblnewPartQuantity = new System.Windows.Forms.Label();
@@ -207,13 +207,13 @@ namespace QuoteSwift
             // 
             // cbAddToPumpSelection
             // 
-            this.cbAddToPumpSelection.FormattingEnabled = true;
-            this.cbAddToPumpSelection.Location = new System.Drawing.Point(179, 219);
-            this.cbAddToPumpSelection.Margin = new System.Windows.Forms.Padding(4);
-            this.cbAddToPumpSelection.Name = "cbAddToPumpSelection";
-            this.cbAddToPumpSelection.Size = new System.Drawing.Size(292, 26);
-            this.cbAddToPumpSelection.TabIndex = 5;
-            this.cbAddToPumpSelection.ContextMenuStripChanged += new System.EventHandler(this.CbAddToPumpSelection_ContextMenuStripChanged);
+            this.cbAddToProductSelection.FormattingEnabled = true;
+            this.cbAddToProductSelection.Location = new System.Drawing.Point(179, 219);
+            this.cbAddToProductSelection.Margin = new System.Windows.Forms.Padding(4);
+            this.cbAddToProductSelection.Name = "cbAddToPumpSelection";
+            this.cbAddToProductSelection.Size = new System.Drawing.Size(292, 26);
+            this.cbAddToProductSelection.TabIndex = 5;
+            this.cbAddToProductSelection.ContextMenuStripChanged += new System.EventHandler(this.CbAddToPumpSelection_ContextMenuStripChanged);
             // 
             // btnAddPart
             // 
@@ -288,7 +288,7 @@ namespace QuoteSwift
             this.Controls.Add(this.lblnewPartQuantity);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAddPart);
-            this.Controls.Add(this.cbAddToPumpSelection);
+            this.Controls.Add(this.cbAddToProductSelection);
             this.Controls.Add(this.mtxtNewPartNumber);
             this.Controls.Add(this.mtxtOriginalPartNumber);
             this.Controls.Add(this.mtxtPartDescription);
@@ -334,7 +334,7 @@ namespace QuoteSwift
         private System.Windows.Forms.MaskedTextBox mtxtPartDescription;
         private System.Windows.Forms.MaskedTextBox mtxtOriginalPartNumber;
         private System.Windows.Forms.MaskedTextBox mtxtNewPartNumber;
-        private System.Windows.Forms.ComboBox cbAddToPumpSelection;
+        private System.Windows.Forms.ComboBox cbAddToProductSelection;
         private System.Windows.Forms.Button btnAddPart;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label lblnewPartQuantity;

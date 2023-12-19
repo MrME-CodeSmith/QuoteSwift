@@ -603,11 +603,11 @@ namespace QuoteSwift
 
         private Business GetSelectedBusiness()
         {
-            if (passed.BusinessList != null && cbBusinessSelection.Text.Length > 0)
+            if (passed.BusinessMap != null && cbBusinessSelection.Text.Length > 0)
             {
-                for (int i = 0; i < passed.BusinessList.Count; i++)
+                for (int i = 0; i < passed.BusinessMap.Count; i++)
                 {
-                    if (passed.BusinessList[i].BusinessName == cbBusinessSelection.Text) return passed.BusinessList[i];
+                    if (passed.BusinessMap[i].BusinessName == cbBusinessSelection.Text) return passed.BusinessMap[i];
                 }
             }
 

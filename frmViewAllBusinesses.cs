@@ -59,10 +59,10 @@ namespace QuoteSwift
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {
-            if (passed.BusinessList != null)
+            if (passed.BusinessMap != null)
             {
-                for (int i = 0; i < passed.BusinessList.Count; i++)
-                    DgvBusinessList.Rows.Add(passed.BusinessList[i].BusinessName);
+                for (int i = 0; i < passed.BusinessMap.Count; i++)
+                    DgvBusinessList.Rows.Add(passed.BusinessMap[i].BusinessName);
             }
 
             DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
@@ -73,14 +73,14 @@ namespace QuoteSwift
         {
             Business business = GetBusinessSelection();
 
-            if (business != null && passed.BusinessList != null)
+            if (business != null && passed.BusinessMap != null)
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
-                    passed.BusinessList.Remove(business);
+                    passed.BusinessMap.Remove(business);
                     MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
 
-                    if (passed.BusinessList.Count == 0) passed.BusinessList = null;
+                    if (passed.BusinessMap.Count == 0) passed.BusinessMap = null;
 
                     LoadInformation();
                 }
@@ -109,9 +109,9 @@ namespace QuoteSwift
                 return null;
             }
 
-            if (passed.BusinessList != null)
+            if (passed.BusinessMap != null)
             {
-                business = passed.BusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessMap.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -122,20 +122,20 @@ namespace QuoteSwift
         {
             DgvBusinessList.Rows.Clear();
 
-            if (passed.BusinessList != null)
-                for (int i = 0; i < passed.BusinessList.Count; i++)
+            if (passed.BusinessMap != null)
+                for (int i = 0; i < passed.BusinessMap.Count; i++)
                 {
-                    DgvBusinessList.Rows.Add(passed.BusinessList[i].BusinessName);
+                    DgvBusinessList.Rows.Add(passed.BusinessMap[i].BusinessName);
                 }
         }
 
         private bool ReplaceBusiness(Business Original, Business New)
         {
-            if (New != null && Original != null && passed.BusinessList != null)
-                for (int i = 0; i < passed.BusinessList.Count; i++)
-                    if (passed.BusinessList[i] == Original)
+            if (New != null && Original != null && passed.BusinessMap != null)
+                for (int i = 0; i < passed.BusinessMap.Count; i++)
+                    if (passed.BusinessMap[i] == Original)
                     {
-                        passed.BusinessList[i] = New;
+                        passed.BusinessMap[i] = New;
                         return true;
                     }
 

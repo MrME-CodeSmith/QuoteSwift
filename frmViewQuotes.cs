@@ -14,7 +14,7 @@ namespace QuoteSwift
 
         private void BtnCreateNewQuote_Click(object sender, EventArgs e)
         {
-            if (Global.Context.BusinessList != null && Global.Context.ProductList != null && Global.Context.BusinessList[0].CustomerList != null)
+            if (Global.Context.BusinessMap != null && Global.Context.ProductMap != null && Global.Context.BusinessMap[0].CustomerList != null)
             {
                 Hide();
                 QuoteSwiftMainCode.CreateNewQuote();
@@ -143,7 +143,7 @@ namespace QuoteSwift
 
         private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
-            if (Global.Context != null && Global.Context.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (Global.Context != null && Global.Context.QuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 Hide();
                 Global.Context.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
@@ -157,7 +157,7 @@ namespace QuoteSwift
 
         private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
         {
-            if (Global.Context != null && Global.Context.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (Global.Context != null && Global.Context.QuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 this.Hide();
                 Global.Context.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
@@ -212,23 +212,23 @@ namespace QuoteSwift
 
                     byte[] RetreivedMandatoryPartList = MainProgramCode.RetreiveData("MandatoryParts.pbf");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.PassMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.MandatoryPartMap = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
 
                     RetreivedMandatoryPartList = MainProgramCode.RetreiveData("NonMandatoryParts.pbf");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.PassNonMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.NonMandatoryPartMap = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
 
                     byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.pbf");
 
-                    if (RetreivePumpList != null && RetreivePumpList.Length > 0) Global.Context.ProductList = new BindingList<Pump>(MainProgramCode.DeserializePumpList(RetreivePumpList));
+                    if (RetreivePumpList != null && RetreivePumpList.Length > 0) Global.Context.ProductMap = new BindingList<Product>(MainProgramCode.DeserializePumpList(RetreivePumpList));
 
                     byte[] RetreiveBusinessList = MainProgramCode.RetreiveData("BusinessList.pbf");
 
-                    if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) Global.Context.BusinessList = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
+                    if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) Global.Context.BusinessMap = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
 
                     byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.pbf");
 
-                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) Global.Context.PassQuoteList = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
+                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) Global.Context.QuoteMap = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
                 }
                 catch (Exception Ex)
                 {
@@ -255,8 +255,8 @@ namespace QuoteSwift
 
 
             BindingSource PreviousQuotesDatagridBindingSource = null;
-            if (Global.Context != null && Global.Context.PassQuoteList != null)
-                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = Global.Context.PassQuoteList };
+            if (Global.Context != null && Global.Context.QuoteMap != null)
+                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = Global.Context.QuoteMap };
 
             if (PreviousQuotesDatagridBindingSource != null)
             {

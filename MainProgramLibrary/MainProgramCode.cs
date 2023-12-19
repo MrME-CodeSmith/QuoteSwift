@@ -17,17 +17,17 @@ namespace QuoteSwift
 
         public static Quote GetLastQuote()
         {
-            if (Global.Context.PassQuoteList != null)
+            if (Global.Context.QuoteMap != null)
             {
                 int Index = 0;
-                DateTime dt = Global.Context.PassQuoteList[0].QuoteCreationDate;
-                for (int i = 1; i < Global.Context.PassQuoteList.Count; i++)
-                    if (Global.Context.PassQuoteList[i].QuoteCreationDate.Date > dt)
+                DateTime dt = Global.Context.QuoteMap[0].QuoteCreationDate;
+                for (int i = 1; i < Global.Context.QuoteMap.Count; i++)
+                    if (Global.Context.QuoteMap[i].QuoteCreationDate.Date > dt)
                     {
-                        dt = Global.Context.PassQuoteList[i].QuoteCreationDate.Date;
+                        dt = Global.Context.QuoteMap[i].QuoteCreationDate.Date;
                         Index = i;
                     }
-                return Global.Context.PassQuoteList[Index];
+                return Global.Context.QuoteMap[Index];
             }
 
             return null;
@@ -186,9 +186,9 @@ namespace QuoteSwift
         {
             //Determine if Mandatory Parts exist:
 
-            if (Global.Context != null && Global.Context.PassMandatoryPartList != null && Global.Context.PassMandatoryPartList.Count > 0)
+            if (Global.Context != null && Global.Context.MandatoryPartMap != null && Global.Context.MandatoryPartMap.Count > 0)
             {
-                byte[] ToStore = SerializePartList(Global.Context.PassMandatoryPartList);
+                byte[] ToStore = SerializePartList(Global.Context.MandatoryPartMap);
                 SaveData("MandatoryParts.pbf", ToStore);
             }
         }
@@ -199,21 +199,21 @@ namespace QuoteSwift
         {
             //Determine if Non-Mandatory Parts exist:
 
-            if (Global.Context != null && Global.Context.PassNonMandatoryPartList != null && Global.Context.PassNonMandatoryPartList.Count > 0)
+            if (Global.Context != null && Global.Context.NonMandatoryPartMap != null && Global.Context.NonMandatoryPartMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePartList(Global.Context.PassNonMandatoryPartList);
+                byte[] ToStore = MainProgramCode.SerializePartList(Global.Context.NonMandatoryPartMap);
                 MainProgramCode.SaveData("NonMandatoryParts.pbf", ToStore);
             }
         }
 
         // Serialize Pump List Method
 
-        public static byte[] SerializePumpList(BindingList<Pump> PumpPartList)
+        public static byte[] SerializePumpList(BindingList<Product> PumpPartList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Pump>>(PumpPartList);
+                tempByte = MainProgramCode.ProtoSerialize<BindingList<Product>>(PumpPartList);
             }
             catch
             {
@@ -225,11 +225,11 @@ namespace QuoteSwift
 
         // De-serialize Pump List Method
 
-        public static BindingList<Pump> DeserializePumpList(byte[] tempByte)
+        public static BindingList<Product> DeserializePumpList(byte[] tempByte)
         {
             try
             {
-                return MainProgramCode.ProtoDeserialize<BindingList<Pump>>(tempByte);
+                return MainProgramCode.ProtoDeserialize<BindingList<Product>>(tempByte);
             }
             catch
             {
@@ -243,9 +243,9 @@ namespace QuoteSwift
         {
             //Determine if Pump List exist:
 
-            if (Global.Context != null && Global.Context.ProductList != null && Global.Context.ProductList.Count > 0)
+            if (Global.Context != null && Global.Context.ProductMap != null && Global.Context.ProductMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePumpList(Global.Context.ProductList);
+                byte[] ToStore = MainProgramCode.SerializePumpList(Global.Context.ProductMap);
                 MainProgramCode.SaveData("PumpList.pbf", ToStore);
             }
         }
@@ -288,9 +288,9 @@ namespace QuoteSwift
         {
             //Determine if Pump List exist:
 
-            if (Global.Context != null && Global.Context.BusinessList != null && Global.Context.BusinessList.Count > 0)
+            if (Global.Context != null && Global.Context.BusinessMap != null && Global.Context.BusinessMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeBusinessList(Global.Context.BusinessList);
+                byte[] ToStore = MainProgramCode.SerializeBusinessList(Global.Context.BusinessMap);
                 MainProgramCode.SaveData("BusinessList.pbf", ToStore);
             }
         }
@@ -332,9 +332,9 @@ namespace QuoteSwift
         {
             //Determine if Pump List exist:
 
-            if (Global.Context != null && Global.Context.PassQuoteList != null && Global.Context.PassQuoteList.Count > 0)
+            if (Global.Context != null && Global.Context.QuoteMap != null && Global.Context.QuoteMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeQuoteList(Global.Context.PassQuoteList);
+                byte[] ToStore = MainProgramCode.SerializeQuoteList(Global.Context.QuoteMap);
                 MainProgramCode.SaveData("QuoteList.pbf", ToStore);
             }
         }

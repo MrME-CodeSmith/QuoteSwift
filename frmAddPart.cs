@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -7,11 +8,6 @@ namespace QuoteSwift
 {
     public partial class FrmAddPart : Form
     {
-
-        AppContext passed;
-
-        public ref AppContext Passed { get => ref passed; }
-
         public FrmAddPart()
         {
             InitializeComponent();
@@ -25,32 +21,33 @@ namespace QuoteSwift
 
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
+            var ctx = Global.Context;
 
-            if (passed.ChangeSpecificObject)
+            if (ctx.ChangeSpecificObject)
             {
 
                 if (ValidInput())
                 {
-                    Part BeforeUpdatePart = new Part(passed.PartToChange);
+                    Part BeforeUpdatePart = new Part(ctx.PartToChange);
 
-                    passed.PartToChange.PartName = mtxtPartName.Text;
-                    passed.PartToChange.PartDescription = mtxtPartDescription.Text;
-                    passed.PartToChange.OriginalItemPartNumber = mtxtOriginalPartNumber.Text;
-                    passed.PartToChange.NewPartNumber = mtxtNewPartNumber.Text;
-                    passed.PartToChange.PartPrice = QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text);
-                    passed.PartToChange.MandatoryPart = cbxMandatoryPart.Checked;
+                    ctx.PartToChange.PartName = mtxtPartName.Text.Trim();
+                    ctx.PartToChange.PartDescription = mtxtPartDescription.Text.Trim();
+                    ctx.PartToChange.OriginalItemPartNumber = mtxtOriginalPartNumber.Text.Trim();
+                    ctx.PartToChange.NewPartNumber = mtxtNewPartNumber.Text.Trim();
+                    ctx.PartToChange.PartPrice = QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text.Trim());
+                    ctx.PartToChange.MandatoryPart = cbxMandatoryPart.Checked;
 
-                    if (BeforeUpdatePart.MandatoryPart && !passed.PartToChange.MandatoryPart)//Determine if it was a mandatory part that changed into a non-mandatory part
+                    if (BeforeUpdatePart.MandatoryPart && !ctx.PartToChange.MandatoryPart)//Determine if it was a mandatory part that changed into a non-mandatory part
                     {
-                        if (!ChangeToNonMandatory(passed.PartToChange))
+                        if (!ChangeToNonMandatory(ctx.PartToChange))
                         {
                             MainProgramCode.ShowError("An error occurred while transferring the part to the non-mandatory part list", "ERROR - Transfer Failed");
                             return;
                         }
                     }
-                    else if (!BeforeUpdatePart.MandatoryPart && passed.PartToChange.MandatoryPart)//Determine if it was a non-mandatory part that changed into a mandatory part
+                    else if (!BeforeUpdatePart.MandatoryPart && ctx.PartToChange.MandatoryPart)//Determine if it was a non-mandatory part that changed into a mandatory part
                     {
-                        if (!ChangeToMandatory(passed.PartToChange))
+                        if (!ChangeToMandatory(ctx.PartToChange))
                         {
                             MainProgramCode.ShowError("An error occurred while transferring the part to the mandatory part list", "ERROR - Transfer Failed");
                             return;
@@ -58,7 +55,8 @@ namespace QuoteSwift
                     }
 
                     MainProgramCode.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
-                    passed.ChangeSpecificObject = false;
+                    ctx.PartToChange = null;
+                    ctx.ChangeSpecificObject = false;
                     Close();
                 }
                 else return;
@@ -69,52 +67,72 @@ namespace QuoteSwift
                 Part newPart;
                 if (ValidInput())
                 {
-                    newPart = new Part(mtxtPartName.Text, mtxtPartDescription.Text, mtxtOriginalPartNumber.Text, mtxtNewPartNumber.Text, cbxMandatoryPart.Checked, QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text));
+                    newPart = new Part(
+                        mPartName: mtxtPartName.Text.Trim(), 
+                        mPartDescription: mtxtPartDescription.Text.Trim(), 
+                        mOriginalItempartNumber: mtxtOriginalPartNumber.Text.Trim(), 
+                        mNewPartNumber: mtxtNewPartNumber.Text.Trim(), 
+                        mMandatoryPart: cbxMandatoryPart.Checked, 
+                        mPartPrice: QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text.Trim())
+                    );
                 }
                 else return;
 
-
-
                 if (newPart.MandatoryPart)
                 {
-                    if (passed.PassMandatoryPartList != null) if (!DistinctInput(ref newPart)) return;
+                    if (ctx.MandatoryPartMap != null) 
+                        if (!DistinctInput(ref newPart))
+                            return;
 
-
-                    if (passed.PassMandatoryPartList == null)
+                    if (ctx.MandatoryPartMap != null)
                     {
-                        passed.PassMandatoryPartList = new BindingList<Part>() { newPart };
+                        ctx.MandatoryPartMap[newPart.OriginalItemPartNumber] = newPart;
+                        ctx.MandatoryPartMap[newPart.NewPartNumber] = newPart;
                         MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
                     }
                     else
                     {
-                        passed.PassMandatoryPartList.Add(newPart);
+                        ctx.MandatoryPartMap = new Dictionary<string, Part>
+                        {
+                            { newPart.OriginalItemPartNumber, newPart },
+                            { newPart.NewPartNumber, newPart }
+                        };
                         MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
                     }
 
                 }
                 else //newPart is Non-Mandatory
                 {
-                    if (passed.PassNonMandatoryPartList == null)
+                    if (ctx.NonMandatoryPartMap != null)
                     {
-                        passed.PassNonMandatoryPartList = new BindingList<Part>() { newPart };
-                        passed.PassNonMandatoryPartList.Add(newPart);
+                        ctx.NonMandatoryPartMap[newPart.OriginalItemPartNumber] = newPart;
+                        ctx.NonMandatoryPartMap[newPart.NewPartNumber] = newPart;
                         MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
                     }
                     else
                     {
-                        passed.PassNonMandatoryPartList.Add(newPart);
+                        ctx.NonMandatoryPartMap = new Dictionary<string, Part>
+                        {
+                            { newPart.OriginalItemPartNumber, newPart },
+                            { newPart.NewPartNumber, newPart }
+                        };
                         MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
                     }
                 }
 
 
-                if (cbAddToPumpSelection.SelectedIndex > -1)
+                if (cbAddToProductSelection.SelectedIndex > -1)
                 {
-                    Pump PumpSelection = (Pump)cbAddToPumpSelection.SelectedItem;
+                    Product ProductSelection = (Product) cbAddToProductSelection.SelectedItem;
 
-                    PumpSelection.PartList.Add(new Pump_Part(newPart, (int)NudQuantity.Value));
+                    ProductSelection.PartList.Add(
+                        new Product_Part(
+                            newPart, 
+                            (int) NudQuantity.Value
+                        )
+                    );
 
-                    MainProgramCode.ShowInformation(newPart.PartName + " successfully added to " + PumpSelection.PumpName + " pump the part list.", "INFORMATION - Part Added  To Pump Success");
+                    MainProgramCode.ShowInformation($"{newPart.PartName} successfully added to {ProductSelection.ProductName}'s part list.", "INFORMATION - Part Added To Pump Success");
                 }
 
 
@@ -227,15 +245,15 @@ namespace QuoteSwift
 
                         bool FoundPump = false;
 
-                        BindingList<Pump_Part> NewPumpPartList = new BindingList<Pump_Part>();
+                        BindingList<Product_Part> NewPumpPartList = new BindingList<Product_Part>();
 
                         if (passed.ProductList != null)
                         {
-                            Pump NewPump = new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList);
-                            Pump OldPump = null;
+                            Product NewPump = new Product(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList);
+                            Product OldPump = null;
                             for (int i = 0; i < passed.ProductList.Count; i++)
                             {
-                                if (passed.ProductList[i].PumpName == NewPump.PumpName)
+                                if (passed.ProductList[i].PumpName == NewPump.ProductName)
                                 {
                                     FoundPump = true;
                                     OldPump = passed.ProductList[i];
@@ -245,20 +263,20 @@ namespace QuoteSwift
 
                             if (FoundPump == false) //Pump non existing
                             {
-                                NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
+                                NewPumpPartList = new BindingList<Product_Part> { new Product_Part(newPart, int.Parse(readFields[5])) };
                                 NewPump.PartList = NewPumpPartList;
                                 passed.ProductList.Add(NewPump);
                             }
                             else // Pump Existing
                             {
-                                OldPump.PartList.Add(new Pump_Part(newPart, int.Parse(readFields[5])));
+                                OldPump.PartList.Add(new Product_Part(newPart, int.Parse(readFields[5])));
                                 if (OldPump.NewPumpPrice != NewPump.NewPumpPrice) OldPump.NewPumpPrice = NewPump.NewPumpPrice;
                             }
                         }
                         else // passed.PassPumpList is empty
                         {
-                            NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
-                            passed.ProductList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
+                            NewPumpPartList = new BindingList<Product_Part> { new Product_Part(newPart, int.Parse(readFields[5])) };
+                            passed.ProductList = new BindingList<Product> { new Product(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
                         }
 
                     }
@@ -300,12 +318,12 @@ namespace QuoteSwift
 
                 BindingSource ComboBoxPumpSource = new BindingSource { DataSource = passed.ProductList };
 
-                cbAddToPumpSelection.DataSource = ComboBoxPumpSource.DataSource;
+                cbAddToProductSelection.DataSource = ComboBoxPumpSource.DataSource;
 
                 //Linking the specific item from the Pump class to display in the combo-box:
 
-                cbAddToPumpSelection.DisplayMember = "PumpName";
-                cbAddToPumpSelection.ValueMember = "PumpName";
+                cbAddToProductSelection.DisplayMember = "PumpName";
+                cbAddToProductSelection.ValueMember = "PumpName";
             }
 
             // Determine is an item is to be edited / added.
@@ -313,7 +331,7 @@ namespace QuoteSwift
             if (passed.ChangeSpecificObject && passed.PartToChange != null)
             {
                 //Updating 
-                LoadInformation();
+                LoadPartData();
                 ReadWriteComponents();
                 btnAddPart.Text = "Update";
                 updatePartToolStripMenuItem.Enabled = false;
@@ -323,7 +341,7 @@ namespace QuoteSwift
                 //Viewing
                 btnAddPart.Visible = false;
                 Read_OnlyComponents();
-                LoadInformation();
+                LoadPartData();
                 updatePartToolStripMenuItem.Enabled = true;
             }   //Otherwise its Add
 
@@ -391,8 +409,12 @@ namespace QuoteSwift
         {
             if (SwitchPart != null)
             {
-                passed.PassMandatoryPartList.Add(SwitchPart);
-                passed.PassNonMandatoryPartList.Remove(SwitchPart);
+                var ctx = Global.Context;
+                ctx.NonMandatoryPartMap.Remove(SwitchPart.OriginalItemPartNumber);
+                ctx.NonMandatoryPartMap.Remove(SwitchPart.NewPartNumber);
+
+                ctx.MandatoryPartMap[SwitchPart.OriginalItemPartNumber] = SwitchPart;
+                ctx.MandatoryPartMap[SwitchPart.NewPartNumber] = SwitchPart;
                 return true;
             }
             return false;
@@ -402,8 +424,13 @@ namespace QuoteSwift
         {
             if (SwitchPart != null)
             {
-                passed.PassNonMandatoryPartList.Add(SwitchPart);
-                passed.PassMandatoryPartList.Remove(SwitchPart);
+                var ctx = Global.Context;
+                ctx.MandatoryPartMap.Remove(SwitchPart.OriginalItemPartNumber);
+                ctx.MandatoryPartMap.Remove(SwitchPart.NewPartNumber);
+
+                ctx.NonMandatoryPartMap[SwitchPart.OriginalItemPartNumber] = SwitchPart;
+                ctx.NonMandatoryPartMap[SwitchPart.NewPartNumber] = SwitchPart;
+
                 return true;
             }
             return false;
@@ -413,50 +440,24 @@ namespace QuoteSwift
 
         private bool DistinctInput(ref Part part)
         {
-            if (part != null && part.MandatoryPart)
-            {
-                if (passed.PassMandatoryPartList != null)
-                {
-                    for (int i = 0; i < passed.PassMandatoryPartList.Count - 1; i++)
-                    {
-                        if (passed.PassMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
-                        {
-                            if (passed.PartToChange == null)
-                                MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
-                            return false;
-                        }
-                    }
-                }
-            }
-            else if (part != null) // Part is NON-Mandatory
-            {
-                if (passed.PassNonMandatoryPartList != null)
-                {
-                    for (int i = 0; i < passed.PassNonMandatoryPartList.Count - 1; i++)
-                    {
-                        if (passed.PassNonMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
-                        {
-                            if (passed.PartToChange == null)
-                                MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
-                            return false;
-                        }
-                    }
-                }
-            }
-            else return false; //part is null and therefore not valid
-
-
-            return true;
+            var ctx = Global.Context;
+            return
+                part != null &&
+                !ctx.MandatoryPartMap.TryGetValue(part.OriginalItemPartNumber, out _) &&
+                !ctx.MandatoryPartMap.TryGetValue(part.NewPartNumber, out _) &&
+                !ctx.NonMandatoryPartMap.TryGetValue(part.OriginalItemPartNumber, out _) &&
+                !ctx.NonMandatoryPartMap.TryGetValue(part.NewPartNumber, out _);
         }
 
-        private void LoadInformation()
+        private void LoadPartData()
         {
-            mtxtPartName.Text = passed.PartToChange.PartName;
-            mtxtPartDescription.Text = passed.PartToChange.PartDescription;
-            mtxtOriginalPartNumber.Text = passed.PartToChange.OriginalItemPartNumber;
-            mtxtNewPartNumber.Text = passed.PartToChange.NewPartNumber;
-            mtxtPartPrice.Text = passed.PartToChange.PartPrice.ToString();
-            cbxMandatoryPart.Checked = passed.PartToChange.MandatoryPart;
+            var ctx = Global.Context;
+            mtxtPartName.Text = ctx.PartToChange.PartName;
+            mtxtPartDescription.Text = ctx.PartToChange.PartDescription;
+            mtxtOriginalPartNumber.Text = ctx.PartToChange.OriginalItemPartNumber;
+            mtxtNewPartNumber.Text = ctx.PartToChange.NewPartNumber;
+            mtxtPartPrice.Text = ctx.PartToChange.PartPrice.ToString();
+            cbxMandatoryPart.Checked = ctx.PartToChange.MandatoryPart;
         }
 
         private void Read_OnlyComponents()
@@ -466,7 +467,7 @@ namespace QuoteSwift
             mtxtPartDescription.ReadOnly = true;
             mtxtPartName.ReadOnly = true;
             mtxtPartPrice.ReadOnly = true;
-            cbAddToPumpSelection.Enabled = false;
+            cbAddToProductSelection.Enabled = false;
             NudQuantity.Enabled = false;
             cbxMandatoryPart.Enabled = false;
         }
@@ -478,7 +479,7 @@ namespace QuoteSwift
             mtxtPartDescription.ReadOnly = false;
             mtxtPartName.ReadOnly = false;
             mtxtPartPrice.ReadOnly = false;
-            cbAddToPumpSelection.Enabled = false;
+            cbAddToProductSelection.Enabled = false;
             NudQuantity.Enabled = false;
             cbxMandatoryPart.Enabled = true;
             btnAddPart.Visible = true;

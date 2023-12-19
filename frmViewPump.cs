@@ -31,7 +31,7 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                passed.PumpToChange = passed.ProductList.ElementAt(iGridSelection);
+                passed.PumpToChange = passed.ProductMap.ElementAt(iGridSelection);
                 passed.ChangeSpecificObject = false;
 
                 Hide();
@@ -62,13 +62,13 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                Pump objPumpSelection = passed.ProductList.ElementAt(iGridSelection);
+                Product objPumpSelection = passed.ProductMap.ElementAt(iGridSelection);
 
-                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
+                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.ProductName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
-                    passed.ProductList.RemoveAt(iGridSelection);
+                    passed.ProductMap.RemoveAt(iGridSelection);
 
-                    MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
+                    MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.ProductName + " from the pump list", "INFORMATION - Deletion Success");
                 }
             }
             else
@@ -102,11 +102,11 @@ namespace QuoteSwift // Repair Quote Swift
             //Manually Load Pump items:
             dgvPumpList.Rows.Clear();
 
-            if (passed.ProductList != null)
+            if (passed.ProductMap != null)
             {
-                for (int i = 0; i < passed.ProductList.Count; i++)
+                for (int i = 0; i < passed.ProductMap.Count; i++)
                 {
-                    dgvPumpList.Rows.Add(passed.ProductList[i].PumpName, passed.ProductList[i].PumpDescription, passed.ProductList[i].NewPumpPrice.ToString());
+                    dgvPumpList.Rows.Add(passed.ProductMap[i].ProductName, passed.ProductMap[i].PumpDescription, passed.ProductMap[i].NewPumpPrice.ToString());
                 }
             }
         }

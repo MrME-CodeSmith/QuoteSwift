@@ -47,11 +47,11 @@ namespace QuoteSwift
                     }
 
 
-                    if (passed.PassQuoteList != null)
+                    if (passed.QuoteMap != null)
                     {
-                        passed.PassQuoteList.Add(NewQuote);
+                        passed.QuoteMap.Add(NewQuote);
                     }
-                    else passed.PassQuoteList = new BindingList<Quote> { NewQuote };
+                    else passed.QuoteMap = new BindingList<Quote> { NewQuote };
 
                     if (MainProgramCode.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
@@ -120,7 +120,7 @@ namespace QuoteSwift
                 dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
 
                 Text = Text.Replace("<< Business Name >>", GetBusinessSelection().BusinessName);
-                if (passed.PassQuoteList == null || passed.PassQuoteList.Count == 0)
+                if (passed.QuoteMap == null || passed.QuoteMap.Count == 0)
                 {
                     cbxUseAutomaticNumberingScheme.Checked = false;
                     cbxUseAutomaticNumberingScheme.Enabled = false;
@@ -183,9 +183,9 @@ namespace QuoteSwift
             Business business;
             string SearchName = cbxBusinessSelection.Text;
 
-            if (passed.BusinessList != null && SearchName.Length > 1)
+            if (passed.BusinessMap != null && SearchName.Length > 1)
             {
-                business = passed.BusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessMap.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -196,7 +196,7 @@ namespace QuoteSwift
         {
             string SearchName = cbxCustomerSelection.Text;
             if (SearchName.Length > 1)
-                if (passed.BusinessList != null)
+                if (passed.BusinessMap != null)
                     if (GetBusinessSelection().CustomerList != null)
                     {
                         return GetBusinessSelection().CustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
@@ -205,11 +205,11 @@ namespace QuoteSwift
             return null;
         }
 
-        private Pump GetPumpSelection()
+        private Product GetPumpSelection()
         {
             string SearchName = cbxPumpSelection.Text;
 
-            if (passed.ProductList != null) return passed.ProductList.SingleOrDefault(p => p.PumpName == SearchName);
+            if (passed.ProductMap != null) return passed.ProductMap.SingleOrDefault(p => p.PumpName == SearchName);
 
             return null;
         }
@@ -245,7 +245,7 @@ namespace QuoteSwift
 
         private void LinkBusinessTelephone(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessList != null && b != null)
+            if (passed != null && passed.BusinessMap != null && b != null)
             {
                 //Created a Binding Source for the Business' Telephone list to link the source
                 //directly to the combo-box's data-source:
@@ -258,7 +258,7 @@ namespace QuoteSwift
 
         private void LinkBusinessCellphone(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessList != null && b != null)
+            if (passed != null && passed.BusinessMap != null && b != null)
             {
                 //Created a Binding Source for the Business' Cellphone list to link the source
                 //directly to the combo-box's data-source:
@@ -271,7 +271,7 @@ namespace QuoteSwift
 
         private void LinkBusinessEmail(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessList != null && b != null)
+            if (passed != null && passed.BusinessMap != null && b != null)
             {
                 //Created a Binding Source for the Business' Email list to link the source
                 //directly to the combo-box's data-source:
@@ -334,12 +334,12 @@ namespace QuoteSwift
 
         private void LinkPumpList(ref ComboBox cb)
         {
-            if (passed != null && passed.ProductList != null)
+            if (passed != null && passed.ProductMap != null)
             {
                 //Created a Binding Source for the Pumps list to link the source
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxSource = new BindingSource { DataSource = passed.ProductList };
+                BindingSource ComboBoxSource = new BindingSource { DataSource = passed.ProductMap };
 
                 cb.DataSource = ComboBoxSource.DataSource;
 
@@ -390,16 +390,16 @@ namespace QuoteSwift
             dgvMandatoryPartReplacement.Rows.Clear();
             DgvNonMandatoryPartReplacement.Rows.Clear();
 
-            if (passed != null && passed.ProductList != null && cbxPumpSelection.SelectedIndex > -1)
+            if (passed != null && passed.ProductMap != null && cbxPumpSelection.SelectedIndex > -1)
             {
-                Pump display = GetPumpSelection();
+                Product display = GetPumpSelection();
 
                 if (display != null) LoadParts(display);
             }
             Calculate();
         }
 
-        void LoadParts(Pump p)
+        void LoadParts(Product p)
         {
             if (p.PartList != null)
             {
@@ -645,7 +645,7 @@ namespace QuoteSwift
             }
         }
 
-        Pump_Part GetPart(string s, BindingList<Pump_Part> bl)
+        Product_Part GetPart(string s, BindingList<Product_Part> bl)
         {
 
             if (bl != null && s != "")
@@ -785,9 +785,9 @@ namespace QuoteSwift
         {
             Quote Provided = q;
 
-            if (passed.PassQuoteList != null)
+            if (passed.QuoteMap != null)
             {
-                Quote Search = passed.PassQuoteList.SingleOrDefault(p => p.QuoteJobNumber == Provided.QuoteJobNumber || p.QuoteNumber == Provided.QuoteNumber);
+                Quote Search = passed.QuoteMap.SingleOrDefault(p => p.QuoteJobNumber == Provided.QuoteJobNumber || p.QuoteNumber == Provided.QuoteNumber);
                 if (Search != null) return false;
             }
 
@@ -796,13 +796,13 @@ namespace QuoteSwift
 
         private void GetNewQuotenumber()
         {
-            if (passed != null && passed.PassQuoteList != null)
+            if (passed != null && passed.QuoteMap != null)
             {
-                Quote temp = passed.PassQuoteList[0];
+                Quote temp = passed.QuoteMap[0];
                 int LastQuoteNumber = GetQuoteNumber(ref temp);
-                for (int i = 1; i < passed.PassQuoteList.Count; i++)
+                for (int i = 1; i < passed.QuoteMap.Count; i++)
                 {
-                    temp = passed.PassQuoteList[i];
+                    temp = passed.QuoteMap[i];
                     if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
                 }
                 LastQuoteNumber++;

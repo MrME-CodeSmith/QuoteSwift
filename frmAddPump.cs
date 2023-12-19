@@ -29,7 +29,7 @@ namespace QuoteSwift
 
             if (ValidInput())
             {
-                BindingList<Pump_Part> NewPumpParts = RetreivePumpPartList();
+                BindingList<Product_Part> NewPumpParts = RetreivePumpPartList();
 
                 if (NewPumpParts == null)
                 {
@@ -40,7 +40,7 @@ namespace QuoteSwift
                 if (passed.ChangeSpecificObject) // Update Part List if true
                 {
                     RecordNewInformation();
-                    MainProgramCode.ShowInformation(passed.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
+                    MainProgramCode.ShowInformation(passed.PumpToChange.ProductName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
 
                     //Set ChangeSpecificObject to false and convert to View
 
@@ -52,9 +52,9 @@ namespace QuoteSwift
                 }
                 else //Create New Pump And Add To Pump List
                 {
-                    Pump newPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, (float)Convert.ToDouble(mtxtNewPumpPrice.Text), ref NewPumpParts); // Cast used since Convert.To does not support float
-                    if (passed.ProductList == null) passed.ProductList = new BindingList<Pump> { newPump }; else passed.ProductList.Add(newPump);
-                    MainProgramCode.ShowInformation(newPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
+                    Product newPump = new Product(mtxtPumpName.Text, mtxtPumpDescription.Text, (float)Convert.ToDouble(mtxtNewPumpPrice.Text), ref NewPumpParts); // Cast used since Convert.To does not support float
+                    if (passed.ProductMap == null) passed.ProductMap = new BindingList<Product> { newPump }; else passed.ProductMap.Add(newPump);
+                    MainProgramCode.ShowInformation(newPump.ProductName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
                 }
             }
 
@@ -161,7 +161,7 @@ namespace QuoteSwift
         void ConvertToEditForm()
         {
             ReadWriteMainComponents();
-            Text = "Updating " + passed.PumpToChange.PumpName + " Pump";
+            Text = "Updating " + passed.PumpToChange.ProductName + " Pump";
             btnAddPump.Text = "Update Pump";
             btnAddPump.Visible = true;
             updatePumpToolStripMenuItem.Enabled = true;
@@ -171,7 +171,7 @@ namespace QuoteSwift
 
         void ConvertToViewForm()
         {
-            Text = "Viewing " + passed.PumpToChange.PumpName + " Pump";
+            Text = "Viewing " + passed.PumpToChange.ProductName + " Pump";
             btnAddPump.Visible = false;
             Read_OnlyMainComponents();
             updatePumpToolStripMenuItem.Enabled = false;
@@ -183,12 +183,12 @@ namespace QuoteSwift
         {
             mtxtNewPumpPrice.Text = passed.PumpToChange.NewPumpPrice.ToString();
             mtxtPumpDescription.Text = passed.PumpToChange.PumpDescription;
-            mtxtPumpName.Text = passed.PumpToChange.PumpName;
+            mtxtPumpName.Text = passed.PumpToChange.ProductName;
 
-            for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
+            for (int i = 0; i < passed.MandatoryPartMap.Count; i++)
                 for (int k = 0; k < passed.PumpToChange.PartList.Count; k++)
                 {
-                    if (passed.PassMandatoryPartList[i].OriginalItemPartNumber == passed.PumpToChange.PartList[k].PumpPart.OriginalItemPartNumber)
+                    if (passed.MandatoryPartMap[i].OriginalItemPartNumber == passed.PumpToChange.PartList[k].PumpPart.OriginalItemPartNumber)
                     {
                         DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvMandatoryPartView.Rows[i].Cells["clmAddToPumpSelection"];
                         cbx.Value = true;
@@ -196,10 +196,10 @@ namespace QuoteSwift
                     }
                 }
 
-            for (int s = 0; s < passed.PassNonMandatoryPartList.Count; s++)
+            for (int s = 0; s < passed.NonMandatoryPartMap.Count; s++)
                 for (int d = 0; d < passed.PumpToChange.PartList.Count; d++)
                 {
-                    if (passed.PassNonMandatoryPartList[s].OriginalItemPartNumber == passed.PumpToChange.PartList[d].PumpPart.OriginalItemPartNumber)
+                    if (passed.NonMandatoryPartMap[s].OriginalItemPartNumber == passed.PumpToChange.PartList[d].PumpPart.OriginalItemPartNumber)
                     {
                         DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvNonMandatoryPartView.Rows[s].Cells["ClmNonMandatoryPartSelection"];
                         cbx.Value = true;
@@ -235,13 +235,13 @@ namespace QuoteSwift
             return true;
         }
 
-        BindingList<Pump_Part> RetreivePumpPartList()
+        BindingList<Product_Part> RetreivePumpPartList()
         {
             //When done Editing / Adding a pump, all mandatory parts need to be added first to the part list
             //This is for the for loop when the form gets activated to work correctly.
 
-            BindingList<Pump_Part> ReturnList = null;
-            Pump_Part newPart;
+            BindingList<Product_Part> ReturnList = null;
+            Product_Part newPart;
             //Mandatory added first
             for (int i = 0; i < dgvMandatoryPartView.Rows.Count; i++)
                 try
@@ -250,7 +250,7 @@ namespace QuoteSwift
                     {
                         try
                         {
-                            newPart = new Pump_Part(passed.PassMandatoryPartList[i], QuoteSwiftMainCode.ParseInt(dgvMandatoryPartView.Rows[i].Cells["clmMPartQuantity"].Value.ToString())); // Cast used rather than convert; not much but to a degree faster
+                            newPart = new Product_Part(passed.MandatoryPartMap[i], QuoteSwiftMainCode.ParseInt(dgvMandatoryPartView.Rows[i].Cells["clmMPartQuantity"].Value.ToString())); // Cast used rather than convert; not much but to a degree faster
                         }
                         catch
                         {
@@ -259,7 +259,7 @@ namespace QuoteSwift
 
                         if (newPart != null)
                             if (ReturnList == null)
-                                ReturnList = new BindingList<Pump_Part> { newPart };
+                                ReturnList = new BindingList<Product_Part> { newPart };
                             else ReturnList.Add(newPart);
                     }
                 }
@@ -277,7 +277,7 @@ namespace QuoteSwift
                     {
                         try
                         {
-                            newPart = new Pump_Part(passed.PassNonMandatoryPartList[k], QuoteSwiftMainCode.ParseInt(dgvNonMandatoryPartView.Rows[k].Cells["clmNMPartQuantity"].Value.ToString())); // Cast used rather than convert; not much but to a degree faster
+                            newPart = new Product_Part(passed.NonMandatoryPartMap[k], QuoteSwiftMainCode.ParseInt(dgvNonMandatoryPartView.Rows[k].Cells["clmNMPartQuantity"].Value.ToString())); // Cast used rather than convert; not much but to a degree faster
                         }
                         catch
                         {
@@ -286,7 +286,7 @@ namespace QuoteSwift
 
                         if (newPart != null)
                             if (ReturnList == null)
-                                ReturnList = new BindingList<Pump_Part> { newPart };
+                                ReturnList = new BindingList<Product_Part> { newPart };
                             else ReturnList.Add(newPart);
                     }
                 }
@@ -301,7 +301,7 @@ namespace QuoteSwift
         void ChangeViewToEdit()
         {
             if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == false)
-                if (MainProgramCode.RequestConfirmation("You are currently viewing " + passed.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
+                if (MainProgramCode.RequestConfirmation("You are currently viewing " + passed.PumpToChange.ProductName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
                 {
                     ConvertToEditForm();
                     passed.ChangeSpecificObject = true;
@@ -310,7 +310,7 @@ namespace QuoteSwift
 
         void RecordNewInformation()
         {
-            if (mtxtPumpName.Text != passed.PumpToChange.PumpName) passed.PumpToChange.PumpName = mtxtPumpName.Text;
+            if (mtxtPumpName.Text != passed.PumpToChange.ProductName) passed.PumpToChange.ProductName = mtxtPumpName.Text;
 
             if (mtxtPumpDescription.Text != passed.PumpToChange.PumpDescription) passed.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
 
@@ -329,28 +329,28 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if (passed.PassMandatoryPartList != null)
+            if (passed.MandatoryPartMap != null)
             {
                 dgvMandatoryPartView.Rows.Clear();
 
-                for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
+                for (int i = 0; i < passed.MandatoryPartMap.Count; i++)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvMandatoryPartView.Rows.Add(passed.PassMandatoryPartList[i].PartName, passed.PassMandatoryPartList[i].PartDescription, passed.PassMandatoryPartList[i].OriginalItemPartNumber, passed.PassMandatoryPartList[i].NewPartNumber, passed.PassMandatoryPartList[i].PartPrice, false, 0);
+                    dgvMandatoryPartView.Rows.Add(passed.MandatoryPartMap[i].PartName, passed.MandatoryPartMap[i].PartDescription, passed.MandatoryPartMap[i].OriginalItemPartNumber, passed.MandatoryPartMap[i].NewPartNumber, passed.MandatoryPartMap[i].PartPrice, false, 0);
                 }
             }
         }
 
         void LoadNonMandatoryParts()
         {
-            if (passed.PassNonMandatoryPartList != null)
+            if (passed.NonMandatoryPartMap != null)
             {
                 dgvNonMandatoryPartView.Rows.Clear();
 
-                for (int k = 0; k < passed.PassNonMandatoryPartList.Count; k++)
+                for (int k = 0; k < passed.NonMandatoryPartMap.Count; k++)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvNonMandatoryPartView.Rows.Add(passed.PassNonMandatoryPartList[k].PartName, passed.PassNonMandatoryPartList[k].PartDescription, passed.PassNonMandatoryPartList[k].OriginalItemPartNumber, passed.PassNonMandatoryPartList[k].NewPartNumber, passed.PassNonMandatoryPartList[k].PartPrice, false, 0);
+                    dgvNonMandatoryPartView.Rows.Add(passed.NonMandatoryPartMap[k].PartName, passed.NonMandatoryPartMap[k].PartDescription, passed.NonMandatoryPartMap[k].OriginalItemPartNumber, passed.NonMandatoryPartMap[k].NewPartNumber, passed.NonMandatoryPartMap[k].PartPrice, false, 0);
                 }
             }
         }

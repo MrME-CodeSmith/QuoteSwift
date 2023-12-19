@@ -99,19 +99,19 @@ namespace QuoteSwift
         {
             DgvCustomerList.Rows.Clear();
 
-            if (passed != null && passed.BusinessList != null && cbBusinessSelection.Text.Length > 0)
-                for (int i = 0; i < passed.BusinessList.Count; i++)
-                    if (cbBusinessSelection.Text == passed.BusinessList[i].BusinessName)
-                        if (passed.BusinessList[i].CustomerList != null)
-                            for (int j = 0; j < passed.BusinessList[i].CustomerList.Count; j++)
-                                DgvCustomerList.Rows.Add(passed.BusinessList[i].CustomerList[j].CustomerCompanyName,
-                                                         GetPreviousQuoteDate(passed.BusinessList[i].CustomerList[j]));
+            if (passed != null && passed.BusinessMap != null && cbBusinessSelection.Text.Length > 0)
+                for (int i = 0; i < passed.BusinessMap.Count; i++)
+                    if (cbBusinessSelection.Text == passed.BusinessMap[i].BusinessName)
+                        if (passed.BusinessMap[i].CustomerList != null)
+                            for (int j = 0; j < passed.BusinessMap[i].CustomerList.Count; j++)
+                                DgvCustomerList.Rows.Add(passed.BusinessMap[i].CustomerList[j].CustomerCompanyName,
+                                                         GetPreviousQuoteDate(passed.BusinessMap[i].CustomerList[j]));
 
         }
 
         private string GetPreviousQuoteDate(Customer c)
         {
-            if (passed.PassQuoteList != null)
+            if (passed.QuoteMap != null)
             {
                 //TODO: Implement
             }
@@ -161,9 +161,9 @@ namespace QuoteSwift
             Business business;
             string SearchName = cbBusinessSelection.Text;
 
-            if (passed.BusinessList != null && SearchName.Length > 1)
+            if (passed.BusinessMap != null && SearchName.Length > 1)
             {
-                business = passed.BusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessMap.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -172,9 +172,9 @@ namespace QuoteSwift
 
         public void LinkBusinessToSource(ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessList != null)
+            if (passed != null && passed.BusinessMap != null)
             {
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = passed.BusinessList };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = passed.BusinessMap };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 

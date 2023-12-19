@@ -35,29 +35,29 @@ namespace QuoteSwift
                 Business.BusinessExtraInformation = rtxtExtraInformation.Text;
                 Business.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
-                if (passed.BusinessList == null)
+                if (passed.BusinessMap == null)
                 {
                     //Create New business List
-                    passed.BusinessList = new BindingList<Business> { Business };
+                    passed.BusinessMap = new BindingList<Business> { Business };
                 }
                 else //Add To List
                 {
-                    if (passed.BusinessList.SingleOrDefault(p => p.BusinessName == Business.BusinessName) != null)
+                    if (passed.BusinessMap.SingleOrDefault(p => p.BusinessName == Business.BusinessName) != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
                         return;
                     }
-                    else if (passed.BusinessList.SingleOrDefault(p => p.BusinessLegalDetails.VatNumber == Business.BusinessLegalDetails.VatNumber) != null)
+                    else if (passed.BusinessMap.SingleOrDefault(p => p.BusinessLegalDetails.VatNumber == Business.BusinessLegalDetails.VatNumber) != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
                         return;
                     }
-                    else if (passed.BusinessList.SingleOrDefault(p => p.BusinessLegalDetails.RegistrationNumber == Business.BusinessLegalDetails.RegistrationNumber) != null)
+                    else if (passed.BusinessMap.SingleOrDefault(p => p.BusinessLegalDetails.RegistrationNumber == Business.BusinessLegalDetails.RegistrationNumber) != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
                         return;
                     }
-                    else passed.BusinessList.Add(Business);
+                    else passed.BusinessMap.Add(Business);
                 }
 
                 passed.BusinessToChange = null;

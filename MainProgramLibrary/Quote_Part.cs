@@ -7,7 +7,7 @@ namespace QuoteSwift
     public class Quote_Part
     {
         [ProtoMember(1)]
-        private Pump_Part mPumpPart;
+        private Product_Part mPumpPart;
         [ProtoMember(2)]
         private int mMissingorScrap;
         [ProtoMember(3)]
@@ -21,7 +21,7 @@ namespace QuoteSwift
         [ProtoMember(7)]
         private float mRepairDevider;
 
-        public Quote_Part(Pump_Part mPumpPart, int mMissingorScrap, int mRepaired, int mNew, float mPrice, float mUnitPrice, float mRepairDevider)
+        public Quote_Part(Product_Part mPumpPart, int mMissingorScrap, int mRepaired, int mNew, float mPrice, float mUnitPrice, float mRepairDevider)
         {
             PumpPart = mPumpPart;
             MissingorScrap = mMissingorScrap;
@@ -32,7 +32,7 @@ namespace QuoteSwift
             RepairDevider = mRepairDevider;
         }
 
-        public Pump_Part PumpPart { get => mPumpPart; set => mPumpPart = value; }
+        public Product_Part PumpPart { get => mPumpPart; set => mPumpPart = value; }
         public int MissingorScrap { get => mMissingorScrap; set => mMissingorScrap = value; }
         public int Repaired { get => mRepaired; set => mRepaired = value; }
         public int New { get => mNew; set => mNew = value; }
