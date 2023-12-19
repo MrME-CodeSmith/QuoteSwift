@@ -146,10 +146,10 @@ namespace QuoteSwift
             if (Global.Context != null && Global.Context.QuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 Hide();
-                Global.Context.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
+                Global.Context.QuoteToChange = dgvPreviousQuotes.SelectedItem as Quote;
                 Global.Context. ChangeSpecificObject = false;
                 QuoteSwiftMainCode.CreateNewQuote();
-                Global.Context.QuoteTOChange = null;
+                Global.Context.QuoteToChange = null;
                 Global.Context.ChangeSpecificObject = false;
                 Show();
             }
@@ -160,10 +160,10 @@ namespace QuoteSwift
             if (Global.Context != null && Global.Context.QuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 this.Hide();
-                Global.Context.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
+                Global.Context.QuoteToChange = dgvPreviousQuotes.SelectedItem as Quote;
                 Global.Context.ChangeSpecificObject = true;
                 QuoteSwiftMainCode.CreateNewQuote();
-                Global.Context.QuoteTOChange = null;
+                Global.Context.QuoteToChange = null;
                 Global.Context.ChangeSpecificObject = false;
                 this.Show();
             }

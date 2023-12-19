@@ -3,6 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using MainProgramLibrary;
+using ToastNotifications;
+using ToastNotifications.Position;
+using System.Net.Http;
 
 namespace QuoteSwift
 {
@@ -15,7 +19,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (MainProgramCode.RequestConfirmation(Messages.TerminationRequestText, Messages.TerminationRequestCaption))
                 QuoteSwiftMainCode.CloseApplication(true);
         }
 
@@ -37,24 +41,18 @@ namespace QuoteSwift
                     ctx.PartToChange.PartPrice = QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text.Trim());
                     ctx.PartToChange.MandatoryPart = cbxMandatoryPart.Checked;
 
-                    if (BeforeUpdatePart.MandatoryPart && !ctx.PartToChange.MandatoryPart)//Determine if it was a mandatory part that changed into a non-mandatory part
+                    switch (BeforeUpdatePart.MandatoryPart)
                     {
-                        if (!ChangeToNonMandatory(ctx.PartToChange))
-                        {
-                            MainProgramCode.ShowError("An error occurred while transferring the part to the non-mandatory part list", "ERROR - Transfer Failed");
-                            return;
-                        }
-                    }
-                    else if (!BeforeUpdatePart.MandatoryPart && ctx.PartToChange.MandatoryPart)//Determine if it was a non-mandatory part that changed into a mandatory part
-                    {
-                        if (!ChangeToMandatory(ctx.PartToChange))
-                        {
-                            MainProgramCode.ShowError("An error occurred while transferring the part to the mandatory part list", "ERROR - Transfer Failed");
-                            return;
-                        }
+                        case true when !ctx.PartToChange.MandatoryPart:
+                            ChangeToNonMandatory(ctx.PartToChange);
+                            break;
+                        case false when ctx.PartToChange.MandatoryPart:
+                            ChangeToMandatory(ctx.PartToChange);
+                            break;
                     }
 
-                    MainProgramCode.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
+
+                    MainProgramCode.ShowInformation($"{Messages.UpdateConfirmationInfoText} the part", Messages.UpdateConfirmationInfoCaption);
                     ctx.PartToChange = null;
                     ctx.ChangeSpecificObject = false;
                     Close();
@@ -78,66 +76,31 @@ namespace QuoteSwift
                 }
                 else return;
 
-                if (newPart.MandatoryPart)
-                {
-                    if (ctx.MandatoryPartMap != null) 
-                        if (!DistinctInput(ref newPart))
-                            return;
-
-                    if (ctx.MandatoryPartMap != null)
-                    {
-                        ctx.MandatoryPartMap[newPart.OriginalItemPartNumber] = newPart;
-                        ctx.MandatoryPartMap[newPart.NewPartNumber] = newPart;
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
-                    }
-                    else
-                    {
-                        ctx.MandatoryPartMap = new Dictionary<string, Part>
-                        {
-                            { newPart.OriginalItemPartNumber, newPart },
-                            { newPart.NewPartNumber, newPart }
-                        };
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
-                    }
-
-                }
-                else //newPart is Non-Mandatory
-                {
-                    if (ctx.NonMandatoryPartMap != null)
-                    {
-                        ctx.NonMandatoryPartMap[newPart.OriginalItemPartNumber] = newPart;
-                        ctx.NonMandatoryPartMap[newPart.NewPartNumber] = newPart;
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
-                    }
-                    else
-                    {
-                        ctx.NonMandatoryPartMap = new Dictionary<string, Part>
-                        {
-                            { newPart.OriginalItemPartNumber, newPart },
-                            { newPart.NewPartNumber, newPart }
-                        };
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
-                    }
-                }
-
+                ctx.AddPart(ref newPart);
 
                 if (cbAddToProductSelection.SelectedIndex > -1)
                 {
-                    Product ProductSelection = (Product) cbAddToProductSelection.SelectedItem;
+                    var ProductSelection = (Product)cbAddToProductSelection.SelectedItem;
 
                     ProductSelection.PartList.Add(
                         new Product_Part(
-                            newPart, 
-                            (int) NudQuantity.Value
+                            newPart,
+                            (int)NudQuantity.Value
                         )
                     );
 
-                    MainProgramCode.ShowInformation($"{newPart.PartName} successfully added to {ProductSelection.ProductName}'s part list.", "INFORMATION - Part Added To Pump Success");
+                    MainProgramCode.ShowInformation(
+                        $"{Messages.AddConfirmationInformationText} {newPart.PartName} to {ProductSelection.ProductName}'s part list.",
+                        Messages.AddConfirmationInformationCaption);
+                }
+                else
+                {
+                    MainProgramCode.ShowInformation(
+                        $"{Messages.AddConfirmationInformationText} {newPart.PartName}",
+                        Messages.AddConfirmationInformationCaption);
                 }
 
-
                 ClearInput();
-
             }
         }
 

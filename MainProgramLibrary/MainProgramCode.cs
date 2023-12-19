@@ -53,7 +53,18 @@ namespace QuoteSwift
 
         public static void ShowInformation(string text, string caption)
         {
-            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var toastXml = Windows.UI.Notifications.ToastNotificationManager.GetTemplateContent(Windows.UI.Notifications.ToastTemplateType.ToastImageAndText04);
+
+            // Fill in the text elements
+            var stringElements = toastXml.GetElementsByTagName("text");
+            stringElements[0].AppendChild(toastXml.CreateTextNode(caption));
+            stringElements[1].AppendChild(toastXml.CreateTextNode(text));
+
+            // Create the toast and attach event listeners
+            var toast = new Windows.UI.Notifications.ToastNotification(toastXml);
+
+            // Show the toast. 
+            Windows.UI.Notifications.ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
 
 
