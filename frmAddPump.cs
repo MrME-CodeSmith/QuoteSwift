@@ -181,14 +181,14 @@ namespace QuoteSwift
 
         void PopulateFormWithPassedPump()
         {
-            mtxtNewPumpPrice.Text = passed.PumpToChange.NewPumpPrice.ToString();
+            mtxtNewPumpPrice.Text = passed.PumpToChange.NewProductPrice.ToString();
             mtxtPumpDescription.Text = passed.PumpToChange.PumpDescription;
             mtxtPumpName.Text = passed.PumpToChange.ProductName;
 
             for (int i = 0; i < passed.MandatoryPartMap.Count; i++)
                 for (int k = 0; k < passed.PumpToChange.PartList.Count; k++)
                 {
-                    if (passed.MandatoryPartMap[i].OriginalItemPartNumber == passed.PumpToChange.PartList[k].PumpPart.OriginalItemPartNumber)
+                    if (passed.MandatoryPartMap[i].OriginalItemPartNumber == passed.PumpToChange.PartList[k].ProductPart.OriginalItemPartNumber)
                     {
                         DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvMandatoryPartView.Rows[i].Cells["clmAddToPumpSelection"];
                         cbx.Value = true;
@@ -199,7 +199,7 @@ namespace QuoteSwift
             for (int s = 0; s < passed.NonMandatoryPartMap.Count; s++)
                 for (int d = 0; d < passed.PumpToChange.PartList.Count; d++)
                 {
-                    if (passed.NonMandatoryPartMap[s].OriginalItemPartNumber == passed.PumpToChange.PartList[d].PumpPart.OriginalItemPartNumber)
+                    if (passed.NonMandatoryPartMap[s].OriginalItemPartNumber == passed.PumpToChange.PartList[d].ProductPart.OriginalItemPartNumber)
                     {
                         DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvNonMandatoryPartView.Rows[s].Cells["ClmNonMandatoryPartSelection"];
                         cbx.Value = true;
@@ -314,7 +314,7 @@ namespace QuoteSwift
 
             if (mtxtPumpDescription.Text != passed.PumpToChange.PumpDescription) passed.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
 
-            if (NewPumpValueInput() != passed.PumpToChange.NewPumpPrice) passed.PumpToChange.NewPumpPrice = NewPumpValueInput();
+            if (NewPumpValueInput() != passed.PumpToChange.NewProductPrice) passed.PumpToChange.NewProductPrice = NewPumpValueInput();
 
             passed.PumpToChange.PartList = RetreivePumpPartList();
         }

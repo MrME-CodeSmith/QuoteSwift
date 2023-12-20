@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using MainProgramLibrary;
 using ToastNotifications;
@@ -32,7 +33,7 @@ namespace QuoteSwift
 
                 if (ValidInput())
                 {
-                    Part BeforeUpdatePart = new Part(ctx.PartToChange);
+                    var BeforeUpdatePart = new Part(ctx.PartToChange);
 
                     ctx.PartToChange.PartName = mtxtPartName.Text.Trim();
                     ctx.PartToChange.PartDescription = mtxtPartDescription.Text.Trim();
@@ -131,24 +132,14 @@ namespace QuoteSwift
         {
             //Load a CSV file and add the items to the appropriate list
 
-            string message = "Please ensure that the selected CSV file has the following items in this exact order:\n\n" +
-                             "First Column: Original Part Number\n" +
-                             "Second Column: Part Name\n" +
-                             "Third Column: Part Description\n" +
-                             "Fourth Column: New Part Number\n" +
-                             "Fifth Column: Part Price\n" +
-                             "Sixth Column: Part Quantity (To add this amount of parts to the pump specified) \n" +
-                             "Seventh Column: TRUE / FALSE value (Mandatory part)\n" +
-                             "Eighth Column: Pump Name(To add a part to a specific pump)\n" +
-                             "Ninth Column: Pump Price (Price when pump is bought new)\n" +
-                             "Click the OK button to select the file or alternative choose cancel to abort this action.";
-
-            DialogResult MessageBoxResult = MessageBox.Show(
-                message, 
-                "INFORMATION - CSV Batch Part Import", 
+            var MessageBoxResult = MessageBox.Show(
+                Messages.CSVBatchImportInformationText, 
+                Messages.CSVBatchImportInformationCaption, 
                 MessageBoxButtons.OKCancel, 
                 MessageBoxIcon.Information
             );
+
+            var ctx = Global.Context;
 
             if (MessageBoxResult == DialogResult.OK)
             {
@@ -158,8 +149,11 @@ namespace QuoteSwift
                     fieldParser.TextFieldType = FieldType.Delimited;
                     fieldParser.SetDelimiters(",");
 
-                    bool UpdateDuplicated = MainProgramCode.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part");
-                    var ctx = Global.Context;
+                    bool UpdateDuplicated = MainProgramCode.RequestConfirmation(
+                        Messages.UpdatePartsWithSamePartNumbersRequestText, 
+                        Messages.UpdatePartsWithSamePartNumbersRequestCaption
+                    );
+                    
                     while (!fieldParser.EndOfData)
                     {
                         //Process each row:
@@ -176,109 +170,133 @@ namespace QuoteSwift
                                 QuoteSwiftMainCode.ParseFloat(readFields[4])
                             );
 
-                            Part OldPartToChange = ctx.PartToChange;
-                            ctx.PartToChange = newPart;
-                            if (!DistinctInput(ref newPart))
+                            try
                             {
-                                ctx.PartToChange = OldPartToChange;
-
+                                ctx.AddPart(ref newPart);
+                            }
+                            catch (FeedbackException)
+                            {
                                 if (UpdateDuplicated)
                                 {
-                                    if (newPart.MandatoryPart)
-                                        for (int i = 0; i < passed.PassMandatoryPartList.Count - 1; i++)
+                                    if (!ctx.MandatoryPartMap.TryGetValue(newPart.OriginalItemPartNumber, out var p))
+                                        if (!ctx.NonMandatoryPartMap.TryGetValue(newPart.OriginalItemPartNumber, out p))
+                                            if (!ctx.MandatoryPartMap.TryGetValue(newPart.NewPartNumber, out p))
+                                                ctx.NonMandatoryPartMap.TryGetValue(newPart.NewPartNumber, out p);
+
+                                    var tempPart = new Part[4];
+
+                                    ctx.MandatoryPartMap.TryGetValue(newPart.OriginalItemPartNumber, out tempPart[0]);
+                                    ctx.MandatoryPartMap.TryGetValue(newPart.NewPartNumber, out tempPart[1]);
+
+                                    ctx.NonMandatoryPartMap.TryGetValue(newPart.NewPartNumber, out tempPart[2]);
+                                    ctx.NonMandatoryPartMap.TryGetValue(newPart.OriginalItemPartNumber, out tempPart[3]);
+
+                                    if (
+                                        tempPart.All(
+                                            part => part == null ||
+                                                    part.Equals(p) ||
+                                                    (
+                                                        part.OriginalItemPartNumber != newPart.OriginalItemPartNumber &&
+                                                        part.NewPartNumber != newPart.NewPartNumber &&
+                                                        part.OriginalItemPartNumber != newPart.NewPartNumber &&
+                                                        part.NewPartNumber != newPart.OriginalItemPartNumber
+                                                    )
+                                        )
+                                    )
+                                    {
+                                        p.PartName = newPart.PartName;
+                                        p.PartDescription = newPart.PartDescription;
+                                        p.PartPrice = newPart.PartPrice;
+
+                                        if (p.MandatoryPart)
                                         {
-                                            if (passed.PassMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
-                                            {
-
-                                                Part data = passed.PassMandatoryPartList[i];
-                                                data.MandatoryPart = newPart.MandatoryPart;
-                                                data.PartDescription = newPart.PartDescription;
-                                                data.PartName = newPart.PartName;
-                                                data.PartPrice = newPart.PartPrice;
-
-                                                break;
-                                            }
+                                            ctx.MandatoryPartMap.Remove(p.OriginalItemPartNumber);
+                                            ctx.MandatoryPartMap.Remove(p.NewPartNumber);
+                                            ctx.MandatoryPartList.Remove(p);
+                                        }
+                                        else
+                                        {
+                                            ctx.NonMandatoryPartMap.Remove(p.OriginalItemPartNumber);
+                                            ctx.NonMandatoryPartMap.Remove(p.NewPartNumber);
+                                            ctx.NonMandatoryPartList.Remove(p);
                                         }
 
-                                    if (!newPart.MandatoryPart)
-                                        for (int i = 0; i < passed.PassNonMandatoryPartList.Count - 1; i++)
+                                        p.OriginalItemPartNumber = newPart.OriginalItemPartNumber;
+                                        p.NewPartNumber = newPart.NewPartNumber;
+                                        p.MandatoryPart = newPart.MandatoryPart;
+
+                                        if (p.MandatoryPart)
                                         {
-                                            if (passed.PassNonMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
-                                            {
-
-
-                                                Part data = passed.PassNonMandatoryPartList[i];
-                                                data.MandatoryPart = newPart.MandatoryPart;
-                                                data.PartDescription = newPart.PartDescription;
-                                                data.PartName = newPart.PartName;
-                                                data.PartPrice = newPart.PartPrice;
-
-                                                break;
-                                            }
+                                            ctx.MandatoryPartMap[p.OriginalItemPartNumber] = p;
+                                            ctx.MandatoryPartMap[p.NewPartNumber] = p;
+                                            ctx.MandatoryPartList.Add(p);
                                         }
-
+                                        else
+                                        {
+                                            ctx.NonMandatoryPartMap[p.OriginalItemPartNumber] = p;
+                                            ctx.NonMandatoryPartMap[p.NewPartNumber] = p;
+                                            ctx.NonMandatoryPartList.Add(p);
+                                        }
+                                    }
                                 }
                             }
                         }
                         catch
                         {
-                            MainProgramCode.ShowError("The provided CSV File's format is incorrect, please try again once the format has been corrected.", "ERROR - CSV File Format Incorrect");
+                            MainProgramCode.ShowError(Messages.CsvBatchImportErrorText, Messages.CsvBatchImportErrorCaption);
                             return;
                         }
 
-                        if (passed.PassMandatoryPartList == null) passed.PassMandatoryPartList = new BindingList<Part>();
-                        if (passed.PassNonMandatoryPartList == null) passed.PassNonMandatoryPartList = new BindingList<Part>();
+                        var newProductPartList = new BindingList<Product_Part>();
 
+                        var product = new Product(
+                            readFields[7].Trim(), 
+                            "", 
+                            QuoteSwiftMainCode.ParseFloat(readFields[8].Trim()), 
+                            ref newProductPartList
+                        );
 
-                        if (newPart != null && newPart.MandatoryPart && DistinctInput(ref newPart))
+                        if (ctx.ProductMap.TryGetValue(product.ProductName, out var prod))
                         {
-                            passed.PassMandatoryPartList.Add(newPart);
-                        }
-                        else if (newPart != null && DistinctInput(ref newPart)) passed.PassNonMandatoryPartList.Add(newPart);
-
-                        bool FoundPump = false;
-
-                        BindingList<Product_Part> NewPumpPartList = new BindingList<Product_Part>();
-
-                        if (passed.ProductList != null)
-                        {
-                            Product NewPump = new Product(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList);
-                            Product OldPump = null;
-                            for (int i = 0; i < passed.ProductList.Count; i++)
+                            if (prod.PartList.All(
+                                    part => part.ProductPart.OriginalItemPartNumber != newPart.OriginalItemPartNumber &&
+                                            part.ProductPart.NewPartNumber != newPart.NewPartNumber &&
+                                            part.ProductPart.OriginalItemPartNumber != newPart.NewPartNumber &&
+                                            part.ProductPart.NewPartNumber != newPart.OriginalItemPartNumber
+                                    )
+                            )
                             {
-                                if (passed.ProductList[i].PumpName == NewPump.ProductName)
-                                {
-                                    FoundPump = true;
-                                    OldPump = passed.ProductList[i];
-                                    break;
-                                }
-                            }
-
-                            if (FoundPump == false) //Pump non existing
-                            {
-                                NewPumpPartList = new BindingList<Product_Part> { new Product_Part(newPart, int.Parse(readFields[5])) };
-                                NewPump.PartList = NewPumpPartList;
-                                passed.ProductList.Add(NewPump);
-                            }
-                            else // Pump Existing
-                            {
-                                OldPump.PartList.Add(new Product_Part(newPart, int.Parse(readFields[5])));
-                                if (OldPump.NewPumpPrice != NewPump.NewPumpPrice) OldPump.NewPumpPrice = NewPump.NewPumpPrice;
+                                prod.PartList.Add(
+                                    new Product_Part(
+                                        newPart,
+                                        int.Parse(readFields[5].Trim())
+                                    )
+                                );
+                                prod.NewProductPrice = QuoteSwiftMainCode.ParseFloat(readFields[8].Trim());
                             }
                         }
-                        else // passed.PassPumpList is empty
+                        else
                         {
-                            NewPumpPartList = new BindingList<Product_Part> { new Product_Part(newPart, int.Parse(readFields[5])) };
-                            passed.ProductList = new BindingList<Product> { new Product(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
+                            product.PartList.Add(
+                                new Product_Part(
+                                    newPart,
+                                    int.Parse(readFields[5].Trim())
+                                )
+                            );
+                            ctx.ProductMap[product.ProductName] = product;
                         }
-
                     }
-
-                    MainProgramCode.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
-
+                    MainProgramCode.ShowInformation(Messages.CsvBatchImportSuccessText, Messages.CsvBatchImportSuccessCaption);
                 }
             }
             else return;
+
+            if (ctx.ChangeSpecificObject)
+            {
+                ctx.PartToChange = null;
+                ctx.ChangeSpecificObject = false;
+            }
+            
             Close();
         }
 

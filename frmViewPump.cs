@@ -106,7 +106,7 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 for (int i = 0; i < passed.ProductMap.Count; i++)
                 {
-                    dgvPumpList.Rows.Add(passed.ProductMap[i].ProductName, passed.ProductMap[i].PumpDescription, passed.ProductMap[i].NewPumpPrice.ToString());
+                    dgvPumpList.Rows.Add(passed.ProductMap[i].ProductName, passed.ProductMap[i].PumpDescription, passed.ProductMap[i].NewProductPrice.ToString());
                 }
             }
         }

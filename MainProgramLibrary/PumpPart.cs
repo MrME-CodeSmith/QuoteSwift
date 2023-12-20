@@ -6,17 +6,17 @@ namespace QuoteSwift
     public class Product_Part
     {
         [ProtoMember(1)]
-        private Part mPumpPart;
+        private Part mProductPart;
         [ProtoMember(2)]
         private int mPumpPartQuantity;
 
-        public Product_Part(Part mPumpPart, int mPumpPartQuantity)
+        public Product_Part(Part productPart, int mPumpPartQuantity)
         {
-            PumpPart = mPumpPart;
+            ProductPart = productPart;
             PumpPartQuantity = mPumpPartQuantity;
         }
 
-        public Part PumpPart { get => mPumpPart; set => mPumpPart = value; }
+        public Part ProductPart { get => mProductPart; set => mProductPart = value; }
         public int PumpPartQuantity { get => mPumpPartQuantity; set => mPumpPartQuantity = value; }
     }
 }

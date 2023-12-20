@@ -409,24 +409,24 @@ namespace QuoteSwift
                 for (int i = 0; i < p.PartList.Count; i++)
                 {
                     //Manually setting the data grid's rows' values:
-                    if (p.PartList[i].PumpPart.MandatoryPart)
-                        dgvMandatoryPartReplacement.Rows.Add(p.PartList[i].PumpPart.NewPartNumber,
-                                                             p.PartList[i].PumpPart.PartDescription,
+                    if (p.PartList[i].ProductPart.MandatoryPart)
+                        dgvMandatoryPartReplacement.Rows.Add(p.PartList[i].ProductPart.NewPartNumber,
+                                                             p.PartList[i].ProductPart.PartDescription,
                                                              p.PartList[i].PumpPartQuantity,
                                                              p.PartList[i].PumpPartQuantity,
                                                              0,
                                                              p.PartList[i].PumpPartQuantity,
-                                                             (p.PartList[i].PumpPartQuantity * p.PartList[i].PumpPart.PartPrice),
-                                                             p.PartList[i].PumpPart.PartPrice,
+                                                             (p.PartList[i].PumpPartQuantity * p.PartList[i].ProductPart.PartPrice),
+                                                             p.PartList[i].ProductPart.PartPrice,
                                                              0, 1);
-                    else DgvNonMandatoryPartReplacement.Rows.Add(p.PartList[i].PumpPart.NewPartNumber,
-                                                                 p.PartList[i].PumpPart.PartDescription,
+                    else DgvNonMandatoryPartReplacement.Rows.Add(p.PartList[i].ProductPart.NewPartNumber,
+                                                                 p.PartList[i].ProductPart.PartDescription,
                                                                  p.PartList[i].PumpPartQuantity,
                                                                  p.PartList[i].PumpPartQuantity,
                                                                  0,
                                                                  p.PartList[i].PumpPartQuantity,
                                                                  0,
-                                                                 p.PartList[i].PumpPart.PartPrice,
+                                                                 p.PartList[i].ProductPart.PartPrice,
                                                                  0, 1);
 
                 }
@@ -434,7 +434,7 @@ namespace QuoteSwift
                 DgvNonMandatoryPartReplacement.Rows.Add("TS6LAB", "LABOUR", 1, 0, 0, 1, 0, 1000, 0, 1);
                 DgvNonMandatoryPartReplacement.Rows.Add("CON TS6", "CONSUMABLES incl COLLECTION & DELIVERY", 1, 0, 0, 1, 0, 1000, 0, 1);
 
-                lblNewPumpUnitPrice.Text = "New Pump Price: R " + p.NewPumpPrice.ToString();
+                lblNewPumpUnitPrice.Text = "New Pump Price: R " + p.NewProductPrice.ToString();
             }
         }
 
@@ -571,7 +571,7 @@ namespace QuoteSwift
 
 
 
-            lblRepairPercentage.Text = "Repair Percentage: " + Convert.ToString((P.SubTotal / GetPumpSelection().NewPumpPrice) * 100) + "%";
+            lblRepairPercentage.Text = "Repair Percentage: " + Convert.ToString((P.SubTotal / GetPumpSelection().NewProductPrice) * 100) + "%";
         }
 
         private void BtnCalculateRebate_Click(object sender, EventArgs e)
@@ -652,7 +652,7 @@ namespace QuoteSwift
             {
                 for (int i = 0; i < bl.Count; i++)
                 {
-                    if (bl[i].PumpPart.NewPartNumber == s)
+                    if (bl[i].ProductPart.NewPartNumber == s)
                     {
                         return bl[i];
                     }
@@ -714,8 +714,8 @@ namespace QuoteSwift
                                          new Address(GetBusinesssPOBoxAddressSelection(GetBusinessSelection())),
                                          new Address(GetCustomerPOBoxAddressSelection(GetCustomerSelection())),
                                          txtLineNumber.Text,
-                                         GetPumpSelection().NewPumpPrice,
-                                         ((QuoteSwiftMainCode.ParseFloat(lblTotalDue.Text) / GetPumpSelection().NewPumpPrice) * 100),
+                                         GetPumpSelection().NewProductPrice,
+                                         ((QuoteSwiftMainCode.ParseFloat(lblTotalDue.Text) / GetPumpSelection().NewProductPrice) * 100),
                                          rtxCustomerDeliveryDescripton.Text,
                                          new Customer(GetCustomerSelection()),
                                          new Business(GetBusinessSelection()),
@@ -728,7 +728,7 @@ namespace QuoteSwift
                                          P,
                                          cbxPumpSelection.Text);
 
-            CreateQuote.QuoteRepairPercentage = ((float)(P.SubTotal / GetPumpSelection().NewPumpPrice * 100));
+            CreateQuote.QuoteRepairPercentage = ((float)(P.SubTotal / GetPumpSelection().NewProductPrice * 100));
             return CreateQuote;
         }
 
@@ -850,8 +850,8 @@ namespace QuoteSwift
             {
                 Quote_Part data = passed.QuoteToChange.QuoteMandatoryPartList[i];
                 if (data != null)
-                    dgvMandatoryPartReplacement.Rows.Add(data.PumpPart.PumpPart.NewPartNumber,
-                                                         data.PumpPart.PumpPart.PartDescription,
+                    dgvMandatoryPartReplacement.Rows.Add(data.PumpPart.ProductPart.NewPartNumber,
+                                                         data.PumpPart.ProductPart.PartDescription,
                                                          data.PumpPart.PumpPartQuantity,
                                                          data.MissingorScrap,
                                                          data.Repaired,
@@ -865,8 +865,8 @@ namespace QuoteSwift
             {
                 Quote_Part data = passed.QuoteToChange.QuoteNewList[i];
                 if (data != null)
-                    DgvNonMandatoryPartReplacement.Rows.Add(data.PumpPart.PumpPart.NewPartNumber,
-                                                         data.PumpPart.PumpPart.PartDescription,
+                    DgvNonMandatoryPartReplacement.Rows.Add(data.PumpPart.ProductPart.NewPartNumber,
+                                                         data.PumpPart.ProductPart.PartDescription,
                                                          data.PumpPart.PumpPartQuantity,
                                                          data.MissingorScrap,
                                                          data.Repaired,
