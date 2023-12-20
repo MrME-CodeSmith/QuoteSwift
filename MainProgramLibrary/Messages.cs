@@ -1,6 +1,8 @@
-﻿using System;
+﻿using QuoteSwift;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
 namespace MainProgramLibrary
 {
@@ -8,6 +10,11 @@ namespace MainProgramLibrary
     {
         public static string PartAlreadyExists => "This part already exists in the system. Please ensure that these are unique:\n- Original Part Number\n- New Part Number";
         public static string InvalidParameter => "Parameter is not valid.";
+        public static string InvalidPartName => "Please ensure that the name of the Item is valid and it has a length greater than two(2) characters.";
+        public static string InvalidPartDescription => "Please ensure that the description of the Item is valid and it has a length greater than two(2) characters.";
+        public static string InvalidOriginalPartNumber => "Please ensure that the original part number of the Item is valid and it has a length greater than two(2) characters.";
+        public static string InvalidNewPartNumber => "Please ensure that the new part number of the Item is valid and it has a length greater than two(2) characters.";
+        public static string InvalidPartPrice => "Please ensure that the price of the Item is valid and it has a value greater than R99.";
 
 
 
@@ -26,6 +33,7 @@ namespace MainProgramLibrary
         public static string AddConfirmationInformationText => "Successfully added";
 
         public static string CsvBatchImportSuccessCaption => "CONFIRMATION - CSV Batch Import Successful";
+        public static string CsvBatchImportSuccessText => "The CSV file was successfully imported.";
 
         public static string CSVBatchImportInformationCaption => "INFORMATION - CSV Batch Import Successful";
         public static string CSVBatchImportInformationText => "Please ensure that the selected CSV file has the following items in this exact order:\n\n" +
@@ -40,6 +48,12 @@ namespace MainProgramLibrary
                                                               "Ninth Column: Pump Price (Price when pump is bought new)\n" +
                                                               "Click the OK button to select the file or alternative choose cancel to abort this action.";
 
+        public static string ScreenDefaultValueRequestCaption => "REQUEST - Screen Defaults Reset";
+        public static string ScreenDefaultValueRequestText => "Are you sure you want to reset the screen defaults?";
+
+        public static string ActionCancelRequestCaption => "REQUEST - Action Cancellation";
+        public static string ActionCancelRequestText => "Are you sure you want to cancel this action?";
+
         public static string TaskWarningInformationCaption => "WARNING - Task could not complete";
         public static string TaskErrorInformationCaption => "ERROR - Task failed";
 
@@ -47,6 +61,10 @@ namespace MainProgramLibrary
         public static string CsvBatchImportErrorText => "The CSV file could not be imported. Please ensure that the file is not open in another application and that the file's format is correct.";
 
         public static string TaskErrorInformationText => "The task could not be completed. Please try restarting the system.";
+        public static string InvalidInputErrorCaption => "ERROR - Invalid Input";
+        public static string UpdatePartRequestText => "You are currently only viewing a part, would you like to update its details instead?";
+        public static string UpdatePartRequestCaption => "REQUEST - Update Specific Part Details";
+
 
         //===============================================================================================================
     }
