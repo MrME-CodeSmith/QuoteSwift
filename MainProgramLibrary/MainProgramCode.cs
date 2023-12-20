@@ -51,6 +51,11 @@ namespace QuoteSwift
             MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        public static void ShowWarning(string text, string caption)
+        {
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         public static void ShowInformation(string text, string caption)
         {
             var toastXml = Windows.UI.Notifications.ToastNotificationManager.GetTemplateContent(Windows.UI.Notifications.ToastTemplateType.ToastImageAndText04);

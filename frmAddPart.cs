@@ -76,8 +76,26 @@ namespace QuoteSwift
                 }
                 else return;
 
-                ctx.AddPart(ref newPart);
-
+                try
+                {
+                    ctx.AddPart(ref newPart);
+                }
+                catch (FeedbackException Ex)
+                {
+                    MainProgramCode.ShowWarning(
+                        Ex.Message, 
+                        Messages.TaskWarningInformationCaption
+                    );
+                }
+                catch (Exception)
+                {
+                    MainProgramCode.ShowError(
+                        Messages.TaskErrorInformationText, 
+                        Messages.TaskErrorInformationCaption
+                    );
+                    return;
+                }
+                
                 if (cbAddToProductSelection.SelectedIndex > -1)
                 {
                     var ProductSelection = (Product)cbAddToProductSelection.SelectedItem;
@@ -125,19 +143,23 @@ namespace QuoteSwift
                              "Ninth Column: Pump Price (Price when pump is bought new)\n" +
                              "Click the OK button to select the file or alternative choose cancel to abort this action.";
 
-            DialogResult MessageBoxResult = MessageBox.Show(message, "INFORMATION - CSV Batch Part Import", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            DialogResult MessageBoxResult = MessageBox.Show(
+                message, 
+                "INFORMATION - CSV Batch Part Import", 
+                MessageBoxButtons.OKCancel, 
+                MessageBoxIcon.Information
+            );
 
             if (MessageBoxResult == DialogResult.OK)
             {
                 OfdOpenCSVFile.ShowDialog();
-                using (TextFieldParser fieldParser = new TextFieldParser(OfdOpenCSVFile.FileName))
+                using (var fieldParser = new TextFieldParser(OfdOpenCSVFile.FileName))
                 {
                     fieldParser.TextFieldType = FieldType.Delimited;
                     fieldParser.SetDelimiters(",");
 
-                    bool UpdateDuplicated = false;
-                    if (MainProgramCode.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part")) UpdateDuplicated = true;
-
+                    bool UpdateDuplicated = MainProgramCode.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part");
+                    var ctx = Global.Context;
                     while (!fieldParser.EndOfData)
                     {
                         //Process each row:
@@ -145,12 +167,20 @@ namespace QuoteSwift
                         Part newPart = null;
                         try
                         {
-                            newPart = new Part(readFields[1], readFields[2], readFields[0], readFields[3], QuoteSwiftMainCode.ParseBoolean(readFields[6]), QuoteSwiftMainCode.ParseFloat(readFields[4]));
-                            Part OldPartToChange = passed.PartToChange;
-                            passed.PartToChange = newPart;
+                            newPart = new Part(
+                                readFields[1], 
+                                readFields[2], 
+                                readFields[0], 
+                                readFields[3], 
+                                QuoteSwiftMainCode.ParseBoolean(readFields[6]), 
+                                QuoteSwiftMainCode.ParseFloat(readFields[4])
+                            );
+
+                            Part OldPartToChange = ctx.PartToChange;
+                            ctx.PartToChange = newPart;
                             if (!DistinctInput(ref newPart))
                             {
-                                passed.PartToChange = OldPartToChange;
+                                ctx.PartToChange = OldPartToChange;
 
                                 if (UpdateDuplicated)
                                 {

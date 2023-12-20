@@ -22,6 +22,10 @@ namespace MainProgramLibrary
         public static string AddConfirmationInformationCaption => "CONFIRMATION - Add Successful";
         public static string AddConfirmationInformationText => "Successfully added";
 
+        public static string TaskWarningInformationCaption => "WARNING - Task could not complete";
+        public static string TaskErrorInformationCaption => "ERROR - Task failed";
+        public static string TaskErrorInformationText => "The task could not be completed. Please try restarting the system.";
+
         //===============================================================================================================
     }
 
