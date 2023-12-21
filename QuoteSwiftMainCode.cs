@@ -61,14 +61,14 @@ namespace QuoteSwift
             if (Global.Context != null && Global.Context.QuoteMap != null)
             {
                 int Index = 0;
-                DateTime dt = Global.Context.QuoteMap[0].QuoteCreationDate;
+                DateTime dt = Global.Context.QuoteMap.Values.ToArray()[0].QuoteCreationDate;
                 for (int i = 1; i < Global.Context.QuoteMap.Count; i++)
-                    if (Global.Context.QuoteMap[i].QuoteCreationDate.Date > dt)
+                    if (Global.Context.QuoteMap.Values.ToArray()[i].QuoteCreationDate.Date > dt)
                     {
-                        dt = Global.Context.QuoteMap[i].QuoteCreationDate.Date;
+                        dt = Global.Context.QuoteMap.Values.ToArray()[i].QuoteCreationDate.Date;
                         Index = i;
                     }
-                return Global.Context.QuoteMap[Index];
+                return Global.Context.QuoteMap.Values.ToArray()[Index];
             }
 
             return null;

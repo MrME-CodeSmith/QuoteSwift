@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -49,9 +50,9 @@ namespace QuoteSwift
 
                     if (passed.QuoteMap != null)
                     {
-                        passed.QuoteMap.Add(NewQuote);
+                        passed.QuoteMap.Add(NewQuote.QuoteNumber, NewQuote);
                     }
-                    else passed.QuoteMap = new BindingList<Quote> { NewQuote };
+                    else passed.QuoteMap = new Dictionary<string, Quote>() { { NewQuote.QuoteNumber ,NewQuote } };
 
                     if (MainProgramCode.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
@@ -185,7 +186,7 @@ namespace QuoteSwift
 
             if (passed.BusinessMap != null && SearchName.Length > 1)
             {
-                business = passed.BusinessMap.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
                 return business;
             }
 
@@ -209,7 +210,7 @@ namespace QuoteSwift
         {
             string SearchName = cbxPumpSelection.Text;
 
-            if (passed.ProductMap != null) return passed.ProductMap.SingleOrDefault(p => p.PumpName == SearchName);
+            if (passed.ProductMap != null) return passed.ProductMap.SingleOrDefault(p => p.Value.ProductName == SearchName).Value;
 
             return null;
         }
@@ -787,7 +788,7 @@ namespace QuoteSwift
 
             if (passed.QuoteMap != null)
             {
-                Quote Search = passed.QuoteMap.SingleOrDefault(p => p.QuoteJobNumber == Provided.QuoteJobNumber || p.QuoteNumber == Provided.QuoteNumber);
+                Quote Search = passed.QuoteMap.SingleOrDefault(p => p.Value.QuoteJobNumber == Provided.QuoteJobNumber || p.Value.QuoteNumber == Provided.QuoteNumber).Value;
                 if (Search != null) return false;
             }
 
@@ -798,11 +799,11 @@ namespace QuoteSwift
         {
             if (passed != null && passed.QuoteMap != null)
             {
-                Quote temp = passed.QuoteMap[0];
+                Quote temp = passed.QuoteMap.Values.ToArray()[0];
                 int LastQuoteNumber = GetQuoteNumber(ref temp);
                 for (int i = 1; i < passed.QuoteMap.Count; i++)
                 {
-                    temp = passed.QuoteMap[i];
+                    temp = passed.QuoteMap.Values.ToArray()[i];
                     if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
                 }
                 LastQuoteNumber++;

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -14,7 +16,7 @@ namespace QuoteSwift
 
         private void BtnCreateNewQuote_Click(object sender, EventArgs e)
         {
-            if (Global.Context.BusinessMap != null && Global.Context.ProductMap != null && Global.Context.BusinessMap[0].CustomerList != null)
+            if (Global.Context.BusinessMap != null && Global.Context.ProductMap != null && Global.Context.BusinessMap.Values.ToArray()[0].CustomerList != null)
             {
                 Hide();
                 QuoteSwiftMainCode.CreateNewQuote();
@@ -212,23 +214,23 @@ namespace QuoteSwift
 
                     byte[] RetreivedMandatoryPartList = MainProgramCode.RetreiveData("MandatoryParts.pbf");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.MandatoryPartMap = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.MandatoryPartMap = new Dictionary<string, Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList).ToDictionary(part => part.OriginalItemPartNumber)); //FIX THESE
 
                     RetreivedMandatoryPartList = MainProgramCode.RetreiveData("NonMandatoryParts.pbf");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.NonMandatoryPartMap = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) Global.Context.NonMandatoryPartMap = new Dictionary<string, Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList).ToDictionary(part => part.OriginalItemPartNumber));
 
                     byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.pbf");
 
-                    if (RetreivePumpList != null && RetreivePumpList.Length > 0) Global.Context.ProductMap = new BindingList<Product>(MainProgramCode.DeserializePumpList(RetreivePumpList));
+                    if (RetreivePumpList != null && RetreivePumpList.Length > 0) Global.Context.ProductMap = new Dictionary<string,Product>(MainProgramCode.DeserializePumpList(RetreivePumpList).ToDictionary(product => product.ProductName));
 
                     byte[] RetreiveBusinessList = MainProgramCode.RetreiveData("BusinessList.pbf");
 
-                    if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) Global.Context.BusinessMap = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
+                    if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) Global.Context.BusinessMap = new Dictionary<string,Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList).ToDictionary(business => business.BusinessLegalDetails.RegistrationNumber));
 
                     byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.pbf");
 
-                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) Global.Context.QuoteMap = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
+                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) Global.Context.QuoteMap = new Dictionary<string, Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList).ToDictionary(quote => quote.QuoteNumber));
                 }
                 catch (Exception Ex)
                 {
@@ -255,7 +257,7 @@ namespace QuoteSwift
 
 
             BindingSource PreviousQuotesDatagridBindingSource = null;
-            if (Global.Context != null && Global.Context.QuoteMap != null)
+            if (Global.Context != null && Global.Context.QuoteMap != null && Global.Context.QuoteMap.Count > 0)
                 PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = Global.Context.QuoteMap };
 
             if (PreviousQuotesDatagridBindingSource != null)

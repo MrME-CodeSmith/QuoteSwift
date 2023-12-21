@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,12 +11,12 @@ namespace QuoteSwift
 
         AppContext passed;
 
-        Business Business;
+        Business mBusiness;
 
         public FrmAddBusiness()
         {
             InitializeComponent();
-            Business = passed.BusinessToChange;
+            mBusiness = passed.BusinessToChange;
         }
 
         public ref AppContext Passed { get => ref passed; }
@@ -30,40 +31,43 @@ namespace QuoteSwift
         {
             if (ValidBusiness() && !passed.ChangeSpecificObject)
             {
-                //Add Final Details to Business object
-                Business.BusinessName = txtBusinessName.Text;
-                Business.BusinessExtraInformation = rtxtExtraInformation.Text;
-                Business.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
+                //Add Final Details to mBusiness object
+                mBusiness.BusinessName = txtBusinessName.Text;
+                mBusiness.BusinessExtraInformation = rtxtExtraInformation.Text;
+                mBusiness.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
                 if (passed.BusinessMap == null)
                 {
                     //Create New business List
-                    passed.BusinessMap = new BindingList<Business> { Business };
+                    passed.BusinessMap = new Dictionary<string, Business>()
+                    {
+                        { mBusiness.BusinessLegalDetails.RegistrationNumber, mBusiness }
+                    };
                 }
                 else //Add To List
                 {
-                    if (passed.BusinessMap.SingleOrDefault(p => p.BusinessName == Business.BusinessName) != null)
+                    if (passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == mBusiness.BusinessName).Value != null)
                     {
-                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
+                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
                         return;
                     }
-                    else if (passed.BusinessMap.SingleOrDefault(p => p.BusinessLegalDetails.VatNumber == Business.BusinessLegalDetails.VatNumber) != null)
+                    else if (passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.VatNumber == mBusiness.BusinessLegalDetails.VatNumber).Value != null)
                     {
-                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
+                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
                         return;
                     }
-                    else if (passed.BusinessMap.SingleOrDefault(p => p.BusinessLegalDetails.RegistrationNumber == Business.BusinessLegalDetails.RegistrationNumber) != null)
+                    else if (passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.RegistrationNumber == mBusiness.BusinessLegalDetails.RegistrationNumber).Value != null)
                     {
-                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
+                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
                         return;
                     }
-                    else passed.BusinessMap.Add(Business);
+                    else passed.BusinessMap.Add(mBusiness.BusinessLegalDetails.RegistrationNumber ,mBusiness);
                 }
 
                 passed.BusinessToChange = null;
                 passed.ChangeSpecificObject = false;
 
-                MainProgramCode.ShowInformation(Business.BusinessName + " has been added.", "INFORMATION - Business Successfully Added");
+                MainProgramCode.ShowInformation(mBusiness.BusinessName + " has been added.", "INFORMATION - mBusiness Successfully Added");
 
                 ResetScreenInput();
             }
@@ -73,7 +77,7 @@ namespace QuoteSwift
                 passed.BusinessToChange.BusinessExtraInformation = rtxtExtraInformation.Text;
                 passed.BusinessToChange.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
-                MainProgramCode.ShowInformation(Business.BusinessName + " has been successfully updated.", "INFORMATION - Business Successfully Updated");
+                MainProgramCode.ShowInformation(mBusiness.BusinessName + " has been successfully updated.", "INFORMATION - mBusiness Successfully Updated");
                 ConvertToViewOnly();
             }
         }
@@ -86,16 +90,16 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
-                    if (Business.BusinessPOBoxAddressList == null)
+                    if (mBusiness.BusinessPOBoxAddressList == null)
                     {
                         //Create New List
-                        Business.BusinessPOBoxAddressList = new BindingList<Address> { address };
-                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
+                        mBusiness.BusinessPOBoxAddressList = new BindingList<Address> { address };
+                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - mBusiness P.O.Box Address Added Successfully");
                     }
                     else // AddingNewEventArgs To list
                     {
-                        Business.BusinessPOBoxAddressList.Add(address);
-                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
+                        mBusiness.BusinessPOBoxAddressList.Add(address);
+                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - mBusiness P.O.Box Address Added Successfully");
                     }
 
                     ClearPOBoxAddressInput();
@@ -111,16 +115,16 @@ namespace QuoteSwift
                                               txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
                 if (!AddressExisting(address))
                 {
-                    if (Business.BusinessAddressList == null)
+                    if (mBusiness.BusinessAddressList == null)
                     {
                         //Create New List
-                        Business.BusinessAddressList = new BindingList<Address> { address };
-                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
+                        mBusiness.BusinessAddressList = new BindingList<Address> { address };
+                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - mBusiness Address Added Successfully");
                     }
                     else //Add To Current list
                     {
-                        Business.BusinessAddressList.Add(address);
-                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
+                        mBusiness.BusinessAddressList.Add(address);
+                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - mBusiness Address Added Successfully");
                     }
 
                     ClearBusinessAddressInput();
@@ -138,15 +142,15 @@ namespace QuoteSwift
 
             if (mtxtTelephoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
             {
-                if (Business.BusinessTelephoneNumberList == null)
+                if (mBusiness.BusinessTelephoneNumberList == null)
                 {
                     // Create new List
-                    Business.BusinessTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
+                    mBusiness.BusinessTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
                     Added = true;
                 }
                 else // Add To List
                 {
-                    Business.BusinessTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
+                    mBusiness.BusinessTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
                     Added = true;
                 }
 
@@ -155,15 +159,15 @@ namespace QuoteSwift
 
             if (mtxtCellphoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
             {
-                if (Business.BusinessCellphoneNumberList == null)
+                if (mBusiness.BusinessCellphoneNumberList == null)
                 {
                     // Create new List
-                    Business.BusinessCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
+                    mBusiness.BusinessCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
                     Added = true;
                 }
                 else // Add To List
                 {
-                    Business.BusinessCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
+                    mBusiness.BusinessCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
                     Added = true;
                 }
 
@@ -172,7 +176,7 @@ namespace QuoteSwift
 
             if (Added)
             {
-                MainProgramCode.ShowInformation("Successfully added the business phone number/s", "INFORMATION - Business Phone Number/s Added Successfully");
+                MainProgramCode.ShowInformation("Successfully added the business phone number/s", "INFORMATION - mBusiness Phone Number/s Added Successfully");
             }
         }
 
@@ -187,16 +191,16 @@ namespace QuoteSwift
             {
                 if (!EmailAddressExisting(mtxtEmail.Text))
                 {
-                    if (Business.BusinessEmailAddressList == null)
+                    if (mBusiness.BusinessEmailAddressList == null)
                     {
                         //Create New List
-                        Business.BusinessEmailAddressList = new BindingList<string> { mtxtEmail.Text };
-                        MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
+                        mBusiness.BusinessEmailAddressList = new BindingList<string> { mtxtEmail.Text };
+                        MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - mBusiness Email Address Added Successfully");
                     }
                     else //Add To Existing List
                     {
-                        Business.BusinessEmailAddressList.Add(mtxtEmail.Text);
-                        MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
+                        mBusiness.BusinessEmailAddressList.Add(mtxtEmail.Text);
+                        MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - mBusiness Email Address Added Successfully");
                     }
 
                     mtxtEmail.ResetText();
@@ -207,92 +211,92 @@ namespace QuoteSwift
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
         {
-            if (Business.BusinessEmailAddressList != null)
+            if (mBusiness.BusinessEmailAddressList != null)
             {
-                passed.BusinessToChange = Business;
+                passed.BusinessToChange = mBusiness;
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesEmailAddresses();
                 Show();
 
-                Business = passed.BusinessToChange;
+                mBusiness = passed.BusinessToChange;
                 passed.BusinessToChange = null;
                 passed.ChangeSpecificObject = false;
 
             }
-            else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
+            else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing mBusiness Email Addresses");
         }
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
         {
-            if (Business.BusinessAddressList != null)
+            if (mBusiness.BusinessAddressList != null)
             {
-                passed.BusinessToChange = Business;
+                passed.BusinessToChange = mBusiness;
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesAddresses();
                 Show();
 
-                Business = passed.BusinessToChange;
+                mBusiness = passed.BusinessToChange;
                 passed.BusinessToChange = null;
                 passed.ChangeSpecificObject = false;
             }
-            else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
+            else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing mBusiness Addresses");
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
         {
-            if (Business.BusinessPOBoxAddressList != null)
+            if (mBusiness.BusinessPOBoxAddressList != null)
             {
-                passed.BusinessToChange = Business;
+                passed.BusinessToChange = mBusiness;
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses();
                 Show();
 
-                Business = passed.BusinessToChange;
+                mBusiness = passed.BusinessToChange;
                 passed.BusinessToChange = null;
                 passed.ChangeSpecificObject = false;
             }
-            else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
+            else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing mBusiness P.O.Box Addresses");
         }
 
         private void BtnViewAll_Click(object sender, EventArgs e)
         {
-            if (Business.BusinessTelephoneNumberList != null || Business.BusinessCellphoneNumberList != null)
+            if (mBusiness.BusinessTelephoneNumberList != null || mBusiness.BusinessCellphoneNumberList != null)
             {
-                passed.BusinessToChange = Business;
+                passed.BusinessToChange = mBusiness;
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesPhoneNumbers();
                 Show();
 
-                Business = passed.BusinessToChange;
+                mBusiness = passed.BusinessToChange;
                 passed.BusinessToChange = null;
                 passed.ChangeSpecificObject = false;
             }
-            else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
+            else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing mBusiness Phone Numbers");
         }
 
         private void FrmAddBusiness_Load(object sender, EventArgs e)
         {
-            if (passed.BusinessToChange != null && passed.ChangeSpecificObject) // Change Existing Business Info
+            if (passed.BusinessToChange != null && passed.ChangeSpecificObject) // Change Existing mBusiness Info
             {
-                Business = passed.BusinessToChange;
+                mBusiness = passed.BusinessToChange;
             }
-            else if (passed.BusinessToChange != null && !passed.ChangeSpecificObject) // View Existing Business Info
+            else if (passed.BusinessToChange != null && !passed.ChangeSpecificObject) // View Existing mBusiness Info
             {
-                Business = passed.BusinessToChange;
+                mBusiness = passed.BusinessToChange;
                 ConvertToViewOnly();
                 LoadInformation();
             }
-            else if (passed.BusinessToChange == null && !passed.ChangeSpecificObject) // Add New Business Info
+            else if (passed.BusinessToChange == null && !passed.ChangeSpecificObject) // Add New mBusiness Info
             {
-                Business = new Business();
+                mBusiness = new Business();
             }
             else // Undefined Use - Show ERROR
             {
@@ -324,37 +328,37 @@ namespace QuoteSwift
         {
             if (txtBusinessAddresssDescription.Text.Length < 2)
             {
-                MainProgramCode.ShowError("The provided Business Address Description is invalid, please provide a valid description", "ERROR - Invalid Business Address Description");
+                MainProgramCode.ShowError("The provided mBusiness Address Description is invalid, please provide a valid description", "ERROR - Invalid mBusiness Address Description");
                 return (false);
             }
 
             if (QuoteSwiftMainCode.ParseInt(mtxtStreetnumber.Text) == 0)
             {
-                MainProgramCode.ShowError("The provided Business Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business Address Street Number");
+                MainProgramCode.ShowError("The provided mBusiness Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid mBusiness Address Street Number");
                 return (false);
             }
 
             if (txtStreetName.Text.Length < 2)
             {
-                MainProgramCode.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
+                MainProgramCode.ShowError("The provided mBusiness Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid mBusiness Address Street Name");
                 return (false);
             }
 
             if (txtSuburb.Text.Length < 2)
             {
-                MainProgramCode.ShowError("The provided Business Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business Address Suburb");
+                MainProgramCode.ShowError("The provided mBusiness Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid mBusiness Address Suburb");
                 return (false);
             }
 
             if (txtCity.Text.Length < 2)
             {
-                MainProgramCode.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business Address City");
+                MainProgramCode.ShowError("The provided mBusiness Address City is invalid, please provide a valid city", "ERROR - Invalid mBusiness Address City");
                 return (false);
             }
 
             if (QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text) == 0)
             {
-                MainProgramCode.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business Address Area Code");
+                MainProgramCode.ShowError("The provided mBusiness Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid mBusiness Address Area Code");
                 return (false);
             }
 
@@ -365,31 +369,31 @@ namespace QuoteSwift
         {
             if (txtBusinessPODescription.Text.Length < 2)
             {
-                MainProgramCode.ShowError("The provided Business P.O.Box Address Description is invalid, please provide a valid description", "ERROR - Invalid Business P.O.Box Address Description");
+                MainProgramCode.ShowError("The provided mBusiness P.O.Box Address Description is invalid, please provide a valid description", "ERROR - Invalid mBusiness P.O.Box Address Description");
                 return (false);
             }
 
             if (QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text) == 0)
             {
-                MainProgramCode.ShowError("The provided Business' P.O.Box Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business' P.O.Box Address Street Number");
+                MainProgramCode.ShowError("The provided mBusiness' P.O.Box Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid mBusiness' P.O.Box Address Street Number");
                 return (false);
             }
 
             if (txtPOBoxSuburb.Text.Length < 2)
             {
-                MainProgramCode.ShowError("The provided Business' P.O.Box Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business' P.O.Box Address Suburb");
+                MainProgramCode.ShowError("The provided mBusiness' P.O.Box Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid mBusiness' P.O.Box Address Suburb");
                 return (false);
             }
 
             if (txtPOBoxCity.Text.Length < 2)
             {
-                MainProgramCode.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business' P.O.Box Address City");
+                MainProgramCode.ShowError("The provided mBusiness Address City is invalid, please provide a valid city", "ERROR - Invalid mBusiness' P.O.Box Address City");
                 return (false);
             }
 
             if (QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text) == 0)
             {
-                MainProgramCode.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business' P.O.Box Address Area Code");
+                MainProgramCode.ShowError("The provided mBusiness Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid mBusiness' P.O.Box Address Area Code");
                 return (false);
             }
 
@@ -400,43 +404,43 @@ namespace QuoteSwift
         {
             if (txtBusinessName.Text.Length < 3)
             {
-                MainProgramCode.ShowError("The provided business name is invalid, please provide a business name longer that 2 characters.", "ERROR - Invalid Business Name");
+                MainProgramCode.ShowError("The provided business name is invalid, please provide a business name longer that 2 characters.", "ERROR - Invalid mBusiness Name");
                 return false;
             }
 
             if (mtxtVATNumber.Text.Length < 7)
             {
-                MainProgramCode.ShowError("The provided VAT number is invalid, please provide a valid VAT number.", "ERROR - Invalid Business VAT Number");
+                MainProgramCode.ShowError("The provided VAT number is invalid, please provide a valid VAT number.", "ERROR - Invalid mBusiness VAT Number");
                 return false;
             }
 
             if (mtxtRegistrationNumber.Text.Length < 7)
             {
-                MainProgramCode.ShowError("The provided registration number is invalid, please provide a valid registration number.", "ERROR - Invalid Business Registration Number");
+                MainProgramCode.ShowError("The provided registration number is invalid, please provide a valid registration number.", "ERROR - Invalid mBusiness Registration Number");
                 return false;
             }
 
-            if (Business.BusinessAddressList == null)
+            if (mBusiness.BusinessAddressList == null)
             {
-                MainProgramCode.ShowError("Please add a valid business address under the 'Business Address' section.", "ERROR - Current Business Invalid");
+                MainProgramCode.ShowError("Please add a valid business address under the 'mBusiness Address' section.", "ERROR - Current mBusiness Invalid");
                 return false;
             }
 
-            if (Business.BusinessPOBoxAddressList == null)
+            if (mBusiness.BusinessPOBoxAddressList == null)
             {
-                MainProgramCode.ShowError("Please add a valid business P.O.Box address under the 'Business P.O.Box Address' section.", "ERROR - Current Business Invalid");
+                MainProgramCode.ShowError("Please add a valid business P.O.Box address under the 'mBusiness P.O.Box Address' section.", "ERROR - Current mBusiness Invalid");
                 return false;
             }
 
-            if (Business.BusinessTelephoneNumberList == null && Business.BusinessCellphoneNumberList == null)
+            if (mBusiness.BusinessTelephoneNumberList == null && mBusiness.BusinessCellphoneNumberList == null)
             {
-                MainProgramCode.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current Business Invalid");
+                MainProgramCode.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current mBusiness Invalid");
                 return false;
             }
 
-            if (Business.BusinessEmailAddressList == null)
+            if (mBusiness.BusinessEmailAddressList == null)
             {
-                MainProgramCode.ShowError("Please add a valid business email address under the 'Email Related' section.", "ERROR - Current Business Invalid");
+                MainProgramCode.ShowError("Please add a valid business email address under the 'Email Related' section.", "ERROR - Current mBusiness Invalid");
                 return false;
             }
 
@@ -487,11 +491,11 @@ namespace QuoteSwift
 
         public bool AddressExisting(Address a)
         {
-            if (Business.BusinessAddressList != null)
+            if (mBusiness.BusinessAddressList != null)
             {
-                for (int i = 0; i < Business.BusinessAddressList.Count; i++)
+                for (int i = 0; i < mBusiness.BusinessAddressList.Count; i++)
                 {
-                    if (Business.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
+                    if (mBusiness.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
                         MainProgramCode.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
                         return true;
@@ -505,11 +509,11 @@ namespace QuoteSwift
         private bool POBoxAddressExisting(Address a)
         {
 
-            if (Business.BusinessPOBoxAddressList != null)
+            if (mBusiness.BusinessPOBoxAddressList != null)
             {
-                for (int i = 0; i < Business.BusinessPOBoxAddressList.Count; i++)
+                for (int i = 0; i < mBusiness.BusinessPOBoxAddressList.Count; i++)
                 {
-                    if (Business.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
+                    if (mBusiness.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
                         MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
                         return true;
@@ -522,9 +526,9 @@ namespace QuoteSwift
 
         public bool EmailAddressExisting(string s)
         {
-            if (Business.BusinessEmailAddressList != null)
+            if (mBusiness.BusinessEmailAddressList != null)
             {
-                if (Business.BusinessEmailAddressList.SingleOrDefault(p => p == s) != null)
+                if (mBusiness.BusinessEmailAddressList.SingleOrDefault(p => p == s) != null)
                 {
                     MainProgramCode.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
                     return true;
@@ -537,11 +541,11 @@ namespace QuoteSwift
 
         public bool PhoneNumberExisting(string s)
         {
-            if (Business.BusinessTelephoneNumberList != null)
+            if (mBusiness.BusinessTelephoneNumberList != null)
             {
-                for (int i = 0; i < Business.BusinessTelephoneNumberList.Count; i++)
+                for (int i = 0; i < mBusiness.BusinessTelephoneNumberList.Count; i++)
                 {
-                    if (Business.BusinessTelephoneNumberList.SingleOrDefault(p => p == s) != null)
+                    if (mBusiness.BusinessTelephoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
                         MainProgramCode.ShowError("This number has already been added previously to the Telephone Number List.", "ERROR - Number Already Added");
                         return true;
@@ -549,11 +553,11 @@ namespace QuoteSwift
                 }
             }
 
-            if (Business.BusinessCellphoneNumberList != null)
+            if (mBusiness.BusinessCellphoneNumberList != null)
             {
-                for (int i = 0; i < Business.BusinessCellphoneNumberList.Count; i++)
+                for (int i = 0; i < mBusiness.BusinessCellphoneNumberList.Count; i++)
                 {
-                    if (Business.BusinessCellphoneNumberList.SingleOrDefault(p => p == s) != null)
+                    if (mBusiness.BusinessCellphoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
                         MainProgramCode.ShowError("This number has already been added previously to the Cellphone Number List.", "ERROR - Number Already Added");
                         return true;
@@ -566,12 +570,12 @@ namespace QuoteSwift
 
         private void LoadInformation()
         {
-            if (Business != null)
+            if (mBusiness != null)
             {
-                txtBusinessName.Text = Business.BusinessName;
-                rtxtExtraInformation.Text = Business.BusinessExtraInformation;
-                mtxtVATNumber.Text = Business.BusinessLegalDetails.VatNumber;
-                mtxtRegistrationNumber.Text = Business.BusinessLegalDetails.RegistrationNumber;
+                txtBusinessName.Text = mBusiness.BusinessName;
+                rtxtExtraInformation.Text = mBusiness.BusinessExtraInformation;
+                mtxtVATNumber.Text = mBusiness.BusinessLegalDetails.VatNumber;
+                mtxtRegistrationNumber.Text = mBusiness.BusinessLegalDetails.RegistrationNumber;
             }
         }
 
@@ -590,7 +594,7 @@ namespace QuoteSwift
             btnViewEmailAddresses.Enabled = true;
 
             btnAddBusiness.Visible = false;
-            Text = Text.Replace("Add Business", "Viewing " + passed.BusinessToChange.BusinessName);
+            Text = Text.Replace("Add mBusiness", "Viewing " + passed.BusinessToChange.BusinessName);
             updateBusinessInformationToolStripMenuItem.Enabled = true;
         }
 
@@ -604,8 +608,8 @@ namespace QuoteSwift
             QuoteSwiftMainCode.ReadWriteComponents(gbxPOBoxAddress.Controls);
 
             btnAddBusiness.Visible = true;
-            btnAddBusiness.Text = "Update Business";
-            Text = Text.Replace("Viewing " + Business.BusinessName, "Updating " + Business.BusinessName);
+            btnAddBusiness.Text = "Update mBusiness";
+            Text = Text.Replace("Viewing " + mBusiness.BusinessName, "Updating " + mBusiness.BusinessName);
             updateBusinessInformationToolStripMenuItem.Enabled = false;
         }
 

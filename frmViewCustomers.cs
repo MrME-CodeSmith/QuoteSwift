@@ -101,11 +101,11 @@ namespace QuoteSwift
 
             if (passed != null && passed.BusinessMap != null && cbBusinessSelection.Text.Length > 0)
                 for (int i = 0; i < passed.BusinessMap.Count; i++)
-                    if (cbBusinessSelection.Text == passed.BusinessMap[i].BusinessName)
-                        if (passed.BusinessMap[i].CustomerList != null)
-                            for (int j = 0; j < passed.BusinessMap[i].CustomerList.Count; j++)
-                                DgvCustomerList.Rows.Add(passed.BusinessMap[i].CustomerList[j].CustomerCompanyName,
-                                                         GetPreviousQuoteDate(passed.BusinessMap[i].CustomerList[j]));
+                    if (cbBusinessSelection.Text == passed.BusinessMap.Values.ToArray()[i].BusinessName)
+                        if (passed.BusinessMap.Values.ToArray()[i].CustomerList != null)
+                            for (int j = 0; j < passed.BusinessMap.Values.ToArray()[i].CustomerList.Count; j++)
+                                DgvCustomerList.Rows.Add(passed.BusinessMap.Values.ToArray()[i].CustomerList[j].CustomerCompanyName,
+                                                         GetPreviousQuoteDate(passed.BusinessMap.Values.ToArray()[i].CustomerList[j]));
 
         }
 
@@ -163,7 +163,7 @@ namespace QuoteSwift
 
             if (passed.BusinessMap != null && SearchName.Length > 1)
             {
-                business = passed.BusinessMap.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
                 return business;
             }
 

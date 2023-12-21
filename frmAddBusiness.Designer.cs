@@ -120,7 +120,7 @@ namespace QuoteSwift
             this.updateBusinessInformationToolStripMenuItem.Enabled = false;
             this.updateBusinessInformationToolStripMenuItem.Name = "updateBusinessInformationToolStripMenuItem";
             this.updateBusinessInformationToolStripMenuItem.Size = new System.Drawing.Size(268, 24);
-            this.updateBusinessInformationToolStripMenuItem.Text = "Update Business Information";
+            this.updateBusinessInformationToolStripMenuItem.Text = "Update mBusiness Information";
             this.updateBusinessInformationToolStripMenuItem.Click += new System.EventHandler(this.UpdateBusinessInformationToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
@@ -144,7 +144,7 @@ namespace QuoteSwift
             this.gbxBusinessInformation.Size = new System.Drawing.Size(526, 252);
             this.gbxBusinessInformation.TabIndex = 1;
             this.gbxBusinessInformation.TabStop = false;
-            this.gbxBusinessInformation.Text = "Business Information:";
+            this.gbxBusinessInformation.Text = "mBusiness Information:";
             // 
             // gbxLegalInformation
             // 
@@ -232,7 +232,7 @@ namespace QuoteSwift
             this.lblBusinessName.Name = "lblBusinessName";
             this.lblBusinessName.Size = new System.Drawing.Size(117, 18);
             this.lblBusinessName.TabIndex = 0;
-            this.lblBusinessName.Text = "Business Name:";
+            this.lblBusinessName.Text = "mBusiness Name:";
             this.lblBusinessName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // gbxPhoneRelated
@@ -337,7 +337,7 @@ namespace QuoteSwift
             this.gbxBusinessAddress.Size = new System.Drawing.Size(526, 283);
             this.gbxBusinessAddress.TabIndex = 5;
             this.gbxBusinessAddress.TabStop = false;
-            this.gbxBusinessAddress.Text = "Business Address:";
+            this.gbxBusinessAddress.Text = "mBusiness Address:";
             // 
             // lblBusinessAddressDescription
             // 
@@ -550,7 +550,7 @@ namespace QuoteSwift
             this.gbxPOBoxAddress.Size = new System.Drawing.Size(526, 283);
             this.gbxPOBoxAddress.TabIndex = 10;
             this.gbxPOBoxAddress.TabStop = false;
-            this.gbxPOBoxAddress.Text = "Business P.O.Box Address:";
+            this.gbxPOBoxAddress.Text = "mBusiness P.O.Box Address:";
             // 
             // lblBusinessPODescription
             // 
@@ -675,7 +675,7 @@ namespace QuoteSwift
             this.btnAddBusiness.Name = "btnAddBusiness";
             this.btnAddBusiness.Size = new System.Drawing.Size(171, 32);
             this.btnAddBusiness.TabIndex = 26;
-            this.btnAddBusiness.Text = "Add Business";
+            this.btnAddBusiness.Text = "Add mBusiness";
             this.btnAddBusiness.UseVisualStyleBackColor = true;
             this.btnAddBusiness.Click += new System.EventHandler(this.BtnAddBusiness_Click);
             // 
@@ -708,7 +708,7 @@ namespace QuoteSwift
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmAddBusiness";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Add Business";
+            this.Text = "Add mBusiness";
             this.Load += new System.EventHandler(this.FrmAddBusiness_Load);
             this.msBusinessControls.ResumeLayout(false);
             this.msBusinessControls.PerformLayout();

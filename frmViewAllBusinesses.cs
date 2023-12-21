@@ -62,7 +62,7 @@ namespace QuoteSwift
             if (passed.BusinessMap != null)
             {
                 for (int i = 0; i < passed.BusinessMap.Count; i++)
-                    DgvBusinessList.Rows.Add(passed.BusinessMap[i].BusinessName);
+                    DgvBusinessList.Rows.Add(passed.BusinessMap.Values.ToArray()[i].BusinessName);
             }
 
             DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
@@ -77,7 +77,7 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
-                    passed.BusinessMap.Remove(business);
+                    passed.BusinessMap.Remove(business.BusinessLegalDetails.RegistrationNumber);
                     MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
 
                     if (passed.BusinessMap.Count == 0) passed.BusinessMap = null;
@@ -111,7 +111,7 @@ namespace QuoteSwift
 
             if (passed.BusinessMap != null)
             {
-                business = passed.BusinessMap.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
                 return business;
             }
 
@@ -125,7 +125,7 @@ namespace QuoteSwift
             if (passed.BusinessMap != null)
                 for (int i = 0; i < passed.BusinessMap.Count; i++)
                 {
-                    DgvBusinessList.Rows.Add(passed.BusinessMap[i].BusinessName);
+                    DgvBusinessList.Rows.Add(passed.BusinessMap.Values.ToArray()[i].BusinessName);
                 }
         }
 
@@ -133,9 +133,9 @@ namespace QuoteSwift
         {
             if (New != null && Original != null && passed.BusinessMap != null)
                 for (int i = 0; i < passed.BusinessMap.Count; i++)
-                    if (passed.BusinessMap[i] == Original)
+                    if (passed.BusinessMap.Values.ToArray()[i] == Original)
                     {
-                        passed.BusinessMap[i] = New;
+                        passed.BusinessMap.Values.ToArray()[i] = New;
                         return true;
                     }
 

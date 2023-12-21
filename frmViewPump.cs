@@ -31,7 +31,7 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                passed.PumpToChange = passed.ProductMap.ElementAt(iGridSelection);
+                passed.PumpToChange = passed.ProductMap.Values.ToArray().ElementAt(iGridSelection);
                 passed.ChangeSpecificObject = false;
 
                 Hide();
@@ -62,11 +62,11 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                Product objPumpSelection = passed.ProductMap.ElementAt(iGridSelection);
+                Product objPumpSelection = passed.ProductMap.Values.ToArray().ElementAt(iGridSelection);
 
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.ProductName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
-                    passed.ProductMap.RemoveAt(iGridSelection);
+                    passed.ProductMap.Remove(objPumpSelection.ProductName);
 
                     MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.ProductName + " from the pump list", "INFORMATION - Deletion Success");
                 }
@@ -106,7 +106,7 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 for (int i = 0; i < passed.ProductMap.Count; i++)
                 {
-                    dgvPumpList.Rows.Add(passed.ProductMap[i].ProductName, passed.ProductMap[i].PumpDescription, passed.ProductMap[i].NewProductPrice.ToString());
+                    dgvPumpList.Rows.Add(passed.ProductMap.Values.ToArray()[i].ProductName, passed.ProductMap.Values.ToArray()[i].PumpDescription, passed.ProductMap.Values.ToArray()[i].NewProductPrice.ToString());
                 }
             }
         }

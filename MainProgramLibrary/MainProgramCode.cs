@@ -1,7 +1,9 @@
 ﻿using ProtoBuf;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -20,14 +22,14 @@ namespace QuoteSwift
             if (Global.Context.QuoteMap != null)
             {
                 int Index = 0;
-                DateTime dt = Global.Context.QuoteMap[0].QuoteCreationDate;
+                DateTime dt = Global.Context.QuoteMap.Values.ToArray()[0].QuoteCreationDate;
                 for (int i = 1; i < Global.Context.QuoteMap.Count; i++)
-                    if (Global.Context.QuoteMap[i].QuoteCreationDate.Date > dt)
+                    if (Global.Context.QuoteMap.Values.ToArray()[i].QuoteCreationDate.Date > dt)
                     {
-                        dt = Global.Context.QuoteMap[i].QuoteCreationDate.Date;
+                        dt = Global.Context.QuoteMap.Values.ToArray()[i].QuoteCreationDate.Date;
                         Index = i;
                     }
-                return Global.Context.QuoteMap[Index];
+                return Global.Context.QuoteMap.Values.ToArray()[Index];
             }
 
             return null;
@@ -167,12 +169,12 @@ namespace QuoteSwift
 
         //Serialize Part list:
 
-        public static byte[] SerializePartList(BindingList<Part> PartList)
+        public static byte[] SerializePartList(List<Part> PartList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Part>>(PartList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Part>>(PartList);
             }
             catch
             {
@@ -204,7 +206,7 @@ namespace QuoteSwift
 
             if (Global.Context != null && Global.Context.MandatoryPartMap != null && Global.Context.MandatoryPartMap.Count > 0)
             {
-                byte[] ToStore = SerializePartList(Global.Context.MandatoryPartMap);
+                byte[] ToStore = SerializePartList(Global.Context.MandatoryPartMap.Values.ToList());
                 SaveData("MandatoryParts.pbf", ToStore);
             }
         }
@@ -217,19 +219,19 @@ namespace QuoteSwift
 
             if (Global.Context != null && Global.Context.NonMandatoryPartMap != null && Global.Context.NonMandatoryPartMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePartList(Global.Context.NonMandatoryPartMap);
+                byte[] ToStore = MainProgramCode.SerializePartList(Global.Context.NonMandatoryPartMap.Values.ToList());
                 MainProgramCode.SaveData("NonMandatoryParts.pbf", ToStore);
             }
         }
 
         // Serialize Pump List Method
 
-        public static byte[] SerializePumpList(BindingList<Product> PumpPartList)
+        public static byte[] SerializePumpList(List<Product> PumpPartList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Product>>(PumpPartList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Product>>(PumpPartList);
             }
             catch
             {
@@ -261,7 +263,7 @@ namespace QuoteSwift
 
             if (Global.Context != null && Global.Context.ProductMap != null && Global.Context.ProductMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePumpList(Global.Context.ProductMap);
+                byte[] ToStore = MainProgramCode.SerializePumpList(Global.Context.ProductMap.Values.ToList());
                 MainProgramCode.SaveData("PumpList.pbf", ToStore);
             }
         }
@@ -269,12 +271,12 @@ namespace QuoteSwift
 
         // Serialize Business List Method
 
-        public static byte[] SerializeBusinessList(BindingList<Business> BusinessList)
+        public static byte[] SerializeBusinessList(List<Business> BusinessList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Business>>(BusinessList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Business>>(BusinessList);
             }
             catch
             {
@@ -306,19 +308,19 @@ namespace QuoteSwift
 
             if (Global.Context != null && Global.Context.BusinessMap != null && Global.Context.BusinessMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeBusinessList(Global.Context.BusinessMap);
+                byte[] ToStore = MainProgramCode.SerializeBusinessList(Global.Context.BusinessMap.Values.ToList());
                 MainProgramCode.SaveData("BusinessList.pbf", ToStore);
             }
         }
 
         // Serialize Quote List Method
 
-        public static byte[] SerializeQuoteList(BindingList<Quote> QuoteList)
+        public static byte[] SerializeQuoteList(List<Quote> QuoteList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Quote>>(QuoteList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Quote>>(QuoteList);
             }
             catch
             {
@@ -350,7 +352,7 @@ namespace QuoteSwift
 
             if (Global.Context != null && Global.Context.QuoteMap != null && Global.Context.QuoteMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeQuoteList(Global.Context.QuoteMap);
+                byte[] ToStore = MainProgramCode.SerializeQuoteList(Global.Context.QuoteMap.Values.ToList());
                 MainProgramCode.SaveData("QuoteList.pbf", ToStore);
             }
         }

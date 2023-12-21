@@ -607,7 +607,7 @@ namespace QuoteSwift
             {
                 for (int i = 0; i < passed.BusinessMap.Count; i++)
                 {
-                    if (passed.BusinessMap[i].BusinessName == cbBusinessSelection.Text) return passed.BusinessMap[i];
+                    if (passed.BusinessMap.Values.ToArray()[i].BusinessName == cbBusinessSelection.Text) return passed.BusinessMap.Values.ToArray()[i];
                 }
             }
 
