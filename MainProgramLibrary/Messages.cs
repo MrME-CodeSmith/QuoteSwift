@@ -35,8 +35,8 @@ namespace MainProgramLibrary
         public static string CsvBatchImportSuccessCaption => "CONFIRMATION - CSV Batch Import Successful";
         public static string CsvBatchImportSuccessText => "The CSV file was successfully imported.";
 
-        public static string CSVBatchImportInformationCaption => "INFORMATION - CSV Batch Import Successful";
-        public static string CSVBatchImportInformationText => "Please ensure that the selected CSV file has the following items in this exact order:\n\n" +
+        public static string CsvBatchImportInformationCaption => "INFORMATION - CSV Batch Import Successful";
+        public static string CsvBatchImportInformationText => "Please ensure that the selected CSV file has the following items in this exact order:\n\n" +
                                                               "First Column: Original Part Number\n" +
                                                               "Second Column: Part Name\n" +
                                                               "Third Column: Part Description\n" +

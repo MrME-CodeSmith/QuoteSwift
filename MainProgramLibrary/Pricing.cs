@@ -16,7 +16,7 @@ namespace QuoteSwift
         [ProtoMember(5)]
         private float mSubTotal;
         [ProtoMember(6)]
-        private float mVAT;
+        private float mVat;
         [ProtoMember(7)]
         private float mTotalDue;
         [ProtoMember(8)]
@@ -29,21 +29,21 @@ namespace QuoteSwift
             Consumables = 0;
             Rebate = 0;
             SubTotal = 0;
-            VAT = 0;
+            Vat = 0;
             TotalDue = 0;
             PumpPrice = 0;
         }
 
-        public Pricing(float mMachining, float mLabour, float mConsumables, float mRebate, float mSubTotal, float mVAT, float mTotalDue, float mPumpPrice)
+        public Pricing(float machining, float labour, float consumables, float rebate, float subTotal, float vat, float totalDue, float pumpPrice)
         {
-            Machining = mMachining;
-            Labour = mLabour;
-            Consumables = mConsumables;
-            Rebate = mRebate;
-            SubTotal = mSubTotal;
-            VAT = mVAT;
-            TotalDue = mTotalDue;
-            PumpPrice = mPumpPrice;
+            Machining = machining;
+            Labour = labour;
+            Consumables = consumables;
+            Rebate = rebate;
+            SubTotal = subTotal;
+            Vat = vat;
+            TotalDue = totalDue;
+            PumpPrice = pumpPrice;
         }
 
         public float Machining { get => mMachining; set => mMachining = value; }
@@ -51,7 +51,7 @@ namespace QuoteSwift
         public float Consumables { get => mConsumables; set => mConsumables = value; }
         public float Rebate { get => mRebate; set => mRebate = value; }
         public float SubTotal { get => mSubTotal; set => mSubTotal = value; }
-        public float VAT { get => mVAT; set => mVAT = value; }
+        public float Vat { get => mVat; set => mVat = value; }
         public float TotalDue { get => mTotalDue; set => mTotalDue = value; }
         public float PumpPrice { get => mPumpPrice; set => mPumpPrice = value; }
     }

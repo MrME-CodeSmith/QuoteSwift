@@ -11,7 +11,7 @@ namespace QuoteSwift
         [ProtoMember(2)]
         private string mCustomerCompanyName;
         [ProtoMember(3)]
-        private BindingList<Address> mCustomerPOBoxAddress;
+        private BindingList<Address> mCustomerPoBoxAddress;
         [ProtoMember(4)]
         private BindingList<Address> mCustomerDeliveryAddressList;
         [ProtoMember(5)]
@@ -32,7 +32,7 @@ namespace QuoteSwift
         {
             CustomerName = "";
             CustomerCompanyName = "";
-            CustomerPOBoxAddress = null;
+            CustomerPoBoxAddress = null;
             CustomerDeliveryAddressList = null;
             CustomerLegalDetails = null;
             CustomerVendorNumber = "";
@@ -47,7 +47,7 @@ namespace QuoteSwift
         {
             CustomerName = c.CustomerName;
             CustomerCompanyName = c.CustomerCompanyName;
-            CustomerPOBoxAddress = c.CustomerPOBoxAddress;
+            CustomerPoBoxAddress = c.CustomerPoBoxAddress;
             CustomerDeliveryAddressList = c.CustomerDeliveryAddressList;
             CustomerLegalDetails = c.CustomerLegalDetails;
             CustomerVendorNumber = c.CustomerVendorNumber;
@@ -60,7 +60,7 @@ namespace QuoteSwift
 
         public string CustomerName { get => mCustomerName; set => mCustomerName = value; }
         public string CustomerCompanyName { get => mCustomerCompanyName; set => mCustomerCompanyName = value; }
-        public BindingList<Address> CustomerPOBoxAddress { get => mCustomerPOBoxAddress; set => mCustomerPOBoxAddress = value; }
+        public BindingList<Address> CustomerPoBoxAddress { get => mCustomerPoBoxAddress; set => mCustomerPoBoxAddress = value; }
         public BindingList<Address> CustomerDeliveryAddressList { get => mCustomerDeliveryAddressList; set => mCustomerDeliveryAddressList = value; }
         public Legal CustomerLegalDetails { get => mCustomerLegalDetails; set => mCustomerLegalDetails = value; }
         public string CustomerVendorNumber { get => mCustomerVendorNumber; set => mCustomerVendorNumber = value; }

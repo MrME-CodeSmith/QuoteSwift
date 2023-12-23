@@ -7,9 +7,9 @@ namespace QuoteSwift
 {
     public partial class FrmViewCustomers : Form
     {
-        AppContext passed;
+        AppContext mPassed;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmViewCustomers()
         {
@@ -33,17 +33,17 @@ namespace QuoteSwift
                 return;
             }
 
-            passed.CustomerToChange = customer;
-            passed.ChangeSpecificObject = false;
-            passed.BusinessToChange = container;
+            mPassed.CustomerToChange = customer;
+            mPassed.ChangeSpecificObject = false;
+            mPassed.BusinessToChange = container;
 
             QuoteSwiftMainCode.AddCustomer();
 
-            if (!ReplaceCustomer(customer, passed.CustomerToChange, container) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
+            if (!ReplaceCustomer(customer, mPassed.CustomerToChange, container) && mPassed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
 
-            passed.CustomerToChange = null;
-            passed.BusinessToChange = null;
-            passed.ChangeSpecificObject = false;
+            mPassed.CustomerToChange = null;
+            mPassed.BusinessToChange = null;
+            mPassed.ChangeSpecificObject = false;
 
             LoadInformation();
 
@@ -99,19 +99,19 @@ namespace QuoteSwift
         {
             DgvCustomerList.Rows.Clear();
 
-            if (passed != null && passed.BusinessMap != null && cbBusinessSelection.Text.Length > 0)
-                for (int i = 0; i < passed.BusinessMap.Count; i++)
-                    if (cbBusinessSelection.Text == passed.BusinessMap.Values.ToArray()[i].BusinessName)
-                        if (passed.BusinessMap.Values.ToArray()[i].CustomerList != null)
-                            for (int j = 0; j < passed.BusinessMap.Values.ToArray()[i].CustomerList.Count; j++)
-                                DgvCustomerList.Rows.Add(passed.BusinessMap.Values.ToArray()[i].CustomerList[j].CustomerCompanyName,
-                                                         GetPreviousQuoteDate(passed.BusinessMap.Values.ToArray()[i].CustomerList[j]));
+            if (mPassed != null && mPassed.BusinessMap != null && cbBusinessSelection.Text.Length > 0)
+                for (int i = 0; i < mPassed.BusinessMap.Count; i++)
+                    if (cbBusinessSelection.Text == mPassed.BusinessMap.Values.ToArray()[i].BusinessName)
+                        if (mPassed.BusinessMap.Values.ToArray()[i].CustomerList != null)
+                            for (int j = 0; j < mPassed.BusinessMap.Values.ToArray()[i].CustomerList.Count; j++)
+                                DgvCustomerList.Rows.Add(mPassed.BusinessMap.Values.ToArray()[i].CustomerList[j].CustomerCompanyName,
+                                                         GetPreviousQuoteDate(mPassed.BusinessMap.Values.ToArray()[i].CustomerList[j]));
 
         }
 
         private string GetPreviousQuoteDate(Customer c)
         {
-            if (passed.QuoteMap != null)
+            if (mPassed.QuoteMap != null)
             {
                 //TODO: Implement
             }
@@ -119,13 +119,13 @@ namespace QuoteSwift
             return "No Previous Quote Date Available";
         }
 
-        private bool ReplaceCustomer(Customer Original, Customer New, Business Container)
+        private bool ReplaceCustomer(Customer original, Customer @new, Business container)
         {
-            if (New != null && Original != null && Container != null && Container.CustomerList != null)
-                for (int i = 0; i < Container.CustomerList.Count; i++)
-                    if (Container.CustomerList[i] == Original)
+            if (@new != null && original != null && container != null && container.CustomerList != null)
+                for (int i = 0; i < container.CustomerList.Count; i++)
+                    if (container.CustomerList[i] == original)
                     {
-                        Container.CustomerList[i] = New;
+                        container.CustomerList[i] = @new;
                         return true;
                     }
 
@@ -161,9 +161,9 @@ namespace QuoteSwift
             Business business;
             string SearchName = cbBusinessSelection.Text;
 
-            if (passed.BusinessMap != null && SearchName.Length > 1)
+            if (mPassed.BusinessMap != null && SearchName.Length > 1)
             {
-                business = passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
+                business = mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
                 return business;
             }
 
@@ -172,9 +172,9 @@ namespace QuoteSwift
 
         public void LinkBusinessToSource(ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessMap != null)
+            if (mPassed != null && mPassed.BusinessMap != null)
             {
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = passed.BusinessMap };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = mPassed.BusinessMap };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 

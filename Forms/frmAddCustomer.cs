@@ -8,18 +8,18 @@ namespace QuoteSwift
     public partial class FrmAddCustomer : Form
     {
 
-        AppContext passed;
+        AppContext mPassed;
 
-        Customer Customer;
+        Customer mCustomer;
 
-        Business Container;
+        Business mContainer;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmAddCustomer()
         {
             InitializeComponent();
-            Customer = passed.CustomerToChange;
+            mCustomer = mPassed.CustomerToChange;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -30,46 +30,46 @@ namespace QuoteSwift
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
-            if (ValidBusiness() && !passed.ChangeSpecificObject)
+            if (ValidBusiness() && !mPassed.ChangeSpecificObject)
             {
                 Business LinkBusiness = GetSelectedBusiness();
 
                 //Add Final Details to Customer object
-                Customer.CustomerName = "";
-                Customer.CustomerCompanyName = txtCustomerCompanyName.Text;
-                Customer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
-                Customer.VendorNumber = mtxtVendorNumber.Text;
+                mCustomer.CustomerName = "";
+                mCustomer.CustomerCompanyName = txtCustomerCompanyName.Text;
+                mCustomer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
+                mCustomer.VendorNumber = mtxtVendorNumber.Text;
 
                 if (LinkBusiness.CustomerList == null)
                 {
                     //Create New Customer List
-                    LinkBusiness.CustomerList = new BindingList<Customer> { Customer };
+                    LinkBusiness.CustomerList = new BindingList<Customer> { mCustomer };
                 }
                 else //Add To List
                 {
-                    if (LinkBusiness.CustomerList.SingleOrDefault(p => p.CustomerName == Customer.CustomerName) != null)
+                    if (LinkBusiness.CustomerList.SingleOrDefault(p => p.CustomerName == mCustomer.CustomerName) != null)
                     {
                         MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
                         return;
                     }
-                    else LinkBusiness.CustomerList.Add(Customer);
+                    else LinkBusiness.CustomerList.Add(mCustomer);
                 }
 
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                mPassed.CustomerToChange = null;
+                mPassed.ChangeSpecificObject = false;
 
-                MainProgramCode.ShowInformation(Customer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
+                MainProgramCode.ShowInformation(mCustomer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
 
                 ResetScreenInput();
             }
-            else if (ValidBusiness() && passed.ChangeSpecificObject)
+            else if (ValidBusiness() && mPassed.ChangeSpecificObject)
             {
-                passed.CustomerToChange.CustomerName = "";
-                passed.CustomerToChange.CustomerCompanyName = txtCustomerCompanyName.Text;
-                passed.CustomerToChange.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
-                passed.CustomerToChange.VendorNumber = mtxtVendorNumber.Text;
+                mPassed.CustomerToChange.CustomerName = "";
+                mPassed.CustomerToChange.CustomerCompanyName = txtCustomerCompanyName.Text;
+                mPassed.CustomerToChange.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
+                mPassed.CustomerToChange.VendorNumber = mtxtVendorNumber.Text;
 
-                MainProgramCode.ShowInformation(Customer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
+                MainProgramCode.ShowInformation(mCustomer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
                 ConvertToViewOnly();
             }
         }
@@ -79,20 +79,20 @@ namespace QuoteSwift
             FrmViewCustomers frmViewCustomers = new FrmViewCustomers();
             frmViewCustomers.LinkBusinessToSource(ref cbBusinessSelection);
 
-            if (passed.CustomerToChange != null && passed.ChangeSpecificObject) // Change Existing Customer Info
+            if (mPassed.CustomerToChange != null && mPassed.ChangeSpecificObject) // Change Existing Customer Info
             {
-                Customer = passed.CustomerToChange;
+                mCustomer = mPassed.CustomerToChange;
             }
-            else if (passed.CustomerToChange != null && !passed.ChangeSpecificObject) // View Existing Customer Info
+            else if (mPassed.CustomerToChange != null && !mPassed.ChangeSpecificObject) // View Existing Customer Info
             {
-                Customer = passed.CustomerToChange;
+                mCustomer = mPassed.CustomerToChange;
                 ConvertToViewOnly();
                 LoadInformation();
 
             }
-            else if (passed.CustomerToChange == null && !passed.ChangeSpecificObject) // Add New Business Info
+            else if (mPassed.CustomerToChange == null && !mPassed.ChangeSpecificObject) // Add New Business Info
             {
-                Customer = new Customer();
+                mCustomer = new Customer();
             }
             else // Undefined Use - Show ERROR
             {
@@ -108,15 +108,15 @@ namespace QuoteSwift
                 Address address = new Address(txtCustomerAddresssDescription.Text, 0, txtAtt.Text, txtWorkArea.Text, txtWorkPlace.Text, 0);
                 if (!AddressExisting(address))
                 {
-                    if (Customer.CustomerDeliveryAddressList == null)
+                    if (mCustomer.CustomerDeliveryAddressList == null)
                     {
                         //Create New List
-                        Customer.CustomerDeliveryAddressList = new BindingList<Address> { address };
+                        mCustomer.CustomerDeliveryAddressList = new BindingList<Address> { address };
                         MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
                     }
                     else //Add To Current list
                     {
-                        Customer.CustomerDeliveryAddressList.Add(address);
+                        mCustomer.CustomerDeliveryAddressList.Add(address);
                         MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
                     }
 
@@ -127,25 +127,25 @@ namespace QuoteSwift
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            if (ValidCustomerPOBoxAddress())
+            if (ValidCustomerPoBoxAddress())
             {
                 Address address = new Address(txtCustomerPODescription.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text),
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
-                if (!POBoxAddressExisting(address))
+                if (!PoBoxAddressExisting(address))
                 {
-                    if (Customer.CustomerPOBoxAddress == null)
+                    if (mCustomer.CustomerPoBoxAddress == null)
                     {
                         //Create New List
-                        Customer.CustomerPOBoxAddress = new BindingList<Address> { address };
+                        mCustomer.CustomerPoBoxAddress = new BindingList<Address> { address };
                         MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                     }
                     else // AddingNewEventArgs To list
                     {
-                        Customer.CustomerPOBoxAddress.Add(address);
+                        mCustomer.CustomerPoBoxAddress.Add(address);
                         MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                     }
 
-                    ClearPOBoxAddressInput();
+                    ClearPoBoxAddressInput();
                 }
             }
         }
@@ -160,15 +160,15 @@ namespace QuoteSwift
 
             if (mtxtTelephoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
             {
-                if (Customer.CustomerTelephoneNumberList == null)
+                if (mCustomer.CustomerTelephoneNumberList == null)
                 {
                     // Create new List
-                    Customer.CustomerTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
+                    mCustomer.CustomerTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
                     Added = true;
                 }
                 else // Add To List
                 {
-                    Customer.CustomerTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
+                    mCustomer.CustomerTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
                     Added = true;
                 }
 
@@ -177,15 +177,15 @@ namespace QuoteSwift
 
             if (mtxtCellphoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
             {
-                if (Customer.CustomerCellphoneNumberList == null)
+                if (mCustomer.CustomerCellphoneNumberList == null)
                 {
                     // Create new List
-                    Customer.CustomerCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
+                    mCustomer.CustomerCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
                     Added = true;
                 }
                 else // Add To List
                 {
-                    Customer.CustomerCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
+                    mCustomer.CustomerCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
                     Added = true;
                 }
 
@@ -205,54 +205,54 @@ namespace QuoteSwift
 
         private void BtnViewAll_Click(object sender, EventArgs e)
         {
-            if (Customer.CustomerCellphoneNumberList != null || Customer.CustomerTelephoneNumberList != null)
+            if (mCustomer.CustomerCellphoneNumberList != null || mCustomer.CustomerTelephoneNumberList != null)
             {
-                passed.CustomerToChange = Customer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                mPassed.CustomerToChange = mCustomer;
+                mPassed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesPhoneNumbers();
                 Show();
 
-                Customer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                mCustomer = mPassed.CustomerToChange;
+                mPassed.CustomerToChange = null;
+                mPassed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Customer Phone Numbers");
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
         {
-            if (Customer.CustomerPOBoxAddress != null)
+            if (mCustomer.CustomerPoBoxAddress != null)
             {
-                passed.CustomerToChange = Customer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                mPassed.CustomerToChange = mCustomer;
+                mPassed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses();
+                QuoteSwiftMainCode.ViewBusinessesPoBoxAddresses();
                 Show();
 
-                Customer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                mCustomer = mPassed.CustomerToChange;
+                mPassed.CustomerToChange = null;
+                mPassed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer P.O.Box Addresses");
         }
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
         {
-            if (Customer.CustomerEmailList != null)
+            if (mCustomer.CustomerEmailList != null)
             {
-                passed.CustomerToChange = Customer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                mPassed.CustomerToChange = mCustomer;
+                mPassed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesEmailAddresses();
                 Show();
 
-                Customer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                mCustomer = mPassed.CustomerToChange;
+                mPassed.CustomerToChange = null;
+                mPassed.ChangeSpecificObject = false;
 
             }
             else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Email Addresses");
@@ -260,18 +260,18 @@ namespace QuoteSwift
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
         {
-            if (Customer != null)
+            if (mCustomer != null)
             {
-                passed.CustomerToChange = Customer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                mPassed.CustomerToChange = mCustomer;
+                mPassed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesAddresses();
                 Show();
 
-                Customer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                mCustomer = mPassed.CustomerToChange;
+                mPassed.CustomerToChange = null;
+                mPassed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Addresses");
         }
@@ -279,7 +279,7 @@ namespace QuoteSwift
         private void UpdatedCustomerInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConvertToEdit();
-            passed.ChangeSpecificObject = true;
+            mPassed.ChangeSpecificObject = true;
             updatedCustomerInformationToolStripMenuItem.Enabled = false;
         }
 
@@ -289,15 +289,15 @@ namespace QuoteSwift
             {
                 if (!EmailAddressExisting(mtxtEmailAddress.Text))
                 {
-                    if (Customer.CustomerEmailList == null)
+                    if (mCustomer.CustomerEmailList == null)
                     {
                         //Create New List
-                        Customer.CustomerEmailList = new BindingList<string> { mtxtEmailAddress.Text };
+                        mCustomer.CustomerEmailList = new BindingList<string> { mtxtEmailAddress.Text };
                         MainProgramCode.ShowInformation("Successfully added the customer Email address", "INFORMATION - Customer Email Address Added Successfully");
                     }
                     else //Add To Existing List
                     {
-                        Customer.CustomerEmailList.Add(mtxtEmailAddress.Text);
+                        mCustomer.CustomerEmailList.Add(mtxtEmailAddress.Text);
                         MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - Customer Email Address Added Successfully");
                     }
 
@@ -348,7 +348,7 @@ namespace QuoteSwift
             return true;
         }
 
-        private bool ValidCustomerPOBoxAddress()
+        private bool ValidCustomerPoBoxAddress()
         {
             if (txtCustomerPODescription.Text.Length < 2)
             {
@@ -404,25 +404,25 @@ namespace QuoteSwift
                 return false;
             }
 
-            if (Customer.CustomerDeliveryAddressList == null)
+            if (mCustomer.CustomerDeliveryAddressList == null)
             {
                 MainProgramCode.ShowError("Please add a valid customer delivery address under the 'Customer Address' section.", "ERROR - Current Customer Invalid");
                 return false;
             }
 
-            if (Customer.CustomerPOBoxAddress == null)
+            if (mCustomer.CustomerPoBoxAddress == null)
             {
                 MainProgramCode.ShowError("Please add a valid customer P.O.Box address under the 'Customer P.O.Box Address' section.", "ERROR - Current Customer Invalid");
                 return false;
             }
 
-            if (Customer.CustomerCellphoneNumberList == null && Customer.CustomerTelephoneNumberList == null)
+            if (mCustomer.CustomerCellphoneNumberList == null && mCustomer.CustomerTelephoneNumberList == null)
             {
                 MainProgramCode.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current Customer Invalid");
                 return false;
             }
 
-            if (Customer.CustomerEmailList == null)
+            if (mCustomer.CustomerEmailList == null)
             {
                 MainProgramCode.ShowError("Please add a valid customer email address under the 'Email Related' section.", "ERROR - Current Customer Invalid");
                 return false;
@@ -449,7 +449,7 @@ namespace QuoteSwift
             txtWorkPlace.ResetText();
         }
 
-        private void ClearPOBoxAddressInput()
+        private void ClearPoBoxAddressInput()
         {
             txtCustomerPODescription.ResetText();
             mtxtPOBoxStreetNumber.ResetText();
@@ -465,7 +465,7 @@ namespace QuoteSwift
             mtxtVATNumber.ResetText();
             mtxtRegistrationNumber.ResetText();
             ClearCustomerAddressInput();
-            ClearPOBoxAddressInput();
+            ClearPoBoxAddressInput();
             mtxtEmailAddress.ResetText();
             mtxtCellphoneNumber.ResetText();
             mtxtTelephoneNumber.ResetText();
@@ -474,11 +474,11 @@ namespace QuoteSwift
 
         public bool AddressExisting(Address a)
         {
-            if (Customer.CustomerDeliveryAddressList != null)
+            if (mCustomer.CustomerDeliveryAddressList != null)
             {
-                for (int i = 0; i < Customer.CustomerDeliveryAddressList.Count; i++)
+                for (int i = 0; i < mCustomer.CustomerDeliveryAddressList.Count; i++)
                 {
-                    if (Customer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
+                    if (mCustomer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
                         MainProgramCode.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
                         return true;
@@ -489,14 +489,14 @@ namespace QuoteSwift
             return false;
         }
 
-        private bool POBoxAddressExisting(Address a)
+        private bool PoBoxAddressExisting(Address a)
         {
 
-            if (Customer.CustomerPOBoxAddress != null)
+            if (mCustomer.CustomerPoBoxAddress != null)
             {
-                for (int i = 0; i < Customer.CustomerPOBoxAddress.Count; i++)
+                for (int i = 0; i < mCustomer.CustomerPoBoxAddress.Count; i++)
                 {
-                    if (Customer.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
+                    if (mCustomer.CustomerPoBoxAddress.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
                         MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
                         return true;
@@ -509,9 +509,9 @@ namespace QuoteSwift
 
         public bool EmailAddressExisting(string s)
         {
-            if (Customer.CustomerEmailList != null)
+            if (mCustomer.CustomerEmailList != null)
             {
-                if (Customer.CustomerEmailList.SingleOrDefault(p => p == s) != null)
+                if (mCustomer.CustomerEmailList.SingleOrDefault(p => p == s) != null)
                 {
                     MainProgramCode.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
                     return true;
@@ -522,11 +522,11 @@ namespace QuoteSwift
 
         public bool PhoneNumberExisting(string s)
         {
-            if (Customer.CustomerTelephoneNumberList != null)
+            if (mCustomer.CustomerTelephoneNumberList != null)
             {
-                for (int i = 0; i < Customer.CustomerTelephoneNumberList.Count; i++)
+                for (int i = 0; i < mCustomer.CustomerTelephoneNumberList.Count; i++)
                 {
-                    if (Customer.CustomerTelephoneNumberList.SingleOrDefault(p => p == s) != null)
+                    if (mCustomer.CustomerTelephoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
                         MainProgramCode.ShowError("This number has already been added previously to the Telephone Number List.", "ERROR - Number Already Added");
                         return true;
@@ -534,11 +534,11 @@ namespace QuoteSwift
                 }
             }
 
-            if (Customer.CustomerTelephoneNumberList != null)
+            if (mCustomer.CustomerTelephoneNumberList != null)
             {
-                for (int i = 0; i < Customer.CustomerTelephoneNumberList.Count; i++)
+                for (int i = 0; i < mCustomer.CustomerTelephoneNumberList.Count; i++)
                 {
-                    if (Customer.CustomerTelephoneNumberList.SingleOrDefault(p => p == s) != null)
+                    if (mCustomer.CustomerTelephoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
                         MainProgramCode.ShowError("This number has already been added previously to the Cellphone Number List.", "ERROR - Number Already Added");
                         return true;
@@ -551,16 +551,16 @@ namespace QuoteSwift
 
         private void LoadInformation()
         {
-            if (Customer != null)
+            if (mCustomer != null)
             {
-                Container = passed.BusinessToChange;
-                passed.BusinessToChange = null;
+                mContainer = mPassed.BusinessToChange;
+                mPassed.BusinessToChange = null;
 
-                txtCustomerCompanyName.Text = Customer.CustomerCompanyName;
-                cbBusinessSelection.Text = Container.BusinessName;
-                mtxtVATNumber.Text = Customer.CustomerLegalDetails.VatNumber;
-                mtxtRegistrationNumber.Text = Customer.CustomerLegalDetails.RegistrationNumber;
-                mtxtVendorNumber.Text = Customer.VendorNumber;
+                txtCustomerCompanyName.Text = mCustomer.CustomerCompanyName;
+                cbBusinessSelection.Text = mContainer.BusinessName;
+                mtxtVATNumber.Text = mCustomer.CustomerLegalDetails.VatNumber;
+                mtxtRegistrationNumber.Text = mCustomer.CustomerLegalDetails.RegistrationNumber;
+                mtxtVendorNumber.Text = mCustomer.VendorNumber;
             }
         }
 
@@ -579,7 +579,7 @@ namespace QuoteSwift
             btnViewEmailAddresses.Enabled = true;
 
             btnAddCustomer.Visible = false;
-            Text = Text.Replace("Add Customer", "Viewing " + Customer.CustomerName);
+            Text = Text.Replace("Add Customer", "Viewing " + mCustomer.CustomerName);
             updatedCustomerInformationToolStripMenuItem.Enabled = true;
         }
 
@@ -594,20 +594,20 @@ namespace QuoteSwift
 
             btnAddCustomer.Visible = true;
             btnAddCustomer.Text = "Update Customer";
-            if (passed != null && passed.BusinessToChange != null)
-                Text = Text.Replace("Viewing " + passed.BusinessToChange.BusinessName, "Updating " + passed.BusinessToChange.BusinessName);
-            if (passed != null && passed.CustomerToChange != null)
-                Text = Text.Replace("Viewing " + passed.CustomerToChange.CustomerName, "Updating " + passed.CustomerToChange.CustomerName);
+            if (mPassed != null && mPassed.BusinessToChange != null)
+                Text = Text.Replace("Viewing " + mPassed.BusinessToChange.BusinessName, "Updating " + mPassed.BusinessToChange.BusinessName);
+            if (mPassed != null && mPassed.CustomerToChange != null)
+                Text = Text.Replace("Viewing " + mPassed.CustomerToChange.CustomerName, "Updating " + mPassed.CustomerToChange.CustomerName);
             updatedCustomerInformationToolStripMenuItem.Enabled = false;
         }
 
         private Business GetSelectedBusiness()
         {
-            if (passed.BusinessMap != null && cbBusinessSelection.Text.Length > 0)
+            if (mPassed.BusinessMap != null && cbBusinessSelection.Text.Length > 0)
             {
-                for (int i = 0; i < passed.BusinessMap.Count; i++)
+                for (int i = 0; i < mPassed.BusinessMap.Count; i++)
                 {
-                    if (passed.BusinessMap.Values.ToArray()[i].BusinessName == cbBusinessSelection.Text) return passed.BusinessMap.Values.ToArray()[i];
+                    if (mPassed.BusinessMap.Values.ToArray()[i].BusinessName == cbBusinessSelection.Text) return mPassed.BusinessMap.Values.ToArray()[i];
                 }
             }
 

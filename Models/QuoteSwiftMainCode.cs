@@ -259,10 +259,10 @@ namespace QuoteSwift
 
         // View Business P.O.Box Addresses
 
-        public static void ViewBusinessesPOBoxAddresses()
+        public static void ViewBusinessesPoBoxAddresses()
         {
-            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses();
-            FrmViewPOBoxAddresses.ShowDialog();
+            FrmViewPoBoxAddresses frmViewPoBoxAddresses = new FrmViewPoBoxAddresses();
+            frmViewPoBoxAddresses.ShowDialog();
         }
 
         // View Business Email Addresses

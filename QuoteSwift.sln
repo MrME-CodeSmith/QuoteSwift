@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportToExcel", "ExportToEx
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainProgramLibrary", "MainProgramLibrary\MainProgramLibrary.csproj", "{374F4D18-B639-468B-ADC7-88A9F39D6553}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoteSwift.UnitTests", "..\QuoteSwift.UnitTests\QuoteSwift.UnitTests.csproj", "{AB42639E-2464-4A1E-8D3D-CD131CA7D69E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{374F4D18-B639-468B-ADC7-88A9F39D6553}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{374F4D18-B639-468B-ADC7-88A9F39D6553}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{374F4D18-B639-468B-ADC7-88A9F39D6553}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB42639E-2464-4A1E-8D3D-CD131CA7D69E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB42639E-2464-4A1E-8D3D-CD131CA7D69E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB42639E-2464-4A1E-8D3D-CD131CA7D69E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB42639E-2464-4A1E-8D3D-CD131CA7D69E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

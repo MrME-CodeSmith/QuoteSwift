@@ -5,9 +5,9 @@ namespace QuoteSwift
 {
     public partial class FrmEditBusinessAddress : Form
     {
-        AppContext passed;
+        AppContext mPassed;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmEditBusinessAddress()
         {
@@ -21,14 +21,14 @@ namespace QuoteSwift
 
         private void FrmEditBusinessAddress_Load(object sender, EventArgs e)
         {
-            if (passed.AddressToChange != null)
+            if (mPassed.AddressToChange != null)
             {
-                txtBusinessAddresssDescription.Text = passed.AddressToChange.AddressDescription;
-                mtxtStreetnumber.Text = passed.AddressToChange.AddressStreetNumber.ToString();
-                txtStreetName.Text = passed.AddressToChange.AddressStreetName;
-                txtSuburb.Text = passed.AddressToChange.AddressSuburb;
-                txtCity.Text = passed.AddressToChange.AddressCity;
-                mtxtAreaCode.Text = passed.AddressToChange.AddressAreaCode.ToString();
+                txtBusinessAddresssDescription.Text = mPassed.AddressToChange.AddressDescription;
+                mtxtStreetnumber.Text = mPassed.AddressToChange.AddressStreetNumber.ToString();
+                txtStreetName.Text = mPassed.AddressToChange.AddressStreetName;
+                txtSuburb.Text = mPassed.AddressToChange.AddressSuburb;
+                txtCity.Text = mPassed.AddressToChange.AddressCity;
+                mtxtAreaCode.Text = mPassed.AddressToChange.AddressAreaCode.ToString();
                 txtStreetName.Enabled = false;
             }
         }
@@ -50,7 +50,7 @@ namespace QuoteSwift
 
                 if (!AddressExists(UpdatedAddress))
                 {
-                    passed.AddressToChange = UpdatedAddress;
+                    mPassed.AddressToChange = UpdatedAddress;
                     MainProgramCode.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
                     Close();
                 }
@@ -78,7 +78,7 @@ namespace QuoteSwift
                 return (false);
             }
 
-            if (txtStreetName.Text.Length < 2 && passed.AddressToChange == null)
+            if (txtStreetName.Text.Length < 2 && mPassed.AddressToChange == null)
             {
                 MainProgramCode.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
                 return (false);
@@ -107,18 +107,18 @@ namespace QuoteSwift
 
         private bool AddressExists(Address a)
         {
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
-                if (passed.BusinessToChange.BusinessPOBoxAddressList != null && a != null)
-                    for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
+            if (mPassed != null && mPassed.BusinessToChange != null && mPassed.BusinessToChange.BusinessPoBoxAddressList != null)
+                if (mPassed.BusinessToChange.BusinessPoBoxAddressList != null && a != null)
+                    for (int i = 0; i < mPassed.BusinessToChange.BusinessPoBoxAddressList.Count; i++)
                     {
-                        if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription == a.AddressDescription && passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription != passed.AddressToChange.AddressDescription) return false;
+                        if (mPassed.BusinessToChange.BusinessPoBoxAddressList[i].AddressDescription == a.AddressDescription && mPassed.BusinessToChange.BusinessPoBoxAddressList[i].AddressDescription != mPassed.AddressToChange.AddressDescription) return false;
                     }
 
-            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
-                if (passed.CustomerToChange.CustomerPOBoxAddress != null && a != null)
-                    for (int i = 0; i < passed.CustomerToChange.CustomerPOBoxAddress.Count; i++)
+            if (mPassed != null && mPassed.CustomerToChange != null && mPassed.CustomerToChange.CustomerPoBoxAddress != null)
+                if (mPassed.CustomerToChange.CustomerPoBoxAddress != null && a != null)
+                    for (int i = 0; i < mPassed.CustomerToChange.CustomerPoBoxAddress.Count; i++)
                     {
-                        if (passed.CustomerToChange.CustomerPOBoxAddress[i].AddressDescription == a.AddressDescription && passed.CustomerToChange.CustomerPOBoxAddress[i].AddressDescription != passed.AddressToChange.AddressDescription) return false;
+                        if (mPassed.CustomerToChange.CustomerPoBoxAddress[i].AddressDescription == a.AddressDescription && mPassed.CustomerToChange.CustomerPoBoxAddress[i].AddressDescription != mPassed.AddressToChange.AddressDescription) return false;
                     }
             return false;
         }

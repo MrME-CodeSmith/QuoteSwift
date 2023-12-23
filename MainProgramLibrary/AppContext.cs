@@ -53,117 +53,117 @@ namespace QuoteSwift
         //Pass All Constructor :
 
         public AppContext(
-            Dictionary<string, Quote> mPassQuoteMap, 
-            Dictionary<string, Business> mPassBusinessMap, 
-            Dictionary<string, Product> mPassPumpMap, 
-            Dictionary<string, Part> mPassMandatoryPartMap,
-            Dictionary<string, Part> mPassNonMandatoryPartMap
+            Dictionary<string, Quote> passQuoteMap, 
+            Dictionary<string, Business> passBusinessMap, 
+            Dictionary<string, Product> passPumpMap, 
+            Dictionary<string, Part> passMandatoryPartMap,
+            Dictionary<string, Part> passNonMandatoryPartMap
         ){
-            QuoteMap = mPassQuoteMap;
-            BusinessMap = mPassBusinessMap;
-            ProductMap = mPassPumpMap;
-            MandatoryPartMap = mPassMandatoryPartMap;
-            NonMandatoryPartMap = mPassNonMandatoryPartMap;
+            QuoteMap = passQuoteMap;
+            BusinessMap = passBusinessMap;
+            ProductMap = passPumpMap;
+            MandatoryPartMap = passMandatoryPartMap;
+            NonMandatoryPartMap = passNonMandatoryPartMap;
         }
 
         //Pass Quote Constructor:
 
         public AppContext(
-            Dictionary<string, Quote> mPassQuoteMap,
-            Dictionary<string, Business> mPassBusinessMap,
-            Dictionary<string, Product> mPassPumpMap,
-            Dictionary<string, Part> mPassMandatoryPartMap,
-            Dictionary<string, Part> mPassNonMandatoryPartMap,
-            ref Quote mQuoteTOChange, 
-            bool mChangeSpecificObject = false
+            Dictionary<string, Quote> passQuoteMap,
+            Dictionary<string, Business> passBusinessMap,
+            Dictionary<string, Product> passPumpMap,
+            Dictionary<string, Part> passMandatoryPartMap,
+            Dictionary<string, Part> passNonMandatoryPartMap,
+            ref Quote quoteToChange, 
+            bool changeSpecificObject = false
         ){
-            QuoteMap = mPassQuoteMap;
-            BusinessMap = mPassBusinessMap;
-            ProductMap = mPassPumpMap;
-            MandatoryPartMap = mPassMandatoryPartMap;
-            NonMandatoryPartMap = mPassNonMandatoryPartMap;
-            QuoteToChange = mQuoteTOChange;
-            ChangeSpecificObject = mChangeSpecificObject;
+            QuoteMap = passQuoteMap;
+            BusinessMap = passBusinessMap;
+            ProductMap = passPumpMap;
+            MandatoryPartMap = passMandatoryPartMap;
+            NonMandatoryPartMap = passNonMandatoryPartMap;
+            QuoteToChange = quoteToChange;
+            ChangeSpecificObject = changeSpecificObject;
         }
 
         //Pass Business Constructor:
 
         public AppContext(
-            Dictionary<string, Quote> mPassQuoteMap,
-            Dictionary<string, Business> mPassBusinessMap,
-            Dictionary<string, Product> mPassPumpMap,
-            Dictionary<string, Part> mPassMandatoryPartMap,
-            Dictionary<string, Part> mPassNonMandatoryPartMap,
-            ref Business mBusinessToChange, 
-            bool mChangeSpecificObject = false
+            Dictionary<string, Quote> passQuoteMap,
+            Dictionary<string, Business> passBusinessMap,
+            Dictionary<string, Product> passPumpMap,
+            Dictionary<string, Part> passMandatoryPartMap,
+            Dictionary<string, Part> passNonMandatoryPartMap,
+            ref Business businessToChange, 
+            bool changeSpecificObject = false
         ){
-            QuoteMap = mPassQuoteMap;
-            BusinessMap = mPassBusinessMap;
-            ProductMap = mPassPumpMap;
-            MandatoryPartMap = mPassMandatoryPartMap;
-            NonMandatoryPartMap = mPassNonMandatoryPartMap;
-            BusinessToChange = mBusinessToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
+            QuoteMap = passQuoteMap;
+            BusinessMap = passBusinessMap;
+            ProductMap = passPumpMap;
+            MandatoryPartMap = passMandatoryPartMap;
+            NonMandatoryPartMap = passNonMandatoryPartMap;
+            BusinessToChange = businessToChange;
+            ChangeSpecificObject = changeSpecificObject;
         }
 
         //Pass Customer Constructor:
 
         public AppContext(
-            Dictionary<string, Quote> mPassQuoteMap,
-            Dictionary<string, Business> mPassBusinessMap,
-            Dictionary<string, Product> mPassPumpMap,
-            Dictionary<string, Part> mPassMandatoryPartMap,
-            Dictionary<string, Part> mPassNonMandatoryPartMap,
-            ref Customer mCustomerToChange, 
-            bool mChangeSpecificObject = false
+            Dictionary<string, Quote> passQuoteMap,
+            Dictionary<string, Business> passBusinessMap,
+            Dictionary<string, Product> passPumpMap,
+            Dictionary<string, Part> passMandatoryPartMap,
+            Dictionary<string, Part> passNonMandatoryPartMap,
+            ref Customer customerToChange, 
+            bool changeSpecificObject = false
         ){
-            QuoteMap = mPassQuoteMap;
-            BusinessMap = mPassBusinessMap;
-            ProductMap = mPassPumpMap;
-            MandatoryPartMap = mPassMandatoryPartMap;
-            NonMandatoryPartMap = mPassNonMandatoryPartMap;
-            CustomerToChange = mCustomerToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
+            QuoteMap = passQuoteMap;
+            BusinessMap = passBusinessMap;
+            ProductMap = passPumpMap;
+            MandatoryPartMap = passMandatoryPartMap;
+            NonMandatoryPartMap = passNonMandatoryPartMap;
+            CustomerToChange = customerToChange;
+            ChangeSpecificObject = changeSpecificObject;
         }
 
         //Pass Pump Constructor:
 
         public AppContext(
-            Dictionary<string, Quote> mPassQuoteMap,
-            Dictionary<string, Business> mPassBusinessMap,
-            Dictionary<string, Product> mPassPumpMap,
-            Dictionary<string, Part> mPassMandatoryPartMap,
-            Dictionary<string, Part> mPassNonMandatoryPartMap,
-            ref Product mPumpToChange, 
-            bool mChangeSpecificObject = false
+            Dictionary<string, Quote> passQuoteMap,
+            Dictionary<string, Business> passBusinessMap,
+            Dictionary<string, Product> passPumpMap,
+            Dictionary<string, Part> passMandatoryPartMap,
+            Dictionary<string, Part> passNonMandatoryPartMap,
+            ref Product pumpToChange, 
+            bool changeSpecificObject = false
         ){
-            QuoteMap = mPassQuoteMap;
-            BusinessMap = mPassBusinessMap;
-            ProductMap = mPassPumpMap;
-            MandatoryPartMap = mPassMandatoryPartMap;
-            NonMandatoryPartMap = mPassNonMandatoryPartMap;
-            PumpToChange = mPumpToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
+            QuoteMap = passQuoteMap;
+            BusinessMap = passBusinessMap;
+            ProductMap = passPumpMap;
+            MandatoryPartMap = passMandatoryPartMap;
+            NonMandatoryPartMap = passNonMandatoryPartMap;
+            PumpToChange = pumpToChange;
+            ChangeSpecificObject = changeSpecificObject;
         }
 
         //Pass Part Constructor:
 
         public AppContext(
-            Dictionary<string, Quote> mPassQuoteMap,
-            Dictionary<string, Business> mPassBusinessMap,
-            Dictionary<string, Product> mPassPumpMap,
-            Dictionary<string, Part> mPassMandatoryPartMap,
-            Dictionary<string, Part> mPassNonMandatoryPartMap,
-            ref Part mPartToChange, 
-            bool mChangeSpecificObject = false
+            Dictionary<string, Quote> passQuoteMap,
+            Dictionary<string, Business> passBusinessMap,
+            Dictionary<string, Product> passPumpMap,
+            Dictionary<string, Part> passMandatoryPartMap,
+            Dictionary<string, Part> passNonMandatoryPartMap,
+            ref Part partToChange, 
+            bool changeSpecificObject = false
         ){
-            QuoteMap = mPassQuoteMap;
-            BusinessMap = mPassBusinessMap;
-            ProductMap = mPassPumpMap;
-            MandatoryPartMap = mPassMandatoryPartMap;
-            NonMandatoryPartMap = mPassNonMandatoryPartMap;
-            PartToChange = mPartToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
+            QuoteMap = passQuoteMap;
+            BusinessMap = passBusinessMap;
+            ProductMap = passPumpMap;
+            MandatoryPartMap = passMandatoryPartMap;
+            NonMandatoryPartMap = passNonMandatoryPartMap;
+            PartToChange = partToChange;
+            ChangeSpecificObject = changeSpecificObject;
         }
 
         public void AddPart(ref Part p)

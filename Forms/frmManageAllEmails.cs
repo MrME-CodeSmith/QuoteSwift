@@ -8,9 +8,9 @@ namespace QuoteSwift
     public partial class FrmManageAllEmails : Form
     {
 
-        AppContext passed;
+        AppContext mPassed;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmManageAllEmails()
         {
@@ -25,11 +25,11 @@ namespace QuoteSwift
 
         private void FrmManageAllEmails_Load(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+            if (mPassed != null && mPassed.BusinessToChange != null && mPassed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                Text = Text.Replace("< Business Name >", passed.BusinessToChange.BusinessName);
+                Text = Text.Replace("< Business Name >", mPassed.BusinessToChange.BusinessName);
 
-                if (!passed.ChangeSpecificObject)
+                if (!mPassed.ChangeSpecificObject)
                 {
                     QuoteSwiftMainCode.ReadOnlyComponents(Controls);
                     BtnCancel.Enabled = true;
@@ -37,11 +37,11 @@ namespace QuoteSwift
 
                 LoadInformation();
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            else if (mPassed != null && mPassed.CustomerToChange != null && mPassed.CustomerToChange.CustomerEmailList != null)
             {
-                Text = Text.Replace("< Business Name >", passed.CustomerToChange.CustomerName);
+                Text = Text.Replace("< Business Name >", mPassed.CustomerToChange.CustomerName);
 
-                if (!passed.ChangeSpecificObject)
+                if (!mPassed.ChangeSpecificObject)
                 {
                     QuoteSwiftMainCode.ReadOnlyComponents(Controls);
                     BtnCancel.Enabled = true;
@@ -66,17 +66,17 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedEmail + "' email address from the list?", "REQUEST - Deletion Request"))
                 {
-                    if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+                    if (mPassed.BusinessToChange != null && mPassed.BusinessToChange.BusinessEmailAddressList != null)
                     {
-                        passed.BusinessToChange.BusinessEmailAddressList.Remove(SelectedEmail);
+                        mPassed.BusinessToChange.BusinessEmailAddressList.Remove(SelectedEmail);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-                        if (passed.BusinessToChange.BusinessEmailAddressList.Count == 0) passed.BusinessToChange.BusinessEmailAddressList = null;
+                        if (mPassed.BusinessToChange.BusinessEmailAddressList.Count == 0) mPassed.BusinessToChange.BusinessEmailAddressList = null;
                     }
-                    else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+                    else if (mPassed.CustomerToChange != null && mPassed.CustomerToChange.CustomerEmailList != null)
                     {
-                        passed.CustomerToChange.CustomerEmailList.Remove(SelectedEmail);
+                        mPassed.CustomerToChange.CustomerEmailList.Remove(SelectedEmail);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-                        if (passed.CustomerToChange.CustomerEmailList.Count == 0) passed.CustomerToChange.CustomerEmailList = null;
+                        if (mPassed.CustomerToChange.CustomerEmailList.Count == 0) mPassed.CustomerToChange.CustomerEmailList = null;
                     }
 
 
@@ -92,33 +92,33 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             string email = GetEmailSelection();
-            passed.EmailToChange = email;
-            passed.ChangeSpecificObject = true;
+            mPassed.EmailToChange = email;
+            mPassed.ChangeSpecificObject = true;
             QuoteSwiftMainCode.EditBusinessEmailAddress();
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+            if (mPassed.BusinessToChange != null && mPassed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                for (int i = 0; i < passed.BusinessToChange.BusinessEmailAddressList.Count; i++)
+                for (int i = 0; i < mPassed.BusinessToChange.BusinessEmailAddressList.Count; i++)
                 {
-                    if (passed.BusinessToChange.BusinessEmailAddressList[i] == email)
+                    if (mPassed.BusinessToChange.BusinessEmailAddressList[i] == email)
                     {
-                        passed.BusinessToChange.BusinessEmailAddressList[i] = passed.EmailToChange;
+                        mPassed.BusinessToChange.BusinessEmailAddressList[i] = mPassed.EmailToChange;
                     }
                 }
             }
-            else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            else if (mPassed.CustomerToChange != null && mPassed.CustomerToChange.CustomerEmailList != null)
             {
-                for (int i = 0; i < passed.CustomerToChange.CustomerEmailList.Count; i++)
+                for (int i = 0; i < mPassed.CustomerToChange.CustomerEmailList.Count; i++)
                 {
-                    if (passed.CustomerToChange.CustomerEmailList[i] == email)
+                    if (mPassed.CustomerToChange.CustomerEmailList[i] == email)
                     {
-                        passed.CustomerToChange.CustomerEmailList[i] = passed.EmailToChange;
+                        mPassed.CustomerToChange.CustomerEmailList[i] = mPassed.EmailToChange;
                     }
                 }
             }
 
-            passed.ChangeSpecificObject = false;
-            passed.EmailToChange = null;
+            mPassed.ChangeSpecificObject = false;
+            mPassed.EmailToChange = null;
             LoadInformation();
         }
 
@@ -135,14 +135,14 @@ namespace QuoteSwift
                 return "";
             }
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+            if (mPassed.BusinessToChange != null && mPassed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                SearchName = passed.BusinessToChange.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName);
+                SearchName = mPassed.BusinessToChange.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName);
                 return SearchName;
             }
-            else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            else if (mPassed.CustomerToChange != null && mPassed.CustomerToChange.CustomerEmailList != null)
             {
-                SearchName = passed.CustomerToChange.CustomerEmailList.SingleOrDefault(p => p == SearchName);
+                SearchName = mPassed.CustomerToChange.CustomerEmailList.SingleOrDefault(p => p == SearchName);
                 return SearchName;
             }
 
@@ -152,18 +152,18 @@ namespace QuoteSwift
         private void LoadInformation()
         {
             DgvEmails.Rows.Clear();
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+            if (mPassed != null && mPassed.BusinessToChange != null && mPassed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                for (int i = 0; i < passed.BusinessToChange.BusinessEmailAddressList.Count; i++)
+                for (int i = 0; i < mPassed.BusinessToChange.BusinessEmailAddressList.Count; i++)
                 {
-                    DgvEmails.Rows.Add(passed.BusinessToChange.BusinessEmailAddressList[i]);
+                    DgvEmails.Rows.Add(mPassed.BusinessToChange.BusinessEmailAddressList[i]);
                 }
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            else if (mPassed != null && mPassed.CustomerToChange != null && mPassed.CustomerToChange.CustomerEmailList != null)
             {
-                for (int i = 0; i < passed.CustomerToChange.CustomerEmailList.Count; i++)
+                for (int i = 0; i < mPassed.CustomerToChange.CustomerEmailList.Count; i++)
                 {
-                    DgvEmails.Rows.Add(passed.CustomerToChange.CustomerEmailList[i]);
+                    DgvEmails.Rows.Add(mPassed.CustomerToChange.CustomerEmailList[i]);
                 }
             }
         }

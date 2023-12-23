@@ -9,9 +9,9 @@ namespace QuoteSwift
     {
 
 
-        AppContext passed;
+        AppContext mPassed;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmViewAllBusinesses()
         {
@@ -35,14 +35,14 @@ namespace QuoteSwift
                 return;
             }
 
-            passed.BusinessToChange = Business;
-            passed.ChangeSpecificObject = false;
+            mPassed.BusinessToChange = Business;
+            mPassed.ChangeSpecificObject = false;
             QuoteSwiftMainCode.AddBusiness();
 
-            if (!ReplaceBusiness(Business, passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
+            if (!ReplaceBusiness(Business, mPassed.BusinessToChange) && mPassed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
 
-            passed.BusinessToChange = null;
-            passed.ChangeSpecificObject = false;
+            mPassed.BusinessToChange = null;
+            mPassed.ChangeSpecificObject = false;
 
             LoadInformation();
 
@@ -59,10 +59,10 @@ namespace QuoteSwift
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {
-            if (passed.BusinessMap != null)
+            if (mPassed.BusinessMap != null)
             {
-                for (int i = 0; i < passed.BusinessMap.Count; i++)
-                    DgvBusinessList.Rows.Add(passed.BusinessMap.Values.ToArray()[i].BusinessName);
+                for (int i = 0; i < mPassed.BusinessMap.Count; i++)
+                    DgvBusinessList.Rows.Add(mPassed.BusinessMap.Values.ToArray()[i].BusinessName);
             }
 
             DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
@@ -73,14 +73,14 @@ namespace QuoteSwift
         {
             Business business = GetBusinessSelection();
 
-            if (business != null && passed.BusinessMap != null)
+            if (business != null && mPassed.BusinessMap != null)
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
-                    passed.BusinessMap.Remove(business.BusinessLegalDetails.RegistrationNumber);
+                    mPassed.BusinessMap.Remove(business.BusinessLegalDetails.RegistrationNumber);
                     MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
 
-                    if (passed.BusinessMap.Count == 0) passed.BusinessMap = null;
+                    if (mPassed.BusinessMap.Count == 0) mPassed.BusinessMap = null;
 
                     LoadInformation();
                 }
@@ -109,9 +109,9 @@ namespace QuoteSwift
                 return null;
             }
 
-            if (passed.BusinessMap != null)
+            if (mPassed.BusinessMap != null)
             {
-                business = passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
+                business = mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
                 return business;
             }
 
@@ -122,20 +122,20 @@ namespace QuoteSwift
         {
             DgvBusinessList.Rows.Clear();
 
-            if (passed.BusinessMap != null)
-                for (int i = 0; i < passed.BusinessMap.Count; i++)
+            if (mPassed.BusinessMap != null)
+                for (int i = 0; i < mPassed.BusinessMap.Count; i++)
                 {
-                    DgvBusinessList.Rows.Add(passed.BusinessMap.Values.ToArray()[i].BusinessName);
+                    DgvBusinessList.Rows.Add(mPassed.BusinessMap.Values.ToArray()[i].BusinessName);
                 }
         }
 
-        private bool ReplaceBusiness(Business Original, Business New)
+        private bool ReplaceBusiness(Business original, Business @new)
         {
-            if (New != null && Original != null && passed.BusinessMap != null)
-                for (int i = 0; i < passed.BusinessMap.Count; i++)
-                    if (passed.BusinessMap.Values.ToArray()[i] == Original)
+            if (@new != null && original != null && mPassed.BusinessMap != null)
+                for (int i = 0; i < mPassed.BusinessMap.Count; i++)
+                    if (mPassed.BusinessMap.Values.ToArray()[i] == original)
                     {
-                        passed.BusinessMap.Values.ToArray()[i] = New;
+                        mPassed.BusinessMap.Values.ToArray()[i] = @new;
                         return true;
                     }
 

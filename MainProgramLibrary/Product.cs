@@ -12,21 +12,21 @@ namespace QuoteSwift
         [ProtoMember(2)]
         private string mPumpDescription;
         [ProtoMember(3)]
-        private BindingList<Product_Part> mPartList;
+        private BindingList<ProductPart> mPartList;
         [ProtoMember(4)]
         private float mNewProductPrice;
 
-        public Product(string mPumpName, string mPumpDescription, float newProductPrice, ref BindingList<Product_Part> mPartList)
+        public Product(string pumpName, string pumpDescription, float newProductPrice, ref BindingList<ProductPart> partList)
         {
-            ProductName = mPumpName;
-            PumpDescription = mPumpDescription;
-            PartList = mPartList;
+            ProductName = pumpName;
+            PumpDescription = pumpDescription;
+            PartList = partList;
             NewProductPrice = newProductPrice;
         }
 
         public string ProductName { get => mPumpName; set => mPumpName = value; }
         public string PumpDescription { get => mPumpDescription; set => mPumpDescription = value; }
-        public BindingList<Product_Part> PartList { get => mPartList; set => mPartList = value; }
+        public BindingList<ProductPart> PartList { get => mPartList; set => mPartList = value; }
         public float NewProductPrice { get => mNewProductPrice; set => mNewProductPrice = value; }
     }
 }

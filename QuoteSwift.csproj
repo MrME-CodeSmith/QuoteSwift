@@ -99,161 +99,162 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrmAddBusiness.cs">
+    <Compile Include="Controllers\FrmAddPart_Controller.cs" />
+    <Compile Include="Forms\FrmAddBusiness.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAddBusiness.Designer.cs">
+    <Compile Include="Forms\FrmAddBusiness.Designer.cs">
       <DependentUpon>FrmAddBusiness.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmAddCustomer.cs">
+    <Compile Include="Forms\FrmAddCustomer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAddCustomer.Designer.cs">
+    <Compile Include="Forms\FrmAddCustomer.Designer.cs">
       <DependentUpon>FrmAddCustomer.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmAddPart.cs">
+    <Compile Include="Forms\FrmAddPart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAddPart.Designer.cs">
+    <Compile Include="Forms\FrmAddPart.Designer.cs">
       <DependentUpon>FrmAddPart.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmAddPump.cs">
+    <Compile Include="Forms\FrmAddPump.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAddPump.Designer.cs">
+    <Compile Include="Forms\FrmAddPump.Designer.cs">
       <DependentUpon>FrmAddPump.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmCreateQuote.cs">
+    <Compile Include="Forms\FrmCreateQuote.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmCreateQuote.Designer.cs">
+    <Compile Include="Forms\FrmCreateQuote.Designer.cs">
       <DependentUpon>FrmCreateQuote.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmEditBusinessAddress.cs">
+    <Compile Include="Forms\FrmEditBusinessAddress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmEditBusinessAddress.Designer.cs">
+    <Compile Include="Forms\FrmEditBusinessAddress.Designer.cs">
       <DependentUpon>FrmEditBusinessAddress.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmEditEmailAddress.cs">
+    <Compile Include="Forms\FrmEditEmailAddress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmEditEmailAddress.Designer.cs">
+    <Compile Include="Forms\FrmEditEmailAddress.Designer.cs">
       <DependentUpon>FrmEditEmailAddress.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmEditPhoneNumber.cs">
+    <Compile Include="Forms\FrmEditPhoneNumber.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmEditPhoneNumber.Designer.cs">
+    <Compile Include="Forms\FrmEditPhoneNumber.Designer.cs">
       <DependentUpon>FrmEditPhoneNumber.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmManageAllEmails.cs">
+    <Compile Include="Forms\FrmManageAllEmails.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmManageAllEmails.Designer.cs">
+    <Compile Include="Forms\FrmManageAllEmails.Designer.cs">
       <DependentUpon>FrmManageAllEmails.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmManagingPhoneNumbers.cs">
+    <Compile Include="Forms\FrmManagingPhoneNumbers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmManagingPhoneNumbers.Designer.cs">
+    <Compile Include="Forms\FrmManagingPhoneNumbers.Designer.cs">
       <DependentUpon>FrmManagingPhoneNumbers.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmViewAllBusinesses.cs">
+    <Compile Include="Forms\FrmViewAllBusinesses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmViewAllBusinesses.Designer.cs">
+    <Compile Include="Forms\FrmViewAllBusinesses.Designer.cs">
       <DependentUpon>FrmViewAllBusinesses.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmViewBusinessAddresses.cs">
+    <Compile Include="Forms\FrmViewBusinessAddresses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmViewBusinessAddresses.Designer.cs">
+    <Compile Include="Forms\FrmViewBusinessAddresses.Designer.cs">
       <DependentUpon>FrmViewBusinessAddresses.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmViewCustomers.cs">
+    <Compile Include="Forms\FrmViewCustomers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmViewCustomers.Designer.cs">
+    <Compile Include="Forms\FrmViewCustomers.Designer.cs">
       <DependentUpon>FrmViewCustomers.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmViewParts.cs">
+    <Compile Include="Forms\FrmViewParts.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmViewParts.Designer.cs">
+    <Compile Include="Forms\FrmViewParts.Designer.cs">
       <DependentUpon>FrmViewParts.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmViewPOBoxAddresses.cs">
+    <Compile Include="Forms\FrmViewPOBoxAddresses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmViewPOBoxAddresses.Designer.cs">
+    <Compile Include="Forms\FrmViewPOBoxAddresses.Designer.cs">
       <DependentUpon>FrmViewPOBoxAddresses.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmViewPump.cs">
+    <Compile Include="Forms\FrmViewPump.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmViewPump.Designer.cs">
+    <Compile Include="Forms\FrmViewPump.Designer.cs">
       <DependentUpon>FrmViewPump.cs</DependentUpon>
     </Compile>
-    <Compile Include="QuoteSwiftMainCode.cs" />
-    <Compile Include="FrmViewQuotes.cs">
+    <Compile Include="Models\QuoteSwiftMainCode.cs" />
+    <Compile Include="Forms\FrmViewQuotes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmViewQuotes.Designer.cs">
+    <Compile Include="Forms\FrmViewQuotes.Designer.cs">
       <DependentUpon>FrmViewQuotes.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FrmAddBusiness.resx">
+    <EmbeddedResource Include="Forms\FrmAddBusiness.resx">
       <DependentUpon>FrmAddBusiness.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmAddCustomer.resx">
+    <EmbeddedResource Include="Forms\FrmAddCustomer.resx">
       <DependentUpon>FrmAddCustomer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmAddPart.resx">
+    <EmbeddedResource Include="Forms\FrmAddPart.resx">
       <DependentUpon>FrmAddPart.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmAddPump.resx">
+    <EmbeddedResource Include="Forms\FrmAddPump.resx">
       <DependentUpon>FrmAddPump.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmCreateQuote.resx">
+    <EmbeddedResource Include="Forms\FrmCreateQuote.resx">
       <DependentUpon>FrmCreateQuote.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmEditBusinessAddress.resx">
+    <EmbeddedResource Include="Forms\FrmEditBusinessAddress.resx">
       <DependentUpon>FrmEditBusinessAddress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmEditEmailAddress.resx">
+    <EmbeddedResource Include="Forms\FrmEditEmailAddress.resx">
       <DependentUpon>FrmEditEmailAddress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmEditPhoneNumber.resx">
+    <EmbeddedResource Include="Forms\FrmEditPhoneNumber.resx">
       <DependentUpon>FrmEditPhoneNumber.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmManageAllEmails.resx">
+    <EmbeddedResource Include="Forms\FrmManageAllEmails.resx">
       <DependentUpon>FrmManageAllEmails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmManagingPhoneNumbers.resx">
+    <EmbeddedResource Include="Forms\FrmManagingPhoneNumbers.resx">
       <DependentUpon>FrmManagingPhoneNumbers.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewAllBusinesses.resx">
+    <EmbeddedResource Include="Forms\FrmViewAllBusinesses.resx">
       <DependentUpon>FrmViewAllBusinesses.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewBusinessAddresses.resx">
+    <EmbeddedResource Include="Forms\FrmViewBusinessAddresses.resx">
       <DependentUpon>FrmViewBusinessAddresses.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewCustomers.resx">
+    <EmbeddedResource Include="Forms\FrmViewCustomers.resx">
       <DependentUpon>FrmViewCustomers.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewParts.resx">
+    <EmbeddedResource Include="Forms\FrmViewParts.resx">
       <DependentUpon>FrmViewParts.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewPOBoxAddresses.resx">
+    <EmbeddedResource Include="Forms\FrmViewPOBoxAddresses.resx">
       <DependentUpon>FrmViewPOBoxAddresses.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewPump.resx">
+    <EmbeddedResource Include="Forms\FrmViewPump.resx">
       <DependentUpon>FrmViewPump.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewQuotes.resx">
+    <EmbeddedResource Include="Forms\FrmViewQuotes.resx">
       <DependentUpon>FrmViewQuotes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -365,7 +366,7 @@
       <Version>18.4.0.43</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.Licensing">
-      <Version>18.4.0.43</Version>
+      <Version>24.1.41</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.SfDataGrid.Winforms">
       <Version>24.1.41</Version>
@@ -395,5 +396,6 @@
       <Version>2.5.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
