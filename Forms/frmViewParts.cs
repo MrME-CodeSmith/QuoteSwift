@@ -8,14 +8,14 @@ namespace QuoteSwift
     public partial class FrmViewParts : Form
     {
 
-        AppContext passed;
+        AppContext mPassed;
 
         public FrmViewParts()
         {
             InitializeComponent();
         }
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -36,15 +36,15 @@ namespace QuoteSwift
 
             if (objPartSelection != null)
             {
-                passed.ChangeSpecificObject = false;
-                passed.PartToChange = objPartSelection;
+                mPassed.ChangeSpecificObject = false;
+                mPassed.PartToChange = objPartSelection;
 
                 Hide();
                 QuoteSwiftMainCode.AddNewPart();
                 Show();
 
-                passed.ChangeSpecificObject = false;
-                passed.PartToChange = null;
+                mPassed.ChangeSpecificObject = false;
+                mPassed.PartToChange = null;
             }
             else
             {
@@ -54,7 +54,7 @@ namespace QuoteSwift
 
         private void FrmViewParts_Activated(object sender, EventArgs e)
         {
-            if (passed != null)
+            if (mPassed != null)
             {
                 dgvAllParts.Rows.Clear();
                 LoadMandatoryParts();
@@ -71,7 +71,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.MandatoryPartMap.Remove(SelectedPart.NewPartNumber); // Remember map contains both New and Original part numbers
+                        mPassed.MandatoryPartMap.Remove(SelectedPart.NewPartNumber); // Remember map contains both New and Original part numbers
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -79,7 +79,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.NonMandatoryPartMap.Remove(SelectedPart.NewPartNumber); // Remember map contains both New and Original part numbers
+                        mPassed.NonMandatoryPartMap.Remove(SelectedPart.NewPartNumber); // Remember map contains both New and Original part numbers
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -100,21 +100,21 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if (passed.MandatoryPartMap != null)
-                for (int i = 0; i < passed.MandatoryPartMap.Count; i++)
+            if (mPassed.MandatoryPartMap != null)
+                for (int i = 0; i < mPassed.MandatoryPartMap.Count; i++)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvAllParts.Rows.Add(passed.MandatoryPartMap.Values.ToArray()[i].PartName, passed.MandatoryPartMap.Values.ToArray()[i].PartDescription, passed.MandatoryPartMap.Values.ToArray()[i].OriginalItemPartNumber, passed.MandatoryPartMap.Values.ToArray()[i].NewPartNumber, true, passed.MandatoryPartMap.Values.ToArray()[i].PartPrice);
+                    dgvAllParts.Rows.Add(mPassed.MandatoryPartMap.Values.ToArray()[i].PartName, mPassed.MandatoryPartMap.Values.ToArray()[i].PartDescription, mPassed.MandatoryPartMap.Values.ToArray()[i].OriginalItemPartNumber, mPassed.MandatoryPartMap.Values.ToArray()[i].NewPartNumber, true, mPassed.MandatoryPartMap.Values.ToArray()[i].PartPrice);
                 }
         }
 
         void LoadNonMandatoryParts()
         {
-            if (passed.NonMandatoryPartMap != null)
-                for (int k = 0; k < passed.NonMandatoryPartMap.Count; k++)
+            if (mPassed.NonMandatoryPartMap != null)
+                for (int k = 0; k < mPassed.NonMandatoryPartMap.Count; k++)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvAllParts.Rows.Add(passed.NonMandatoryPartMap.Values.ToArray()[k].PartName, passed.NonMandatoryPartMap.Values.ToArray()[k].PartDescription, passed.NonMandatoryPartMap.Values.ToArray()[k].OriginalItemPartNumber, passed.NonMandatoryPartMap.Values.ToArray()[k].NewPartNumber, false, passed.NonMandatoryPartMap.Values.ToArray()[k].PartPrice);
+                    dgvAllParts.Rows.Add(mPassed.NonMandatoryPartMap.Values.ToArray()[k].PartName, mPassed.NonMandatoryPartMap.Values.ToArray()[k].PartDescription, mPassed.NonMandatoryPartMap.Values.ToArray()[k].OriginalItemPartNumber, mPassed.NonMandatoryPartMap.Values.ToArray()[k].NewPartNumber, false, mPassed.NonMandatoryPartMap.Values.ToArray()[k].PartPrice);
                 }
         }
 
@@ -134,20 +134,20 @@ namespace QuoteSwift
             }
 
 
-            if (passed.MandatoryPartMap.Count > 0 || passed.NonMandatoryPartMap.Count > 0 || passed != null || passed.MandatoryPartMap != null || passed.NonMandatoryPartMap != null)
+            if (mPassed.MandatoryPartMap.Count > 0 || mPassed.NonMandatoryPartMap.Count > 0 || mPassed != null || mPassed.MandatoryPartMap != null || mPassed.NonMandatoryPartMap != null)
             {
 
                 if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
                 {
                     //Search for part in mandatory
 
-                    SelectedPart = passed.MandatoryPartMap.SingleOrDefault(p => p.Value.OriginalItemPartNumber == SearchName).Value;
+                    SelectedPart = mPassed.MandatoryPartMap.SingleOrDefault(p => p.Value.OriginalItemPartNumber == SearchName).Value;
                     return SelectedPart;
 
                 }
                 else // Search in Non-Mandatory
                 {
-                    SelectedPart = passed.NonMandatoryPartMap.SingleOrDefault(p => p.Value.OriginalItemPartNumber == SearchName).Value;
+                    SelectedPart = mPassed.NonMandatoryPartMap.SingleOrDefault(p => p.Value.OriginalItemPartNumber == SearchName).Value;
                     return SelectedPart;
                 }
             }

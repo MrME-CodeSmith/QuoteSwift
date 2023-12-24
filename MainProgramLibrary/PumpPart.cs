@@ -3,20 +3,20 @@
 namespace QuoteSwift
 {
     [ProtoContract(SkipConstructor = true)]
-    public class Product_Part
+    public class ProductPart
     {
         [ProtoMember(1)]
-        private Part mProductPart;
+        private Part mPart;
         [ProtoMember(2)]
         private int mPumpPartQuantity;
 
-        public Product_Part(Part productPart, int mPumpPartQuantity)
+        public ProductPart(Part part, int pumpPartQuantity)
         {
-            ProductPart = productPart;
-            PumpPartQuantity = mPumpPartQuantity;
+            Part = part;
+            PumpPartQuantity = pumpPartQuantity;
         }
 
-        public Part ProductPart { get => mProductPart; set => mProductPart = value; }
+        public Part Part { get => mPart; set => mPart = value; }
         public int PumpPartQuantity { get => mPumpPartQuantity; set => mPumpPartQuantity = value; }
     }
 }

@@ -9,17 +9,17 @@ namespace QuoteSwift
     public partial class FrmAddBusiness : Form
     {
 
-        AppContext passed;
+        AppContext mPassed;
 
         Business mBusiness;
 
         public FrmAddBusiness()
         {
             InitializeComponent();
-            mBusiness = passed.BusinessToChange;
+            mBusiness = mPassed.BusinessToChange;
         }
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -29,53 +29,53 @@ namespace QuoteSwift
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
-            if (ValidBusiness() && !passed.ChangeSpecificObject)
+            if (ValidBusiness() && !mPassed.ChangeSpecificObject)
             {
                 //Add Final Details to mBusiness object
                 mBusiness.BusinessName = txtBusinessName.Text;
                 mBusiness.BusinessExtraInformation = rtxtExtraInformation.Text;
                 mBusiness.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
-                if (passed.BusinessMap == null)
+                if (mPassed.BusinessMap == null)
                 {
                     //Create New business List
-                    passed.BusinessMap = new Dictionary<string, Business>()
+                    mPassed.BusinessMap = new Dictionary<string, Business>()
                     {
                         { mBusiness.BusinessLegalDetails.RegistrationNumber, mBusiness }
                     };
                 }
                 else //Add To List
                 {
-                    if (passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == mBusiness.BusinessName).Value != null)
+                    if (mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == mBusiness.BusinessName).Value != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
                         return;
                     }
-                    else if (passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.VatNumber == mBusiness.BusinessLegalDetails.VatNumber).Value != null)
+                    else if (mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.VatNumber == mBusiness.BusinessLegalDetails.VatNumber).Value != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
                         return;
                     }
-                    else if (passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.RegistrationNumber == mBusiness.BusinessLegalDetails.RegistrationNumber).Value != null)
+                    else if (mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.RegistrationNumber == mBusiness.BusinessLegalDetails.RegistrationNumber).Value != null)
                     {
                         MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
                         return;
                     }
-                    else passed.BusinessMap.Add(mBusiness.BusinessLegalDetails.RegistrationNumber ,mBusiness);
+                    else mPassed.BusinessMap.Add(mBusiness.BusinessLegalDetails.RegistrationNumber ,mBusiness);
                 }
 
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
+                mPassed.BusinessToChange = null;
+                mPassed.ChangeSpecificObject = false;
 
                 MainProgramCode.ShowInformation(mBusiness.BusinessName + " has been added.", "INFORMATION - mBusiness Successfully Added");
 
                 ResetScreenInput();
             }
-            else if (ValidBusiness() && passed.ChangeSpecificObject)
+            else if (ValidBusiness() && mPassed.ChangeSpecificObject)
             {
-                passed.BusinessToChange.BusinessName = txtBusinessName.Text;
-                passed.BusinessToChange.BusinessExtraInformation = rtxtExtraInformation.Text;
-                passed.BusinessToChange.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
+                mPassed.BusinessToChange.BusinessName = txtBusinessName.Text;
+                mPassed.BusinessToChange.BusinessExtraInformation = rtxtExtraInformation.Text;
+                mPassed.BusinessToChange.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
                 MainProgramCode.ShowInformation(mBusiness.BusinessName + " has been successfully updated.", "INFORMATION - mBusiness Successfully Updated");
                 ConvertToViewOnly();
@@ -84,25 +84,25 @@ namespace QuoteSwift
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            if (ValidBusinessPOBoxAddress())
+            if (ValidBusinessPoBoxAddress())
             {
                 Address address = new Address(txtBusinessPODescription.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text),
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
-                if (!POBoxAddressExisting(address))
+                if (!PoBoxAddressExisting(address))
                 {
-                    if (mBusiness.BusinessPOBoxAddressList == null)
+                    if (mBusiness.BusinessPoBoxAddressList == null)
                     {
                         //Create New List
-                        mBusiness.BusinessPOBoxAddressList = new BindingList<Address> { address };
+                        mBusiness.BusinessPoBoxAddressList = new BindingList<Address> { address };
                         MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - mBusiness P.O.Box Address Added Successfully");
                     }
                     else // AddingNewEventArgs To list
                     {
-                        mBusiness.BusinessPOBoxAddressList.Add(address);
+                        mBusiness.BusinessPoBoxAddressList.Add(address);
                         MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - mBusiness P.O.Box Address Added Successfully");
                     }
 
-                    ClearPOBoxAddressInput();
+                    ClearPoBoxAddressInput();
                 }
             }
         }
@@ -213,16 +213,16 @@ namespace QuoteSwift
         {
             if (mBusiness.BusinessEmailAddressList != null)
             {
-                passed.BusinessToChange = mBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                mPassed.BusinessToChange = mBusiness;
+                mPassed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesEmailAddresses();
                 Show();
 
-                mBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
+                mBusiness = mPassed.BusinessToChange;
+                mPassed.BusinessToChange = null;
+                mPassed.ChangeSpecificObject = false;
 
             }
             else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing mBusiness Email Addresses");
@@ -232,34 +232,34 @@ namespace QuoteSwift
         {
             if (mBusiness.BusinessAddressList != null)
             {
-                passed.BusinessToChange = mBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                mPassed.BusinessToChange = mBusiness;
+                mPassed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesAddresses();
                 Show();
 
-                mBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
+                mBusiness = mPassed.BusinessToChange;
+                mPassed.BusinessToChange = null;
+                mPassed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing mBusiness Addresses");
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
         {
-            if (mBusiness.BusinessPOBoxAddressList != null)
+            if (mBusiness.BusinessPoBoxAddressList != null)
             {
-                passed.BusinessToChange = mBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                mPassed.BusinessToChange = mBusiness;
+                mPassed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses();
+                QuoteSwiftMainCode.ViewBusinessesPoBoxAddresses();
                 Show();
 
-                mBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
+                mBusiness = mPassed.BusinessToChange;
+                mPassed.BusinessToChange = null;
+                mPassed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing mBusiness P.O.Box Addresses");
         }
@@ -268,33 +268,33 @@ namespace QuoteSwift
         {
             if (mBusiness.BusinessTelephoneNumberList != null || mBusiness.BusinessCellphoneNumberList != null)
             {
-                passed.BusinessToChange = mBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                mPassed.BusinessToChange = mBusiness;
+                mPassed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
                 QuoteSwiftMainCode.ViewBusinessesPhoneNumbers();
                 Show();
 
-                mBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
+                mBusiness = mPassed.BusinessToChange;
+                mPassed.BusinessToChange = null;
+                mPassed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing mBusiness Phone Numbers");
         }
 
         private void FrmAddBusiness_Load(object sender, EventArgs e)
         {
-            if (passed.BusinessToChange != null && passed.ChangeSpecificObject) // Change Existing mBusiness Info
+            if (mPassed.BusinessToChange != null && mPassed.ChangeSpecificObject) // Change Existing mBusiness Info
             {
-                mBusiness = passed.BusinessToChange;
+                mBusiness = mPassed.BusinessToChange;
             }
-            else if (passed.BusinessToChange != null && !passed.ChangeSpecificObject) // View Existing mBusiness Info
+            else if (mPassed.BusinessToChange != null && !mPassed.ChangeSpecificObject) // View Existing mBusiness Info
             {
-                mBusiness = passed.BusinessToChange;
+                mBusiness = mPassed.BusinessToChange;
                 ConvertToViewOnly();
                 LoadInformation();
             }
-            else if (passed.BusinessToChange == null && !passed.ChangeSpecificObject) // Add New mBusiness Info
+            else if (mPassed.BusinessToChange == null && !mPassed.ChangeSpecificObject) // Add New mBusiness Info
             {
                 mBusiness = new Business();
             }
@@ -313,7 +313,7 @@ namespace QuoteSwift
         private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConvertToEdit();
-            passed.ChangeSpecificObject = true;
+            mPassed.ChangeSpecificObject = true;
             updateBusinessInformationToolStripMenuItem.Enabled = false;
         }
 
@@ -365,7 +365,7 @@ namespace QuoteSwift
             return true;
         }
 
-        private bool ValidBusinessPOBoxAddress()
+        private bool ValidBusinessPoBoxAddress()
         {
             if (txtBusinessPODescription.Text.Length < 2)
             {
@@ -426,7 +426,7 @@ namespace QuoteSwift
                 return false;
             }
 
-            if (mBusiness.BusinessPOBoxAddressList == null)
+            if (mBusiness.BusinessPoBoxAddressList == null)
             {
                 MainProgramCode.ShowError("Please add a valid business P.O.Box address under the 'mBusiness P.O.Box Address' section.", "ERROR - Current mBusiness Invalid");
                 return false;
@@ -467,7 +467,7 @@ namespace QuoteSwift
             mtxtAreaCode.ResetText();
         }
 
-        private void ClearPOBoxAddressInput()
+        private void ClearPoBoxAddressInput()
         {
             txtBusinessPODescription.ResetText();
             mtxtPOBoxStreetNumber.ResetText();
@@ -483,7 +483,7 @@ namespace QuoteSwift
             mtxtVATNumber.ResetText();
             mtxtRegistrationNumber.ResetText();
             ClearBusinessAddressInput();
-            ClearPOBoxAddressInput();
+            ClearPoBoxAddressInput();
             mtxtEmail.ResetText();
             mtxtCellphoneNumber.ResetText();
             mtxtTelephoneNumber.ResetText();
@@ -506,14 +506,14 @@ namespace QuoteSwift
             return false;
         }
 
-        private bool POBoxAddressExisting(Address a)
+        private bool PoBoxAddressExisting(Address a)
         {
 
-            if (mBusiness.BusinessPOBoxAddressList != null)
+            if (mBusiness.BusinessPoBoxAddressList != null)
             {
-                for (int i = 0; i < mBusiness.BusinessPOBoxAddressList.Count; i++)
+                for (int i = 0; i < mBusiness.BusinessPoBoxAddressList.Count; i++)
                 {
-                    if (mBusiness.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
+                    if (mBusiness.BusinessPoBoxAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
                         MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
                         return true;
@@ -594,7 +594,7 @@ namespace QuoteSwift
             btnViewEmailAddresses.Enabled = true;
 
             btnAddBusiness.Visible = false;
-            Text = Text.Replace("Add mBusiness", "Viewing " + passed.BusinessToChange.BusinessName);
+            Text = Text.Replace("Add mBusiness", "Viewing " + mPassed.BusinessToChange.BusinessName);
             updateBusinessInformationToolStripMenuItem.Enabled = true;
         }
 

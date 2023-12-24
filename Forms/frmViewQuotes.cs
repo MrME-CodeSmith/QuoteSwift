@@ -246,7 +246,7 @@ namespace QuoteSwift
             LoadDataGrid();
         }
 
-        readonly int count = 0;
+        readonly int mCount = 0;
         private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
         {
             QuoteSwiftMainCode.CloseApplication(true);

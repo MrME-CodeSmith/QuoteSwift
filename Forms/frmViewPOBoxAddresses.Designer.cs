@@ -1,7 +1,7 @@
 ﻿
 namespace QuoteSwift
 {
-    partial class FrmViewPOBoxAddresses
+    partial class FrmViewPoBoxAddresses
     {
         /// <summary>
         /// Required designer variable.
@@ -167,7 +167,7 @@ namespace QuoteSwift
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.msViewPOBoxAddressesControles;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "FrmViewPOBoxAddresses";
+            this.Name = "FrmViewPoBoxAddresses";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Viewing <<Business name>> P.O.Box Addresses";
             this.Load += new System.EventHandler(this.FrmViewPOBoxAddresses_Load);

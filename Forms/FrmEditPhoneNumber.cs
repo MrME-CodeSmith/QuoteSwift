@@ -6,9 +6,9 @@ namespace QuoteSwift
     public partial class FrmEditPhoneNumber : Form
     {
 
-        AppContext passed;
+        AppContext mPassed;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmEditPhoneNumber()
         {
@@ -17,27 +17,27 @@ namespace QuoteSwift
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
         {
-            if (passed.PhoneNumberToChange != "") txtPhoneNumber.Text = passed.PhoneNumberToChange;
+            if (mPassed.PhoneNumberToChange != "") txtPhoneNumber.Text = mPassed.PhoneNumberToChange;
         }
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null)
+            if (mPassed != null && mPassed.BusinessToChange != null)
             {
                 FrmAddBusiness frmAddBusiness = new FrmAddBusiness();
                 if (!frmAddBusiness.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
-                    passed.PhoneNumberToChange = txtPhoneNumber.Text;
+                    mPassed.PhoneNumberToChange = txtPhoneNumber.Text;
                     MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
                     Close();
                 }
             }
-            else if (passed != null && passed.CustomerToChange != null)
+            else if (mPassed != null && mPassed.CustomerToChange != null)
             {
                 FrmAddCustomer frmAddCustomer = new FrmAddCustomer();
                 if (!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
-                    passed.PhoneNumberToChange = txtPhoneNumber.Text;
+                    mPassed.PhoneNumberToChange = txtPhoneNumber.Text;
                     MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
                     Close();
                 }

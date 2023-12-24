@@ -8,9 +8,9 @@ namespace QuoteSwift // Repair Quote Swift
     public partial class FrmViewPump : Form
     {
 
-        AppContext passed;
+        AppContext mPassed;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmViewPump()
         {
@@ -31,15 +31,15 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                passed.PumpToChange = passed.ProductMap.Values.ToArray().ElementAt(iGridSelection);
-                passed.ChangeSpecificObject = false;
+                mPassed.PumpToChange = mPassed.ProductMap.Values.ToArray().ElementAt(iGridSelection);
+                mPassed.ChangeSpecificObject = false;
 
                 Hide();
                 QuoteSwiftMainCode.CreateNewPump();
                 Show();
 
-                passed.ChangeSpecificObject = false;
-                passed.PumpToChange = null;
+                mPassed.ChangeSpecificObject = false;
+                mPassed.PumpToChange = null;
 
                 LoadInformation();
             }
@@ -62,11 +62,11 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                Product objPumpSelection = passed.ProductMap.Values.ToArray().ElementAt(iGridSelection);
+                Product objPumpSelection = mPassed.ProductMap.Values.ToArray().ElementAt(iGridSelection);
 
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.ProductName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
-                    passed.ProductMap.Remove(objPumpSelection.ProductName);
+                    mPassed.ProductMap.Remove(objPumpSelection.ProductName);
 
                     MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.ProductName + " from the pump list", "INFORMATION - Deletion Success");
                 }
@@ -102,11 +102,11 @@ namespace QuoteSwift // Repair Quote Swift
             //Manually Load Pump items:
             dgvPumpList.Rows.Clear();
 
-            if (passed.ProductMap != null)
+            if (mPassed.ProductMap != null)
             {
-                for (int i = 0; i < passed.ProductMap.Count; i++)
+                for (int i = 0; i < mPassed.ProductMap.Count; i++)
                 {
-                    dgvPumpList.Rows.Add(passed.ProductMap.Values.ToArray()[i].ProductName, passed.ProductMap.Values.ToArray()[i].PumpDescription, passed.ProductMap.Values.ToArray()[i].NewProductPrice.ToString());
+                    dgvPumpList.Rows.Add(mPassed.ProductMap.Values.ToArray()[i].ProductName, mPassed.ProductMap.Values.ToArray()[i].PumpDescription, mPassed.ProductMap.Values.ToArray()[i].NewProductPrice.ToString());
                 }
             }
         }

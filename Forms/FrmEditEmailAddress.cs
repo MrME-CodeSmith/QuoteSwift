@@ -6,9 +6,9 @@ namespace QuoteSwift
     public partial class FrmEditEmailAddress : Form
     {
 
-        AppContext passed;
+        AppContext mPassed;
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         public FrmEditEmailAddress()
         {
@@ -19,9 +19,9 @@ namespace QuoteSwift
         {
             if (mtxtEmail.Text.Length > 3 && mtxtEmail.Text.Contains("@"))
             {
-                string oldEmail = passed.EmailToChange;
-                passed.EmailToChange = mtxtEmail.Text;
-                if (passed != null && passed.BusinessToChange != null)
+                string oldEmail = mPassed.EmailToChange;
+                mPassed.EmailToChange = mtxtEmail.Text;
+                if (mPassed != null && mPassed.BusinessToChange != null)
                 {
                     FrmAddBusiness frmAddBusiness = new FrmAddBusiness();
                     if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
@@ -29,9 +29,9 @@ namespace QuoteSwift
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
                         Close();
                     }
-                    else passed.EmailToChange = oldEmail;
+                    else mPassed.EmailToChange = oldEmail;
                 }
-                else if (passed != null && passed.CustomerToChange != null)
+                else if (mPassed != null && mPassed.CustomerToChange != null)
                 {
                     FrmAddCustomer frmAddCustomer = new FrmAddCustomer();
                     if (!frmAddCustomer.EmailAddressExisting(mtxtEmail.Text))
@@ -39,7 +39,7 @@ namespace QuoteSwift
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
                         Close();
                     }
-                    else passed.EmailToChange = oldEmail;
+                    else mPassed.EmailToChange = oldEmail;
                 }
             }
             else MainProgramCode.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
@@ -47,7 +47,7 @@ namespace QuoteSwift
 
         private void FrmEditEmailAddress_Load(object sender, EventArgs e)
         {
-            mtxtEmail.Text = passed.EmailToChange;
+            mtxtEmail.Text = mPassed.EmailToChange;
 
         }
 

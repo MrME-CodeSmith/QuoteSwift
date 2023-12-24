@@ -13,24 +13,24 @@ namespace QuoteSwift
 {
     public partial class FrmCreateQuote : Form
     {
-        AppContext passed;
+        AppContext mPassed;
 
         public Quote NewQuote;
 
-        readonly Pricing P = new Pricing();
+        readonly Pricing mP = new Pricing();
 
         public FrmCreateQuote()
         {
             InitializeComponent();
         }
 
-        public ref AppContext Passed { get => ref passed; }
+        public ref AppContext Passed { get => ref mPassed; }
 
         private void BtnComplete_Click(object sender, EventArgs e)
         {
-            if (passed != null && !passed.ChangeSpecificObject && passed.QuoteToChange != null)
+            if (mPassed != null && !mPassed.ChangeSpecificObject && mPassed.QuoteToChange != null)
             {
-                NewQuote = passed.QuoteToChange;
+                NewQuote = mPassed.QuoteToChange;
                 ExportQuoteToTemplate();
                 NewQuote = null;
             }
@@ -48,11 +48,11 @@ namespace QuoteSwift
                     }
 
 
-                    if (passed.QuoteMap != null)
+                    if (mPassed.QuoteMap != null)
                     {
-                        passed.QuoteMap.Add(NewQuote.QuoteNumber, NewQuote);
+                        mPassed.QuoteMap.Add(NewQuote.QuoteNumber, NewQuote);
                     }
-                    else passed.QuoteMap = new Dictionary<string, Quote>() { { NewQuote.QuoteNumber ,NewQuote } };
+                    else mPassed.QuoteMap = new Dictionary<string, Quote>() { { NewQuote.QuoteNumber ,NewQuote } };
 
                     if (MainProgramCode.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
@@ -60,10 +60,10 @@ namespace QuoteSwift
                     }
                     else MainProgramCode.ShowInformation("The quote was successfully added to the list of quotes.", "INFORMATION - Quote Added To List");
 
-                    passed.QuoteToChange = NewQuote;
+                    mPassed.QuoteToChange = NewQuote;
                     ConvertToReadOnly();
                     createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
-                    passed.QuoteToChange = null;
+                    mPassed.QuoteToChange = null;
                 }
                 else MainProgramCode.ShowError("The Quote could not be created successfully.", "ERROR - Quote Creation Unsuccessful");
             }
@@ -87,13 +87,13 @@ namespace QuoteSwift
 
         private void FrmCreateQuote_Load(object sender, EventArgs e)
         {
-            if (passed != null && !passed.ChangeSpecificObject && passed.QuoteToChange != null) // View Quote
+            if (mPassed != null && !mPassed.ChangeSpecificObject && mPassed.QuoteToChange != null) // View Quote
             {
                 LoadFromPassedObject();
                 ConvertToReadOnly();
                 createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
             }
-            else if (passed != null && passed.ChangeSpecificObject && passed.QuoteToChange != null)//Create New Quote Using Passed Quote
+            else if (mPassed != null && mPassed.ChangeSpecificObject && mPassed.QuoteToChange != null)//Create New Quote Using Passed Quote
             {
                 LoadFromPassedObject();
 
@@ -110,10 +110,10 @@ namespace QuoteSwift
             {
                 LoadComboBoxes();
                 LoadPartlists();
-                LoadBusinessPOBoxAddress();
+                LoadBusinessPoBoxAddress();
                 LoadBusinessLegalDatails();
                 LoadCustomerDeliveryAddress();
-                LoadCustomerPOBoxAddress();
+                LoadCustomerPoBoxAddress();
                 GetNewQuotenumber();
 
                 dtpQuoteCreationDate.Value = DateTime.Today;
@@ -121,7 +121,7 @@ namespace QuoteSwift
                 dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
 
                 Text = Text.Replace("<< Business Name >>", GetBusinessSelection().BusinessName);
-                if (passed.QuoteMap == null || passed.QuoteMap.Count == 0)
+                if (mPassed.QuoteMap == null || mPassed.QuoteMap.Count == 0)
                 {
                     cbxUseAutomaticNumberingScheme.Checked = false;
                     cbxUseAutomaticNumberingScheme.Enabled = false;
@@ -141,8 +141,8 @@ namespace QuoteSwift
         {
             LinkCustomerDeliveryAddress(GetCustomerSelection(), ref cbxCustomerDeliveryAddress);
             LoadCustomerDetails();
-            LinkCustomerPOBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
-            LoadCustomerPOBoxAddress();
+            LinkCustomerPoBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
+            LoadCustomerPoBoxAddress();
         }
 
         private void CbxBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
@@ -151,17 +151,17 @@ namespace QuoteSwift
             LinkBusinessCellphone(GetBusinessSelection(), ref cbxBusinessCellphoneNumberSelection);
             LinkBusinessEmail(GetBusinessSelection(), ref cbxBusinessEmailAddressSelection);
             LinkCustomers(GetBusinessSelection(), ref cbxCustomerSelection);
-            LinkBusinesssPOBox(GetBusinessSelection(), ref CbxPOBoxSelection);
+            LinkBusinesssPoBox(GetBusinessSelection(), ref CbxPOBoxSelection);
 
             LoadSelectedBusinessInformation();
-            LoadBusinessPOBoxAddress();
+            LoadBusinessPoBoxAddress();
             LoadBusinessLegalDatails();
-            LoadCustomerPOBoxAddress();
+            LoadCustomerPoBoxAddress();
         }
 
         private void CbxPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadBusinessPOBoxAddress();
+            LoadBusinessPoBoxAddress();
         }
 
         private void CbxCustomerDeliveryAddress_SelectedIndexChanged(object sender, EventArgs e)
@@ -184,9 +184,9 @@ namespace QuoteSwift
             Business business;
             string SearchName = cbxBusinessSelection.Text;
 
-            if (passed.BusinessMap != null && SearchName.Length > 1)
+            if (mPassed.BusinessMap != null && SearchName.Length > 1)
             {
-                business = passed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
+                business = mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == SearchName).Value;
                 return business;
             }
 
@@ -197,7 +197,7 @@ namespace QuoteSwift
         {
             string SearchName = cbxCustomerSelection.Text;
             if (SearchName.Length > 1)
-                if (passed.BusinessMap != null)
+                if (mPassed.BusinessMap != null)
                     if (GetBusinessSelection().CustomerList != null)
                     {
                         return GetBusinessSelection().CustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
@@ -210,27 +210,27 @@ namespace QuoteSwift
         {
             string SearchName = cbxPumpSelection.Text;
 
-            if (passed.ProductMap != null) return passed.ProductMap.SingleOrDefault(p => p.Value.ProductName == SearchName).Value;
+            if (mPassed.ProductMap != null) return mPassed.ProductMap.SingleOrDefault(p => p.Value.ProductName == SearchName).Value;
 
             return null;
         }
 
-        private Address GetBusinesssPOBoxAddressSelection(Business b)
+        private Address GetBusinesssPoBoxAddressSelection(Business b)
         {
             string SearchName = CbxPOBoxSelection.Text;
 
-            if (b.BusinessPOBoxAddressList != null) return b.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
+            if (b.BusinessPoBoxAddressList != null) return b.BusinessPoBoxAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
 
             return null;
         }
 
-        private Address GetCustomerPOBoxAddressSelection(Customer c)
+        private Address GetCustomerPoBoxAddressSelection(Customer c)
         {
             if (c != null)
             {
                 string SearchName = CbxCustomerPOBoxSelection.Text;
 
-                if (c.CustomerPOBoxAddress != null) return c.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == SearchName);
+                if (c.CustomerPoBoxAddress != null) return c.CustomerPoBoxAddress.SingleOrDefault(p => p.AddressDescription == SearchName);
             }
             return null;
         }
@@ -246,7 +246,7 @@ namespace QuoteSwift
 
         private void LinkBusinessTelephone(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessMap != null && b != null)
+            if (mPassed != null && mPassed.BusinessMap != null && b != null)
             {
                 //Created a Binding Source for the Business' Telephone list to link the source
                 //directly to the combo-box's data-source:
@@ -259,7 +259,7 @@ namespace QuoteSwift
 
         private void LinkBusinessCellphone(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessMap != null && b != null)
+            if (mPassed != null && mPassed.BusinessMap != null && b != null)
             {
                 //Created a Binding Source for the Business' Cellphone list to link the source
                 //directly to the combo-box's data-source:
@@ -272,7 +272,7 @@ namespace QuoteSwift
 
         private void LinkBusinessEmail(Business b, ref ComboBox cb)
         {
-            if (passed != null && passed.BusinessMap != null && b != null)
+            if (mPassed != null && mPassed.BusinessMap != null && b != null)
             {
                 //Created a Binding Source for the Business' Email list to link the source
                 //directly to the combo-box's data-source:
@@ -283,14 +283,14 @@ namespace QuoteSwift
             }
         }
 
-        private void LinkBusinesssPOBox(Business b, ref ComboBox cb)
+        private void LinkBusinesssPoBox(Business b, ref ComboBox cb)
         {
-            if (b != null && b.BusinessPOBoxAddressList != null)
+            if (b != null && b.BusinessPoBoxAddressList != null)
             {
                 //Created a Binding Source for the Business' P.O.Box list to link the source
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessPOBoxAddressList };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessPoBoxAddressList };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 
@@ -335,12 +335,12 @@ namespace QuoteSwift
 
         private void LinkPumpList(ref ComboBox cb)
         {
-            if (passed != null && passed.ProductMap != null)
+            if (mPassed != null && mPassed.ProductMap != null)
             {
                 //Created a Binding Source for the Pumps list to link the source
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxSource = new BindingSource { DataSource = passed.ProductMap };
+                BindingSource ComboBoxSource = new BindingSource { DataSource = mPassed.ProductMap };
 
                 cb.DataSource = ComboBoxSource.DataSource;
 
@@ -349,14 +349,14 @@ namespace QuoteSwift
             }
         }
 
-        private void LinkCustomerPOBox(Customer c, ref ComboBox cb)
+        private void LinkCustomerPoBox(Customer c, ref ComboBox cb)
         {
-            if (c != null && c.CustomerPOBoxAddress != null)
+            if (c != null && c.CustomerPoBoxAddress != null)
             {
                 //Created a Binding Source for the Customer's P.O.Box list to link the source
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = c.CustomerPOBoxAddress };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = c.CustomerPoBoxAddress };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 
@@ -367,7 +367,7 @@ namespace QuoteSwift
 
         void LoadSelectedBusinessInformation()
         {
-            LoadBusinessPOBoxAddress();
+            LoadBusinessPoBoxAddress();
             LoadBusinessLegalDatails();
         }
 
@@ -382,8 +382,8 @@ namespace QuoteSwift
             LinkCustomers(GetBusinessSelection(), ref cbxCustomerSelection);
             LinkCustomerDeliveryAddress(GetCustomerSelection(), ref cbxCustomerDeliveryAddress);
             LinkPumpList(ref cbxPumpSelection);
-            LinkBusinesssPOBox(GetBusinessSelection(), ref CbxPOBoxSelection);
-            LinkCustomerPOBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
+            LinkBusinesssPoBox(GetBusinessSelection(), ref CbxPOBoxSelection);
+            LinkCustomerPoBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
         }
 
         private void LoadPartlists()
@@ -391,7 +391,7 @@ namespace QuoteSwift
             dgvMandatoryPartReplacement.Rows.Clear();
             DgvNonMandatoryPartReplacement.Rows.Clear();
 
-            if (passed != null && passed.ProductMap != null && cbxPumpSelection.SelectedIndex > -1)
+            if (mPassed != null && mPassed.ProductMap != null && cbxPumpSelection.SelectedIndex > -1)
             {
                 Product display = GetPumpSelection();
 
@@ -410,24 +410,24 @@ namespace QuoteSwift
                 for (int i = 0; i < p.PartList.Count; i++)
                 {
                     //Manually setting the data grid's rows' values:
-                    if (p.PartList[i].ProductPart.MandatoryPart)
-                        dgvMandatoryPartReplacement.Rows.Add(p.PartList[i].ProductPart.NewPartNumber,
-                                                             p.PartList[i].ProductPart.PartDescription,
+                    if (p.PartList[i].Part.MandatoryPart)
+                        dgvMandatoryPartReplacement.Rows.Add(p.PartList[i].Part.NewPartNumber,
+                                                             p.PartList[i].Part.PartDescription,
                                                              p.PartList[i].PumpPartQuantity,
                                                              p.PartList[i].PumpPartQuantity,
                                                              0,
                                                              p.PartList[i].PumpPartQuantity,
-                                                             (p.PartList[i].PumpPartQuantity * p.PartList[i].ProductPart.PartPrice),
-                                                             p.PartList[i].ProductPart.PartPrice,
+                                                             (p.PartList[i].PumpPartQuantity * p.PartList[i].Part.PartPrice),
+                                                             p.PartList[i].Part.PartPrice,
                                                              0, 1);
-                    else DgvNonMandatoryPartReplacement.Rows.Add(p.PartList[i].ProductPart.NewPartNumber,
-                                                                 p.PartList[i].ProductPart.PartDescription,
+                    else DgvNonMandatoryPartReplacement.Rows.Add(p.PartList[i].Part.NewPartNumber,
+                                                                 p.PartList[i].Part.PartDescription,
                                                                  p.PartList[i].PumpPartQuantity,
                                                                  p.PartList[i].PumpPartQuantity,
                                                                  0,
                                                                  p.PartList[i].PumpPartQuantity,
                                                                  0,
-                                                                 p.PartList[i].ProductPart.PartPrice,
+                                                                 p.PartList[i].Part.PartPrice,
                                                                  0, 1);
 
                 }
@@ -439,9 +439,9 @@ namespace QuoteSwift
             }
         }
 
-        private void LoadBusinessPOBoxAddress()
+        private void LoadBusinessPoBoxAddress()
         {
-            Address Selection = GetBusinesssPOBoxAddressSelection(GetBusinessSelection());
+            Address Selection = GetBusinesssPoBoxAddressSelection(GetBusinessSelection());
             if (Selection != null)
             {
                 lblBusinessPOBoxNumber.Text = "Street Name: " + Selection.AddressStreetName;
@@ -451,9 +451,9 @@ namespace QuoteSwift
                 lblBusinessPOBoxAreaCode.Text = "Area Code: " + Selection.AddressAreaCode.ToString();
             }
         }
-        private void LoadCustomerPOBoxAddress()
+        private void LoadCustomerPoBoxAddress()
         {
-            Address Selection = GetCustomerPOBoxAddressSelection(GetCustomerSelection());
+            Address Selection = GetCustomerPoBoxAddressSelection(GetCustomerSelection());
             if (Selection != null)
             {
                 lblCustomerPOBoxStreetName.Text = "P.O.Box Number " + Selection.AddressStreetNumber.ToString();
@@ -491,7 +491,7 @@ namespace QuoteSwift
 
         private void CbxCustomerPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadCustomerPOBoxAddress();
+            LoadCustomerPoBoxAddress();
         }
 
         void Calculate(bool b = false)
@@ -551,19 +551,19 @@ namespace QuoteSwift
 
             // Display Sum of all totals:
 
-            P.Rebate = QuoteSwiftMainCode.ParseFloat(mtxtRebate.Text);
-            P.SubTotal = (Sum -= QuoteSwiftMainCode.ParseFloat(mtxtRebate.Text));
-            P.VAT = (Sum * 0.15f);
-            P.TotalDue = (Sum *= 1.15f);
+            mP.Rebate = QuoteSwiftMainCode.ParseFloat(mtxtRebate.Text);
+            mP.SubTotal = (Sum -= QuoteSwiftMainCode.ParseFloat(mtxtRebate.Text));
+            mP.Vat = (Sum * 0.15f);
+            mP.TotalDue = (Sum *= 1.15f);
 
-            P.Machining = GetPriceForNMItem("MACHINING");
-            P.Labour = GetPriceForNMItem("LABOUR");
-            P.Consumables = GetPriceForNMItem("CONSUMABLES incl COLLECTION & DELIVERY");
+            mP.Machining = GetPriceForNmItem("MACHINING");
+            mP.Labour = GetPriceForNmItem("LABOUR");
+            mP.Consumables = GetPriceForNmItem("CONSUMABLES incl COLLECTION & DELIVERY");
 
-            lblRebateValue.Text = "R" + P.Rebate.ToString();
-            lblSubTotalValue.Text = "R" + P.SubTotal.ToString();
-            lblVATValue.Text = "R" + P.VAT.ToString();
-            lblTotalDueValue.Text = "R" + P.TotalDue.ToString();
+            lblRebateValue.Text = "R" + mP.Rebate.ToString();
+            lblSubTotalValue.Text = "R" + mP.SubTotal.ToString();
+            lblVATValue.Text = "R" + mP.Vat.ToString();
+            lblTotalDueValue.Text = "R" + mP.TotalDue.ToString();
 
             lblRebateValue.Left = 107;
             lblSubTotalValue.Left = 107;
@@ -572,7 +572,7 @@ namespace QuoteSwift
 
 
 
-            lblRepairPercentage.Text = "Repair Percentage: " + Convert.ToString((P.SubTotal / GetPumpSelection().NewProductPrice) * 100) + "%";
+            lblRepairPercentage.Text = "Repair Percentage: " + Convert.ToString((mP.SubTotal / GetPumpSelection().NewProductPrice) * 100) + "%";
         }
 
         private void BtnCalculateRebate_Click(object sender, EventArgs e)
@@ -646,14 +646,14 @@ namespace QuoteSwift
             }
         }
 
-        Product_Part GetPart(string s, BindingList<Product_Part> bl)
+        ProductPart GetPart(string s, BindingList<ProductPart> bl)
         {
 
             if (bl != null && s != "")
             {
                 for (int i = 0; i < bl.Count; i++)
                 {
-                    if (bl[i].ProductPart.NewPartNumber == s)
+                    if (bl[i].Part.NewPartNumber == s)
                     {
                         return bl[i];
                     }
@@ -669,12 +669,12 @@ namespace QuoteSwift
 
 
 
-            BindingList<Quote_Part> MandatoryPartList = new BindingList<Quote_Part>();
+            BindingList<QuotePart> MandatoryPartList = new BindingList<QuotePart>();
             for (int i = 0; i < dgvMandatoryPartReplacement.Rows.Count; i++)
             {
                 if (dgvMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString() != "-")
                 {
-                    Quote_Part quote_Part = new Quote_Part(GetPart(dgvMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(),
+                    QuotePart quotePart = new QuotePart(GetPart(dgvMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(),
                                                                    GetPumpSelection().PartList),
                                                            QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
                                                            QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
@@ -683,17 +683,17 @@ namespace QuoteSwift
                                                            QuoteSwiftMainCode.ParseFloat(dgvMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
                                                            QuoteSwiftMainCode.ParseFloat(dgvMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
 
-                    MandatoryPartList.Add(quote_Part);
+                    MandatoryPartList.Add(quotePart);
                 }
             }
 
 
-            BindingList<Quote_Part> NonMandatoryPartList = new BindingList<Quote_Part>();
+            BindingList<QuotePart> NonMandatoryPartList = new BindingList<QuotePart>();
             for (int i = 0; i < DgvNonMandatoryPartReplacement.Rows.Count - 4; i++)
             {
                 if (DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString() != "-")
                 {
-                    Quote_Part quote_Part = new Quote_Part(GetPart(DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(), GetPumpSelection().PartList),
+                    QuotePart quotePart = new QuotePart(GetPart(DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(), GetPumpSelection().PartList),
                                                            QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
                                                            QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
                                                            QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[5].Value.ToString()),
@@ -701,7 +701,7 @@ namespace QuoteSwift
                                                            QuoteSwiftMainCode.ParseFloat(DgvNonMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
                                                            QuoteSwiftMainCode.ParseFloat(DgvNonMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
 
-                    NonMandatoryPartList.Add(quote_Part);
+                    NonMandatoryPartList.Add(quotePart);
                 }
             }
 
@@ -712,8 +712,8 @@ namespace QuoteSwift
                                          txtJobNumber.Text,
                                          txtPRNumber.Text,
                                          dtpPaymentTerm.Value,
-                                         new Address(GetBusinesssPOBoxAddressSelection(GetBusinessSelection())),
-                                         new Address(GetCustomerPOBoxAddressSelection(GetCustomerSelection())),
+                                         new Address(GetBusinesssPoBoxAddressSelection(GetBusinessSelection())),
+                                         new Address(GetCustomerPoBoxAddressSelection(GetCustomerSelection())),
                                          txtLineNumber.Text,
                                          GetPumpSelection().NewProductPrice,
                                          ((QuoteSwiftMainCode.ParseFloat(lblTotalDue.Text) / GetPumpSelection().NewProductPrice) * 100),
@@ -726,10 +726,10 @@ namespace QuoteSwift
                                          cbxBusinessCellphoneNumberSelection.Text,
                                          cbxBusinessEmailAddressSelection.Text,
                                          (int)(dtpPaymentTerm.Value.Subtract(dtpQuoteCreationDate.Value)).TotalDays,
-                                         P,
+                                         mP,
                                          cbxPumpSelection.Text);
 
-            CreateQuote.QuoteRepairPercentage = ((float)(P.SubTotal / GetPumpSelection().NewProductPrice * 100));
+            CreateQuote.QuoteRepairPercentage = ((float)(mP.SubTotal / GetPumpSelection().NewProductPrice * 100));
             return CreateQuote;
         }
 
@@ -767,7 +767,7 @@ namespace QuoteSwift
 
         }
 
-        private float GetPriceForNMItem(string s)
+        private float GetPriceForNmItem(string s)
         {
             if (s != "")
             {
@@ -786,9 +786,9 @@ namespace QuoteSwift
         {
             Quote Provided = q;
 
-            if (passed.QuoteMap != null)
+            if (mPassed.QuoteMap != null)
             {
-                Quote Search = passed.QuoteMap.SingleOrDefault(p => p.Value.QuoteJobNumber == Provided.QuoteJobNumber || p.Value.QuoteNumber == Provided.QuoteNumber).Value;
+                Quote Search = mPassed.QuoteMap.SingleOrDefault(p => p.Value.QuoteJobNumber == Provided.QuoteJobNumber || p.Value.QuoteNumber == Provided.QuoteNumber).Value;
                 if (Search != null) return false;
             }
 
@@ -797,13 +797,13 @@ namespace QuoteSwift
 
         private void GetNewQuotenumber()
         {
-            if (passed != null && passed.QuoteMap != null)
+            if (mPassed != null && mPassed.QuoteMap != null)
             {
-                Quote temp = passed.QuoteMap.Values.ToArray()[0];
+                Quote temp = mPassed.QuoteMap.Values.ToArray()[0];
                 int LastQuoteNumber = GetQuoteNumber(ref temp);
-                for (int i = 1; i < passed.QuoteMap.Count; i++)
+                for (int i = 1; i < mPassed.QuoteMap.Count; i++)
                 {
-                    temp = passed.QuoteMap.Values.ToArray()[i];
+                    temp = mPassed.QuoteMap.Values.ToArray()[i];
                     if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
                 }
                 LastQuoteNumber++;
@@ -845,14 +845,14 @@ namespace QuoteSwift
             dgvMandatoryPartReplacement.Rows.Clear();
             DgvNonMandatoryPartReplacement.Rows.Clear();
             //Manually setting the data grid's mandatory rows' values:
-            cbxPumpSelection.Text = passed.QuoteToChange.PumpName;
+            cbxPumpSelection.Text = mPassed.QuoteToChange.PumpName;
 
-            for (int i = 0; i < passed.QuoteToChange.QuoteMandatoryPartList.Count; i++)
+            for (int i = 0; i < mPassed.QuoteToChange.QuoteMandatoryPartList.Count; i++)
             {
-                Quote_Part data = passed.QuoteToChange.QuoteMandatoryPartList[i];
+                QuotePart data = mPassed.QuoteToChange.QuoteMandatoryPartList[i];
                 if (data != null)
-                    dgvMandatoryPartReplacement.Rows.Add(data.PumpPart.ProductPart.NewPartNumber,
-                                                         data.PumpPart.ProductPart.PartDescription,
+                    dgvMandatoryPartReplacement.Rows.Add(data.PumpPart.Part.NewPartNumber,
+                                                         data.PumpPart.Part.PartDescription,
                                                          data.PumpPart.PumpPartQuantity,
                                                          data.MissingorScrap,
                                                          data.Repaired,
@@ -862,12 +862,12 @@ namespace QuoteSwift
                                                          ((data.UnitPrice * data.New) + (data.Repaired * (data.UnitPrice / data.RepairDevider))),
                                                          data.RepairDevider);
             }
-            for (int i = 0; i < passed.QuoteToChange.QuoteNewList.Count; i++)
+            for (int i = 0; i < mPassed.QuoteToChange.QuoteNewList.Count; i++)
             {
-                Quote_Part data = passed.QuoteToChange.QuoteNewList[i];
+                QuotePart data = mPassed.QuoteToChange.QuoteNewList[i];
                 if (data != null)
-                    DgvNonMandatoryPartReplacement.Rows.Add(data.PumpPart.ProductPart.NewPartNumber,
-                                                         data.PumpPart.ProductPart.PartDescription,
+                    DgvNonMandatoryPartReplacement.Rows.Add(data.PumpPart.Part.NewPartNumber,
+                                                         data.PumpPart.Part.PartDescription,
                                                          data.PumpPart.PumpPartQuantity,
                                                          data.MissingorScrap,
                                                          data.Repaired,
@@ -877,58 +877,58 @@ namespace QuoteSwift
                                                          ((data.UnitPrice * data.New) + (data.Repaired * (data.UnitPrice / data.RepairDevider))),
                                                          data.RepairDevider);
             }
-            DgvNonMandatoryPartReplacement.Rows.Add("TS6MACH", "MACHINING", 1, 0, 0, 1, 0, passed.QuoteToChange.QuoteCost.Machining, 0, 1);
-            DgvNonMandatoryPartReplacement.Rows.Add("TS6LAB", "LABOUR", 1, 0, 0, 1, 0, passed.QuoteToChange.QuoteCost.Labour, 0, 1);
-            DgvNonMandatoryPartReplacement.Rows.Add("CON TS6", "CONSUMABLES incl COLLECTION & DELIVERY", 1, 0, 0, 1, 0, passed.QuoteToChange.QuoteCost.Consumables, 0, 1);
+            DgvNonMandatoryPartReplacement.Rows.Add("TS6MACH", "MACHINING", 1, 0, 0, 1, 0, mPassed.QuoteToChange.QuoteCost.Machining, 0, 1);
+            DgvNonMandatoryPartReplacement.Rows.Add("TS6LAB", "LABOUR", 1, 0, 0, 1, 0, mPassed.QuoteToChange.QuoteCost.Labour, 0, 1);
+            DgvNonMandatoryPartReplacement.Rows.Add("CON TS6", "CONSUMABLES incl COLLECTION & DELIVERY", 1, 0, 0, 1, 0, mPassed.QuoteToChange.QuoteCost.Consumables, 0, 1);
 
             //Loading Business Information:
-            Address add = passed.QuoteToChange.QuoteBusinessPOBox;
-            cbxBusinessSelection.Text = passed.QuoteToChange.QuoteCompany.BusinessName;
+            Address add = mPassed.QuoteToChange.QuoteBusinessPoBox;
+            cbxBusinessSelection.Text = mPassed.QuoteToChange.QuoteCompany.BusinessName;
             CbxPOBoxSelection.Text = add.AddressDescription;
             lblBusinessPOBoxNumber.Text = "P.O.Box " + add.AddressStreetNumber;
             lblBusinessPOBoxSuburb.Text = add.AddressSuburb;
             lblBusinessPOBoxCity.Text = add.AddressCity;
             lblBusinessPOBoxAreaCode.Text = add.AddressAreaCode.ToString();
 
-            lblBusinessRegistrationNumber.Text = passed.QuoteToChange.QuoteCompany.BusinessLegalDetails.RegistrationNumber;
-            lblBusinessVATNumber.Text = passed.QuoteToChange.QuoteCompany.BusinessLegalDetails.VatNumber;
-            cbxBusinessTelephoneNumberSelection.Text = passed.QuoteToChange.Telefone;
-            cbxBusinessCellphoneNumberSelection.Text = passed.QuoteToChange.Cellphone;
-            cbxBusinessEmailAddressSelection.Text = passed.QuoteToChange.Email;
+            lblBusinessRegistrationNumber.Text = mPassed.QuoteToChange.QuoteCompany.BusinessLegalDetails.RegistrationNumber;
+            lblBusinessVATNumber.Text = mPassed.QuoteToChange.QuoteCompany.BusinessLegalDetails.VatNumber;
+            cbxBusinessTelephoneNumberSelection.Text = mPassed.QuoteToChange.Telefone;
+            cbxBusinessCellphoneNumberSelection.Text = mPassed.QuoteToChange.Cellphone;
+            cbxBusinessEmailAddressSelection.Text = mPassed.QuoteToChange.Email;
 
             //Loading Customer Section:
-            add = passed.QuoteToChange.QuoteCustomerPOBox;
-            cbxCustomerSelection.Text = passed.QuoteToChange.QuoteCustomer.CustomerCompanyName;
+            add = mPassed.QuoteToChange.QuoteCustomerPoBox;
+            cbxCustomerSelection.Text = mPassed.QuoteToChange.QuoteCustomer.CustomerCompanyName;
             CbxCustomerPOBoxSelection.Text = add.AddressDescription;
             lblCustomerPOBoxStreetName.Text = "Private Bag X" + add.AddressStreetNumber;
             lblCustomerPOBoxSuburb.Text = add.AddressSuburb;
             lblCustomerPOBoxCity.Text = add.AddressCity;
             lblCustomerPOBoxAreaCode.Text = add.AddressAreaCode.ToString();
 
-            cbxCustomerDeliveryAddress.Text = passed.QuoteToChange.QuoteCustomer.CustomerName;
-            rtxCustomerDeliveryDescripton.Text = passed.QuoteToChange.QuoteDeliveryAddress;
-            txtCustomerVATNumber.Text = passed.QuoteToChange.QuoteCustomer.CustomerLegalDetails.VatNumber;
+            cbxCustomerDeliveryAddress.Text = mPassed.QuoteToChange.QuoteCustomer.CustomerName;
+            rtxCustomerDeliveryDescripton.Text = mPassed.QuoteToChange.QuoteDeliveryAddress;
+            txtCustomerVATNumber.Text = mPassed.QuoteToChange.QuoteCustomer.CustomerLegalDetails.VatNumber;
 
             //Loading other Quote Details:
-            txtJobNumber.Text = passed.QuoteToChange.QuoteJobNumber;
-            txtReferenceNumber.Text = passed.QuoteToChange.QuoteReference;
-            txtPRNumber.Text = passed.QuoteToChange.QuotePRNumber;
-            txtLineNumber.Text = passed.QuoteToChange.QuoteLineNumber;
-            dtpPaymentTerm.Value = passed.QuoteToChange.QuotePaymentTerm;
+            txtJobNumber.Text = mPassed.QuoteToChange.QuoteJobNumber;
+            txtReferenceNumber.Text = mPassed.QuoteToChange.QuoteReference;
+            txtPRNumber.Text = mPassed.QuoteToChange.QuotePrNumber;
+            txtLineNumber.Text = mPassed.QuoteToChange.QuoteLineNumber;
+            dtpPaymentTerm.Value = mPassed.QuoteToChange.QuotePaymentTerm;
 
-            txtQuoteNumber.Text = passed.QuoteToChange.QuoteNumber;
+            txtQuoteNumber.Text = mPassed.QuoteToChange.QuoteNumber;
 
-            dtpQuoteCreationDate.Value = passed.QuoteToChange.QuoteCreationDate;
-            dtpQuoteExpiryDate.Value = passed.QuoteToChange.QuoteExpireyDate;
+            dtpQuoteCreationDate.Value = mPassed.QuoteToChange.QuoteCreationDate;
+            dtpQuoteExpiryDate.Value = mPassed.QuoteToChange.QuoteExpireyDate;
 
-            lblNewPumpUnitPrice.Text = "New Pump Price: R " + passed.QuoteToChange.QuoteCost.PumpPrice.ToString();
-            lblRepairPercentage.Text = passed.QuoteToChange.QuoteRepairPercentage + "%";
-            lblRebateValue.Text = "R" + passed.QuoteToChange.QuoteCost.Rebate.ToString();
-            lblSubTotalValue.Text = "R" + passed.QuoteToChange.QuoteCost.SubTotal.ToString();
-            lblVATValue.Text = "R" + passed.QuoteToChange.QuoteCost.VAT.ToString();
-            lblTotalDueValue.Text = "R" + passed.QuoteToChange.QuoteCost.TotalDue.ToString();
+            lblNewPumpUnitPrice.Text = "New Pump Price: R " + mPassed.QuoteToChange.QuoteCost.PumpPrice.ToString();
+            lblRepairPercentage.Text = mPassed.QuoteToChange.QuoteRepairPercentage + "%";
+            lblRebateValue.Text = "R" + mPassed.QuoteToChange.QuoteCost.Rebate.ToString();
+            lblSubTotalValue.Text = "R" + mPassed.QuoteToChange.QuoteCost.SubTotal.ToString();
+            lblVATValue.Text = "R" + mPassed.QuoteToChange.QuoteCost.Vat.ToString();
+            lblTotalDueValue.Text = "R" + mPassed.QuoteToChange.QuoteCost.TotalDue.ToString();
 
-            mtxtRebate.Text = passed.QuoteToChange.QuoteCost.Rebate.ToString();
+            mtxtRebate.Text = mPassed.QuoteToChange.QuoteCost.Rebate.ToString();
         }
 
         private void ConvertToReadOnly()
@@ -948,7 +948,7 @@ namespace QuoteSwift
             btnComplete.Enabled = true;
             btnCancel.Enabled = true;
 
-            Text = Text.Replace("<< Business Name >>", passed.QuoteToChange.QuoteCompany.BusinessName);
+            Text = Text.Replace("<< Business Name >>", mPassed.QuoteToChange.QuoteCompany.BusinessName);
             Text = Text.Replace("Creating New", "Viewing");
         }
 
@@ -956,15 +956,15 @@ namespace QuoteSwift
         {
             QuoteSwiftMainCode.ReadWriteComponents(Controls);
 
-            Text = Text.Replace(passed.QuoteToChange.QuoteCompany.BusinessName, passed.QuoteToChange.QuoteCompany.BusinessName);
+            Text = Text.Replace(mPassed.QuoteToChange.QuoteCompany.BusinessName, mPassed.QuoteToChange.QuoteCompany.BusinessName);
             Text = Text.Replace("Viewing", "Creating New");
 
         }
 
         private void CreateNewQuoteUsingThisQuoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (passed.QuoteToChange == null) passed.QuoteToChange = NewQuote;
-            passed.ChangeSpecificObject = true;
+            if (mPassed.QuoteToChange == null) mPassed.QuoteToChange = NewQuote;
+            mPassed.ChangeSpecificObject = true;
             ConvertToReadWrite();
             GetNewQuotenumber();
             btnComplete.Text = "Complete";

@@ -43,14 +43,14 @@ namespace QuoteSwift
             AddressAreaCode = a.mAddressAreaCode;
         }
 
-        public Address(string mAddressDescription, int mAddressStreetNumber, string mAddressStreetName, string mAddressSuburb, string mAddressCity, int mAddressAreaCode)
+        public Address(string addressDescription, int addressStreetNumber, string addressStreetName, string addressSuburb, string addressCity, int addressAreaCode)
         {
-            AddressDescription = mAddressDescription;
-            AddressStreetNumber = mAddressStreetNumber;
-            AddressStreetName = mAddressStreetName;
-            AddressSuburb = mAddressSuburb;
-            AddressCity = mAddressCity;
-            AddressAreaCode = mAddressAreaCode;
+            AddressDescription = addressDescription;
+            AddressStreetNumber = addressStreetNumber;
+            AddressStreetName = addressStreetName;
+            AddressSuburb = addressSuburb;
+            AddressCity = addressCity;
+            AddressAreaCode = addressAreaCode;
         }
 
         public string AddressDescription { get => mAddressDescription; set => mAddressDescription = value; }

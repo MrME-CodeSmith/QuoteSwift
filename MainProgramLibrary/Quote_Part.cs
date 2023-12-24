@@ -4,10 +4,10 @@
 namespace QuoteSwift
 {
     [ProtoContract(SkipConstructor = true)]
-    public class Quote_Part
+    public class QuotePart
     {
         [ProtoMember(1)]
-        private Product_Part mPumpPart;
+        private ProductPart mPumpPart;
         [ProtoMember(2)]
         private int mMissingorScrap;
         [ProtoMember(3)]
@@ -21,18 +21,18 @@ namespace QuoteSwift
         [ProtoMember(7)]
         private float mRepairDevider;
 
-        public Quote_Part(Product_Part mPumpPart, int mMissingorScrap, int mRepaired, int mNew, float mPrice, float mUnitPrice, float mRepairDevider)
+        public QuotePart(ProductPart pumpPart, int missingorScrap, int repaired, int @new, float price, float unitPrice, float repairDevider)
         {
-            PumpPart = mPumpPart;
-            MissingorScrap = mMissingorScrap;
-            Repaired = mRepaired;
-            New = mNew;
-            Price = mPrice;
-            UnitPrice = mUnitPrice;
-            RepairDevider = mRepairDevider;
+            PumpPart = pumpPart;
+            MissingorScrap = missingorScrap;
+            Repaired = repaired;
+            New = @new;
+            Price = price;
+            UnitPrice = unitPrice;
+            RepairDevider = repairDevider;
         }
 
-        public Product_Part PumpPart { get => mPumpPart; set => mPumpPart = value; }
+        public ProductPart PumpPart { get => mPumpPart; set => mPumpPart = value; }
         public int MissingorScrap { get => mMissingorScrap; set => mMissingorScrap = value; }
         public int Repaired { get => mRepaired; set => mRepaired = value; }
         public int New { get => mNew; set => mNew = value; }

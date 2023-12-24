@@ -11,8 +11,6 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-
-
     public static class MainProgramCode
     {
         //Get Last Quote
@@ -82,9 +80,9 @@ namespace QuoteSwift
 
         //Read file into byte Array
 
-        public static byte[] RetreiveData(string FileName)
+        public static byte[] RetreiveData(string fileName)
         {
-            string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\" + FileName;
+            string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\" + fileName;
             byte[] Data = null;
             try
             {
@@ -93,9 +91,9 @@ namespace QuoteSwift
             }
             catch (FileNotFoundException)
             {
-                if (FileName != "ExportQuote.pbf")
-                    if (MainProgramCode.RequestConfirmation(FileName + " could not be found.\nWould you like to continue the execution? (Recommended for first launch)", "REQUEST - Execution Continuation")) return Data;
-                MainProgramCode.ShowError(FileName + " Could not be found, please contact the developer to fix this issue.", "ERROR - " + FileName + " Not Found");
+                if (fileName != "ExportQuote.pbf")
+                    if (MainProgramCode.RequestConfirmation(fileName + " could not be found.\nWould you like to continue the execution? (Recommended for first launch)", "REQUEST - Execution Continuation")) return Data;
+                MainProgramCode.ShowError(fileName + " Could not be found, please contact the developer to fix this issue.", "ERROR - " + fileName + " Not Found");
 
             }
             catch
@@ -109,15 +107,15 @@ namespace QuoteSwift
 
         //Store Byte Array to Directory
 
-        public static bool SaveData(string FileName, byte[] StoreData)
+        public static bool SaveData(string fileName, byte[] storeData)
         {
-            string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\" + FileName;
+            string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\" + fileName;
 
             try
             {
                 if (File.Exists(StorePath)) File.Delete(StorePath);
                 BinaryWriter FileWriter = new BinaryWriter(File.OpenWrite(StorePath));
-                FileWriter.Write(StoreData);
+                FileWriter.Write(storeData);
                 FileWriter.Flush();
                 FileWriter.Close();
             }
@@ -169,12 +167,12 @@ namespace QuoteSwift
 
         //Serialize Part list:
 
-        public static byte[] SerializePartList(List<Part> PartList)
+        public static byte[] SerializePartList(List<Part> partList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<List<Part>>(PartList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Part>>(partList);
             }
             catch
             {
@@ -226,12 +224,12 @@ namespace QuoteSwift
 
         // Serialize Pump List Method
 
-        public static byte[] SerializePumpList(List<Product> PumpPartList)
+        public static byte[] SerializePumpList(List<Product> pumpPartList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<List<Product>>(PumpPartList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Product>>(pumpPartList);
             }
             catch
             {
@@ -271,12 +269,12 @@ namespace QuoteSwift
 
         // Serialize Business List Method
 
-        public static byte[] SerializeBusinessList(List<Business> BusinessList)
+        public static byte[] SerializeBusinessList(List<Business> businessList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<List<Business>>(BusinessList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Business>>(businessList);
             }
             catch
             {
@@ -315,12 +313,12 @@ namespace QuoteSwift
 
         // Serialize Quote List Method
 
-        public static byte[] SerializeQuoteList(List<Quote> QuoteList)
+        public static byte[] SerializeQuoteList(List<Quote> quoteList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<List<Quote>>(QuoteList);
+                tempByte = MainProgramCode.ProtoSerialize<List<Quote>>(quoteList);
             }
             catch
             {

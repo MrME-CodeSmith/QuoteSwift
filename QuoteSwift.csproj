@@ -365,7 +365,7 @@
       <Version>18.4.0.43</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.Licensing">
-      <Version>18.4.0.43</Version>
+      <Version>24.1.41</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.SfDataGrid.Winforms">
       <Version>24.1.41</Version>

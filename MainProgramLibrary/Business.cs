@@ -13,7 +13,7 @@ namespace QuoteSwift
         [ProtoMember(3)]
         private BindingList<Address> mBusinessAddressList;
         [ProtoMember(4)]
-        private BindingList<Address> mBusinessPOBoxAddressList;
+        private BindingList<Address> mBusinessPoBoxAddressList;
         [ProtoMember(5)]
         private Legal mBusinessLegalDetails;
         [ProtoMember(6)]
@@ -31,7 +31,7 @@ namespace QuoteSwift
             BusinessName = "";
             BusinessExtraInformation = "";
             BusinessAddressList = null;
-            BusinessPOBoxAddressList = null;
+            BusinessPoBoxAddressList = null;
             BusinessLegalDetails = null;
             BusinessTelephoneNumberList = null;
             BusinessCellphoneNumberList = null;
@@ -46,7 +46,7 @@ namespace QuoteSwift
             BusinessName = b.mBusinessName;
             BusinessExtraInformation = b.mBusinessExtraInformation;
             BusinessAddressList = b.mBusinessAddressList;
-            BusinessPOBoxAddressList = b.mBusinessPOBoxAddressList;
+            BusinessPoBoxAddressList = b.mBusinessPoBoxAddressList;
             BusinessLegalDetails = b.mBusinessLegalDetails;
             BusinessTelephoneNumberList = b.mBusinessTelephoneNumberList;
             BusinessCellphoneNumberList = b.mBusinessCellphoneNumberList;
@@ -55,25 +55,25 @@ namespace QuoteSwift
         }
 
 
-        public Business(string mBusinessName, string mBusinessExtraInformation, BindingList<Address> mBusinessAddressList, BindingList<Address> mBusinessPOBoxAddressList,
-            Legal mBusinessLegalDetails, BindingList<string> mBusinessTelephoneNumberList, BindingList<string> mBusinessCellphoneNumberList,
-            BindingList<string> mBusinessEmailAddressList, BindingList<Customer> mBusinessCustomerList)
+        public Business(string businessName, string businessExtraInformation, BindingList<Address> businessAddressList, BindingList<Address> businessPoBoxAddressList,
+            Legal businessLegalDetails, BindingList<string> businessTelephoneNumberList, BindingList<string> businessCellphoneNumberList,
+            BindingList<string> businessEmailAddressList, BindingList<Customer> businessCustomerList)
         {
-            BusinessName = mBusinessName;
-            BusinessExtraInformation = mBusinessExtraInformation;
-            BusinessAddressList = mBusinessAddressList;
-            BusinessPOBoxAddressList = mBusinessPOBoxAddressList;
-            BusinessLegalDetails = mBusinessLegalDetails;
-            BusinessTelephoneNumberList = mBusinessTelephoneNumberList;
-            BusinessCellphoneNumberList = mBusinessCellphoneNumberList;
-            BusinessEmailAddressList = mBusinessEmailAddressList;
-            CustomerList = mBusinessCustomerList;
+            BusinessName = businessName;
+            BusinessExtraInformation = businessExtraInformation;
+            BusinessAddressList = businessAddressList;
+            BusinessPoBoxAddressList = businessPoBoxAddressList;
+            BusinessLegalDetails = businessLegalDetails;
+            BusinessTelephoneNumberList = businessTelephoneNumberList;
+            BusinessCellphoneNumberList = businessCellphoneNumberList;
+            BusinessEmailAddressList = businessEmailAddressList;
+            CustomerList = businessCustomerList;
         }
 
         public string BusinessName { get => mBusinessName; set => mBusinessName = value; }
         public string BusinessExtraInformation { get => mBusinessExtraInformation; set => mBusinessExtraInformation = value; }
         public BindingList<Address> BusinessAddressList { get => mBusinessAddressList; set => mBusinessAddressList = value; }
-        public BindingList<Address> BusinessPOBoxAddressList { get => mBusinessPOBoxAddressList; set => mBusinessPOBoxAddressList = value; }
+        public BindingList<Address> BusinessPoBoxAddressList { get => mBusinessPoBoxAddressList; set => mBusinessPoBoxAddressList = value; }
         public Legal BusinessLegalDetails { get => mBusinessLegalDetails; set => mBusinessLegalDetails = value; }
         public BindingList<string> BusinessTelephoneNumberList { get => mBusinessTelephoneNumberList; set => mBusinessTelephoneNumberList = value; }
         public BindingList<string> BusinessCellphoneNumberList { get => mBusinessCellphoneNumberList; set => mBusinessCellphoneNumberList = value; }

@@ -9,14 +9,18 @@ using MainProgramLibrary;
 using ToastNotifications;
 using ToastNotifications.Position;
 using System.Net.Http;
+using QuoteSwift.Controllers;
 
 namespace QuoteSwift
 {
     public partial class FrmAddPart : Form
     {
+        private readonly FrmAddPartController mFrmAddPartController;
+
         public FrmAddPart()
         {
             InitializeComponent();
+            mFrmAddPartController = new FrmAddPartController();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -27,101 +31,24 @@ namespace QuoteSwift
 
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
-            var ctx = Global.Context;
-
-            if (ctx.ChangeSpecificObject)
+            Product selectedProduct = null;
+            if (cbAddToProductSelection.SelectedIndex != -1)
             {
-
-                if (ValidInput())
-                {
-                    var BeforeUpdatePart = new Part(ctx.PartToChange);
-
-                    ctx.PartToChange.PartName = mtxtPartName.Text.Trim();
-                    ctx.PartToChange.PartDescription = mtxtPartDescription.Text.Trim();
-                    ctx.PartToChange.OriginalItemPartNumber = mtxtOriginalPartNumber.Text.Trim();
-                    ctx.PartToChange.NewPartNumber = mtxtNewPartNumber.Text.Trim();
-                    ctx.PartToChange.PartPrice = QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text.Trim());
-                    ctx.PartToChange.MandatoryPart = cbxMandatoryPart.Checked;
-
-                    switch (BeforeUpdatePart.MandatoryPart)
-                    {
-                        case true when !ctx.PartToChange.MandatoryPart:
-                            ChangeToNonMandatory(ctx.PartToChange);
-                            break;
-                        case false when ctx.PartToChange.MandatoryPart:
-                            ChangeToMandatory(ctx.PartToChange);
-                            break;
-                    }
-
-
-                    MainProgramCode.ShowInformation($"{Messages.UpdateConfirmationInfoText} the part", Messages.UpdateConfirmationInfoCaption);
-                    ctx.PartToChange = null;
-                    ctx.ChangeSpecificObject = false;
-                    Close();
-                }
-                else return;
+                var ProductSelection = (Product)cbAddToProductSelection.SelectedItem;
 
             }
-            else // Add New Part
-            {
-                Part newPart;
-                if (ValidInput())
-                {
-                    newPart = new Part(
-                        mPartName: mtxtPartName.Text.Trim(), 
-                        mPartDescription: mtxtPartDescription.Text.Trim(), 
-                        mOriginalItempartNumber: mtxtOriginalPartNumber.Text.Trim(), 
-                        mNewPartNumber: mtxtNewPartNumber.Text.Trim(), 
-                        mMandatoryPart: cbxMandatoryPart.Checked, 
-                        mPartPrice: QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text.Trim())
-                    );
-                }
-                else return;
 
-                try
-                {
-                    ctx.AddPart(ref newPart);
-                }
-                catch (FeedbackException Ex)
-                {
-                    MainProgramCode.ShowWarning(
-                        Ex.Message, 
-                        Messages.TaskWarningInformationCaption
-                    );
-                }
-                catch (Exception)
-                {
-                    MainProgramCode.ShowError(
-                        Messages.TaskErrorInformationText, 
-                        Messages.TaskErrorInformationCaption
-                    );
-                    return;
-                }
-                
-                if (cbAddToProductSelection.SelectedIndex > -1)
-                {
-                    var ProductSelection = (Product)cbAddToProductSelection.SelectedItem;
-
-                    ProductSelection.PartList.Add(
-                        new Product_Part(
-                            newPart,
-                            (int)NudQuantity.Value
-                        )
-                    );
-
-                    MainProgramCode.ShowInformation(
-                        $"{Messages.AddConfirmationInformationText} {newPart.PartName} to {ProductSelection.ProductName}'s part list.",
-                        Messages.AddConfirmationInformationCaption);
-                }
-                else
-                {
-                    MainProgramCode.ShowInformation(
-                        $"{Messages.AddConfirmationInformationText} {newPart.PartName}",
-                        Messages.AddConfirmationInformationCaption);
-                }
-
-                ClearInput();
-            }
+            if(
+                mFrmAddPartController.AddPartHandler(
+                    partName: mtxtPartName.Text,
+                    partDescription: mtxtPartDescription.Text,
+                    originalPartNumber: mtxtOriginalPartNumber.Text,
+                    newPartNumber: mtxtNewPartNumber.Text,
+                    partPrice: mtxtPartPrice.Text,
+                    isMandatory: cbxMandatoryPart.Checked,
+                    selectedProd: selectedProduct
+                )
+            ) Close();
         }
 
         private void FrmAddPart_Activated(object sender, EventArgs e)
@@ -134,8 +61,8 @@ namespace QuoteSwift
             //Load a CSV file and add the items to the appropriate list
 
             var MessageBoxResult = MessageBox.Show(
-                Messages.CSVBatchImportInformationText, 
-                Messages.CSVBatchImportInformationCaption, 
+                Messages.CsvBatchImportInformationText, 
+                Messages.CsvBatchImportInformationCaption, 
                 MessageBoxButtons.OKCancel, 
                 MessageBoxIcon.Information
             );
@@ -248,7 +175,7 @@ namespace QuoteSwift
                             return;
                         }
 
-                        var newProductPartList = new BindingList<Product_Part>();
+                        var newProductPartList = new BindingList<ProductPart>();
 
                         var product = new Product(
                             readFields[7].Trim(), 
@@ -260,15 +187,15 @@ namespace QuoteSwift
                         if (ctx.ProductMap.TryGetValue(product.ProductName, out var prod))
                         {
                             if (prod.PartList.All(
-                                    part => part.ProductPart.OriginalItemPartNumber != newPart.OriginalItemPartNumber &&
-                                            part.ProductPart.NewPartNumber != newPart.NewPartNumber &&
-                                            part.ProductPart.OriginalItemPartNumber != newPart.NewPartNumber &&
-                                            part.ProductPart.NewPartNumber != newPart.OriginalItemPartNumber
+                                    part => part.Part.OriginalItemPartNumber != newPart.OriginalItemPartNumber &&
+                                            part.Part.NewPartNumber != newPart.NewPartNumber &&
+                                            part.Part.OriginalItemPartNumber != newPart.NewPartNumber &&
+                                            part.Part.NewPartNumber != newPart.OriginalItemPartNumber
                                     )
                             )
                             {
                                 prod.PartList.Add(
-                                    new Product_Part(
+                                    new ProductPart(
                                         newPart,
                                         int.Parse(readFields[5].Trim())
                                     )
@@ -279,7 +206,7 @@ namespace QuoteSwift
                         else
                         {
                             product.PartList.Add(
-                                new Product_Part(
+                                new ProductPart(
                                     newPart,
                                     int.Parse(readFields[5].Trim())
                                 )
@@ -326,10 +253,13 @@ namespace QuoteSwift
         {
             var ctx = Global.Context;
 
-            cbAddToProductSelection.DataSource = new BindingSource { DataSource = ctx.ProductMap.Values };
+            if (ctx.ProductMap.Values.Count > 0)
+            {
+                cbAddToProductSelection.DataSource = new BindingSource { DataSource = ctx.ProductMap.Values };
 
-            cbAddToProductSelection.DisplayMember = "ProductName";
-            cbAddToProductSelection.ValueMember = "ProductName";
+                cbAddToProductSelection.DisplayMember = "ProductName";
+                cbAddToProductSelection.ValueMember = "ProductName";
+            }
 
             // Determine is an item is to be edited / added.
 
@@ -359,46 +289,6 @@ namespace QuoteSwift
         *       and clutter free.                                                          
         */
 
-        private bool ValidInput()
-        {
-            if (mtxtPartName.Text.Length < 3)
-            {
-                MainProgramCode.ShowError(Messages.InvalidPartName, Messages.InvalidInputErrorCaption);
-                mtxtPartName.Focus();
-                return false;
-            }
-
-            if (mtxtPartDescription.Text.Length < 3)
-            {
-                MainProgramCode.ShowError(Messages.InvalidPartDescription, Messages.InvalidInputErrorCaption);
-                mtxtPartDescription.Focus();
-                return false;
-            }
-
-            if (mtxtOriginalPartNumber.Text.Length < 3)
-            {
-                MainProgramCode.ShowError(Messages.InvalidOriginalPartNumber, Messages.InvalidInputErrorCaption);
-                mtxtOriginalPartNumber.Focus();
-                return false;
-            }
-
-            if (mtxtNewPartNumber.Text.Length < 3)
-            {
-                MainProgramCode.ShowError(Messages.InvalidNewPartNumber, Messages.InvalidInputErrorCaption);
-                mtxtNewPartNumber.Focus();
-                return false;
-            }
-
-            if (QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text) == 0)
-            {
-                MainProgramCode.ShowError(Messages.InvalidPartPrice, Messages.InvalidInputErrorCaption);
-                mtxtPartPrice.Focus();
-                return false;
-            }
-
-            return true;
-        }
-
         private void ClearInput()
         {
             mtxtNewPartNumber.ResetText();
@@ -410,36 +300,7 @@ namespace QuoteSwift
             NudQuantity.ResetText();
         }
 
-        private static bool ChangeToMandatory(Part switchPart)
-        {
-            if (switchPart != null)
-            {
-                var ctx = Global.Context;
-                ctx.NonMandatoryPartMap.Remove(switchPart.OriginalItemPartNumber);
-                ctx.NonMandatoryPartMap.Remove(switchPart.NewPartNumber);
-
-                ctx.MandatoryPartMap[switchPart.OriginalItemPartNumber] = switchPart;
-                ctx.MandatoryPartMap[switchPart.NewPartNumber] = switchPart;
-                return true;
-            }
-            return false;
-        }
-
-        private static bool ChangeToNonMandatory(Part switchPart)
-        {
-            if (switchPart != null)
-            {
-                var ctx = Global.Context;
-                ctx.MandatoryPartMap.Remove(switchPart.OriginalItemPartNumber);
-                ctx.MandatoryPartMap.Remove(switchPart.NewPartNumber);
-
-                ctx.NonMandatoryPartMap[switchPart.OriginalItemPartNumber] = switchPart;
-                ctx.NonMandatoryPartMap[switchPart.NewPartNumber] = switchPart;
-
-                return true;
-            }
-            return false;
-        }
+        
 
         private void LoadPartData()
         {

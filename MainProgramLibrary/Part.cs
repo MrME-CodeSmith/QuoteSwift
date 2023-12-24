@@ -31,24 +31,24 @@ namespace QuoteSwift
 
         //Copy Constructor:
 
-        public Part(Part P)
+        public Part(Part p)
         {
-            PartName = P.PartName;
-            PartDescription = P.PartDescription;
-            OriginalItemPartNumber = P.OriginalItemPartNumber;
-            NewPartNumber = P.NewPartNumber;
-            MandatoryPart = P.MandatoryPart;
-            PartPrice = P.PartPrice;
+            PartName = p.PartName;
+            PartDescription = p.PartDescription;
+            OriginalItemPartNumber = p.OriginalItemPartNumber;
+            NewPartNumber = p.NewPartNumber;
+            MandatoryPart = p.MandatoryPart;
+            PartPrice = p.PartPrice;
         }
 
-        public Part(string mPartName, string mPartDescription, string mOriginalItempartNumber, string mNewPartNumber, bool mMandatoryPart, float mPartPrice)
+        public Part(string partName, string partDescription, string originalItempartNumber, string newPartNumber, bool mandatoryPart, float partPrice)
         {
-            PartName = mPartName;
-            PartDescription = mPartDescription;
-            OriginalItemPartNumber = mOriginalItempartNumber;
-            NewPartNumber = mNewPartNumber;
-            MandatoryPart = mMandatoryPart;
-            PartPrice = mPartPrice;
+            PartName = partName;
+            PartDescription = partDescription;
+            OriginalItemPartNumber = originalItempartNumber;
+            NewPartNumber = newPartNumber;
+            MandatoryPart = mandatoryPart;
+            PartPrice = partPrice;
         }
 
         public string PartName { get => mPartName; set => mPartName = value; }
