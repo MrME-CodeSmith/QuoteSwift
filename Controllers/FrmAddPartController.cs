@@ -5,7 +5,7 @@ namespace QuoteSwift.Controllers
 {
     public class FrmAddPartController
     {
-        public bool AddPartHandler(
+        public bool AddOrUpdatePartHandler(
             string partName,
             string partDescription,
             string originalPartNumber,
@@ -47,13 +47,13 @@ namespace QuoteSwift.Controllers
                     (context ?? mContext).PartToChange.PartPrice = cleanedPartPrice;
                     (context ?? mContext).PartToChange.MandatoryPart = isMandatory;
 
-                    switch (BeforeUpdatePart.MandatoryPart)
+                    switch ((context ?? mContext).PartToChange.MandatoryPart)
                     {
                         case true when !BeforeUpdatePart.MandatoryPart:
-                            ChangeToNonMandatory((context ?? mContext).PartToChange);
+                            ChangeToMandatory((context ?? mContext).PartToChange);
                             break;
                         case false when BeforeUpdatePart.MandatoryPart:
-                            ChangeToMandatory((context ?? mContext).PartToChange);
+                            ChangeToNonMandatory((context ?? mContext).PartToChange);
                             break;
                     }
 
@@ -83,7 +83,7 @@ namespace QuoteSwift.Controllers
                     newPart = new Part(
                         partName: cleanedPartName,
                         partDescription: cleanedPartDescription,
-                        originalItempartNumber: originalPartNumber,
+                        originalItemPartNumber: originalPartNumber,
                         newPartNumber: cleanedNewPartNumber,
                         mandatoryPart: isMandatory,
                         partPrice: cleanedPartPrice

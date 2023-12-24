@@ -41,11 +41,11 @@ namespace QuoteSwift
             PartPrice = p.PartPrice;
         }
 
-        public Part(string partName, string partDescription, string originalItempartNumber, string newPartNumber, bool mandatoryPart, float partPrice)
+        public Part(string partName, string partDescription, string originalItemPartNumber, string newPartNumber, bool mandatoryPart, float partPrice)
         {
             PartName = partName;
             PartDescription = partDescription;
-            OriginalItemPartNumber = originalItempartNumber;
+            OriginalItemPartNumber = originalItemPartNumber;
             NewPartNumber = newPartNumber;
             MandatoryPart = mandatoryPart;
             PartPrice = partPrice;

@@ -35,11 +35,10 @@ namespace QuoteSwift
             if (cbAddToProductSelection.SelectedIndex != -1)
             {
                 var ProductSelection = (Product)cbAddToProductSelection.SelectedItem;
-
             }
 
             if(
-                mFrmAddPartController.AddPartHandler(
+                mFrmAddPartController.AddOrUpdatePartHandler(
                     partName: mtxtPartName.Text,
                     partDescription: mtxtPartDescription.Text,
                     originalPartNumber: mtxtOriginalPartNumber.Text,
