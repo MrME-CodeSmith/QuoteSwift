@@ -48,8 +48,6 @@ namespace QuoteSwift
         private string mPhoneNumberToChange = "";//In the event that a Phone number needs to be changed.
         private bool mChangeSpecificObject = false; //To determine whether object should be viewed or changed
 
-
-
         //Pass All Constructor :
 
         public AppContext(
