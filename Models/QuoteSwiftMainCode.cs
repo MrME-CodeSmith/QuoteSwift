@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using MainProgramLibrary;
+using QuoteSwift.Forms;
 
-
-
-namespace QuoteSwift
+namespace QuoteSwift.Models
 { 
 
 

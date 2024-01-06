@@ -3,6 +3,7 @@ using QuoteSwift.Controllers;
 using System;
 using System.Globalization;
 using System.Runtime.Remoting.Contexts;
+using MainProgramLibrary;
 
 namespace QuoteSwift.UnitTests
 {

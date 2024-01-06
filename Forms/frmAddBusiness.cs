@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using MainProgramLibrary;
+using QuoteSwift.Models;
 
-namespace QuoteSwift
+namespace QuoteSwift.Forms
 {
     public partial class FrmAddBusiness : Form
     {

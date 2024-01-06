@@ -2,8 +2,10 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MainProgramLibrary;
+using QuoteSwift.Models;
 
-namespace QuoteSwift // Repair Quote Swift
+namespace QuoteSwift.Forms // Repair Quote Swift
 {
     public partial class FrmViewPump : Form
     {

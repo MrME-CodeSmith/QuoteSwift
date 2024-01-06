@@ -1,5 +1,6 @@
 ﻿using MainProgramLibrary;
 using System;
+using QuoteSwift.Models;
 
 namespace QuoteSwift.Controllers
 {

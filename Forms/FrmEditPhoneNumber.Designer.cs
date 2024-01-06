@@ -1,5 +1,5 @@
 ﻿
-namespace QuoteSwift
+namespace QuoteSwift.Forms
 {
     partial class FrmEditPhoneNumber
     {

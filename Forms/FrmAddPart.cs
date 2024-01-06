@@ -1,17 +1,14 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using MainProgramLibrary;
-using ToastNotifications;
-using ToastNotifications.Position;
-using System.Net.Http;
+using Microsoft.VisualBasic.FileIO;
 using QuoteSwift.Controllers;
+using QuoteSwift.Models;
 
-namespace QuoteSwift
+namespace QuoteSwift.Forms
 {
     public partial class FrmAddPart : Form
     {

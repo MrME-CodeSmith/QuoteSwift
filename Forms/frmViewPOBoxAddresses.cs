@@ -1,18 +1,11 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using MainProgramLibrary;
-using ToastNotifications;
-using ToastNotifications.Position;
-using System.Net.Http;
-using QuoteSwift.Controllers;
+using QuoteSwift.Models;
 
-namespace QuoteSwift
+namespace QuoteSwift.Forms
 {
     public partial class FrmViewPoBoxAddresses : Form
     {
