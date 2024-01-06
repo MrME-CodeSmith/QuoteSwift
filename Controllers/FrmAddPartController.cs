@@ -4,7 +4,7 @@ using QuoteSwift.Models;
 
 namespace QuoteSwift.Controllers
 {
-    public class FrmAddPartController
+    internal class FrmAddPartController
     {
         public bool AddOrUpdatePartHandler(
             string partName,
