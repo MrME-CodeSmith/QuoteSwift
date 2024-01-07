@@ -25,61 +25,81 @@ namespace QuoteSwift.Forms
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (MainProgramCode.RequestConfirmation(Messages.TerminationRequestText, Messages.TerminationRequestCaption))
                 QuoteSwiftMainCode.CloseApplication(true);
         }
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
-            if (ValidBusiness() && !mPassed.ChangeSpecificObject)
+            var ctx = Global.Context;
+            if (
+                ValidBusiness(
+                    businessName: txtBusinessName.Text,
+                    taxNumber: mtxtVATNumber.Text,
+                    registrationNumber: mtxtRegistrationNumber.Text,
+                    addressList: mBusiness.BusinessAddressList.ToList(),
+                    poBoxAddressList: mBusiness.BusinessPoBoxAddressList.ToList(),
+                    telephoneNumberList: mBusiness.BusinessTelephoneNumberList.ToList(),
+                    cellPhoneNumberList: mBusiness.BusinessCellphoneNumberList.ToList(),
+                    emailAddressList: mBusiness.BusinessEmailAddressList.ToList()
+                ) && 
+                !ctx.ChangeSpecificObject
+            )
             {
                 //Add Final Details to mBusiness object
                 mBusiness.BusinessName = txtBusinessName.Text;
                 mBusiness.BusinessExtraInformation = rtxtExtraInformation.Text;
                 mBusiness.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
-                if (mPassed.BusinessMap == null)
+                try
                 {
-                    //Create New business List
-                    mPassed.BusinessMap = new Dictionary<string, Business>()
-                    {
-                        { mBusiness.BusinessLegalDetails.RegistrationNumber, mBusiness }
-                    };
+                    ctx.AddBusiness(ref mBusiness);
                 }
-                else //Add To List
+                catch (FeedbackException Ex)
                 {
-                    if (mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessName == mBusiness.BusinessName).Value != null)
-                    {
-                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
-                        return;
-                    }
-                    else if (mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.VatNumber == mBusiness.BusinessLegalDetails.VatNumber).Value != null)
-                    {
-                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
-                        return;
-                    }
-                    else if (mPassed.BusinessMap.SingleOrDefault(p => p.Value.BusinessLegalDetails.RegistrationNumber == mBusiness.BusinessLegalDetails.RegistrationNumber).Value != null)
-                    {
-                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: mBusiness Name,VAT Number and Registration Number should be unique", "ERROR - mBusiness Already Added");
-                        return;
-                    }
-                    else mPassed.BusinessMap.Add(mBusiness.BusinessLegalDetails.RegistrationNumber ,mBusiness);
+                    if(true) 
+                        MainProgramCode.ShowWarning(
+                            Ex.Message,
+                            Messages.TaskWarningInformationCaption
+                        );
+                    //return false;
+                }
+                catch (Exception)
+                {
+                    if (true)
+                        MainProgramCode.ShowError(
+                            Messages.TaskErrorInformationText,
+                            Messages.TaskErrorInformationCaption
+                        );
+                    //return false;
                 }
 
-                mPassed.BusinessToChange = null;
-                mPassed.ChangeSpecificObject = false;
+                ctx.BusinessToChange = null;
+                ctx.ChangeSpecificObject = false;
 
-                MainProgramCode.ShowInformation(mBusiness.BusinessName + " has been added.", "INFORMATION - mBusiness Successfully Added");
+                MainProgramCode.ShowInformation(Messages.AddConfirmationInformationText, Messages.AddConfirmationInformationCaption);
 
                 ResetScreenInput();
             }
-            else if (ValidBusiness() && mPassed.ChangeSpecificObject)
+            else if (
+                ValidBusiness(
+                     businessName: txtBusinessName.Text,
+                     taxNumber: mtxtVATNumber.Text,
+                     registrationNumber: mtxtRegistrationNumber.Text,
+                     addressList: mBusiness.BusinessAddressList.ToList(),
+                     poBoxAddressList: mBusiness.BusinessPoBoxAddressList.ToList(),
+                     telephoneNumberList: mBusiness.BusinessTelephoneNumberList.ToList(),
+                     cellPhoneNumberList: mBusiness.BusinessCellphoneNumberList.ToList(),
+                     emailAddressList: mBusiness.BusinessEmailAddressList.ToList()
+                 ) 
+                &&
+                ctx.ChangeSpecificObject)
             {
-                mPassed.BusinessToChange.BusinessName = txtBusinessName.Text;
-                mPassed.BusinessToChange.BusinessExtraInformation = rtxtExtraInformation.Text;
-                mPassed.BusinessToChange.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
+                ctx.BusinessToChange.BusinessName = txtBusinessName.Text;
+                ctx.BusinessToChange.BusinessExtraInformation = rtxtExtraInformation.Text;
+                ctx.BusinessToChange.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
-                MainProgramCode.ShowInformation(mBusiness.BusinessName + " has been successfully updated.", "INFORMATION - mBusiness Successfully Updated");
+                MainProgramCode.ShowInformation(Messages.UpdateConfirmationInfoText, Messages.UpdateConfirmationInfoCaption);
                 ConvertToViewOnly();
             }
         }
@@ -402,47 +422,56 @@ namespace QuoteSwift.Forms
             return true;
         }
 
-        private bool ValidBusiness()
+        private bool ValidBusiness(
+            string businessName,
+            string taxNumber,
+            string registrationNumber,
+            IReadOnlyCollection<Address> addressList,
+            IReadOnlyCollection<Address> poBoxAddressList,
+            IReadOnlyCollection<string> telephoneNumberList,
+            IReadOnlyCollection<string> cellPhoneNumberList,
+            IReadOnlyCollection<string> emailAddressList
+        )
         {
-            if (txtBusinessName.Text.Length < 3)
+            if (businessName.Trim().Length < 3)
             {
-                MainProgramCode.ShowError("The provided business name is invalid, please provide a business name longer that 2 characters.", "ERROR - Invalid mBusiness Name");
+                MainProgramCode.ShowError(Messages.InvalidBusinessName, Messages.InvalidInputErrorCaption);
                 return false;
             }
 
-            if (mtxtVATNumber.Text.Length < 7)
+            if (taxNumber.Trim().Length < 7)
             {
-                MainProgramCode.ShowError("The provided VAT number is invalid, please provide a valid VAT number.", "ERROR - Invalid mBusiness VAT Number");
+                MainProgramCode.ShowError(Messages.InvalidTaxNumber, Messages.InvalidInputErrorCaption);
                 return false;
             }
 
-            if (mtxtRegistrationNumber.Text.Length < 7)
+            if (registrationNumber.Trim().Length != 10)
             {
-                MainProgramCode.ShowError("The provided registration number is invalid, please provide a valid registration number.", "ERROR - Invalid mBusiness Registration Number");
+                MainProgramCode.ShowError(Messages.InvalidRegistrationNumber, Messages.InvalidInputErrorCaption);
                 return false;
             }
 
-            if (mBusiness.BusinessAddressList == null)
+            if (addressList == null)
             {
-                MainProgramCode.ShowError("Please add a valid business address under the 'mBusiness Address' section.", "ERROR - Current mBusiness Invalid");
+                MainProgramCode.ShowError(Messages.NoBusinessAddress, Messages.InvalidInputErrorCaption);
                 return false;
             }
 
-            if (mBusiness.BusinessPoBoxAddressList == null)
+            if (poBoxAddressList == null)
             {
-                MainProgramCode.ShowError("Please add a valid business P.O.Box address under the 'mBusiness P.O.Box Address' section.", "ERROR - Current mBusiness Invalid");
+                MainProgramCode.ShowError(Messages.NoPoBoxAddress, Messages.InvalidInputErrorCaption);
                 return false;
             }
 
-            if (mBusiness.BusinessTelephoneNumberList == null && mBusiness.BusinessCellphoneNumberList == null)
+            if (telephoneNumberList == null && cellPhoneNumberList == null)
             {
-                MainProgramCode.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current mBusiness Invalid");
+                MainProgramCode.ShowError(Messages.NoValidPhoneNumber, Messages.InvalidInputErrorCaption);
                 return false;
             }
 
-            if (mBusiness.BusinessEmailAddressList == null)
+            if (emailAddressList == null)
             {
-                MainProgramCode.ShowError("Please add a valid business email address under the 'Email Related' section.", "ERROR - Current mBusiness Invalid");
+                MainProgramCode.ShowError(Messages.NoValidEmailAddress, Messages.InvalidInputErrorCaption);
                 return false;
             }
 

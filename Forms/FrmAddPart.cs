@@ -31,7 +31,7 @@ namespace QuoteSwift.Forms
             Product selectedProduct = null;
             if (cbAddToProductSelection.SelectedIndex != -1)
             {
-                var ProductSelection = (Product)cbAddToProductSelection.SelectedItem;
+                selectedProduct = (Product)cbAddToProductSelection.SelectedItem;
             }
 
             if(
@@ -295,8 +295,6 @@ namespace QuoteSwift.Forms
             cbxMandatoryPart.Checked = false;
             NudQuantity.ResetText();
         }
-
-        
 
         private void LoadPartData()
         {

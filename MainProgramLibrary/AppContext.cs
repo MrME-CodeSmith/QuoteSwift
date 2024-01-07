@@ -198,6 +198,21 @@ namespace QuoteSwift
             else throw new GeneralErrorException(Messages.InvalidParameter);
         }
 
+        public void AddBusiness(ref Business b)
+        {
+            if (b != null)
+            {
+                if (!BusinessMap.ContainsKey(b.BusinessLegalDetails.RegistrationNumber))
+                {
+                    BusinessMap[b.BusinessLegalDetails.RegistrationNumber] = b;
+                }
+                else throw new FeedbackException(Messages.BusinessAlreadyExists);
+            }
+            else throw new GeneralErrorException(Messages.InvalidParameter);
+        }
+
+
+
         public Dictionary<string, Quote> QuoteMap { get => mQuoteMap; set => mQuoteMap = value; }
         public Dictionary<string, Business> BusinessMap { get => mBusinessMap; set => mBusinessMap = value; }
         public Dictionary<string, Product> ProductMap { get => mPumpMap; set => mPumpMap = value; }

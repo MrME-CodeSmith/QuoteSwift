@@ -8,5 +8,6 @@ namespace QuoteSwift.Controllers
 {
     internal class FrmAddBusinessController
     {
+
     }
 }

@@ -8,15 +8,27 @@ namespace MainProgramLibrary
 {
     public static class Messages
     {
-        public static string PartAlreadyExists => "This part already exists in the system. Please ensure that these are unique:\n- Original Part Number\n- New Part Number";
+
         public static string InvalidParameter => "Parameter is not valid.";
+
+        //========================================  Part Details Errors Related  =====================================================
+        public static string PartAlreadyExists => "This part already exists in the system. Please ensure that these are unique:\n- Original Part Number\n- New Part Number";
         public static string InvalidPartName => "Please ensure that the name of the Item is valid and it has a length greater than two(2) characters.";
         public static string InvalidPartDescription => "Please ensure that the description of the Item is valid and it has a length greater than two(2) characters.";
         public static string InvalidOriginalPartNumber => "Please ensure that the original part number of the Item is valid and it has a length greater than two(2) characters.";
         public static string InvalidNewPartNumber => "Please ensure that the new part number of the Item is valid and it has a length greater than two(2) characters.";
         public static string InvalidPartPrice => "Please ensure that the price of the Item is valid and it has a value greater than R99.";
 
+        //========================================  Business Details Errors Related  =====================================================
 
+        public static string BusinessAlreadyExists => "This business already exists in the system. Please ensure that these are unique:\n- VAT Number\n- Registration Number";
+        public static string InvalidBusinessName => "The provided business name is invalid, please provide a business name longer that 2 characters.";
+        public static string InvalidTaxNumber => "The provided VAT number is invalid, please provide a valid VAT number.";
+        public static string InvalidRegistrationNumber => "The provided registration number is invalid, please provide a valid registration number.";
+        public static string NoBusinessAddress => "Please add a valid business address under the 'mBusiness Address' section.";
+        public static string NoPoBoxAddress => "Please add a valid business P.O.Box address under the 'mBusiness P.O.Box Address' section.";
+        public static string NoValidPhoneNumber => "Please add a valid phone number under the 'Phone Related' section.";
+        public static string NoValidEmailAddress => "Please add a valid business email address under the 'Email Related' section.";
 
         //========================================  Messages Related  ===================================================
 
@@ -64,7 +76,6 @@ namespace MainProgramLibrary
         public static string InvalidInputErrorCaption => "ERROR - Invalid Input";
         public static string UpdatePartRequestText => "You are currently only viewing a part, would you like to update its details instead?";
         public static string UpdatePartRequestCaption => "REQUEST - Update Specific Part Details";
-
 
         //===============================================================================================================
     }
