@@ -106,23 +106,41 @@ namespace QuoteSwift.Forms
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            if (ValidBusinessPoBoxAddress())
+            var poDescription = txtBusinessPODescription.Text.Trim();
+            var poStreetNumber = mtxtPOBoxStreetNumber.Text.Trim();
+            var poSuburb = txtPOBoxSuburb.Text.Trim();
+            var poCity = txtPOBoxCity.Text.Trim();
+            var poAreaCode = mtxtPOBoxAreaCode.Text.Trim();
+
+            if (
+                ValidBusinessPoBoxAddress(
+                    businessPoDescription: poDescription,
+                    businessPoStreetNumber: poStreetNumber,
+                    businessPoSuburb: poSuburb,
+                    businessPoCity: poCity,
+                    businessPoAreaCode: poAreaCode
+                )
+            )
             {
-                Address address = new Address(txtBusinessPODescription.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text),
-                                              "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
+                var address = new Address(
+                    addressDescription: poDescription, 
+                    addressStreetNumber: QuoteSwiftMainCode.ParseInt(poStreetNumber),
+                    addressStreetName: "",
+                    addressSuburb: poSuburb,
+                    addressCity: poCity, 
+                    addressAreaCode: QuoteSwiftMainCode.ParseInt(poAreaCode)
+                );
+
                 if (!PoBoxAddressExisting(address))
                 {
-                    if (mBusiness.BusinessPoBoxAddressList == null)
-                    {
-                        //Create New List
-                        mBusiness.BusinessPoBoxAddressList = new BindingList<Address> { address };
-                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - mBusiness P.O.Box Address Added Successfully");
-                    }
-                    else // AddingNewEventArgs To list
+                    if (mBusiness.BusinessPoBoxAddressList != null)
                     {
                         mBusiness.BusinessPoBoxAddressList.Add(address);
-                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - mBusiness P.O.Box Address Added Successfully");
+                        mBusiness.BusinessAddressMap.Add(address.AddressDescription.Trim(), address);
                     }
+                    else mBusiness.BusinessPoBoxAddressList = new BindingList<Address>() { address };
+
+                    MainProgramCode.ShowInformation(Messages.AddConfirmationInformationText, Messages.AddConfirmationInformationCaption);
 
                     ClearPoBoxAddressInput();
                 }
@@ -387,33 +405,39 @@ namespace QuoteSwift.Forms
             return true;
         }
 
-        private bool ValidBusinessPoBoxAddress()
+        private bool ValidBusinessPoBoxAddress(
+            string businessPoDescription,
+            string businessPoStreetNumber,
+            string businessPoSuburb,
+            string businessPoCity,
+            string businessPoAreaCode
+        )
         {
-            if (txtBusinessPODescription.Text.Length < 2)
+            if (businessPoDescription.Trim().Length < 2)
             {
                 MainProgramCode.ShowError("The provided mBusiness P.O.Box Address Description is invalid, please provide a valid description", "ERROR - Invalid mBusiness P.O.Box Address Description");
                 return (false);
             }
 
-            if (QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text) == 0)
+            if (QuoteSwiftMainCode.ParseInt(businessPoStreetNumber.Trim()) == 0)
             {
                 MainProgramCode.ShowError("The provided mBusiness' P.O.Box Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid mBusiness' P.O.Box Address Street Number");
                 return (false);
             }
 
-            if (txtPOBoxSuburb.Text.Length < 2)
+            if (businessPoSuburb.Trim().Length < 2)
             {
                 MainProgramCode.ShowError("The provided mBusiness' P.O.Box Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid mBusiness' P.O.Box Address Suburb");
                 return (false);
             }
 
-            if (txtPOBoxCity.Text.Length < 2)
+            if (businessPoCity.Trim().Length < 2)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address City is invalid, please provide a valid city", "ERROR - Invalid mBusiness' P.O.Box Address City");
                 return (false);
             }
 
-            if (QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text) == 0)
+            if (QuoteSwiftMainCode.ParseInt(businessPoAreaCode.Trim()) == 0)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid mBusiness' P.O.Box Address Area Code");
                 return (false);
@@ -539,20 +563,8 @@ namespace QuoteSwift.Forms
 
         private bool PoBoxAddressExisting(Address a)
         {
-
-            if (mBusiness.BusinessPoBoxAddressList != null)
-            {
-                for (int i = 0; i < mBusiness.BusinessPoBoxAddressList.Count; i++)
-                {
-                    if (mBusiness.BusinessPoBoxAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
-                    {
-                        MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return mBusiness.BusinessPoBoxAddressList != null &&
+                   !mBusiness.BusinessAddressMap.ContainsKey(a.AddressDescription.Trim());
         }
 
         public bool EmailAddressExisting(string s)

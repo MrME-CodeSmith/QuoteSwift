@@ -1,5 +1,7 @@
-﻿using ProtoBuf;
+﻿using System.Collections.Generic;
+using ProtoBuf;
 using System.ComponentModel;
+using System.Linq;
 
 namespace QuoteSwift
 {
@@ -24,7 +26,7 @@ namespace QuoteSwift
         private BindingList<string> mBusinessEmailAddressList;
         [ProtoMember(9)]
         private BindingList<Customer> mBusinessCustomerList;
-
+        private Dictionary<string, Address> mBusinessAddressMap;
         //Default Constructor
         public Business()
         {
@@ -37,6 +39,7 @@ namespace QuoteSwift
             BusinessCellphoneNumberList = null;
             BusinessEmailAddressList = null;
             CustomerList = null;
+            mBusinessAddressMap = null;
         }
 
         // Copy Constructor
@@ -52,6 +55,7 @@ namespace QuoteSwift
             BusinessCellphoneNumberList = b.mBusinessCellphoneNumberList;
             BusinessEmailAddressList = b.mBusinessEmailAddressList;
             CustomerList = b.mBusinessCustomerList;
+            mBusinessAddressMap = b.BusinessAddressMap;
         }
 
 
@@ -79,5 +83,6 @@ namespace QuoteSwift
         public BindingList<string> BusinessCellphoneNumberList { get => mBusinessCellphoneNumberList; set => mBusinessCellphoneNumberList = value; }
         public BindingList<string> BusinessEmailAddressList { get => mBusinessEmailAddressList; set => mBusinessEmailAddressList = value; }
         public BindingList<Customer> CustomerList { get => mBusinessCustomerList; set => mBusinessCustomerList = value; }
+        public Dictionary<string, Address> BusinessAddressMap { get => mBusinessAddressMap; set => mBusinessAddressMap = value; }
     }
 }
