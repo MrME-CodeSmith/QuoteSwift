@@ -26,7 +26,12 @@ namespace QuoteSwift
         private BindingList<string> mBusinessEmailAddressList;
         [ProtoMember(9)]
         private BindingList<Customer> mBusinessCustomerList;
+
+        // Maps to optimise searching:
         private Dictionary<string, Address> mBusinessAddressMap;
+        private Dictionary<string, object> mTelephoneNumberMap;
+        private Dictionary<string, object> mCellphoneNumberMap;
+
         //Default Constructor
         public Business()
         {
@@ -84,5 +89,7 @@ namespace QuoteSwift
         public BindingList<string> BusinessEmailAddressList { get => mBusinessEmailAddressList; set => mBusinessEmailAddressList = value; }
         public BindingList<Customer> CustomerList { get => mBusinessCustomerList; set => mBusinessCustomerList = value; }
         public Dictionary<string, Address> BusinessAddressMap { get => mBusinessAddressMap; set => mBusinessAddressMap = value; }
+        public Dictionary<string, object> TelephoneNumberMap { get => mTelephoneNumberMap; set => mTelephoneNumberMap = value; }
+        public Dictionary<string, object> CellphoneNumberMap { get => mCellphoneNumberMap; set => mCellphoneNumberMap = value; }
     }
 }

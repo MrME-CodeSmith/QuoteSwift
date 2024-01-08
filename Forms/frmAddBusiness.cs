@@ -194,50 +194,49 @@ namespace QuoteSwift.Forms
 
         private void BtnAddNumber_Click(object sender, EventArgs e)
         {
-            bool Added = false;
-            if (mtxtTelephoneNumber.Text.Length < 10 && mtxtCellphoneNumber.Text.Length < 10)
+            var telephoneNumber  = mtxtTelephoneNumber.Text.Trim();
+            var cellphoneNumber = mtxtCellphoneNumber.Text.Trim();
+
+            var added = false;
+            if (telephoneNumber.Length < 10 && cellphoneNumber.Length < 10)
             {
-                MainProgramCode.ShowError("a Valid Phone Number/s were not provided, please provide at least one valid phone number.", "ERROR - Invalid Number/s Provided");
+                MainProgramCode.ShowError(Messages.NoValidPhoneNumber, Messages.InvalidInputErrorCaption);
             }
 
-            if (mtxtTelephoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
+            if (telephoneNumber.Length > 10 && !PhoneNumberExisting(telephoneNumber))
             {
-                if (mBusiness.BusinessTelephoneNumberList == null)
-                {
-                    // Create new List
-                    mBusiness.BusinessTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
-                    Added = true;
-                }
-                else // Add To List
-                {
-                    mBusiness.BusinessTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
-                    Added = true;
-                }
 
+                if (mBusiness.BusinessTelephoneNumberList != null)
+                {
+                    mBusiness.BusinessTelephoneNumberList.Add(telephoneNumber);
+                    added = true;
+                }
+                else
+                {
+                    mBusiness.BusinessTelephoneNumberList = new BindingList<string> { telephoneNumber };
+                    added = true;
+                }
                 mtxtTelephoneNumber.ResetText();
             }
 
-            if (mtxtCellphoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
+            if (cellphoneNumber.Length > 10 && !PhoneNumberExisting(cellphoneNumber))
             {
-                if (mBusiness.BusinessCellphoneNumberList == null)
+                if (mBusiness.BusinessCellphoneNumberList != null)
                 {
-                    // Create new List
-                    mBusiness.BusinessCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
-                    Added = true;
+                    mBusiness.BusinessCellphoneNumberList.Add(cellphoneNumber);
+                    added = true;
                 }
-                else // Add To List
+                else
                 {
-                    mBusiness.BusinessCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
-                    Added = true;
+                    mBusiness.BusinessCellphoneNumberList = new BindingList<string> { cellphoneNumber };
+                    added = true;
                 }
 
                 mtxtCellphoneNumber.ResetText();
             }
 
-            if (Added)
-            {
-                MainProgramCode.ShowInformation("Successfully added the business phone number/s", "INFORMATION - mBusiness Phone Number/s Added Successfully");
-            }
+            if (added)
+                MainProgramCode.ShowInformation(Messages.AddConfirmationInformationText, Messages.AddConfirmationInformationCaption);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -611,31 +610,7 @@ namespace QuoteSwift.Forms
 
         public bool PhoneNumberExisting(string s)
         {
-            if (mBusiness.BusinessTelephoneNumberList != null)
-            {
-                for (int i = 0; i < mBusiness.BusinessTelephoneNumberList.Count; i++)
-                {
-                    if (mBusiness.BusinessTelephoneNumberList.SingleOrDefault(p => p == s) != null)
-                    {
-                        MainProgramCode.ShowError("This number has already been added previously to the Telephone Number List.", "ERROR - Number Already Added");
-                        return true;
-                    }
-                }
-            }
-
-            if (mBusiness.BusinessCellphoneNumberList != null)
-            {
-                for (int i = 0; i < mBusiness.BusinessCellphoneNumberList.Count; i++)
-                {
-                    if (mBusiness.BusinessCellphoneNumberList.SingleOrDefault(p => p == s) != null)
-                    {
-                        MainProgramCode.ShowError("This number has already been added previously to the Cellphone Number List.", "ERROR - Number Already Added");
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return !mBusiness.BusinessTelephoneNumberList.Contains(s) && !mBusiness.BusinessCellphoneNumberList.Contains(s);
         }
 
         private void LoadInformation()
