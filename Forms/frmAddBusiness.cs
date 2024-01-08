@@ -149,23 +149,43 @@ namespace QuoteSwift.Forms
 
         private void BtnAddAddress_Click(object sender, EventArgs e)
         {
-            if (ValidBusinessAddress())
+            var businessAddressDescription = txtBusinessAddresssDescription.Text.Trim();
+            var businessAddressStreetNumber = mtxtStreetnumber.Text.Trim();
+            var businessAddressStreetName = txtStreetName.Text.Trim();
+            var businessAddressSuburb = txtSuburb.Text.Trim();
+            var businessAddressCity = txtCity.Text.Trim();
+            var businessAddressAreaCode = mtxtAreaCode.Text.Trim();
+
+            if (
+                ValidBusinessAddress(
+                    businessAddressDescription: businessAddressDescription,
+                    businessAddressStreetNumber: businessAddressStreetNumber,
+                    businessAddressStreetName: businessAddressStreetName,
+                    businessAddressSuburb: businessAddressSuburb,
+                    businessAddressCity: businessAddressCity,
+                    businessAddressAreaCode: businessAddressAreaCode
+                )
+            )
             {
-                Address address = new Address(txtBusinessAddresssDescription.Text, QuoteSwiftMainCode.ParseInt(mtxtStreetnumber.Text),
-                                              txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
+                Address address = new Address(
+                    addressDescription: businessAddressDescription,
+                    addressStreetNumber: QuoteSwiftMainCode.ParseInt(businessAddressStreetNumber),
+                    addressStreetName: businessAddressStreetName,
+                    addressSuburb: businessAddressSuburb,
+                    addressCity: businessAddressCity,
+                    addressAreaCode: QuoteSwiftMainCode.ParseInt(businessAddressAreaCode)
+                );
+
                 if (!AddressExisting(address))
                 {
-                    if (mBusiness.BusinessAddressList == null)
-                    {
-                        //Create New List
-                        mBusiness.BusinessAddressList = new BindingList<Address> { address };
-                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - mBusiness Address Added Successfully");
-                    }
-                    else //Add To Current list
+                    if (mBusiness.BusinessPoBoxAddressList != null)
                     {
                         mBusiness.BusinessAddressList.Add(address);
-                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - mBusiness Address Added Successfully");
+                        mBusiness.BusinessAddressMap.Add(address.AddressDescription.Trim(), address);
                     }
+                    else mBusiness.BusinessAddressList = new BindingList<Address>() { address };
+
+                    MainProgramCode.ShowInformation(Messages.AddConfirmationInformationText, Messages.AddConfirmationInformationCaption);
 
                     ClearBusinessAddressInput();
                 }
@@ -364,39 +384,46 @@ namespace QuoteSwift.Forms
         *       and clutter free.                                                          
         */
 
-        private bool ValidBusinessAddress()
+        private bool ValidBusinessAddress(
+            string businessAddressDescription,
+            string businessAddressStreetNumber,
+            string businessAddressStreetName,
+            string businessAddressSuburb,
+            string businessAddressCity,
+            string businessAddressAreaCode
+        )
         {
-            if (txtBusinessAddresssDescription.Text.Length < 2)
+            if (businessAddressDescription.Trim().Length < 2)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address Description is invalid, please provide a valid description", "ERROR - Invalid mBusiness Address Description");
                 return (false);
             }
 
-            if (QuoteSwiftMainCode.ParseInt(mtxtStreetnumber.Text) == 0)
+            if (QuoteSwiftMainCode.ParseInt(businessAddressStreetNumber.Trim()) == 0)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid mBusiness Address Street Number");
                 return (false);
             }
 
-            if (txtStreetName.Text.Length < 2)
+            if (businessAddressStreetName.Trim().Length < 2)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid mBusiness Address Street Name");
                 return (false);
             }
 
-            if (txtSuburb.Text.Length < 2)
+            if (businessAddressSuburb.Trim().Length < 2)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid mBusiness Address Suburb");
                 return (false);
             }
 
-            if (txtCity.Text.Length < 2)
+            if (businessAddressCity.Trim().Length < 2)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address City is invalid, please provide a valid city", "ERROR - Invalid mBusiness Address City");
                 return (false);
             }
 
-            if (QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text) == 0)
+            if (QuoteSwiftMainCode.ParseInt(businessAddressAreaCode.Trim()) == 0)
             {
                 MainProgramCode.ShowError("The provided mBusiness Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid mBusiness Address Area Code");
                 return (false);
