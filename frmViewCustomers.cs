@@ -114,7 +114,28 @@ namespace QuoteSwift
         {
             if (passed.PassQuoteList != null)
             {
-                //TODO: Implement
+                DateTime latest = DateTime.MinValue;
+                bool found = false;
+
+                for (int i = 0; i < passed.PassQuoteList.Count; i++)
+                {
+                    Quote q = passed.PassQuoteList[i];
+
+                    if (q.QuoteCustomer != null && c != null &&
+                        q.QuoteCustomer.CustomerCompanyName == c.CustomerCompanyName)
+                    {
+                        if (!found || q.QuoteCreationDate.Date > latest.Date)
+                        {
+                            latest = q.QuoteCreationDate;
+                            found = true;
+                        }
+                    }
+                }
+
+                if (found)
+                {
+                    return latest.ToShortDateString();
+                }
             }
 
             return "No Previous Quote Date Available";
