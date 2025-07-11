@@ -14,9 +14,9 @@ namespace QuoteSwift
         [ProtoMember(3)]
         private BindingList<Pump_Part> mPartList;
         [ProtoMember(4)]
-        private float mNewPumpPrice;
+        private decimal mNewPumpPrice;
 
-        public Pump(string mPumpName, string mPumpDescription, float mNewPumpPrice, ref BindingList<Pump_Part> mPartList)
+        public Pump(string mPumpName, string mPumpDescription, decimal mNewPumpPrice, ref BindingList<Pump_Part> mPartList)
         {
             PumpName = mPumpName;
             PumpDescription = mPumpDescription;
@@ -27,6 +27,6 @@ namespace QuoteSwift
         public string PumpName { get => mPumpName; set => mPumpName = value; }
         public string PumpDescription { get => mPumpDescription; set => mPumpDescription = value; }
         public BindingList<Pump_Part> PartList { get => mPartList; set => mPartList = value; }
-        public float NewPumpPrice { get => mNewPumpPrice; set => mNewPumpPrice = value; }
+        public decimal NewPumpPrice { get => mNewPumpPrice; set => mNewPumpPrice = value; }
     }
 }

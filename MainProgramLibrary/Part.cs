@@ -16,7 +16,7 @@ namespace QuoteSwift
         [ProtoMember(5)]
         private bool mMandatoryPart;
         [ProtoMember(6)]
-        private float mPartPrice;
+        private decimal mPartPrice;
 
         // Default Constructor:
         public Part()
@@ -26,7 +26,7 @@ namespace QuoteSwift
             OriginalItemPartNumber = "";
             NewPartNumber = "";
             MandatoryPart = false;
-            PartPrice = 0;
+            PartPrice = 0m;
         }
 
         //Copy Constructor:
@@ -41,7 +41,7 @@ namespace QuoteSwift
             PartPrice = P.PartPrice;
         }
 
-        public Part(string mPartName, string mPartDescription, string mOriginalItempartNumber, string mNewPartNumber, bool mMandatoryPart, float mPartPrice)
+        public Part(string mPartName, string mPartDescription, string mOriginalItempartNumber, string mNewPartNumber, bool mMandatoryPart, decimal mPartPrice)
         {
             PartName = mPartName;
             PartDescription = mPartDescription;
@@ -56,6 +56,6 @@ namespace QuoteSwift
         public string OriginalItemPartNumber { get => mOriginalItemPartNumber; set => mOriginalItemPartNumber = value; }
         public string NewPartNumber { get => mNewPartNumber; set => mNewPartNumber = value; }
         public bool MandatoryPart { get => mMandatoryPart; set => mMandatoryPart = value; }
-        public float PartPrice { get => mPartPrice; set => mPartPrice = value; }
+        public decimal PartPrice { get => mPartPrice; set => mPartPrice = value; }
     }
 }
