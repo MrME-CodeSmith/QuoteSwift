@@ -52,9 +52,5 @@ namespace QuoteSwift
         public string AddressCity { get => mAddressCity; set => mAddressCity = value; }
         public int AddressAreaCode { get => mAddressAreaCode; set => mAddressAreaCode = value; }
 
-        internal object SingleOrDefault(Func<object, bool> p)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
