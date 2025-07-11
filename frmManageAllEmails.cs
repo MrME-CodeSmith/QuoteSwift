@@ -155,16 +155,16 @@ namespace QuoteSwift
             DgvEmails.Rows.Clear();
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                for (int i = 0; i < passed.BusinessToChange.BusinessEmailAddressList.Count; i++)
+                foreach (var email in passed.BusinessToChange.BusinessEmailAddressList)
                 {
-                    DgvEmails.Rows.Add(passed.BusinessToChange.BusinessEmailAddressList[i]);
+                    DgvEmails.Rows.Add(email);
                 }
             }
             else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
             {
-                for (int i = 0; i < passed.CustomerToChange.CustomerEmailList.Count; i++)
+                foreach (var email in passed.CustomerToChange.CustomerEmailList)
                 {
-                    DgvEmails.Rows.Add(passed.CustomerToChange.CustomerEmailList[i]);
+                    DgvEmails.Rows.Add(email);
                 }
             }
         }

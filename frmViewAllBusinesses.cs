@@ -62,8 +62,8 @@ namespace QuoteSwift
         {
             if (passed.PassBusinessList != null)
             {
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
-                    DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
+                foreach (var business in passed.PassBusinessList)
+                    DgvBusinessList.Rows.Add(business.BusinessName);
             }
 
             DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
@@ -124,9 +124,9 @@ namespace QuoteSwift
             DgvBusinessList.Rows.Clear();
 
             if (passed.PassBusinessList != null)
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
+                foreach (var business in passed.PassBusinessList)
                 {
-                    DgvBusinessList.Rows.Add(passed.PassBusinessList[i].BusinessName);
+                    DgvBusinessList.Rows.Add(business.BusinessName);
                 }
         }
 

@@ -110,16 +110,16 @@ namespace QuoteSwift
         {
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
                 if (passed.BusinessToChange.BusinessPOBoxAddressList != null && a != null)
-                    for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
+                    foreach (var address in passed.BusinessToChange.BusinessPOBoxAddressList)
                     {
-                        if (passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription == a.AddressDescription && passed.BusinessToChange.BusinessPOBoxAddressList[i].AddressDescription != passed.AddressToChange.AddressDescription) return false;
+                        if (address.AddressDescription == a.AddressDescription && address.AddressDescription != passed.AddressToChange.AddressDescription) return false;
                     }
 
             if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
                 if (passed.CustomerToChange.CustomerPOBoxAddress != null && a != null)
-                    for (int i = 0; i < passed.CustomerToChange.CustomerPOBoxAddress.Count; i++)
+                    foreach (var address in passed.CustomerToChange.CustomerPOBoxAddress)
                     {
-                        if (passed.CustomerToChange.CustomerPOBoxAddress[i].AddressDescription == a.AddressDescription && passed.CustomerToChange.CustomerPOBoxAddress[i].AddressDescription != passed.AddressToChange.AddressDescription) return false;
+                        if (address.AddressDescription == a.AddressDescription && address.AddressDescription != passed.AddressToChange.AddressDescription) return false;
                     }
             return false;
         }

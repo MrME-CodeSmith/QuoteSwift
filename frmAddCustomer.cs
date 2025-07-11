@@ -477,7 +477,7 @@ namespace QuoteSwift
         {
             if (Customer.CustomerDeliveryAddressList != null)
             {
-                for (int i = 0; i < Customer.CustomerDeliveryAddressList.Count; i++)
+                foreach (var address in Customer.CustomerDeliveryAddressList)
                 {
                     if (Customer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
@@ -495,7 +495,7 @@ namespace QuoteSwift
 
             if (Customer.CustomerPOBoxAddress != null)
             {
-                for (int i = 0; i < Customer.CustomerPOBoxAddress.Count; i++)
+                foreach (var address in Customer.CustomerPOBoxAddress)
                 {
                     if (Customer.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
@@ -525,7 +525,7 @@ namespace QuoteSwift
         {
             if (Customer.CustomerTelephoneNumberList != null)
             {
-                for (int i = 0; i < Customer.CustomerTelephoneNumberList.Count; i++)
+                foreach (var number in Customer.CustomerTelephoneNumberList)
                 {
                     if (Customer.CustomerTelephoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
@@ -537,7 +537,7 @@ namespace QuoteSwift
 
             if (Customer.CustomerCellphoneNumberList != null)
             {
-                for (int i = 0; i < Customer.CustomerCellphoneNumberList.Count; i++)
+                foreach (var number in Customer.CustomerCellphoneNumberList)
                 {
                     if (Customer.CustomerCellphoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
@@ -606,9 +606,9 @@ namespace QuoteSwift
         {
             if (passed.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
             {
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
+                foreach (var business in passed.PassBusinessList)
                 {
-                    if (passed.PassBusinessList[i].BusinessName == cbBusinessSelection.Text) return passed.PassBusinessList[i];
+                    if (business.BusinessName == cbBusinessSelection.Text) return business;
                 }
             }
 

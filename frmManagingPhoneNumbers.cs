@@ -215,33 +215,33 @@ namespace QuoteSwift
 
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
             {
-                for (int i = 0; i < passed.BusinessToChange.BusinessTelephoneNumberList.Count; i++)
+                foreach (var number in passed.BusinessToChange.BusinessTelephoneNumberList)
                 {
-                    dgvTelephoneNumbers.Rows.Add(passed.BusinessToChange.BusinessTelephoneNumberList[i]);
+                    dgvTelephoneNumbers.Rows.Add(number);
                 }
             }
 
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
             {
-                for (int i = 0; i < passed.BusinessToChange.BusinessCellphoneNumberList.Count; i++)
+                foreach (var number in passed.BusinessToChange.BusinessCellphoneNumberList)
                 {
-                    dgvCellphoneNumbers.Rows.Add(passed.BusinessToChange.BusinessCellphoneNumberList[i]);
+                    dgvCellphoneNumbers.Rows.Add(number);
                 }
             }
 
             if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
             {
-                for (int i = 0; i < passed.CustomerToChange.CustomerCellphoneNumberList.Count; i++)
+                foreach (var number in passed.CustomerToChange.CustomerCellphoneNumberList)
                 {
-                    dgvCellphoneNumbers.Rows.Add(passed.CustomerToChange.CustomerCellphoneNumberList[i]);
+                    dgvCellphoneNumbers.Rows.Add(number);
                 }
             }
 
             if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
             {
-                for (int i = 0; i < passed.CustomerToChange.CustomerTelephoneNumberList.Count; i++)
+                foreach (var number in passed.CustomerToChange.CustomerTelephoneNumberList)
                 {
-                    dgvTelephoneNumbers.Rows.Add(passed.CustomerToChange.CustomerTelephoneNumberList[i]);
+                    dgvTelephoneNumbers.Rows.Add(number);
                 }
             }
         }

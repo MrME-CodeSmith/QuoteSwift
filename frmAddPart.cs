@@ -181,12 +181,11 @@ namespace QuoteSwift
                                 if (UpdateDuplicated)
                                 {
                                     if (newPart.MandatoryPart)
-                                        for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
+                                        foreach (var data in passed.PassMandatoryPartList)
                                         {
-                                            if (passed.PassMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
+                                            if (data.NewPartNumber == newPart.NewPartNumber || data.OriginalItemPartNumber == newPart.OriginalItemPartNumber)
                                             {
 
-                                                Part data = passed.PassMandatoryPartList[i];
                                                 data.MandatoryPart = newPart.MandatoryPart;
                                                 data.PartDescription = newPart.PartDescription;
                                                 data.PartName = newPart.PartName;
@@ -197,13 +196,12 @@ namespace QuoteSwift
                                         }
 
                                     if (!newPart.MandatoryPart)
-                                        for (int i = 0; i < passed.PassNonMandatoryPartList.Count; i++)
+                                        foreach (var data in passed.PassNonMandatoryPartList)
                                         {
-                                            if (passed.PassNonMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
+                                            if (data.NewPartNumber == newPart.NewPartNumber || data.OriginalItemPartNumber == newPart.OriginalItemPartNumber)
                                             {
 
 
-                                                Part data = passed.PassNonMandatoryPartList[i];
                                                 data.MandatoryPart = newPart.MandatoryPart;
                                                 data.PartDescription = newPart.PartDescription;
                                                 data.PartName = newPart.PartName;
@@ -240,12 +238,12 @@ namespace QuoteSwift
                         {
                             Pump NewPump = new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref NewPumpPartList);
                             Pump OldPump = null;
-                            for (int i = 0; i < passed.PassPumpList.Count; i++)
+                            foreach (var pump in passed.PassPumpList)
                             {
-                                if (passed.PassPumpList[i].PumpName == NewPump.PumpName)
+                                if (pump.PumpName == NewPump.PumpName)
                                 {
                                     FoundPump = true;
-                                    OldPump = passed.PassPumpList[i];
+                                    OldPump = pump;
                                     break;
                                 }
                             }
@@ -424,9 +422,9 @@ namespace QuoteSwift
             {
                 if (passed.PassMandatoryPartList != null)
                 {
-                    for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
+                    foreach (var existing in passed.PassMandatoryPartList)
                     {
-                        if (passed.PassMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
+                        if (existing.NewPartNumber == part.NewPartNumber || existing.OriginalItemPartNumber == part.OriginalItemPartNumber)
                         {
                             if (passed.PartToChange == null)
                                 MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
@@ -439,9 +437,9 @@ namespace QuoteSwift
             {
                 if (passed.PassNonMandatoryPartList != null)
                 {
-                    for (int i = 0; i < passed.PassNonMandatoryPartList.Count; i++)
+                    foreach (var existing in passed.PassNonMandatoryPartList)
                     {
-                        if (passed.PassNonMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
+                        if (existing.NewPartNumber == part.NewPartNumber || existing.OriginalItemPartNumber == part.OriginalItemPartNumber)
                         {
                             if (passed.PartToChange == null)
                                 MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
