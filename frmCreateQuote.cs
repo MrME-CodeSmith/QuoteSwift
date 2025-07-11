@@ -759,7 +759,7 @@ namespace QuoteSwift
             finally
             {
                 UseWaitCursor = false;
-                string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\ExportToExcel\\ExportQuote.pbf";
+                string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\ExportToExcel\\ExportQuote.json";
                 if (File.Exists(StorePath))
                 {
                     MainProgramCode.ShowError("The quote did not export as intended.", "ERROR - Export Failed Complete Successfully");

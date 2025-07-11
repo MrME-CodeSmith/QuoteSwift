@@ -26,7 +26,7 @@ After a successful build the main executable can be found in `QuoteSwift/bin/Deb
 
 The solution also builds an auxiliary program `ExportToExcel/ExportToExcel.exe`. When a quote is exported from the main application this utility is launched automatically and converts the quote to an Excel file using `QuoteTemplate.xlsx`.
 
-To run the tool manually copy the serialized `ExportQuote.pbf` (created by the main application) into the same directory as `ExportToExcel.exe` and execute:
+To run the tool manually copy the serialized `ExportQuote.json` (created by the main application) into the same directory as `ExportToExcel.exe` and execute:
 
 ```bash
 ExportToExcel.exe
