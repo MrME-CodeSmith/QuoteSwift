@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 
 
@@ -58,21 +59,11 @@ namespace QuoteSwift
 
         public static Quote GetLastQuote(ref Pass passed)
         {
-            if (passed != null && passed.PassQuoteList != null)
+            if (passed != null && passed.PassQuoteList != null && passed.PassQuoteList.Count > 0)
             {
-                Quote latest = passed.PassQuoteList[0];
-                DateTime dt = latest.QuoteCreationDate;
-
-                foreach (var quote in passed.PassQuoteList.Skip(1))
-                {
-                    if (quote.QuoteCreationDate.Date > dt)
-                    {
-                        dt = quote.QuoteCreationDate.Date;
-                        latest = quote;
-                    }
-                }
-
-                return latest;
+                return passed.PassQuoteList.Values
+                    .OrderByDescending(q => q.QuoteCreationDate)
+                    .First();
             }
 
             return null;

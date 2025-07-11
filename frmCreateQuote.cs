@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -50,9 +51,10 @@ namespace QuoteSwift
 
                     if (passed.PassQuoteList != null)
                     {
-                        passed.PassQuoteList.Add(NewQuote);
+                        passed.PassQuoteList[NewQuote.QuoteNumber] = NewQuote;
                     }
-                    else passed.PassQuoteList = new BindingList<Quote> { NewQuote };
+                    else
+                        passed.PassQuoteList = new SortedDictionary<string, Quote> { { NewQuote.QuoteNumber, NewQuote } };
 
                     if (MainProgramCode.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
@@ -791,8 +793,12 @@ namespace QuoteSwift
 
             if (passed.PassQuoteList != null)
             {
-                Quote Search = passed.PassQuoteList.SingleOrDefault(p => p.QuoteJobNumber == Provided.QuoteJobNumber || p.QuoteNumber == Provided.QuoteNumber);
-                if (Search != null) return false;
+                if (passed.PassQuoteList.ContainsKey(Provided.QuoteNumber)) return false;
+                foreach (var p in passed.PassQuoteList.Values)
+                {
+                    if (p.QuoteJobNumber == Provided.QuoteJobNumber)
+                        return false;
+                }
             }
 
             return true;
@@ -800,17 +806,11 @@ namespace QuoteSwift
 
         private void GetNewQuotenumber()
         {
-            if (passed != null && passed.PassQuoteList != null)
+            if (passed != null && passed.PassQuoteList != null && passed.PassQuoteList.Count > 0)
             {
-                Quote temp = passed.PassQuoteList[0];
-                int LastQuoteNumber = GetQuoteNumber(ref temp);
-                for (int i = 1; i < passed.PassQuoteList.Count; i++)
-                {
-                    temp = passed.PassQuoteList[i];
-                    if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
-                }
-                LastQuoteNumber++;
-                txtQuoteNumber.Text = "TRR" + LastQuoteNumber.ToString();
+                int last = passed.PassQuoteList.Values.Select(q => GetQuoteNumber(ref q)).Max();
+                last++;
+                txtQuoteNumber.Text = "TRR" + last.ToString();
             }
         }
 

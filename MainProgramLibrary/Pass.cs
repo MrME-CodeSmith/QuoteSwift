@@ -1,11 +1,12 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 
 
 namespace QuoteSwift
 {
     public class Pass
     {
-        private BindingList<Quote> mPassQuoteList;
+        private SortedDictionary<string, Quote> mPassQuoteDictionary;
         private BindingList<Business> mPassBusinessList;
         private BindingList<Pump> mPassPumpList;
         private BindingList<Part> mPassMandatoryPartList;
@@ -23,7 +24,7 @@ namespace QuoteSwift
 
         //Pass All Constructor :
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList)
+        public Pass(SortedDictionary<string, Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList)
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -34,7 +35,7 @@ namespace QuoteSwift
 
         //Pass Quote Constructor:
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -47,7 +48,7 @@ namespace QuoteSwift
 
         //Pass Business Constructor:
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Business mBusinessToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Business mBusinessToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -60,7 +61,7 @@ namespace QuoteSwift
 
         //Pass Customer Constructor:
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -73,7 +74,7 @@ namespace QuoteSwift
 
         //Pass Pump Constructor:
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Pump mPumpToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Pump mPumpToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -86,7 +87,7 @@ namespace QuoteSwift
 
         //Pass Part Constructor:
 
-        public Pass(BindingList<Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Part mPartToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> mPassQuoteList, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Part mPartToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteList = mPassQuoteList;
             PassBusinessList = mPassBusinessList;
@@ -97,7 +98,7 @@ namespace QuoteSwift
             ChangeSpecificObject = mChangeSpecificObject;
         }
 
-        public BindingList<Quote> PassQuoteList { get => mPassQuoteList; set => mPassQuoteList = value; }
+        public SortedDictionary<string, Quote> PassQuoteList { get => mPassQuoteDictionary; set => mPassQuoteDictionary = value; }
         public BindingList<Business> PassBusinessList { get => mPassBusinessList; set => mPassBusinessList = value; }
         public BindingList<Pump> PassPumpList { get => mPassPumpList; set => mPassPumpList = value; }
         public Business BusinessToChange { get => mBusinessToChange; set => mBusinessToChange = value; }

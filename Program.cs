@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -11,7 +12,7 @@ namespace QuoteSwift
         [STAThread]
         static void Main()
         {
-            Pass passed = new Pass(null, null, null, null, null);
+            Pass passed = new Pass(new SortedDictionary<string, Quote>(), null, null, null, null);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmViewQuotes(ref passed));

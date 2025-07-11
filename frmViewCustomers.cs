@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -117,7 +118,7 @@ namespace QuoteSwift
                 DateTime latest = DateTime.MinValue;
                 bool found = false;
 
-                foreach (var q in passed.PassQuoteList)
+                foreach (var q in passed.PassQuoteList.Values)
                 {
                     if (q.QuoteCustomer != null && c != null &&
                         q.QuoteCustomer.CustomerCompanyName == c.CustomerCompanyName)

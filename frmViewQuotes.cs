@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -15,7 +16,8 @@ namespace QuoteSwift
         {
             InitializeComponent();
             this.passed = passed;
-            if (this.passed == null) passed = new Pass(new BindingList<Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new BindingList<Part>(), new BindingList<Part>());
+            if (this.passed == null)
+                passed = new Pass(new SortedDictionary<string, Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new BindingList<Part>(), new BindingList<Part>());
 
         }
 
@@ -235,7 +237,8 @@ namespace QuoteSwift
 
                     byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.json");
 
-                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) passed.PassQuoteList = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
+                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0)
+                        passed.PassQuoteList = MainProgramCode.DeserializeQuoteDictionary(RetreiveQuoteList);
                 }
                 catch (Exception Ex)
                 {
@@ -263,7 +266,7 @@ namespace QuoteSwift
 
             BindingSource PreviousQuotesDatagridBindingSource = null;
             if (passed != null && passed.PassQuoteList != null)
-                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = passed.PassQuoteList };
+                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = new BindingList<Quote>(passed.PassQuoteList.Values.ToList()) };
 
             if (PreviousQuotesDatagridBindingSource != null)
             {
