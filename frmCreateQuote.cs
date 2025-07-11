@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -48,11 +49,12 @@ namespace QuoteSwift
                     }
 
 
-                    if (passed.PassQuoteList != null)
+                    if (passed.PassQuoteMap != null)
                     {
-                        passed.PassQuoteList.Add(NewQuote);
+                        passed.PassQuoteMap[NewQuote.QuoteNumber] = NewQuote;
                     }
-                    else passed.PassQuoteList = new BindingList<Quote> { NewQuote };
+                    else
+                        passed.PassQuoteMap = new SortedDictionary<string, Quote> { [NewQuote.QuoteNumber] = NewQuote };
 
                     if (MainProgramCode.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
@@ -120,7 +122,7 @@ namespace QuoteSwift
                 dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
 
                 Text = Text.Replace("<< Business Name >>", GetBusinessSelection().BusinessName);
-                if (passed.PassQuoteList == null || passed.PassQuoteList.Count == 0)
+                if (passed.PassQuoteMap == null || passed.PassQuoteMap.Count == 0)
                 {
                     cbxUseAutomaticNumberingScheme.Checked = false;
                     cbxUseAutomaticNumberingScheme.Enabled = false;
@@ -789,10 +791,14 @@ namespace QuoteSwift
         {
             Quote Provided = q;
 
-            if (passed.PassQuoteList != null)
+            if (passed.PassQuoteMap != null)
             {
-                Quote Search = passed.PassQuoteList.SingleOrDefault(p => p.QuoteJobNumber == Provided.QuoteJobNumber || p.QuoteNumber == Provided.QuoteNumber);
-                if (Search != null) return false;
+                foreach (var kv in passed.PassQuoteMap)
+                {
+                    Quote ql = kv.Value;
+                    if (ql.QuoteJobNumber == Provided.QuoteJobNumber || ql.QuoteNumber == Provided.QuoteNumber)
+                        return false;
+                }
             }
 
             return true;
@@ -800,13 +806,13 @@ namespace QuoteSwift
 
         private void GetNewQuotenumber()
         {
-            if (passed != null && passed.PassQuoteList != null)
+            if (passed != null && passed.PassQuoteMap != null && passed.PassQuoteMap.Count > 0)
             {
-                Quote temp = passed.PassQuoteList[0];
+                Quote temp = passed.PassQuoteMap.First().Value;
                 int LastQuoteNumber = GetQuoteNumber(ref temp);
-                for (int i = 1; i < passed.PassQuoteList.Count; i++)
+                foreach (var q in passed.PassQuoteMap.Values.Skip(1))
                 {
-                    temp = passed.PassQuoteList[i];
+                    temp = q;
                     if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
                 }
                 LastQuoteNumber++;

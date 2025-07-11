@@ -113,12 +113,12 @@ namespace QuoteSwift
 
         private string GetPreviousQuoteDate(Customer c)
         {
-            if (passed.PassQuoteList != null)
+            if (passed.PassQuoteMap != null)
             {
                 DateTime latest = DateTime.MinValue;
                 bool found = false;
 
-                foreach (var q in passed.PassQuoteList)
+                foreach (var q in passed.PassQuoteMap.Values)
                 {
                     if (q.QuoteCustomer != null && c != null &&
                         q.QuoteCustomer.CustomerCompanyName == c.CustomerCompanyName)

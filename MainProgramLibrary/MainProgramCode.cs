@@ -17,12 +17,12 @@ namespace QuoteSwift
 
         public static Quote GetLastQuote(ref Pass passed)
         {
-            if (passed != null && passed.PassQuoteList != null)
+            if (passed != null && passed.PassQuoteMap != null && passed.PassQuoteMap.Count > 0)
             {
-                Quote latest = passed.PassQuoteList[0];
+                Quote latest = passed.PassQuoteMap.First().Value;
                 DateTime dt = latest.QuoteCreationDate;
 
-                foreach (var quote in passed.PassQuoteList.Skip(1))
+                foreach (var quote in passed.PassQuoteMap.Values.Skip(1))
                 {
                     if (quote.QuoteCreationDate.Date > dt)
                     {
@@ -296,12 +296,12 @@ namespace QuoteSwift
 
         // Serialize Quote List Method
 
-        public static byte[] SerializeQuoteList(BindingList<Quote> QuoteList)
+        public static byte[] SerializeQuoteList(SortedDictionary<string, Quote> QuoteList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.JsonSerialize<BindingList<Quote>>(QuoteList);
+                tempByte = MainProgramCode.JsonSerialize<SortedDictionary<string, Quote>>(QuoteList);
             }
             catch
             {
@@ -313,11 +313,11 @@ namespace QuoteSwift
 
         // De-serialize Quote List Method
 
-        public static BindingList<Quote> DeserializeQuoteList(byte[] tempByte)
+        public static SortedDictionary<string, Quote> DeserializeQuoteList(byte[] tempByte)
         {
             try
             {
-                return MainProgramCode.JsonDeserialize<BindingList<Quote>>(tempByte);
+                return MainProgramCode.JsonDeserialize<SortedDictionary<string, Quote>>(tempByte);
             }
             catch
             {
@@ -331,9 +331,9 @@ namespace QuoteSwift
         {
             //Determine if Pump List exist:
 
-            if (passed != null && passed.PassQuoteList != null && passed.PassQuoteList.Count > 0)
+            if (passed != null && passed.PassQuoteMap != null && passed.PassQuoteMap.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeQuoteList(passed.PassQuoteList);
+                byte[] ToStore = MainProgramCode.SerializeQuoteList(passed.PassQuoteMap);
                 MainProgramCode.SaveData("QuoteList.json", ToStore);
             }
         }
