@@ -102,21 +102,35 @@ namespace QuoteSwift
         void LoadMandatoryParts()
         {
             if (passed.PassMandatoryPartList != null)
-                for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
+            {
+                foreach (var part in passed.PassMandatoryPartList)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvAllParts.Rows.Add(passed.PassMandatoryPartList[i].PartName, passed.PassMandatoryPartList[i].PartDescription, passed.PassMandatoryPartList[i].OriginalItemPartNumber, passed.PassMandatoryPartList[i].NewPartNumber, true, passed.PassMandatoryPartList[i].PartPrice);
+                    dgvAllParts.Rows.Add(part.PartName,
+                                         part.PartDescription,
+                                         part.OriginalItemPartNumber,
+                                         part.NewPartNumber,
+                                         true,
+                                         part.PartPrice);
                 }
+            }
         }
 
         void LoadNonMandatoryParts()
         {
             if (passed.PassNonMandatoryPartList != null)
-                for (int k = 0; k < passed.PassNonMandatoryPartList.Count; k++)
+            {
+                foreach (var part in passed.PassNonMandatoryPartList)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvAllParts.Rows.Add(passed.PassNonMandatoryPartList[k].PartName, passed.PassNonMandatoryPartList[k].PartDescription, passed.PassNonMandatoryPartList[k].OriginalItemPartNumber, passed.PassNonMandatoryPartList[k].NewPartNumber, false, passed.PassNonMandatoryPartList[k].PartPrice);
+                    dgvAllParts.Rows.Add(part.PartName,
+                                         part.PartDescription,
+                                         part.OriginalItemPartNumber,
+                                         part.NewPartNumber,
+                                         false,
+                                         part.PartPrice);
                 }
+            }
         }
 
         Part GetSelectedPart()

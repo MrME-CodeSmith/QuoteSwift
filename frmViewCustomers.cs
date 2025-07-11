@@ -101,12 +101,12 @@ namespace QuoteSwift
             DgvCustomerList.Rows.Clear();
 
             if (passed != null && passed.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
-                    if (cbBusinessSelection.Text == passed.PassBusinessList[i].BusinessName)
-                        if (passed.PassBusinessList[i].BusinessCustomerList != null)
-                            for (int j = 0; j < passed.PassBusinessList[i].BusinessCustomerList.Count; j++)
-                                DgvCustomerList.Rows.Add(passed.PassBusinessList[i].BusinessCustomerList[j].CustomerCompanyName,
-                                                         GetPreviousQuoteDate(passed.PassBusinessList[i].BusinessCustomerList[j]));
+                foreach (var business in passed.PassBusinessList)
+                    if (cbBusinessSelection.Text == business.BusinessName)
+                        if (business.BusinessCustomerList != null)
+                            foreach (var customer in business.BusinessCustomerList)
+                                DgvCustomerList.Rows.Add(customer.CustomerCompanyName,
+                                                         GetPreviousQuoteDate(customer));
 
         }
 
@@ -117,10 +117,8 @@ namespace QuoteSwift
                 DateTime latest = DateTime.MinValue;
                 bool found = false;
 
-                for (int i = 0; i < passed.PassQuoteList.Count; i++)
+                foreach (var q in passed.PassQuoteList)
                 {
-                    Quote q = passed.PassQuoteList[i];
-
                     if (q.QuoteCustomer != null && c != null &&
                         q.QuoteCustomer.CustomerCompanyName == c.CustomerCompanyName)
                     {

@@ -490,7 +490,7 @@ namespace QuoteSwift
         {
             if (Business.BusinessAddressList != null)
             {
-                for (int i = 0; i < Business.BusinessAddressList.Count; i++)
+                foreach (var address in Business.BusinessAddressList)
                 {
                     if (Business.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
@@ -508,7 +508,7 @@ namespace QuoteSwift
 
             if (Business.BusinessPOBoxAddressList != null)
             {
-                for (int i = 0; i < Business.BusinessPOBoxAddressList.Count; i++)
+                foreach (var address in Business.BusinessPOBoxAddressList)
                 {
                     if (Business.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
                     {
@@ -540,7 +540,7 @@ namespace QuoteSwift
         {
             if (Business.BusinessTelephoneNumberList != null)
             {
-                for (int i = 0; i < Business.BusinessTelephoneNumberList.Count; i++)
+                foreach (var number in Business.BusinessTelephoneNumberList)
                 {
                     if (Business.BusinessTelephoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
@@ -552,7 +552,7 @@ namespace QuoteSwift
 
             if (Business.BusinessCellphoneNumberList != null)
             {
-                for (int i = 0; i < Business.BusinessCellphoneNumberList.Count; i++)
+                foreach (var number in Business.BusinessCellphoneNumberList)
                 {
                     if (Business.BusinessCellphoneNumberList.SingleOrDefault(p => p == s) != null)
                     {

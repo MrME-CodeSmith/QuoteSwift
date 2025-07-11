@@ -186,27 +186,35 @@ namespace QuoteSwift
             mtxtPumpDescription.Text = passed.PumpToChange.PumpDescription;
             mtxtPumpName.Text = passed.PumpToChange.PumpName;
 
-            for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
-                for (int k = 0; k < passed.PumpToChange.PartList.Count; k++)
+            int mIndex = 0;
+            foreach (var part in passed.PassMandatoryPartList)
+            {
+                foreach (var pumpPart in passed.PumpToChange.PartList)
                 {
-                    if (passed.PassMandatoryPartList[i].OriginalItemPartNumber == passed.PumpToChange.PartList[k].PumpPart.OriginalItemPartNumber)
+                    if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
                     {
-                        DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvMandatoryPartView.Rows[i].Cells["clmAddToPumpSelection"];
+                        DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvMandatoryPartView.Rows[mIndex].Cells["clmAddToPumpSelection"];
                         cbx.Value = true;
-                        dgvMandatoryPartView.Rows[i].Cells["clmMPartQuantity"].Value = passed.PumpToChange.PartList[k].PumpPartQuantity.ToString();
+                        dgvMandatoryPartView.Rows[mIndex].Cells["clmMPartQuantity"].Value = pumpPart.PumpPartQuantity.ToString();
                     }
                 }
+                mIndex++;
+            }
 
-            for (int s = 0; s < passed.PassNonMandatoryPartList.Count; s++)
-                for (int d = 0; d < passed.PumpToChange.PartList.Count; d++)
+            int nmIndex = 0;
+            foreach (var part in passed.PassNonMandatoryPartList)
+            {
+                foreach (var pumpPart in passed.PumpToChange.PartList)
                 {
-                    if (passed.PassNonMandatoryPartList[s].OriginalItemPartNumber == passed.PumpToChange.PartList[d].PumpPart.OriginalItemPartNumber)
+                    if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
                     {
-                        DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvNonMandatoryPartView.Rows[s].Cells["ClmNonMandatoryPartSelection"];
+                        DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvNonMandatoryPartView.Rows[nmIndex].Cells["ClmNonMandatoryPartSelection"];
                         cbx.Value = true;
-                        dgvNonMandatoryPartView.Rows[s].Cells["clmNMPartQuantity"].Value = passed.PumpToChange.PartList[d].PumpPartQuantity.ToString();
+                        dgvNonMandatoryPartView.Rows[nmIndex].Cells["clmNMPartQuantity"].Value = pumpPart.PumpPartQuantity.ToString();
                     }
                 }
+                nmIndex++;
+            }
         }
 
         //Links the binding-lists with the corresponding datagridview components
@@ -244,14 +252,16 @@ namespace QuoteSwift
             BindingList<Pump_Part> ReturnList = null;
             Pump_Part newPart;
             //Mandatory added first
-            for (int i = 0; i < dgvMandatoryPartView.Rows.Count; i++)
+            int mPartIndex = 0;
+            foreach (DataGridViewRow row in dgvMandatoryPartView.Rows)
                 try
                 {
-                    if ((bool)(dgvMandatoryPartView.Rows[i].Cells["clmAddToPumpSelection"].Value) == true)
+                    if ((bool)(row.Cells["clmAddToPumpSelection"].Value) == true)
                     {
                         try
                         {
-                            newPart = new Pump_Part(passed.PassMandatoryPartList[i], QuoteSwiftMainCode.ParseInt(dgvMandatoryPartView.Rows[i].Cells["clmMPartQuantity"].Value.ToString())); // Cast used rather than convert; not much but to a degree faster
+                            newPart = new Pump_Part(passed.PassMandatoryPartList[mPartIndex],
+                                QuoteSwiftMainCode.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
                         }
                         catch
                         {
@@ -263,6 +273,7 @@ namespace QuoteSwift
                                 ReturnList = new BindingList<Pump_Part> { newPart };
                             else ReturnList.Add(newPart);
                     }
+                    mPartIndex++;
                 }
                 catch
                 {
@@ -271,14 +282,16 @@ namespace QuoteSwift
 
 
             //Non-Mandatory added second
-            for (int k = 0; k < dgvNonMandatoryPartView.Rows.Count; k++)
+            int nmPartIndex = 0;
+            foreach (DataGridViewRow row in dgvNonMandatoryPartView.Rows)
                 try
                 {
-                    if ((bool)(dgvNonMandatoryPartView.Rows[k].Cells["ClmNonMandatoryPartSelection"].Value) == true)
+                    if ((bool)(row.Cells["ClmNonMandatoryPartSelection"].Value) == true)
                     {
                         try
                         {
-                            newPart = new Pump_Part(passed.PassNonMandatoryPartList[k], QuoteSwiftMainCode.ParseInt(dgvNonMandatoryPartView.Rows[k].Cells["clmNMPartQuantity"].Value.ToString())); // Cast used rather than convert; not much but to a degree faster
+                            newPart = new Pump_Part(passed.PassNonMandatoryPartList[nmPartIndex],
+                                QuoteSwiftMainCode.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
                         }
                         catch
                         {
@@ -290,6 +303,7 @@ namespace QuoteSwift
                                 ReturnList = new BindingList<Pump_Part> { newPart };
                             else ReturnList.Add(newPart);
                     }
+                    nmPartIndex++;
                 }
                 catch
                 {
@@ -334,10 +348,16 @@ namespace QuoteSwift
             {
                 dgvMandatoryPartView.Rows.Clear();
 
-                for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
+                foreach (var part in passed.PassMandatoryPartList)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvMandatoryPartView.Rows.Add(passed.PassMandatoryPartList[i].PartName, passed.PassMandatoryPartList[i].PartDescription, passed.PassMandatoryPartList[i].OriginalItemPartNumber, passed.PassMandatoryPartList[i].NewPartNumber, passed.PassMandatoryPartList[i].PartPrice, false, 0);
+                    dgvMandatoryPartView.Rows.Add(part.PartName,
+                                                   part.PartDescription,
+                                                   part.OriginalItemPartNumber,
+                                                   part.NewPartNumber,
+                                                   part.PartPrice,
+                                                   false,
+                                                   0);
                 }
             }
         }
@@ -348,10 +368,16 @@ namespace QuoteSwift
             {
                 dgvNonMandatoryPartView.Rows.Clear();
 
-                for (int k = 0; k < passed.PassNonMandatoryPartList.Count; k++)
+                foreach (var part in passed.PassNonMandatoryPartList)
                 {
                     //Manually setting the data grid's rows' values:
-                    dgvNonMandatoryPartView.Rows.Add(passed.PassNonMandatoryPartList[k].PartName, passed.PassNonMandatoryPartList[k].PartDescription, passed.PassNonMandatoryPartList[k].OriginalItemPartNumber, passed.PassNonMandatoryPartList[k].NewPartNumber, passed.PassNonMandatoryPartList[k].PartPrice, false, 0);
+                    dgvNonMandatoryPartView.Rows.Add(part.PartName,
+                                                       part.PartDescription,
+                                                       part.OriginalItemPartNumber,
+                                                       part.NewPartNumber,
+                                                       part.PartPrice,
+                                                       false,
+                                                       0);
                 }
             }
         }

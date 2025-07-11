@@ -105,9 +105,11 @@ namespace QuoteSwift // Repair Quote Swift
 
             if (passed.PassPumpList != null)
             {
-                for (int i = 0; i < passed.PassPumpList.Count; i++)
+                foreach (var pump in passed.PassPumpList)
                 {
-                    dgvPumpList.Rows.Add(passed.PassPumpList[i].PumpName, passed.PassPumpList[i].PumpDescription, passed.PassPumpList[i].NewPumpPrice.ToString());
+                    dgvPumpList.Rows.Add(pump.PumpName,
+                                        pump.PumpDescription,
+                                        pump.NewPumpPrice.ToString());
                 }
             }
         }

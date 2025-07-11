@@ -60,15 +60,19 @@ namespace QuoteSwift
         {
             if (passed != null && passed.PassQuoteList != null)
             {
-                int Index = 0;
-                DateTime dt = passed.PassQuoteList[0].QuoteCreationDate;
-                for (int i = 1; i < passed.PassQuoteList.Count; i++)
-                    if (passed.PassQuoteList[i].QuoteCreationDate.Date > dt)
+                Quote latest = passed.PassQuoteList[0];
+                DateTime dt = latest.QuoteCreationDate;
+
+                foreach (var quote in passed.PassQuoteList.Skip(1))
+                {
+                    if (quote.QuoteCreationDate.Date > dt)
                     {
-                        dt = passed.PassQuoteList[i].QuoteCreationDate.Date;
-                        Index = i;
+                        dt = quote.QuoteCreationDate.Date;
+                        latest = quote;
                     }
-                return passed.PassQuoteList[Index];
+                }
+
+                return latest;
             }
 
             return null;
