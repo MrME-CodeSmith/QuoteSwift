@@ -63,7 +63,6 @@ namespace QuoteSwift
                     passed.QuoteTOChange = NewQuote;
                     ConvertToReadOnly();
                     createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
-                    passed.QuoteTOChange = null;
                 }
                 else MainProgramCode.ShowError("The Quote could not be created successfully.", "ERROR - Quote Creation Unsuccessful");
             }
