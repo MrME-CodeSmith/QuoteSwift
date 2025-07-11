@@ -48,13 +48,15 @@ namespace QuoteSwift
                 }
                 else //Add To List
                 {
-                    if (LinkBusiness.BusinessCustomerList.SingleOrDefault(p => p.CustomerName == Customer.CustomerName) != null)
+                    if (LinkBusiness.CustomerMap.ContainsKey(Customer.CustomerCompanyName))
                     {
                         MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
                         return;
                     }
-                    else LinkBusiness.BusinessCustomerList.Add(Customer);
+                    LinkBusiness.BusinessCustomerList.Add(Customer);
                 }
+
+                LinkBusiness.CustomerMap[Customer.CustomerCompanyName] = Customer;
 
                 passed.CustomerToChange = null;
                 passed.ChangeSpecificObject = false;
@@ -65,10 +67,18 @@ namespace QuoteSwift
             }
             else if (ValidBusiness() && passed.ChangeSpecificObject)
             {
+                string oldName = passed.CustomerToChange.CustomerCompanyName;
                 passed.CustomerToChange.CustomerName = "";
                 passed.CustomerToChange.CustomerCompanyName = txtCustomerCompanyName.Text;
                 passed.CustomerToChange.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
                 passed.CustomerToChange.VendorNumber = mtxtVendorNumber.Text;
+
+                Business container = GetSelectedBusiness();
+                if (container != null)
+                {
+                    container.CustomerMap.Remove(oldName);
+                    container.CustomerMap[passed.CustomerToChange.CustomerCompanyName] = passed.CustomerToChange;
+                }
 
                 MainProgramCode.ShowInformation(Customer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
                 ConvertToViewOnly();
@@ -113,13 +123,13 @@ namespace QuoteSwift
                     {
                         //Create New List
                         Customer.CustomerDeliveryAddressList = new BindingList<Address> { address };
-                        MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
                     }
                     else //Add To Current list
                     {
                         Customer.CustomerDeliveryAddressList.Add(address);
-                        MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
                     }
+                    Customer.DeliveryAddressMap[address.AddressDescription] = address;
+                    MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
 
                     ClearCustomerAddressInput();
                 }
@@ -138,13 +148,13 @@ namespace QuoteSwift
                     {
                         //Create New List
                         Customer.CustomerPOBoxAddress = new BindingList<Address> { address };
-                        MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                     }
                     else // AddingNewEventArgs To list
                     {
                         Customer.CustomerPOBoxAddress.Add(address);
-                        MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                     }
+                    Customer.POBoxMap[address.AddressDescription] = address;
+                    MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
 
                     ClearPOBoxAddressInput();
                 }
@@ -165,13 +175,13 @@ namespace QuoteSwift
                 {
                     // Create new List
                     Customer.CustomerTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
-                    Added = true;
                 }
                 else // Add To List
                 {
                     Customer.CustomerTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
-                    Added = true;
                 }
+                Customer.TelephoneNumbers.Add(mtxtTelephoneNumber.Text);
+                Added = true;
 
                 mtxtTelephoneNumber.ResetText();
             }
@@ -182,13 +192,13 @@ namespace QuoteSwift
                 {
                     // Create new List
                     Customer.CustomerCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
-                    Added = true;
                 }
                 else // Add To List
                 {
                     Customer.CustomerCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
-                    Added = true;
                 }
+                Customer.CellphoneNumbers.Add(mtxtCellphoneNumber.Text);
+                Added = true;
 
                 mtxtCellphoneNumber.ResetText();
             }
@@ -294,13 +304,13 @@ namespace QuoteSwift
                     {
                         //Create New List
                         Customer.CustomerEmailList = new BindingList<string> { mtxtEmailAddress.Text };
-                        MainProgramCode.ShowInformation("Successfully added the customer Email address", "INFORMATION - Customer Email Address Added Successfully");
                     }
                     else //Add To Existing List
                     {
                         Customer.CustomerEmailList.Add(mtxtEmailAddress.Text);
-                        MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - Customer Email Address Added Successfully");
                     }
+                    Customer.EmailAddresses.Add(mtxtEmailAddress.Text);
+                    MainProgramCode.ShowInformation("Successfully added the customer Email address", "INFORMATION - Customer Email Address Added Successfully");
 
                     mtxtEmailAddress.ResetText();
                 }
@@ -475,16 +485,10 @@ namespace QuoteSwift
 
         public bool AddressExisting(Address a)
         {
-            if (Customer.CustomerDeliveryAddressList != null)
+            if (Customer.DeliveryAddressMap.ContainsKey(a.AddressDescription))
             {
-                foreach (var address in Customer.CustomerDeliveryAddressList)
-                {
-                    if (Customer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
-                    {
-                        MainProgramCode.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
-                        return true;
-                    }
-                }
+                MainProgramCode.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
+                return true;
             }
 
             return false;
@@ -492,17 +496,10 @@ namespace QuoteSwift
 
         private bool POBoxAddressExisting(Address a)
         {
-
-            if (Customer.CustomerPOBoxAddress != null)
+            if (Customer.POBoxMap.ContainsKey(a.AddressDescription))
             {
-                foreach (var address in Customer.CustomerPOBoxAddress)
-                {
-                    if (Customer.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == a.AddressDescription) != null)
-                    {
-                        MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
-                        return true;
-                    }
-                }
+                MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
+                return true;
             }
 
             return false;
@@ -510,41 +507,20 @@ namespace QuoteSwift
 
         public bool EmailAddressExisting(string s)
         {
-            if (Customer.CustomerEmailList != null)
+            if (Customer.EmailAddresses.Contains(s))
             {
-                if (Customer.CustomerEmailList.SingleOrDefault(p => p == s) != null)
-                {
-                    MainProgramCode.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
-                    return true;
-                }
+                MainProgramCode.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
+                return true;
             }
             return false;
         }
 
         public bool PhoneNumberExisting(string s)
         {
-            if (Customer.CustomerTelephoneNumberList != null)
+            if (Customer.TelephoneNumbers.Contains(s) || Customer.CellphoneNumbers.Contains(s))
             {
-                foreach (var number in Customer.CustomerTelephoneNumberList)
-                {
-                    if (Customer.CustomerTelephoneNumberList.SingleOrDefault(p => p == s) != null)
-                    {
-                        MainProgramCode.ShowError("This number has already been added previously to the Telephone Number List.", "ERROR - Number Already Added");
-                        return true;
-                    }
-                }
-            }
-
-            if (Customer.CustomerCellphoneNumberList != null)
-            {
-                foreach (var number in Customer.CustomerCellphoneNumberList)
-                {
-                    if (Customer.CustomerCellphoneNumberList.SingleOrDefault(p => p == s) != null)
-                    {
-                        MainProgramCode.ShowError("This number has already been added previously to the Cellphone Number List.", "ERROR - Number Already Added");
-                        return true;
-                    }
-                }
+                MainProgramCode.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
+                return true;
             }
 
             return false;
@@ -604,12 +580,9 @@ namespace QuoteSwift
 
         private Business GetSelectedBusiness()
         {
-            if (passed.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
+            if (cbBusinessSelection.Text.Length > 0 && passed.BusinessLookup.TryGetValue(cbBusinessSelection.Text, out Business business))
             {
-                foreach (var business in passed.PassBusinessList)
-                {
-                    if (business.BusinessName == cbBusinessSelection.Text) return business;
-                }
+                return business;
             }
 
             return null;

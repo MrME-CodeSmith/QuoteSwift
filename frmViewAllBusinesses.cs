@@ -79,6 +79,9 @@ namespace QuoteSwift
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
                     passed.PassBusinessList.Remove(business);
+                    passed.BusinessLookup.Remove(business.BusinessName);
+                    passed.BusinessVatNumbers.Remove(business.BusinessLegalDetails.VatNumber);
+                    passed.BusinessRegNumbers.Remove(business.BusinessLegalDetails.RegistrationNumber);
                     MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
 
                     if (passed.PassBusinessList.Count == 0) passed.PassBusinessList = null;
@@ -97,22 +100,20 @@ namespace QuoteSwift
 
         private Business GetBusinessSelection()
         {
-            Business business;
-            string SearchName;
+            string searchName;
             int iGridSelection;
             try
             {
                 iGridSelection = DgvBusinessList.CurrentCell.RowIndex;
-                SearchName = DgvBusinessList.Rows[iGridSelection].Cells[0].Value.ToString();
+                searchName = DgvBusinessList.Rows[iGridSelection].Cells[0].Value.ToString();
             }
             catch
             {
                 return null;
             }
 
-            if (passed.PassBusinessList != null)
+            if (passed.BusinessLookup.TryGetValue(searchName, out Business business))
             {
-                business = passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -137,6 +138,12 @@ namespace QuoteSwift
                     if (passed.PassBusinessList[i] == Original)
                     {
                         passed.PassBusinessList[i] = New;
+                        passed.BusinessLookup.Remove(Original.BusinessName);
+                        passed.BusinessVatNumbers.Remove(Original.BusinessLegalDetails.VatNumber);
+                        passed.BusinessRegNumbers.Remove(Original.BusinessLegalDetails.RegistrationNumber);
+                        passed.BusinessLookup[New.BusinessName] = New;
+                        passed.BusinessVatNumbers.Add(New.BusinessLegalDetails.VatNumber);
+                        passed.BusinessRegNumbers.Add(New.BusinessLegalDetails.RegistrationNumber);
                         return true;
                     }
 

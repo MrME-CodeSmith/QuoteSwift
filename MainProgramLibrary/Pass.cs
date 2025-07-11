@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 
 
 namespace QuoteSwift
@@ -10,6 +11,11 @@ namespace QuoteSwift
         private BindingList<Pump> mPassPumpList;
         private BindingList<Part> mPassMandatoryPartList;
         private BindingList<Part> mPassNonMandatoryPartList;
+
+        // lookup collections for businesses
+        private Dictionary<string, Business> mBusinessLookup = new Dictionary<string, Business>();
+        private HashSet<string> mBusinessVatNumbers = new HashSet<string>();
+        private HashSet<string> mBusinessRegNumbers = new HashSet<string>();
         private Business mBusinessToChange = null; //In the event that a Business' information needs to be changed
         private Customer mCustomerToChange = null; //In the event that a Customer's information needs to be changed
         private Quote mQuoteTOChange = null; //In the event that a Quote's information needs to be changed
@@ -98,7 +104,15 @@ namespace QuoteSwift
         }
 
         public BindingList<Quote> PassQuoteList { get => mPassQuoteList; set => mPassQuoteList = value; }
-        public BindingList<Business> PassBusinessList { get => mPassBusinessList; set => mPassBusinessList = value; }
+        public BindingList<Business> PassBusinessList
+        {
+            get => mPassBusinessList;
+            set
+            {
+                mPassBusinessList = value;
+                SyncBusinessLookup();
+            }
+        }
         public BindingList<Pump> PassPumpList { get => mPassPumpList; set => mPassPumpList = value; }
         public Business BusinessToChange { get => mBusinessToChange; set => mBusinessToChange = value; }
         public Customer CustomerToChange { get => mCustomerToChange; set => mCustomerToChange = value; }
@@ -111,5 +125,26 @@ namespace QuoteSwift
         public Address AddressToChange { get => mAddressToChange; set => mAddressToChange = value; }
         public string EmailToChange { get => mEmailToChange; set => mEmailToChange = value; }
         public string PhoneNumberToChange { get => mPhoneNumberToChange; set => mPhoneNumberToChange = value; }
+
+        public Dictionary<string, Business> BusinessLookup => mBusinessLookup;
+        public HashSet<string> BusinessVatNumbers => mBusinessVatNumbers;
+        public HashSet<string> BusinessRegNumbers => mBusinessRegNumbers;
+
+        private void SyncBusinessLookup()
+        {
+            mBusinessLookup.Clear();
+            mBusinessVatNumbers.Clear();
+            mBusinessRegNumbers.Clear();
+            if (mPassBusinessList != null)
+            {
+                foreach (var b in mPassBusinessList)
+                {
+                    if (!mBusinessLookup.ContainsKey(b.BusinessName))
+                        mBusinessLookup[b.BusinessName] = b;
+                    mBusinessVatNumbers.Add(b.BusinessLegalDetails?.VatNumber);
+                    mBusinessRegNumbers.Add(b.BusinessLegalDetails?.RegistrationNumber);
+                }
+            }
+        }
     }
 }
