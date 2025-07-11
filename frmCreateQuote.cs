@@ -196,12 +196,15 @@ namespace QuoteSwift
         private Customer GetCustomerSelection()
         {
             string SearchName = cbxCustomerSelection.Text;
-            if (SearchName.Length > 1)
-                if (passed.PassBusinessList != null)
-                    if (GetBusinessSelection().BusinessCustomerList != null)
-                    {
-                        return GetBusinessSelection().BusinessCustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
-                    }
+
+            if (SearchName.Length > 1 && passed.PassBusinessList != null)
+            {
+                Business selected = GetBusinessSelection();
+                if (selected != null && selected.BusinessCustomerList != null)
+                {
+                    return selected.BusinessCustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
+                }
+            }
 
             return null;
         }
