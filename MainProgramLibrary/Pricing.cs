@@ -1,25 +1,15 @@
-﻿using ProtoBuf;
 
 namespace QuoteSwift
 {
-    [ProtoContract(SkipConstructor = true)]
     public class Pricing
     {
-        [ProtoMember(1)]
         private decimal mMachining;
-        [ProtoMember(2)]
         private decimal mLabour;
-        [ProtoMember(3)]
         private decimal mConsumables;
-        [ProtoMember(4)]
         private decimal mRebate;
-        [ProtoMember(5)]
         private decimal mSubTotal;
-        [ProtoMember(6)]
         private decimal mVAT;
-        [ProtoMember(7)]
         private decimal mTotalDue;
-        [ProtoMember(8)]
         private decimal mPumpPrice;
 
         public Pricing()

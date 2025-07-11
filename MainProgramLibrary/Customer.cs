@@ -1,30 +1,18 @@
-﻿using ProtoBuf;
 using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    [ProtoContract(SkipConstructor = true)]
     public class Customer
     {
-        [ProtoMember(1)]
         private string mCustomerName;
-        [ProtoMember(2)]
         private string mCustomerCompanyName;
-        [ProtoMember(3)]
         private BindingList<Address> mCustomerPOBoxAddress;
-        [ProtoMember(4)]
         private BindingList<Address> mCustomerDeliveryAddressList;
-        [ProtoMember(5)]
         private Legal mCustomerLegalDetails;
-        [ProtoMember(6)]
         private string mCustomerVendorNumber;
-        [ProtoMember(7)]
         private BindingList<string> mCustomerTelephoneNumberList;
-        [ProtoMember(8)]
         private BindingList<string> mCustomerCellphoneNumberList;
-        [ProtoMember(9)]
         private BindingList<string> mCustomerEmailList;
-        [ProtoMember(10)]
         private string mVendorNumber;
 
         //Default Constructor

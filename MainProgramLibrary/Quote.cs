@@ -1,57 +1,32 @@
-﻿using ProtoBuf;
 using System;
 using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    [ProtoContract(SkipConstructor = true)]
     public class Quote
     {
-        [ProtoMember(1)]
         private string mPumpName;
-        [ProtoMember(2)]
         private string mQuoteNumber;
-        [ProtoMember(3)]
         private DateTime mQuoteCreationDate;
-        [ProtoMember(4)]
         private DateTime mQuoteExpireyDate;
-        [ProtoMember(5)]
         private string mQuoteReference;
-        [ProtoMember(6)]
         private string mQuoteJobNumber;
-        [ProtoMember(7)]
         private string mQuotePRNumber;
-        [ProtoMember(8)]
         private DateTime mQuotePaymentTerm;
-        [ProtoMember(9)]
         private string mQuoteLineNumber;
-        [ProtoMember(10)]
         private Address mQuoteBusinessPOBox;
-        [ProtoMember(11)]
         private Address mQuoteCustomerPOBox;
-        [ProtoMember(12)]
         private float mQuoteNewUnitPrice;
-        [ProtoMember(13)]
         private float mQuoteRepairPercentage;
-        [ProtoMember(14)]
         private string mQuoteDeliveryAddress;
-        [ProtoMember(15)]
         private Customer mQuoteCustomer;
-        [ProtoMember(16)]
         private Business mQuoteCompany;
-        [ProtoMember(17)]
         private BindingList<Quote_Part> mQuoteMandatoryPartList;
-        [ProtoMember(18)]
         private BindingList<Quote_Part> mQuoteNewList;
-        [ProtoMember(19)]
         private string mTelefone;
-        [ProtoMember(20)]
         private string mCellphone;
-        [ProtoMember(21)]
         private string mEmail;
-        [ProtoMember(22)]
         private int mNetDays;
-        [ProtoMember(23)]
         private Pricing mQuoteCost;
 
         /** Constructor */

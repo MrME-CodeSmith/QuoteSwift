@@ -1,21 +1,13 @@
-﻿using ProtoBuf;
 
 namespace QuoteSwift
 {
-    [ProtoContract(SkipConstructor = true)]
     public class Part
     {
-        [ProtoMember(1)]
         private string mPartName;
-        [ProtoMember(2)]
         private string mPartDescription;
-        [ProtoMember(3)]
         private string mOriginalItemPartNumber;
-        [ProtoMember(4)]
         private string mNewPartNumber;
-        [ProtoMember(5)]
         private bool mMandatoryPart;
-        [ProtoMember(6)]
         private decimal mPartPrice;
 
         // Default Constructor:

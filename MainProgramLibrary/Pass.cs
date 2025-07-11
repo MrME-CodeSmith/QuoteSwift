@@ -1,10 +1,8 @@
-﻿using ProtoBuf;
 using System.ComponentModel;
 
 
 namespace QuoteSwift
 {
-    [ProtoContract(SkipConstructor = true)]
     public class Pass
     {
         private BindingList<Quote> mPassQuoteList;

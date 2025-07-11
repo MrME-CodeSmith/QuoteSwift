@@ -1,24 +1,15 @@
-﻿using ProtoBuf;
 
 
 namespace QuoteSwift
 {
-    [ProtoContract(SkipConstructor = true)]
     public class Quote_Part
     {
-        [ProtoMember(1)]
         private Pump_Part mPumpPart;
-        [ProtoMember(2)]
         private int mMissingorScrap;
-        [ProtoMember(3)]
         private int mRepaired;
-        [ProtoMember(4)]
         private int mNew;
-        [ProtoMember(5)]
         private decimal mPrice;
-        [ProtoMember(6)]
         private decimal mUnitPrice;
-        [ProtoMember(7)]
         private decimal mRepairDevider;
 
         public Quote_Part(Pump_Part mPumpPart, int mMissingorScrap, int mRepaired, int mNew, decimal mPrice, decimal mUnitPrice, decimal mRepairDevider)
