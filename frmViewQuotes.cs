@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -15,7 +17,7 @@ namespace QuoteSwift
         {
             InitializeComponent();
             this.passed = passed;
-            if (this.passed == null) passed = new Pass(new BindingList<Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new BindingList<Part>(), new BindingList<Part>());
+            if (this.passed == null) passed = new Pass(new SortedDictionary<string, Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new BindingList<Part>(), new BindingList<Part>());
 
         }
 
@@ -150,7 +152,7 @@ namespace QuoteSwift
 
         private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 Hide();
                 passed.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
@@ -164,7 +166,7 @@ namespace QuoteSwift
 
         private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteList != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
             {
                 this.Hide();
                 passed.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
@@ -235,7 +237,8 @@ namespace QuoteSwift
 
                     byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.json");
 
-                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) passed.PassQuoteList = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
+                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0)
+                        passed.PassQuoteMap = MainProgramCode.DeserializeQuoteList(RetreiveQuoteList);
                 }
                 catch (Exception Ex)
                 {
@@ -262,8 +265,8 @@ namespace QuoteSwift
 
 
             BindingSource PreviousQuotesDatagridBindingSource = null;
-            if (passed != null && passed.PassQuoteList != null)
-                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = passed.PassQuoteList };
+            if (passed != null && passed.PassQuoteMap != null)
+                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = new BindingList<Quote>(passed.PassQuoteMap.Values.ToList()) };
 
             if (PreviousQuotesDatagridBindingSource != null)
             {
