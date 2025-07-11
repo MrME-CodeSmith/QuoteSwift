@@ -535,11 +535,11 @@ namespace QuoteSwift
                 }
             }
 
-            if (Customer.CustomerTelephoneNumberList != null)
+            if (Customer.CustomerCellphoneNumberList != null)
             {
-                for (int i = 0; i < Customer.CustomerTelephoneNumberList.Count; i++)
+                for (int i = 0; i < Customer.CustomerCellphoneNumberList.Count; i++)
                 {
-                    if (Customer.CustomerTelephoneNumberList.SingleOrDefault(p => p == s) != null)
+                    if (Customer.CustomerCellphoneNumberList.SingleOrDefault(p => p == s) != null)
                     {
                         MainProgramCode.ShowError("This number has already been added previously to the Cellphone Number List.", "ERROR - Number Already Added");
                         return true;
