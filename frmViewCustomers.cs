@@ -80,6 +80,7 @@ namespace QuoteSwift
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?", "REQUEST - Deletion Request"))
                 {
                     container.BusinessCustomerList.Remove(customer);
+                    container.CustomerMap.Remove(customer.CustomerCompanyName);
                     MainProgramCode.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
 
                     if (container.BusinessCustomerList.Count == 0) container.BusinessCustomerList = null;
@@ -146,6 +147,8 @@ namespace QuoteSwift
                     if (Container.BusinessCustomerList[i] == Original)
                     {
                         Container.BusinessCustomerList[i] = New;
+                        Container.CustomerMap.Remove(Original.CustomerCompanyName);
+                        Container.CustomerMap[New.CustomerCompanyName] = New;
                         return true;
                     }
 
@@ -169,8 +172,8 @@ namespace QuoteSwift
 
             if (GetSelectedBusiness() != null)
             {
-                customer = GetSelectedBusiness().BusinessCustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
-                return customer;
+                if (GetSelectedBusiness().CustomerMap.TryGetValue(SearchName, out customer))
+                    return customer;
             }
 
             return null;
@@ -178,12 +181,10 @@ namespace QuoteSwift
 
         private Business GetSelectedBusiness()
         {
-            Business business;
-            string SearchName = cbBusinessSelection.Text;
+            string searchName = cbBusinessSelection.Text;
 
-            if (passed.PassBusinessList != null && SearchName.Length > 1)
+            if (searchName.Length > 1 && passed.BusinessLookup.TryGetValue(searchName, out Business business))
             {
-                business = passed.PassBusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
