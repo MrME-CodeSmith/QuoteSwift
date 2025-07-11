@@ -320,9 +320,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Content Include="BusinessList.pbf" />
-    <Content Include="MandatoryParts.pbf" />
-    <Content Include="NonMandatoryParts.pbf" />
+    <Content Include="BusinessList.json" />
+    <Content Include="MandatoryParts.json" />
+    <Content Include="NonMandatoryParts.json" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
@@ -335,7 +335,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Content Include="PumpList.pbf" />
+    <Content Include="PumpList.json" />
     <None Include="QuoteSwift_TemporaryKey.pfx" />
     <Content Include="QuoteTemplate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

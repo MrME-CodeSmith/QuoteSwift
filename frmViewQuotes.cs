@@ -217,23 +217,23 @@ namespace QuoteSwift
                 try
                 {
 
-                    byte[] RetreivedMandatoryPartList = MainProgramCode.RetreiveData("MandatoryParts.pbf");
+                    byte[] RetreivedMandatoryPartList = MainProgramCode.RetreiveData("MandatoryParts.json");
 
                     if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
 
-                    RetreivedMandatoryPartList = MainProgramCode.RetreiveData("NonMandatoryParts.pbf");
+                    RetreivedMandatoryPartList = MainProgramCode.RetreiveData("NonMandatoryParts.json");
 
                     if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassNonMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
 
-                    byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.pbf");
+                    byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.json");
 
                     if (RetreivePumpList != null && RetreivePumpList.Length > 0) passed.PassPumpList = new BindingList<Pump>(MainProgramCode.DeserializePumpList(RetreivePumpList));
 
-                    byte[] RetreiveBusinessList = MainProgramCode.RetreiveData("BusinessList.pbf");
+                    byte[] RetreiveBusinessList = MainProgramCode.RetreiveData("BusinessList.json");
 
                     if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) passed.PassBusinessList = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
 
-                    byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.pbf");
+                    byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.json");
 
                     if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0) passed.PassQuoteList = new BindingList<Quote>(MainProgramCode.DeserializeQuoteList(RetreiveQuoteList));
                 }

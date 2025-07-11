@@ -1,10 +1,10 @@
-﻿using ProtoBuf;
 using QuoteSwift;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace ExportToExcel
 {
@@ -18,14 +18,12 @@ namespace ExportToExcel
             {
                 
                 string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                if (StorePath.Contains("\\ExportToExcel")) StorePath += "\\ExportQuote.pbf"; else StorePath += "\\ExportToExcel\\ExportQuote.pbf";
+                if (StorePath.Contains("\\ExportToExcel")) StorePath += "\\ExportQuote.json"; else StorePath += "\\ExportToExcel\\ExportQuote.json";
 
                 if (File.Exists(StorePath))
                 {
-                    byte[] Data = File.ReadAllBytes(StorePath);
-
-                    MemoryStream stream = new MemoryStream(Data);
-                    NewQuote = Serializer.Deserialize<Quote>(stream);
+                    string json = File.ReadAllText(StorePath);
+                    NewQuote = JsonConvert.DeserializeObject<Quote>(json);
                 }
                 else return;
             } 
@@ -237,7 +235,7 @@ namespace ExportToExcel
                     Marshal.ReleaseComObject(ExcellContainer);
                 }
 
-                string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\ExportQuote.pbf";
+                string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\ExportQuote.json";
                 if (File.Exists(StorePath)) File.Delete(StorePath);
             }
 

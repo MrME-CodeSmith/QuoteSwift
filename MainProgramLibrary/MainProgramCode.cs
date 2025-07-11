@@ -1,4 +1,3 @@
-﻿using ProtoBuf;
 using System;
 using System.Windows.Forms;
 using System.ComponentModel;
@@ -6,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using Newtonsoft.Json;
+using System.Text;
 
 
 namespace QuoteSwift
@@ -74,7 +75,7 @@ namespace QuoteSwift
             }
             catch (FileNotFoundException)
             {
-                if (FileName != "ExportQuote.pbf")
+                if (FileName != "ExportQuote.json")
                     if (MainProgramCode.RequestConfirmation(FileName + " could not be found.\nWould you like to continue the execution? (Recommended for first launch)", "REQUEST - Execution Continuation")) return Data;
                 MainProgramCode.ShowError(FileName + " Could not be found, please contact the developer to fix this issue.", "ERROR - " + FileName + " Not Found");
                 
@@ -109,19 +110,16 @@ namespace QuoteSwift
             return true;
         }
 
-        // Serialize - Protobuf
+        // Serialize to JSON
 
-        public static byte[] ProtoSerialize<T>(T record) where T : class
+        public static byte[] JsonSerialize<T>(T record) where T : class
         {
-            if (null == record) return null;
+            if (record == null) return null;
 
             try
             {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    Serializer.Serialize(stream, record);
-                    return stream.ToArray();
-                }
+                string json = JsonConvert.SerializeObject(record);
+                return Encoding.UTF8.GetBytes(json);
             }
             catch
             {
@@ -129,18 +127,16 @@ namespace QuoteSwift
             }
         }
 
-        //De-serialize - Protobuf
+        // De-serialize from JSON
 
-        public static T ProtoDeserialize<T>(byte[] data) where T : class
+        public static T JsonDeserialize<T>(byte[] data) where T : class
         {
-            if (null == data) return null;
+            if (data == null) return null;
 
             try
             {
-                using (MemoryStream stream = new MemoryStream(data))
-                {
-                    return Serializer.Deserialize<T>(stream);
-                }
+                string json = Encoding.UTF8.GetString(data);
+                return JsonConvert.DeserializeObject<T>(json);
             }
             catch
             {
@@ -155,7 +151,7 @@ namespace QuoteSwift
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Part>>(PartList);
+                tempByte = MainProgramCode.JsonSerialize<BindingList<Part>>(PartList);
             }
             catch
             {
@@ -171,7 +167,7 @@ namespace QuoteSwift
         {
             try
             {
-                return MainProgramCode.ProtoDeserialize<BindingList<Part>>(tempByte);
+                return MainProgramCode.JsonDeserialize<BindingList<Part>>(tempByte);
             }
             catch
             {
@@ -188,7 +184,7 @@ namespace QuoteSwift
             if (passed != null && passed.PassMandatoryPartList != null && passed.PassMandatoryPartList.Count > 0)
             {
                 byte[] ToStore = MainProgramCode.SerializePartList(passed.PassMandatoryPartList);
-                MainProgramCode.SaveData("MandatoryParts.pbf", ToStore);
+                MainProgramCode.SaveData("MandatoryParts.json", ToStore);
             }
         }
 
@@ -201,7 +197,7 @@ namespace QuoteSwift
             if (passed != null && passed.PassNonMandatoryPartList != null && passed.PassNonMandatoryPartList.Count > 0)
             {
                 byte[] ToStore = MainProgramCode.SerializePartList(passed.PassNonMandatoryPartList);
-                MainProgramCode.SaveData("NonMandatoryParts.pbf", ToStore);
+                MainProgramCode.SaveData("NonMandatoryParts.json", ToStore);
             }
         }
 
@@ -212,7 +208,7 @@ namespace QuoteSwift
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Pump>>(PumpPartList);
+                tempByte = MainProgramCode.JsonSerialize<BindingList<Pump>>(PumpPartList);
             }
             catch
             {
@@ -228,7 +224,7 @@ namespace QuoteSwift
         {
             try
             {
-                return MainProgramCode.ProtoDeserialize<BindingList<Pump>>(tempByte);
+                return MainProgramCode.JsonDeserialize<BindingList<Pump>>(tempByte);
             }
             catch
             {
@@ -245,7 +241,7 @@ namespace QuoteSwift
             if (passed != null && passed.PassPumpList != null && passed.PassPumpList.Count > 0)
             {
                 byte[] ToStore = MainProgramCode.SerializePumpList(passed.PassPumpList);
-                MainProgramCode.SaveData("PumpList.pbf", ToStore);
+                MainProgramCode.SaveData("PumpList.json", ToStore);
             }
         }
 
@@ -257,7 +253,7 @@ namespace QuoteSwift
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Business>>(BusinessList);
+                tempByte = MainProgramCode.JsonSerialize<BindingList<Business>>(BusinessList);
             }
             catch
             {
@@ -273,7 +269,7 @@ namespace QuoteSwift
         {
             try
             {
-                return MainProgramCode.ProtoDeserialize<BindingList<Business>>(tempByte);
+                return MainProgramCode.JsonDeserialize<BindingList<Business>>(tempByte);
             }
             catch
             {
@@ -290,7 +286,7 @@ namespace QuoteSwift
             if (passed != null && passed.PassBusinessList != null && passed.PassBusinessList.Count > 0)
             {
                 byte[] ToStore = MainProgramCode.SerializeBusinessList(passed.PassBusinessList);
-                MainProgramCode.SaveData("BusinessList.pbf", ToStore);
+                MainProgramCode.SaveData("BusinessList.json", ToStore);
             }
         }
 
@@ -301,7 +297,7 @@ namespace QuoteSwift
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.ProtoSerialize<BindingList<Quote>>(QuoteList);
+                tempByte = MainProgramCode.JsonSerialize<BindingList<Quote>>(QuoteList);
             }
             catch
             {
@@ -317,7 +313,7 @@ namespace QuoteSwift
         {
             try
             {
-                return MainProgramCode.ProtoDeserialize<BindingList<Quote>>(tempByte);
+                return MainProgramCode.JsonDeserialize<BindingList<Quote>>(tempByte);
             }
             catch
             {
@@ -334,7 +330,7 @@ namespace QuoteSwift
             if (passed != null && passed.PassQuoteList != null && passed.PassQuoteList.Count > 0)
             {
                 byte[] ToStore = MainProgramCode.SerializeQuoteList(passed.PassQuoteList);
-                MainProgramCode.SaveData("QuoteList.pbf", ToStore);
+                MainProgramCode.SaveData("QuoteList.json", ToStore);
             }
         }
 
@@ -347,13 +343,13 @@ namespace QuoteSwift
                 byte[] tempByte;
                 try
                 {
-                    tempByte = MainProgramCode.ProtoSerialize<Quote>(q);
+                    tempByte = MainProgramCode.JsonSerialize<Quote>(q);
                 }
                 catch
                 {
                     throw;
                 }
-                MainProgramCode.SaveData("ExportToExcel\\ExportQuote.pbf", tempByte);
+                MainProgramCode.SaveData("ExportToExcel\\ExportQuote.json", tempByte);
             }
         }
 
@@ -365,7 +361,7 @@ namespace QuoteSwift
         {
             try
             {
-                return ProtoDeserialize<Quote>(tempByte);
+                return JsonDeserialize<Quote>(tempByte);
             }
             catch
             {
