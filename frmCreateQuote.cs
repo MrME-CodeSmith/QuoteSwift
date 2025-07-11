@@ -294,7 +294,7 @@ namespace QuoteSwift
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 
-                cb.DisplayMember = "BusinessName";
+                cb.DisplayMember = "AddressDescription";
                 cb.ValueMember = "AddressDescription";
             }
         }
@@ -328,7 +328,7 @@ namespace QuoteSwift
 
                 cb.DataSource = ComboBoxSource.DataSource;
 
-                cb.DisplayMember = "CustomerName";
+                cb.DisplayMember = "AddressDescription";
                 cb.ValueMember = "AddressDescription";
             }
         }
@@ -360,7 +360,7 @@ namespace QuoteSwift
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 
-                cb.DisplayMember = "CustomerName";
+                cb.DisplayMember = "AddressDescription";
                 cb.ValueMember = "AddressDescription";
             }
         }
