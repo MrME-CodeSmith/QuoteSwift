@@ -1,25 +1,17 @@
-﻿using ProtoBuf;
 using System;
 
 namespace QuoteSwift
 {
-    [ProtoContract(SkipConstructor = true)]
     public class Address
     {
         /** Descriptive variable names used where possible
          * to avoid possible confusion*/
 
-        [ProtoMember(1)]
         private string mAddressDescription = "";
-        [ProtoMember(2)]
         private int mAddressStreetNumber = 0;
-        [ProtoMember(3)]
         private string mAddressStreetName = "";
-        [ProtoMember(4)]
         private string mAddressSuburb = "";
-        [ProtoMember(5)]
         private string mAddressCity = "";
-        [ProtoMember(6)]
         private int mAddressAreaCode = 0;
 
         //Default Constructor
