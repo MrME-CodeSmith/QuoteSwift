@@ -1,6 +1,7 @@
 # QuoteSwift
 
 QuoteSwift is a Windows Forms application for creating and managing pump quotes. It allows users to maintain parts, pumps, businesses and customers and to generate quotes that can be exported to Microsoft Excel.
+Quote data is now serialized as JSON.
 
 ## Prerequisites
 
