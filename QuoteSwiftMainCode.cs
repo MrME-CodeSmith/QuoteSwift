@@ -131,6 +131,14 @@ namespace QuoteSwift
             return temp;
         }
 
+        // Parse Decimal:
+
+        public static decimal ParseDecimal(string t)
+        {
+            decimal.TryParse(t, out decimal temp);
+            return temp;
+        }
+
         // Parse Boole:
 
         public static bool ParseBoolean(string t)

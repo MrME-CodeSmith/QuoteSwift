@@ -53,7 +53,7 @@ namespace QuoteSwift
                 }
                 else //Create New Pump And Add To Pump List
                 {
-                    Pump newPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, (float)Convert.ToDouble(mtxtNewPumpPrice.Text), ref NewPumpParts); // Cast used since Convert.To does not support float
+                    Pump newPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, QuoteSwiftMainCode.ParseDecimal(mtxtNewPumpPrice.Text), ref NewPumpParts);
                     if (passed.PassPumpList == null) passed.PassPumpList = new BindingList<Pump> { newPump }; else passed.PassPumpList.Add(newPump);
                     MainProgramCode.ShowInformation(newPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
                 }
@@ -320,9 +320,9 @@ namespace QuoteSwift
             passed.PumpToChange.PartList = RetreivePumpPartList();
         }
 
-        float NewPumpValueInput()
+        decimal NewPumpValueInput()
         {
-            float.TryParse(mtxtNewPumpPrice.Text, out float TempNewPumpPrice);
+            decimal.TryParse(mtxtNewPumpPrice.Text, out decimal TempNewPumpPrice);
             return TempNewPumpPrice;
         }
 

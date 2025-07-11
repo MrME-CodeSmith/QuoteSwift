@@ -6,35 +6,35 @@ namespace QuoteSwift
     public class Pricing
     {
         [ProtoMember(1)]
-        private float mMachining;
+        private decimal mMachining;
         [ProtoMember(2)]
-        private float mLabour;
+        private decimal mLabour;
         [ProtoMember(3)]
-        private float mConsumables;
+        private decimal mConsumables;
         [ProtoMember(4)]
-        private float mRebate;
+        private decimal mRebate;
         [ProtoMember(5)]
-        private float mSubTotal;
+        private decimal mSubTotal;
         [ProtoMember(6)]
-        private float mVAT;
+        private decimal mVAT;
         [ProtoMember(7)]
-        private float mTotalDue;
+        private decimal mTotalDue;
         [ProtoMember(8)]
-        private float mPumpPrice;
+        private decimal mPumpPrice;
 
         public Pricing()
         {
-            Machining = 0;
-            Labour = 0;
-            Consumables = 0;
-            Rebate = 0;
-            SubTotal = 0;
-            VAT = 0;
-            TotalDue = 0;
-            PumpPrice = 0;
+            Machining = 0m;
+            Labour = 0m;
+            Consumables = 0m;
+            Rebate = 0m;
+            SubTotal = 0m;
+            VAT = 0m;
+            TotalDue = 0m;
+            PumpPrice = 0m;
         }
 
-        public Pricing(float mMachining, float mLabour, float mConsumables, float mRebate, float mSubTotal, float mVAT, float mTotalDue, float mPumpPrice)
+        public Pricing(decimal mMachining, decimal mLabour, decimal mConsumables, decimal mRebate, decimal mSubTotal, decimal mVAT, decimal mTotalDue, decimal mPumpPrice)
         {
             Machining = mMachining;
             Labour = mLabour;
@@ -46,13 +46,13 @@ namespace QuoteSwift
             PumpPrice = mPumpPrice;
         }
 
-        public float Machining { get => mMachining; set => mMachining = value; }
-        public float Labour { get => mLabour; set => mLabour = value; }
-        public float Consumables { get => mConsumables; set => mConsumables = value; }
-        public float Rebate { get => mRebate; set => mRebate = value; }
-        public float SubTotal { get => mSubTotal; set => mSubTotal = value; }
-        public float VAT { get => mVAT; set => mVAT = value; }
-        public float TotalDue { get => mTotalDue; set => mTotalDue = value; }
-        public float PumpPrice { get => mPumpPrice; set => mPumpPrice = value; }
+        public decimal Machining { get => mMachining; set => mMachining = value; }
+        public decimal Labour { get => mLabour; set => mLabour = value; }
+        public decimal Consumables { get => mConsumables; set => mConsumables = value; }
+        public decimal Rebate { get => mRebate; set => mRebate = value; }
+        public decimal SubTotal { get => mSubTotal; set => mSubTotal = value; }
+        public decimal VAT { get => mVAT; set => mVAT = value; }
+        public decimal TotalDue { get => mTotalDue; set => mTotalDue = value; }
+        public decimal PumpPrice { get => mPumpPrice; set => mPumpPrice = value; }
     }
 }

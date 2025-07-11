@@ -38,7 +38,7 @@ namespace QuoteSwift
                     passed.PartToChange.PartDescription = mtxtPartDescription.Text;
                     passed.PartToChange.OriginalItemPartNumber = mtxtOriginalPartNumber.Text;
                     passed.PartToChange.NewPartNumber = mtxtNewPartNumber.Text;
-                    passed.PartToChange.PartPrice = QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text);
+                    passed.PartToChange.PartPrice = QuoteSwiftMainCode.ParseDecimal(mtxtPartPrice.Text);
                     passed.PartToChange.MandatoryPart = cbxMandatoryPart.Checked;
 
                     if (BeforeUpdatePart.MandatoryPart && !passed.PartToChange.MandatoryPart)//Determine if it was a mandatory part that changed into a non-mandatory part
@@ -70,7 +70,7 @@ namespace QuoteSwift
                 Part newPart;
                 if (ValidInput())
                 {
-                    newPart = new Part(mtxtPartName.Text, mtxtPartDescription.Text, mtxtOriginalPartNumber.Text, mtxtNewPartNumber.Text, cbxMandatoryPart.Checked, QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text));
+                    newPart = new Part(mtxtPartName.Text, mtxtPartDescription.Text, mtxtOriginalPartNumber.Text, mtxtNewPartNumber.Text, cbxMandatoryPart.Checked, QuoteSwiftMainCode.ParseDecimal(mtxtPartPrice.Text));
                 }
                 else return;
 
@@ -165,7 +165,7 @@ namespace QuoteSwift
                         Part newPart = null;
                         try
                         {
-                            newPart = new Part(readFields[1], readFields[2], readFields[0], readFields[3], QuoteSwiftMainCode.ParseBoolean(readFields[6]), QuoteSwiftMainCode.ParseFloat(readFields[4]));
+                            newPart = new Part(readFields[1], readFields[2], readFields[0], readFields[3], QuoteSwiftMainCode.ParseBoolean(readFields[6]), QuoteSwiftMainCode.ParseDecimal(readFields[4]));
                             Part OldPartToChange = passed.PartToChange;
                             passed.PartToChange = newPart;
                             if (!DistinctInput(ref newPart))
@@ -232,7 +232,7 @@ namespace QuoteSwift
 
                         if (passed.PassPumpList != null)
                         {
-                            Pump NewPump = new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList);
+                            Pump NewPump = new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref NewPumpPartList);
                             Pump OldPump = null;
                             for (int i = 0; i < passed.PassPumpList.Count; i++)
                             {
@@ -259,7 +259,7 @@ namespace QuoteSwift
                         else // passed.PassPumpList is empty
                         {
                             NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
-                            passed.PassPumpList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseFloat(readFields[8]), ref NewPumpPartList) };
+                            passed.PassPumpList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref NewPumpPartList) };
                         }
 
                     }
@@ -367,7 +367,7 @@ namespace QuoteSwift
                 return false;
             }
 
-            if (QuoteSwiftMainCode.ParseFloat(mtxtPartPrice.Text) == 0)
+            if (QuoteSwiftMainCode.ParseDecimal(mtxtPartPrice.Text) == 0)
             {
                 MainProgramCode.ShowError("Please ensure that the price of the Item is valid and it has a value greater than R99.", "ERROR - Invalid Input");
                 mtxtPartPrice.Focus();
