@@ -78,7 +78,9 @@ namespace QuoteSwift
 
                 if (newPart.MandatoryPart)
                 {
-                    if (passed.PassMandatoryPartList != null) if (!DistinctInput(ref newPart)) return;
+                    if (passed.PassMandatoryPartList != null)
+                        if (!DistinctInput(ref newPart))
+                            return;
 
 
                     if (passed.PassMandatoryPartList == null)
@@ -95,6 +97,10 @@ namespace QuoteSwift
                 }
                 else //newPart is Non-Mandatory
                 {
+                    if (passed.PassNonMandatoryPartList != null)
+                        if (!DistinctInput(ref newPart))
+                            return;
+
                     if (passed.PassNonMandatoryPartList == null)
                     {
                         passed.PassNonMandatoryPartList = new BindingList<Part>() { newPart };
@@ -175,7 +181,7 @@ namespace QuoteSwift
                                 if (UpdateDuplicated)
                                 {
                                     if (newPart.MandatoryPart)
-                                        for (int i = 0; i < passed.PassMandatoryPartList.Count - 1; i++)
+                                        for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
                                         {
                                             if (passed.PassMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
                                             {
@@ -191,7 +197,7 @@ namespace QuoteSwift
                                         }
 
                                     if (!newPart.MandatoryPart)
-                                        for (int i = 0; i < passed.PassNonMandatoryPartList.Count - 1; i++)
+                                        for (int i = 0; i < passed.PassNonMandatoryPartList.Count; i++)
                                         {
                                             if (passed.PassNonMandatoryPartList[i].NewPartNumber == newPart.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == newPart.OriginalItemPartNumber)
                                             {
@@ -418,7 +424,7 @@ namespace QuoteSwift
             {
                 if (passed.PassMandatoryPartList != null)
                 {
-                    for (int i = 0; i < passed.PassMandatoryPartList.Count - 1; i++)
+                    for (int i = 0; i < passed.PassMandatoryPartList.Count; i++)
                     {
                         if (passed.PassMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
                         {
@@ -433,7 +439,7 @@ namespace QuoteSwift
             {
                 if (passed.PassNonMandatoryPartList != null)
                 {
-                    for (int i = 0; i < passed.PassNonMandatoryPartList.Count - 1; i++)
+                    for (int i = 0; i < passed.PassNonMandatoryPartList.Count; i++)
                     {
                         if (passed.PassNonMandatoryPartList[i].NewPartNumber == part.NewPartNumber || passed.PassNonMandatoryPartList[i].OriginalItemPartNumber == part.OriginalItemPartNumber)
                         {
