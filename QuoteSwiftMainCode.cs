@@ -29,7 +29,7 @@ namespace QuoteSwift
                 foreach (DataGridView dgv in cc.OfType<DataGridView>()) dgv.ReadOnly = false;
                 foreach (Button btn in cc.OfType<Button>()) btn.Enabled = true;
                 foreach (CheckBox cbx in cc.OfType<CheckBox>()) cbx.Enabled = true;
-                foreach (Syncfusion.Windows.Forms.Tools.DoubleTextBox dtxt in cc.OfType<Syncfusion.Windows.Forms.Tools.DoubleTextBox>()) dtxt.Enabled = true;
+                foreach (QuoteSwift.Controls.NumericTextBox dtxt in cc.OfType<QuoteSwift.Controls.NumericTextBox>()) dtxt.Enabled = true;
             }
         }
 
@@ -50,7 +50,7 @@ namespace QuoteSwift
                 foreach (DataGridView dgv in cc.OfType<DataGridView>()) dgv.ReadOnly = true;
                 foreach (Button btn in cc.OfType<Button>()) btn.Enabled = false;
                 foreach (CheckBox cbx in cc.OfType<CheckBox>()) cbx.Enabled = false;
-                foreach (Syncfusion.Windows.Forms.Tools.DoubleTextBox dtxt in cc.OfType<Syncfusion.Windows.Forms.Tools.DoubleTextBox>()) dtxt.Enabled = false;
+                foreach (QuoteSwift.Controls.NumericTextBox dtxt in cc.OfType<QuoteSwift.Controls.NumericTextBox>()) dtxt.Enabled = false;
             }
         }
 

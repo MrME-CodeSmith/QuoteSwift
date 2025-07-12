@@ -47,7 +47,7 @@ namespace QuoteSwift
             this.btnCreateNewQuote = new System.Windows.Forms.Button();
             this.btnViewSelectedQuote = new System.Windows.Forms.Button();
             this.btnCreateNewQuoteOnSelection = new System.Windows.Forms.Button();
-            this.dgvPreviousQuotes = new Syncfusion.WinForms.DataGrid.SfDataGrid();
+            this.dgvPreviousQuotes = new System.Windows.Forms.DataGridView();
             this.msQuoteControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPreviousQuotes)).BeginInit();
             this.SuspendLayout();
@@ -219,13 +219,14 @@ namespace QuoteSwift
             this.dgvPreviousQuotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvPreviousQuotes.AutoSizeColumnsMode = Syncfusion.WinForms.DataGrid.Enums.AutoSizeColumnsMode.AllCells;
+            this.dgvPreviousQuotes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvPreviousQuotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
             this.dgvPreviousQuotes.Location = new System.Drawing.Point(12, 84);
             this.dgvPreviousQuotes.Name = "dgvPreviousQuotes";
             this.dgvPreviousQuotes.Size = new System.Drawing.Size(659, 368);
-            this.dgvPreviousQuotes.Style.AddNewRowStyle.Font.Size = 11F;
-            this.dgvPreviousQuotes.SummaryCalculationUnit = Syncfusion.Data.SummaryCalculationUnit.SelectedRows;
+            this.dgvPreviousQuotes.AllowUserToAddRows = false;
+            this.dgvPreviousQuotes.AllowUserToDeleteRows = false;
+            this.dgvPreviousQuotes.ReadOnly = true;
             this.dgvPreviousQuotes.TabIndex = 6;
             this.dgvPreviousQuotes.Text = "Previous Quotes";
             // 
@@ -274,7 +275,7 @@ namespace QuoteSwift
         private System.Windows.Forms.ToolStripMenuItem managePumpPartsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addNewPartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewAllPartsToolStripMenuItem;
-        private Syncfusion.WinForms.DataGrid.SfDataGrid dgvPreviousQuotes;
+        private System.Windows.Forms.DataGridView dgvPreviousQuotes;
     }
 }
 

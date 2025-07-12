@@ -251,6 +251,7 @@
       <DependentUpon>FrmViewPump.cs</DependentUpon>
     </Compile>
     <Compile Include="QuoteSwiftMainCode.cs" />
+    <Compile Include="Controls\NumericTextBox.cs" />
     <Compile Include="FrmViewQuotes.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -152,10 +152,10 @@ namespace QuoteSwift
 
         private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedRows.Count > 0)
             {
                 Hide();
-                passed.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
+                passed.QuoteTOChange = dgvPreviousQuotes.SelectedRows[0].DataBoundItem as Quote;
                 passed.ChangeSpecificObject = false;
                 QuoteSwiftMainCode.CreateNewQuote(ref passed);
                 passed.QuoteTOChange = null;
@@ -166,10 +166,10 @@ namespace QuoteSwift
 
         private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedItem as Quote != null)
+            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedRows.Count > 0)
             {
                 this.Hide();
-                passed.QuoteTOChange = dgvPreviousQuotes.SelectedItem as Quote;
+                passed.QuoteTOChange = dgvPreviousQuotes.SelectedRows[0].DataBoundItem as Quote;
                 passed.ChangeSpecificObject = true;
                 QuoteSwiftMainCode.CreateNewQuote(ref passed);
                 passed.QuoteTOChange = null;
@@ -274,82 +274,66 @@ namespace QuoteSwift
 
 
                 dgvPreviousQuotes.Columns["QuoteNumber"].HeaderText = "Quote Number";
-                dgvPreviousQuotes.Columns["QuoteNumber"].HeaderStyle.Font.Size = 11;
-                dgvPreviousQuotes.Columns["QuoteNumber"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuoteNumber"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["QuoteCreationDate"].HeaderText = "Quote Creation Date";
-                dgvPreviousQuotes.Columns["QuoteCreationDate"].HeaderStyle.Font.Size = 11;
-                dgvPreviousQuotes.Columns["QuoteCreationDate"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuoteCreationDate"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["QuoteExpireyDate"].HeaderText = "Quote Expiry Date";
-                dgvPreviousQuotes.Columns["QuoteExpireyDate"].HeaderStyle.Font.Size = 11;
-                dgvPreviousQuotes.Columns["QuoteExpireyDate"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuoteExpireyDate"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["QuoteReference"].HeaderText = "Quote Reference";
-                dgvPreviousQuotes.Columns["QuoteReference"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["QuoteReference"].Visible = false;
 
                 dgvPreviousQuotes.Columns["QuoteJobNumber"].HeaderText = "Quote Job-Number";
-                dgvPreviousQuotes.Columns["QuoteJobNumber"].HeaderStyle.Font.Size = 11;
-                dgvPreviousQuotes.Columns["QuoteJobNumber"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuoteJobNumber"].ReadOnly = true;
 
 
                 dgvPreviousQuotes.Columns["QuotePRNumber"].HeaderText = "Quote PR-Number";
-                dgvPreviousQuotes.Columns["QuotePRNumber"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["QuotePRNumber"].Visible = false;
-                dgvPreviousQuotes.Columns["QuotePRNumber"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuotePRNumber"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["QuotePaymentTerm"].HeaderText = "Quote Payment Term";
-                dgvPreviousQuotes.Columns["QuotePaymentTerm"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["QuotePaymentTerm"].Visible = false;
-                dgvPreviousQuotes.Columns["QuotePaymentTerm"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuotePaymentTerm"].ReadOnly = true;
 
 
                 dgvPreviousQuotes.Columns["QuoteLineNumber"].HeaderText = "Quote Line Number";
-                dgvPreviousQuotes.Columns["QuoteLineNumber"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["QuoteLineNumber"].Visible = false;
-                dgvPreviousQuotes.Columns["QuoteLineNumber"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuoteLineNumber"].ReadOnly = true;
 
 
                 dgvPreviousQuotes.Columns["QuoteNewUnitPrice"].HeaderText = "New Pump Unit Price";
-                dgvPreviousQuotes.Columns["QuoteNewUnitPrice"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["QuoteNewUnitPrice"].Visible = false;
-                dgvPreviousQuotes.Columns["QuoteNewUnitPrice"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuoteNewUnitPrice"].ReadOnly = true;
 
 
                 dgvPreviousQuotes.Columns["QuoteRepairPercentage"].HeaderText = "Repair Percentage";
-                dgvPreviousQuotes.Columns["QuoteRepairPercentage"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["QuoteRepairPercentage"].Visible = false;
-                dgvPreviousQuotes.Columns["QuoteRepairPercentage"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["QuoteRepairPercentage"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["QuoteDeliveryAddress"].HeaderText = "Delivery Address";
-                dgvPreviousQuotes.Columns["QuoteDeliveryAddress"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["QuoteDeliveryAddress"].Visible = false;
 
                 dgvPreviousQuotes.Columns["Telefone"].HeaderText = "Telephone";
-                dgvPreviousQuotes.Columns["Telefone"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["Telefone"].Visible = false;
-                dgvPreviousQuotes.Columns["Telefone"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["Telefone"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["Cellphone"].HeaderText = "Cellphone";
-                dgvPreviousQuotes.Columns["Cellphone"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["Cellphone"].Visible = false;
-                dgvPreviousQuotes.Columns["Cellphone"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["Cellphone"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["Email"].HeaderText = "Email";
-                dgvPreviousQuotes.Columns["Email"].HeaderStyle.Font.Size = 11;
-                dgvPreviousQuotes.Columns["Email"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["Email"].ReadOnly = true;
                 dgvPreviousQuotes.Columns["Email"].Visible = false;
 
                 dgvPreviousQuotes.Columns["NetDays"].HeaderText = "Quote Creation Date";
-                dgvPreviousQuotes.Columns["NetDays"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["NetDays"].Visible = false;
-                dgvPreviousQuotes.Columns["NetDays"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["NetDays"].ReadOnly = true;
 
                 dgvPreviousQuotes.Columns["PumpName"].HeaderText = "Quote Number";
-                dgvPreviousQuotes.Columns["PumpName"].HeaderStyle.Font.Size = 11;
                 dgvPreviousQuotes.Columns["PumpName"].Visible = false;
-                dgvPreviousQuotes.Columns["PumpName"].AllowEditing = false;
+                dgvPreviousQuotes.Columns["PumpName"].ReadOnly = true;
 
             }
 

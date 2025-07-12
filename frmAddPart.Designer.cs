@@ -51,10 +51,9 @@ namespace QuoteSwift
             this.lblnewPartQuantity = new System.Windows.Forms.Label();
             this.NudQuantity = new System.Windows.Forms.NumericUpDown();
             this.OfdOpenCSVFile = new System.Windows.Forms.OpenFileDialog();
-            this.mtxtPartPrice = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
+            this.mtxtPartPrice = new QuoteSwift.Controls.NumericTextBox();
             this.msAddPartControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NudQuantity)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mtxtPartPrice)).BeginInit();
             this.SuspendLayout();
             // 
             // msAddPartControls
@@ -267,12 +266,11 @@ namespace QuoteSwift
             // 
             // mtxtPartPrice
             // 
-            this.mtxtPartPrice.BeforeTouchSize = new System.Drawing.Size(148, 24);
-            this.mtxtPartPrice.DoubleValue = 0D;
+            this.mtxtPartPrice.Value = 0M;
             this.mtxtPartPrice.Location = new System.Drawing.Point(181, 184);
             this.mtxtPartPrice.Margin = new System.Windows.Forms.Padding(4);
-            this.mtxtPartPrice.MaxValue = 5000000D;
-            this.mtxtPartPrice.MinValue = 0D;
+            this.mtxtPartPrice.MaxValue = 5000000M;
+            this.mtxtPartPrice.MinValue = 0M;
             this.mtxtPartPrice.Name = "mtxtPartPrice";
             this.mtxtPartPrice.Size = new System.Drawing.Size(139, 24);
             this.mtxtPartPrice.TabIndex = 4;
@@ -312,7 +310,6 @@ namespace QuoteSwift
             this.msAddPartControls.ResumeLayout(false);
             this.msAddPartControls.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NudQuantity)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mtxtPartPrice)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -342,6 +339,6 @@ namespace QuoteSwift
         private System.Windows.Forms.ToolStripMenuItem loadPartBatchToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog OfdOpenCSVFile;
         private System.Windows.Forms.ToolStripMenuItem updatePartToolStripMenuItem;
-        private Syncfusion.Windows.Forms.Tools.DoubleTextBox mtxtPartPrice;
+        private QuoteSwift.Controls.NumericTextBox mtxtPartPrice;
     }
 }

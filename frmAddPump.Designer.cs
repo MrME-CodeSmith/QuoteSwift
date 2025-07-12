@@ -54,7 +54,7 @@ namespace QuoteSwift
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAddPump = new System.Windows.Forms.Button();
             this.gbxPartInformation = new System.Windows.Forms.GroupBox();
-            this.mtxtNewPumpPrice = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
+            this.mtxtNewPumpPrice = new QuoteSwift.Controls.NumericTextBox();
             this.mtxtPumpDescription = new System.Windows.Forms.MaskedTextBox();
             this.mtxtPumpName = new System.Windows.Forms.MaskedTextBox();
             this.lblNewPumpPrice = new System.Windows.Forms.Label();
@@ -64,7 +64,6 @@ namespace QuoteSwift
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNonMandatoryPartView)).BeginInit();
             this.gbxPartInformation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mtxtNewPumpPrice)).BeginInit();
             this.SuspendLayout();
             // 
             // msAddPumpControls
@@ -313,12 +312,11 @@ namespace QuoteSwift
             // 
             // mtxtNewPumpPrice
             // 
-            this.mtxtNewPumpPrice.BeforeTouchSize = new System.Drawing.Size(148, 24);
-            this.mtxtNewPumpPrice.DoubleValue = 0D;
+            this.mtxtNewPumpPrice.Value = 0M;
             this.mtxtNewPumpPrice.Location = new System.Drawing.Point(174, 90);
             this.mtxtNewPumpPrice.Margin = new System.Windows.Forms.Padding(4);
-            this.mtxtNewPumpPrice.MaxValue = 5000000D;
-            this.mtxtNewPumpPrice.MinValue = 0D;
+            this.mtxtNewPumpPrice.MaxValue = 5000000M;
+            this.mtxtNewPumpPrice.MinValue = 0M;
             this.mtxtNewPumpPrice.Name = "mtxtNewPumpPrice";
             this.mtxtNewPumpPrice.Size = new System.Drawing.Size(139, 24);
             this.mtxtNewPumpPrice.TabIndex = 2;
@@ -396,7 +394,6 @@ namespace QuoteSwift
             ((System.ComponentModel.ISupportInitialize)(this.dgvNonMandatoryPartView)).EndInit();
             this.gbxPartInformation.ResumeLayout(false);
             this.gbxPartInformation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mtxtNewPumpPrice)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -433,6 +430,6 @@ namespace QuoteSwift
         private System.Windows.Forms.DataGridViewCheckBoxColumn ClmNonMandatoryPartSelection;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmNMPartQuantity;
         private System.Windows.Forms.ToolStripMenuItem updatePumpToolStripMenuItem;
-        private Syncfusion.Windows.Forms.Tools.DoubleTextBox mtxtNewPumpPrice;
+        private QuoteSwift.Controls.NumericTextBox mtxtNewPumpPrice;
     }
 }
