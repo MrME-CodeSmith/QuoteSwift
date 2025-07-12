@@ -120,7 +120,7 @@ namespace QuoteSwift
             this.ClmRepairDevider = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cbxPumpSelection = new System.Windows.Forms.ComboBox();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.mtxtRebate = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
+            this.mtxtRebate = new QuoteSwift.Controls.NumericTextBox();
             this.BtnCalculateRebate = new System.Windows.Forms.Button();
             this.lblRebateTestInput = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
@@ -156,7 +156,6 @@ namespace QuoteSwift
             ((System.ComponentModel.ISupportInitialize)(this.DgvNonMandatoryPartReplacement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartReplacement)).BeginInit();
             this.panel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mtxtRebate)).BeginInit();
             this.panel10.SuspendLayout();
             this.panel9.SuspendLayout();
             this.panel8.SuspendLayout();
@@ -1080,12 +1079,11 @@ namespace QuoteSwift
             // 
             // mtxtRebate
             // 
-            this.mtxtRebate.BeforeTouchSize = new System.Drawing.Size(148, 24);
-            this.mtxtRebate.DoubleValue = 1D;
+            this.mtxtRebate.Value = 1M;
             this.mtxtRebate.Location = new System.Drawing.Point(71, 8);
             this.mtxtRebate.Margin = new System.Windows.Forms.Padding(4);
-            this.mtxtRebate.MaxValue = 5000000D;
-            this.mtxtRebate.MinValue = 0D;
+            this.mtxtRebate.MaxValue = 5000000M;
+            this.mtxtRebate.MinValue = 0M;
             this.mtxtRebate.Name = "mtxtRebate";
             this.mtxtRebate.Size = new System.Drawing.Size(148, 24);
             this.mtxtRebate.TabIndex = 21;
@@ -1335,7 +1333,6 @@ namespace QuoteSwift
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryPartReplacement)).EndInit();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mtxtRebate)).EndInit();
             this.panel10.ResumeLayout(false);
             this.panel10.PerformLayout();
             this.panel9.ResumeLayout(false);
@@ -1451,7 +1448,7 @@ namespace QuoteSwift
         private System.Windows.Forms.DataGridViewTextBoxColumn clmUnitPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmRepairDevider;
-        private Syncfusion.Windows.Forms.Tools.DoubleTextBox mtxtRebate;
+        private QuoteSwift.Controls.NumericTextBox mtxtRebate;
         private System.Windows.Forms.Label lblCustomerSelection;
         private System.Windows.Forms.Label lblCustomerDeliveryAddress;
         private System.Windows.Forms.SaveFileDialog sfdSaveExport;
