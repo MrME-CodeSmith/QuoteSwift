@@ -388,25 +388,26 @@ namespace QuoteSwift
                 return false;
             }
 
-            if (Business.BusinessAddressList == null)
+            if (Business.BusinessAddressList == null || Business.BusinessAddressList.Count == 0)
             {
                 MainProgramCode.ShowError("Please add a valid business address under the 'Business Address' section.", "ERROR - Current Business Invalid");
                 return false;
             }
 
-            if (Business.BusinessPOBoxAddressList == null)
+            if (Business.BusinessPOBoxAddressList == null || Business.BusinessPOBoxAddressList.Count == 0)
             {
                 MainProgramCode.ShowError("Please add a valid business P.O.Box address under the 'Business P.O.Box Address' section.", "ERROR - Current Business Invalid");
                 return false;
             }
 
-            if (Business.BusinessTelephoneNumberList == null && Business.BusinessCellphoneNumberList == null)
+            if ((Business.BusinessTelephoneNumberList == null || Business.BusinessTelephoneNumberList.Count == 0) &&
+                (Business.BusinessCellphoneNumberList == null || Business.BusinessCellphoneNumberList.Count == 0))
             {
                 MainProgramCode.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current Business Invalid");
                 return false;
             }
 
-            if (Business.BusinessEmailAddressList == null)
+            if (Business.BusinessEmailAddressList == null || Business.BusinessEmailAddressList.Count == 0)
             {
                 MainProgramCode.ShowError("Please add a valid business email address under the 'Email Related' section.", "ERROR - Current Business Invalid");
                 return false;
