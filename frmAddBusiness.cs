@@ -96,17 +96,8 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
-                    if (Business.BusinessPOBoxAddressList == null)
-                    {
-                        //Create New List
-                        Business.BusinessPOBoxAddressList = new BindingList<Address> { address };
-                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
-                    }
-                    else // AddingNewEventArgs To list
-                    {
-                        Business.BusinessPOBoxAddressList.Add(address);
-                        MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
-                    }
+                    Business.BusinessPOBoxAddressList.Add(address);
+                    MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
 
                     Business.POBoxMap[address.AddressDescription] = address;
 
@@ -123,19 +114,9 @@ namespace QuoteSwift
                                               txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
                 if (!AddressExisting(address))
                 {
-                    if (Business.BusinessAddressList == null)
-                    {
-                        //Create New List
-                        Business.BusinessAddressList = new BindingList<Address> { address };
-                        Business.AddressMap[address.AddressDescription] = address;
-                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
-                    }
-                    else //Add To Current list
-                    {
-                        Business.BusinessAddressList.Add(address);
-                        Business.AddressMap[address.AddressDescription] = address;
-                        MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
-                    }
+                    Business.BusinessAddressList.Add(address);
+                    Business.AddressMap[address.AddressDescription] = address;
+                    MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
 
                     ClearBusinessAddressInput();
                 }
@@ -152,15 +133,7 @@ namespace QuoteSwift
 
             if (mtxtTelephoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
             {
-                if (Business.BusinessTelephoneNumberList == null)
-                {
-                    // Create new List
-                    Business.BusinessTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
-                }
-                else // Add To List
-                {
-                    Business.BusinessTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
-                }
+                Business.BusinessTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
                 Business.TelephoneNumbers.Add(mtxtTelephoneNumber.Text);
                 Added = true;
 
@@ -169,15 +142,7 @@ namespace QuoteSwift
 
             if (mtxtCellphoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
             {
-                if (Business.BusinessCellphoneNumberList == null)
-                {
-                    // Create new List
-                    Business.BusinessCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
-                }
-                else // Add To List
-                {
-                    Business.BusinessCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
-                }
+                Business.BusinessCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
                 Business.CellphoneNumbers.Add(mtxtCellphoneNumber.Text);
                 Added = true;
 
@@ -201,15 +166,7 @@ namespace QuoteSwift
             {
                 if (!EmailAddressExisting(mtxtEmail.Text))
                 {
-                    if (Business.BusinessEmailAddressList == null)
-                    {
-                        //Create New List
-                        Business.BusinessEmailAddressList = new BindingList<string> { mtxtEmail.Text };
-                    }
-                    else //Add To Existing List
-                    {
-                        Business.BusinessEmailAddressList.Add(mtxtEmail.Text);
-                    }
+                    Business.BusinessEmailAddressList.Add(mtxtEmail.Text);
                     Business.EmailAddresses.Add(mtxtEmail.Text);
                     MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
 

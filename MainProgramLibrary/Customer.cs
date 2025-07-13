@@ -28,13 +28,13 @@ namespace QuoteSwift
         {
             CustomerName = "";
             CustomerCompanyName = "";
-            CustomerPOBoxAddress = null;
-            CustomerDeliveryAddressList = null;
+            CustomerPOBoxAddress = new BindingList<Address>();
+            CustomerDeliveryAddressList = new BindingList<Address>();
             CustomerLegalDetails = null;
             CustomerVendorNumber = "";
-            CustomerTelephoneNumberList = null;
-            CustomerCellphoneNumberList = null;
-            CustomerEmailList = null;
+            CustomerTelephoneNumberList = new BindingList<string>();
+            CustomerCellphoneNumberList = new BindingList<string>();
+            CustomerEmailList = new BindingList<string>();
             VendorNumber = "";
 
             mDeliveryAddressMap = new Dictionary<string, Address>();
