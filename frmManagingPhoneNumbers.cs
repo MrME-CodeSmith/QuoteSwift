@@ -188,24 +188,23 @@ namespace QuoteSwift
 
         string GetNumberSelection(BindingList<string> b, ref DataGridView d)
         {
-            string SearchName;
+            if (d == null || d.CurrentCell == null || d.CurrentRow == null)
+                return string.Empty;
+
             int iGridSelection = d.CurrentCell.RowIndex;
-            try
-            {
-                SearchName = d.Rows[iGridSelection].Cells[0].Value.ToString();
-            }
-            catch
-            {
-                return "";
-            }
+            if (iGridSelection < 0 || iGridSelection >= d.Rows.Count)
+                return string.Empty;
+
+            string SearchName = d.Rows[iGridSelection].Cells[0].Value?.ToString();
+            if (string.IsNullOrEmpty(SearchName))
+                return string.Empty;
 
             if (b != null)
             {
-                SearchName = b.SingleOrDefault(p => p == SearchName);
-                return SearchName;
+                return b.SingleOrDefault(p => p == SearchName) ?? string.Empty;
             }
 
-            return "";
+            return SearchName;
         }
 
         private void LoadInformation()

@@ -121,27 +121,24 @@ namespace QuoteSwift
 
         Address GetAddressSelection()
         {
-            Address SelectedAddress;
-            string SearchName;
-            int iGridSelection = DgvViewAllBusinessAddresses.CurrentCell.RowIndex;
-            try
-            {
-                SearchName = DgvViewAllBusinessAddresses.Rows[iGridSelection].Cells[0].Value.ToString();
-            }
-            catch
-            {
+            if (DgvViewAllBusinessAddresses.CurrentCell == null || DgvViewAllBusinessAddresses.CurrentRow == null)
                 return null;
-            }
+
+            int iGridSelection = DgvViewAllBusinessAddresses.CurrentCell.RowIndex;
+            if (iGridSelection < 0 || iGridSelection >= DgvViewAllBusinessAddresses.Rows.Count)
+                return null;
+
+            string SearchName = DgvViewAllBusinessAddresses.Rows[iGridSelection].Cells[0].Value?.ToString();
+            if (string.IsNullOrEmpty(SearchName))
+                return null;
 
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null)
             {
-                SelectedAddress = passed.BusinessToChange.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-                return SelectedAddress;
+                return passed.BusinessToChange.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
             }
             else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerDeliveryAddressList != null)
             {
-                SelectedAddress = passed.CustomerToChange.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-                return SelectedAddress;
+                return passed.CustomerToChange.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
             }
 
             return null;

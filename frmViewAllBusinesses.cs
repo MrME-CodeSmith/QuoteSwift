@@ -100,19 +100,18 @@ namespace QuoteSwift
 
         private Business GetBusinessSelection()
         {
-            string searchName;
-            int iGridSelection;
-            try
-            {
-                iGridSelection = DgvBusinessList.CurrentCell.RowIndex;
-                searchName = DgvBusinessList.Rows[iGridSelection].Cells[0].Value.ToString();
-            }
-            catch
-            {
+            if (DgvBusinessList.CurrentCell == null || DgvBusinessList.CurrentRow == null)
                 return null;
-            }
 
-            if (passed.BusinessLookup.TryGetValue(searchName, out Business business))
+            int iGridSelection = DgvBusinessList.CurrentCell.RowIndex;
+            if (iGridSelection < 0 || iGridSelection >= DgvBusinessList.Rows.Count)
+                return null;
+
+            string searchName = DgvBusinessList.Rows[iGridSelection].Cells[0].Value?.ToString();
+            if (string.IsNullOrEmpty(searchName))
+                return null;
+
+            if (passed.BusinessLookup != null && passed.BusinessLookup.TryGetValue(searchName, out Business business))
             {
                 return business;
             }

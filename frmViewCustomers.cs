@@ -157,24 +157,20 @@ namespace QuoteSwift
 
         private Customer GetCustomerSelection()
         {
-            Customer customer;
-            string SearchName;
-            int iGridSelection;
-            try
-            {
-                iGridSelection = DgvCustomerList.CurrentCell.RowIndex;
-                SearchName = DgvCustomerList.Rows[iGridSelection].Cells[0].Value.ToString();
-            }
-            catch
-            {
+            if (DgvCustomerList.CurrentCell == null || DgvCustomerList.CurrentRow == null)
                 return null;
-            }
 
-            if (GetSelectedBusiness() != null)
-            {
-                if (GetSelectedBusiness().CustomerMap.TryGetValue(SearchName, out customer))
-                    return customer;
-            }
+            int iGridSelection = DgvCustomerList.CurrentCell.RowIndex;
+            if (iGridSelection < 0 || iGridSelection >= DgvCustomerList.Rows.Count)
+                return null;
+
+            string SearchName = DgvCustomerList.Rows[iGridSelection].Cells[0].Value?.ToString();
+            if (string.IsNullOrEmpty(SearchName))
+                return null;
+
+            Business selected = GetSelectedBusiness();
+            if (selected != null && selected.CustomerMap != null && selected.CustomerMap.TryGetValue(SearchName, out Customer customer))
+                return customer;
 
             return null;
         }
