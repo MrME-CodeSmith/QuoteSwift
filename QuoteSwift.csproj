@@ -43,7 +43,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -72,19 +72,6 @@
   <PropertyGroup />
   <PropertyGroup>
     <StartupObject>QuoteSwift.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>7536C013F41ACA19CA018C228D4DD211D02D05CE</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>QuoteSwift_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bogus, Version=33.0.2.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
@@ -235,7 +222,9 @@
       <DependentUpon>FrmViewPump.cs</DependentUpon>
     </Compile>
     <Compile Include="QuoteSwiftMainCode.cs" />
-    <Compile Include="Controls\NumericTextBox.cs" />
+    <Compile Include="Controls\NumericTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FrmViewQuotes.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Bogus">
       <HintPath>..\QuoteSwift\packages\Bogus.33.0.2\lib\net40\Bogus.dll</HintPath>
     </Reference>
