@@ -68,40 +68,7 @@ namespace QuoteSwift
 
 
         //Procedure Handling The Closing Of The Application
-        public static void CloseApplication(bool b, ref Pass passed)
-        {
-            if (b)
-            {
-                try
-                {
-
-                    MainProgramCode.SerializeMandatoryPartList(ref passed);
-
-                    MainProgramCode.SerializeNonMandatoryPartList(ref passed);
-
-                    MainProgramCode.SerializePumpList(ref passed);
-
-                    MainProgramCode.SerializeBusinessList(ref passed);
-
-                    MainProgramCode.SerializeQuoteList(ref passed);
-
-                }
-                catch (Exception Ex)
-                {
-
-                    while (Ex != null)
-                    {
-                        MainProgramCode.ShowError(Ex.Message, "ERROR Occurred");
-                        Ex = Ex.InnerException;
-                    }
-
-                }
-                finally
-                {
-                    Application.Exit();
-                }
-            }
-        }
+        // Removed - use MainProgramCode.CloseApplication instead.
 
         /** Parse String Inputs: */
 
