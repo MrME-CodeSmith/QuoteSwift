@@ -10,7 +10,6 @@ namespace QuoteSwift
         private BindingList<Address> mCustomerPOBoxAddress;
         private BindingList<Address> mCustomerDeliveryAddressList;
         private Legal mCustomerLegalDetails;
-        private string mCustomerVendorNumber;
         private BindingList<string> mCustomerTelephoneNumberList;
         private BindingList<string> mCustomerCellphoneNumberList;
         private BindingList<string> mCustomerEmailList;
@@ -31,7 +30,6 @@ namespace QuoteSwift
             CustomerPOBoxAddress = new BindingList<Address>();
             CustomerDeliveryAddressList = new BindingList<Address>();
             CustomerLegalDetails = null;
-            CustomerVendorNumber = "";
             CustomerTelephoneNumberList = new BindingList<string>();
             CustomerCellphoneNumberList = new BindingList<string>();
             CustomerEmailList = new BindingList<string>();
@@ -52,7 +50,6 @@ namespace QuoteSwift
             CustomerPOBoxAddress = c.CustomerPOBoxAddress;
             CustomerDeliveryAddressList = c.CustomerDeliveryAddressList;
             CustomerLegalDetails = c.CustomerLegalDetails;
-            CustomerVendorNumber = c.CustomerVendorNumber;
             CustomerTelephoneNumberList = c.CustomerTelephoneNumberList;
             CustomerCellphoneNumberList = c.CustomerCellphoneNumberList;
             CustomerEmailList = c.CustomerEmailList;
@@ -93,7 +90,6 @@ namespace QuoteSwift
             }
         }
         public Legal CustomerLegalDetails { get => mCustomerLegalDetails; set => mCustomerLegalDetails = value; }
-        public string CustomerVendorNumber { get => mCustomerVendorNumber; set => mCustomerVendorNumber = value; }
         public BindingList<string> CustomerTelephoneNumberList
         {
             get => mCustomerTelephoneNumberList;
