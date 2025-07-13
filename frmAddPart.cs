@@ -112,7 +112,7 @@ namespace QuoteSwift
                 {
                     Pump PumpSelection = (Pump)cbAddToPumpSelection.SelectedItem;
 
-                    PumpSelection.PartList.Add(new Pump_Part(newPart, (int)NudQuantity.Value));
+                    AddOrOverridePumpPart(PumpSelection, newPart, (int)NudQuantity.Value);
 
                     MainProgramCode.ShowInformation(newPart.PartName + " successfully added to " + PumpSelection.PumpName + " pump the part list.", "INFORMATION - Part Added  To Pump Success");
                 }
@@ -217,12 +217,23 @@ namespace QuoteSwift
                         if (passed.PassNonMandatoryPartList == null) passed.PassNonMandatoryPartList = new Dictionary<string, Part>();
 
 
-                        if (newPart != null && newPart.MandatoryPart && DistinctInput(ref newPart))
+                        Part partForPump = newPart;
+                        bool partIsDistinct = newPart != null && DistinctInput(ref newPart);
+
+                        if (newPart != null && newPart.MandatoryPart)
                         {
-                            passed.AddMandatoryPart(newPart);
+                            if (partIsDistinct)
+                                passed.AddMandatoryPart(newPart);
+                            else
+                                partForPump = GetPartByOriginal(newPart.OriginalItemPartNumber) ?? newPart;
                         }
-                        else if (newPart != null && DistinctInput(ref newPart))
-                            passed.AddNonMandatoryPart(newPart);
+                        else if (newPart != null)
+                        {
+                            if (partIsDistinct)
+                                passed.AddNonMandatoryPart(newPart);
+                            else
+                                partForPump = GetPartByOriginal(newPart.OriginalItemPartNumber) ?? newPart;
+                        }
 
                         bool FoundPump = false;
 
@@ -244,19 +255,19 @@ namespace QuoteSwift
 
                             if (FoundPump == false) //Pump non existing
                             {
-                                NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
+                                NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(partForPump, int.Parse(readFields[5])) };
                                 NewPump.PartList = NewPumpPartList;
                                 passed.PassPumpList.Add(NewPump);
                             }
                             else // Pump Existing
                             {
-                                OldPump.PartList.Add(new Pump_Part(newPart, int.Parse(readFields[5])));
+                                AddOrOverridePumpPart(OldPump, partForPump, int.Parse(readFields[5]));
                                 if (OldPump.NewPumpPrice != NewPump.NewPumpPrice) OldPump.NewPumpPrice = NewPump.NewPumpPrice;
                             }
                         }
                         else // passed.PassPumpList is empty
                         {
-                            NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(newPart, int.Parse(readFields[5])) };
+                            NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(partForPump, int.Parse(readFields[5])) };
                             passed.PassPumpList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref NewPumpPartList) };
                         }
 
@@ -501,6 +512,39 @@ namespace QuoteSwift
         private void FrmAddPart_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainProgramCode.CloseApplication(true, ref passed);
+        }
+
+        private Part GetPartByOriginal(string originalNumber)
+        {
+            string key = StringUtil.NormalizeKey(originalNumber);
+            if (passed.PassMandatoryPartList != null &&
+                passed.PassMandatoryPartList.TryGetValue(key, out var part))
+                return part;
+            if (passed.PassNonMandatoryPartList != null &&
+                passed.PassNonMandatoryPartList.TryGetValue(key, out part))
+                return part;
+            return null;
+        }
+
+        private void AddOrOverridePumpPart(Pump pump, Part part, int quantity)
+        {
+            if (pump == null || part == null)
+                return;
+
+            if (pump.PartList == null)
+                pump.PartList = new BindingList<Pump_Part>();
+
+            string key = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
+            foreach (var pp in pump.PartList)
+            {
+                if (StringUtil.NormalizeKey(pp.PumpPart.OriginalItemPartNumber) == key)
+                {
+                    pp.PumpPartQuantity = quantity;
+                    return;
+                }
+            }
+
+            pump.PartList.Add(new Pump_Part(part, quantity));
         }
 
         /*********************************************************************************/
