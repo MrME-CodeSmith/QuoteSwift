@@ -109,7 +109,7 @@ namespace QuoteSwift
             set
             {
                 mBusinessAddressList = value;
-                mAddressMap.Clear();
+                mAddressMap?.Clear();
                 if (mBusinessAddressList != null)
                     foreach (var a in mBusinessAddressList)
                         mAddressMap[a.AddressDescription] = a;
@@ -121,7 +121,7 @@ namespace QuoteSwift
             set
             {
                 mBusinessPOBoxAddressList = value;
-                mPOBoxMap.Clear();
+                mPOBoxMap?.Clear();
                 if (mBusinessPOBoxAddressList != null)
                     foreach (var a in mBusinessPOBoxAddressList)
                         mPOBoxMap[a.AddressDescription] = a;
@@ -134,7 +134,7 @@ namespace QuoteSwift
             set
             {
                 mBusinessTelephoneNumberList = value;
-                mTelephoneNumbers.Clear();
+                mTelephoneNumbers?.Clear();
                 if (mBusinessTelephoneNumberList != null)
                     foreach (var n in mBusinessTelephoneNumberList)
                         mTelephoneNumbers.Add(n);
@@ -146,7 +146,7 @@ namespace QuoteSwift
             set
             {
                 mBusinessCellphoneNumberList = value;
-                mCellphoneNumbers.Clear();
+                mCellphoneNumbers?.Clear();
                 if (mBusinessCellphoneNumberList != null)
                     foreach (var n in mBusinessCellphoneNumberList)
                         mCellphoneNumbers.Add(n);
@@ -158,7 +158,7 @@ namespace QuoteSwift
             set
             {
                 mBusinessEmailAddressList = value;
-                mEmailAddresses.Clear();
+                mEmailAddresses?.Clear();
                 if (mBusinessEmailAddressList != null)
                     foreach (var e in mBusinessEmailAddressList)
                         mEmailAddresses.Add(e);
@@ -170,7 +170,7 @@ namespace QuoteSwift
             set
             {
                 mBusinessCustomerList = value;
-                mCustomerMap.Clear();
+                mCustomerMap?.Clear();
                 if (mBusinessCustomerList != null)
                     foreach (var c in mBusinessCustomerList)
                         mCustomerMap[c.CustomerCompanyName] = c;

@@ -74,7 +74,7 @@ namespace QuoteSwift
             set
             {
                 mCustomerPOBoxAddress = value;
-                mPOBoxMap.Clear();
+                mPOBoxMap?.Clear();
                 if (mCustomerPOBoxAddress != null)
                     foreach (var a in mCustomerPOBoxAddress)
                         mPOBoxMap[a.AddressDescription] = a;
@@ -86,7 +86,7 @@ namespace QuoteSwift
             set
             {
                 mCustomerDeliveryAddressList = value;
-                mDeliveryAddressMap.Clear();
+                mDeliveryAddressMap?.Clear();
                 if (mCustomerDeliveryAddressList != null)
                     foreach (var a in mCustomerDeliveryAddressList)
                         mDeliveryAddressMap[a.AddressDescription] = a;
@@ -100,7 +100,7 @@ namespace QuoteSwift
             set
             {
                 mCustomerTelephoneNumberList = value;
-                mTelephoneNumbers.Clear();
+                mTelephoneNumbers?.Clear();
                 if (mCustomerTelephoneNumberList != null)
                     foreach (var n in mCustomerTelephoneNumberList)
                         mTelephoneNumbers.Add(n);
@@ -112,7 +112,7 @@ namespace QuoteSwift
             set
             {
                 mCustomerCellphoneNumberList = value;
-                mCellphoneNumbers.Clear();
+                mCellphoneNumbers?.Clear();
                 if (mCustomerCellphoneNumberList != null)
                     foreach (var n in mCustomerCellphoneNumberList)
                         mCellphoneNumbers.Add(n);
@@ -124,7 +124,7 @@ namespace QuoteSwift
             set
             {
                 mCustomerEmailList = value;
-                mEmailAddresses.Clear();
+                mEmailAddresses?.Clear();
                 if (mCustomerEmailList != null)
                     foreach (var e in mCustomerEmailList)
                         mEmailAddresses.Add(e);
