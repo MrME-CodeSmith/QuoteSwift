@@ -507,8 +507,12 @@ namespace QuoteSwift
             {
                 txtBusinessName.Text = Business.BusinessName;
                 rtxtExtraInformation.Text = Business.BusinessExtraInformation;
-                mtxtVATNumber.Text = Business.BusinessLegalDetails.VatNumber;
-                mtxtRegistrationNumber.Text = Business.BusinessLegalDetails.RegistrationNumber;
+
+                if (Business.BusinessLegalDetails != null)
+                {
+                    mtxtVATNumber.Text = Business.BusinessLegalDetails.VatNumber;
+                    mtxtRegistrationNumber.Text = Business.BusinessLegalDetails.RegistrationNumber;
+                }
             }
         }
 
