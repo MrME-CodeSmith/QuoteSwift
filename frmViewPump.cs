@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
 
 namespace QuoteSwift // Repair Quote Swift
 {
@@ -118,6 +119,29 @@ namespace QuoteSwift // Repair Quote Swift
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Still Needs Implementation.
+        }
+
+        private void ExportInventoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "CSV files (*.csv)|*.csv|All Files (*.*)|*.*";
+                sfd.DefaultExt = "csv";
+                sfd.FileName = "Inventory.csv";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        MainProgramCode.ExportInventory(passed.PassPumpList, sfd.FileName);
+                        MainProgramCode.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
+                    }
+                    catch (Exception ex)
+                    {
+                        MainProgramCode.ShowError("Inventory export failed.\n" + ex.Message, "ERROR - Export Failed");
+                    }
+                }
+            }
         }
 
         private void FrmViewPump_FormClosing(object sender, FormClosingEventArgs e)

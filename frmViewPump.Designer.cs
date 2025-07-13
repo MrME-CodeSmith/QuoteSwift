@@ -31,6 +31,7 @@ namespace QuoteSwift
         {
             this.msViewAllPumpControls = new System.Windows.Forms.MenuStrip();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportInventoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnAddPump = new System.Windows.Forms.Button();
             this.btnRemovePumpSelection = new System.Windows.Forms.Button();
             this.dgvPumpList = new System.Windows.Forms.DataGridView();
@@ -46,7 +47,8 @@ namespace QuoteSwift
             // 
             this.msViewAllPumpControls.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.msViewAllPumpControls.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeToolStripMenuItem});
+            this.closeToolStripMenuItem,
+            this.exportInventoryToolStripMenuItem});
             this.msViewAllPumpControls.Location = new System.Drawing.Point(0, 0);
             this.msViewAllPumpControls.Name = "msViewAllPumpControls";
             this.msViewAllPumpControls.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
@@ -61,6 +63,13 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
+            // exportInventoryToolStripMenuItem
+            //
+            this.exportInventoryToolStripMenuItem.Name = "exportInventoryToolStripMenuItem";
+            this.exportInventoryToolStripMenuItem.Size = new System.Drawing.Size(128, 24);
+            this.exportInventoryToolStripMenuItem.Text = "Export Inventory";
+            this.exportInventoryToolStripMenuItem.Click += new System.EventHandler(this.ExportInventoryToolStripMenuItem_Click);
+            //
             // btnAddPump
             // 
             this.btnAddPump.Location = new System.Drawing.Point(20, 39);
@@ -164,6 +173,7 @@ namespace QuoteSwift
 
         private System.Windows.Forms.MenuStrip msViewAllPumpControls;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportInventoryToolStripMenuItem;
         private System.Windows.Forms.Button btnAddPump;
         private System.Windows.Forms.Button btnRemovePumpSelection;
         private System.Windows.Forms.DataGridView dgvPumpList;

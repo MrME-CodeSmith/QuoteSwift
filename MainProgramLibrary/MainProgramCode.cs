@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Globalization;
 
 using Newtonsoft.Json;
 using System.Text;
@@ -372,6 +373,50 @@ namespace QuoteSwift
             {
                 return null;
             }
+        }
+
+        // Export pump and part inventory to CSV
+        public static void ExportInventory(BindingList<Pump> pumpList, string filePath)
+        {
+            if (filePath == null)
+                throw new ArgumentNullException(nameof(filePath));
+
+            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+            {
+                writer.WriteLine("PumpName,PumpDescription,PumpPrice,PartOriginalNumber,PartName,PartDescription,PartNewNumber,PartPrice,Mandatory,Quantity");
+
+                if (pumpList != null)
+                {
+                    foreach (var pump in pumpList)
+                    {
+                        if (pump.PartList == null) continue;
+                        foreach (var pp in pump.PartList)
+                        {
+                            var part = pp.PumpPart;
+                            writer.WriteLine(string.Join(",",
+                                CsvEscape(pump.PumpName),
+                                CsvEscape(pump.PumpDescription),
+                                pump.NewPumpPrice.ToString(CultureInfo.InvariantCulture),
+                                CsvEscape(part?.OriginalItemPartNumber),
+                                CsvEscape(part?.PartName),
+                                CsvEscape(part?.PartDescription),
+                                CsvEscape(part?.NewPartNumber),
+                                part?.PartPrice.ToString(CultureInfo.InvariantCulture) ?? string.Empty,
+                                part?.MandatoryPart.ToString() ?? string.Empty,
+                                pp.PumpPartQuantity.ToString(CultureInfo.InvariantCulture)));
+                        }
+                    }
+                }
+            }
+        }
+
+        private static string CsvEscape(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return string.Empty;
+            if (value.Contains("\"")) value = value.Replace("\"", "\"\"");
+            if (value.Contains(",") || value.Contains("\n") || value.Contains("\r"))
+                return $"\"{value}\"";
+            return value;
         }
 
         
