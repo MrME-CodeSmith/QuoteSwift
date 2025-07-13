@@ -99,7 +99,7 @@ namespace QuoteSwift
                     Business.BusinessPOBoxAddressList.Add(address);
                     MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
 
-                    Business.POBoxMap[address.AddressDescription] = address;
+                    Business.POBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
 
                     ClearPOBoxAddressInput();
                 }
@@ -115,7 +115,7 @@ namespace QuoteSwift
                 if (!AddressExisting(address))
                 {
                     Business.BusinessAddressList.Add(address);
-                    Business.AddressMap[address.AddressDescription] = address;
+                    Business.AddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
                     MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
 
                     ClearBusinessAddressInput();
@@ -455,7 +455,8 @@ namespace QuoteSwift
 
         public bool AddressExisting(Address a)
         {
-            if (Business.AddressMap.ContainsKey(a.AddressDescription))
+            string key = StringUtil.NormalizeKey(a.AddressDescription);
+            if (Business.AddressMap.ContainsKey(key))
             {
                 MainProgramCode.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
                 return true;
@@ -466,7 +467,8 @@ namespace QuoteSwift
 
         private bool POBoxAddressExisting(Address a)
         {
-            if (Business.POBoxMap.ContainsKey(a.AddressDescription))
+            string key = StringUtil.NormalizeKey(a.AddressDescription);
+            if (Business.POBoxMap.ContainsKey(key))
             {
                 MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
                 return true;

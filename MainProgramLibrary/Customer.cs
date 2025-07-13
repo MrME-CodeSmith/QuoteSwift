@@ -77,7 +77,7 @@ namespace QuoteSwift
                 mPOBoxMap?.Clear();
                 if (mCustomerPOBoxAddress != null)
                     foreach (var a in mCustomerPOBoxAddress)
-                        mPOBoxMap[a.AddressDescription] = a;
+                        mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
             }
         }
         public BindingList<Address> CustomerDeliveryAddressList
@@ -89,7 +89,7 @@ namespace QuoteSwift
                 mDeliveryAddressMap?.Clear();
                 if (mCustomerDeliveryAddressList != null)
                     foreach (var a in mCustomerDeliveryAddressList)
-                        mDeliveryAddressMap[a.AddressDescription] = a;
+                        mDeliveryAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
             }
         }
         public Legal CustomerLegalDetails { get => mCustomerLegalDetails; set => mCustomerLegalDetails = value; }

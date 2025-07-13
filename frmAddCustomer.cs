@@ -120,7 +120,7 @@ namespace QuoteSwift
                     {
                         Customer.CustomerDeliveryAddressList.Add(address);
                     }
-                    Customer.DeliveryAddressMap[address.AddressDescription] = address;
+                    Customer.DeliveryAddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
                     MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
 
                     ClearCustomerAddressInput();
@@ -137,7 +137,7 @@ namespace QuoteSwift
                 if (!POBoxAddressExisting(address))
                 {
                     Customer.CustomerPOBoxAddress.Add(address);
-                    Customer.POBoxMap[address.AddressDescription] = address;
+                    Customer.POBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
                     MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
 
                     ClearPOBoxAddressInput();
@@ -442,7 +442,8 @@ namespace QuoteSwift
 
         public bool AddressExisting(Address a)
         {
-            if (Customer.DeliveryAddressMap.ContainsKey(a.AddressDescription))
+            string key = StringUtil.NormalizeKey(a.AddressDescription);
+            if (Customer.DeliveryAddressMap.ContainsKey(key))
             {
                 MainProgramCode.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
                 return true;
@@ -453,7 +454,8 @@ namespace QuoteSwift
 
         private bool POBoxAddressExisting(Address a)
         {
-            if (Customer.POBoxMap.ContainsKey(a.AddressDescription))
+            string key = StringUtil.NormalizeKey(a.AddressDescription);
+            if (Customer.POBoxMap.ContainsKey(key))
             {
                 MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
                 return true;

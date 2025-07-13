@@ -108,19 +108,24 @@ namespace QuoteSwift
 
         private bool AddressExists(Address a)
         {
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
-                if (passed.BusinessToChange.BusinessPOBoxAddressList != null && a != null)
-                    foreach (var address in passed.BusinessToChange.BusinessPOBoxAddressList)
-                    {
-                        if (address.AddressDescription == a.AddressDescription && address.AddressDescription != passed.AddressToChange.AddressDescription) return false;
-                    }
+            if (a == null) return false;
 
-            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
-                if (passed.CustomerToChange.CustomerPOBoxAddress != null && a != null)
-                    foreach (var address in passed.CustomerToChange.CustomerPOBoxAddress)
-                    {
-                        if (address.AddressDescription == a.AddressDescription && address.AddressDescription != passed.AddressToChange.AddressDescription) return false;
-                    }
+            string key = StringUtil.NormalizeKey(a.AddressDescription);
+
+            if (passed?.BusinessToChange != null &&
+                passed.BusinessToChange.AddressMap.TryGetValue(key, out Address existingB))
+            {
+                if (!ReferenceEquals(existingB, passed.AddressToChange))
+                    return true;
+            }
+
+            if (passed?.CustomerToChange != null &&
+                passed.CustomerToChange.DeliveryAddressMap.TryGetValue(key, out Address existingC))
+            {
+                if (!ReferenceEquals(existingC, passed.AddressToChange))
+                    return true;
+            }
+
             return false;
         }
 
