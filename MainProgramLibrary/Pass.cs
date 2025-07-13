@@ -20,6 +20,7 @@ namespace QuoteSwift
         private Dictionary<string, Business> mBusinessLookup = new Dictionary<string, Business>();
         private HashSet<string> mBusinessVatNumbers = new HashSet<string>();
         private HashSet<string> mBusinessRegNumbers = new HashSet<string>();
+        private HashSet<string> mRepairableItemNames = new HashSet<string>();
         private Business mBusinessToChange = null; //In the event that a Business' information needs to be changed
         private Customer mCustomerToChange = null; //In the event that a Customer's information needs to be changed
         private Quote mQuoteTOChange = null; //In the event that a Quote's information needs to be changed
@@ -118,7 +119,15 @@ namespace QuoteSwift
                 SyncBusinessLookup();
             }
         }
-        public BindingList<Pump> PassPumpList { get => mPassPumpList; set => mPassPumpList = value; }
+        public BindingList<Pump> PassPumpList
+        {
+            get => mPassPumpList;
+            set
+            {
+                mPassPumpList = value;
+                SyncRepairableItemLookup();
+            }
+        }
         public Business BusinessToChange { get => mBusinessToChange; set => mBusinessToChange = value; }
         public Customer CustomerToChange { get => mCustomerToChange; set => mCustomerToChange = value; }
         public Quote QuoteTOChange { get => mQuoteTOChange; set => mQuoteTOChange = value; }
@@ -150,6 +159,7 @@ namespace QuoteSwift
         public Dictionary<string, Business> BusinessLookup => mBusinessLookup;
         public HashSet<string> BusinessVatNumbers => mBusinessVatNumbers;
         public HashSet<string> BusinessRegNumbers => mBusinessRegNumbers;
+        public HashSet<string> RepairableItemNames => mRepairableItemNames;
 
         private void SyncBusinessLookup()
         {
@@ -164,6 +174,18 @@ namespace QuoteSwift
                         mBusinessLookup[b.BusinessName] = b;
                     mBusinessVatNumbers.Add(b.BusinessLegalDetails?.VatNumber);
                     mBusinessRegNumbers.Add(b.BusinessLegalDetails?.RegistrationNumber);
+                }
+            }
+        }
+
+        private void SyncRepairableItemLookup()
+        {
+            mRepairableItemNames.Clear();
+            if (mPassPumpList != null)
+            {
+                foreach (var p in mPassPumpList)
+                {
+                    mRepairableItemNames.Add(StringUtil.NormalizeKey(p.PumpName));
                 }
             }
         }
@@ -228,6 +250,21 @@ namespace QuoteSwift
         public bool TryGetNonMandatoryPartByNew(string newNumber, out Part part)
         {
             return mNonMandatoryNewPartMap.TryGetValue(StringUtil.NormalizeKey(newNumber), out part);
+        }
+
+        public void AddRepairableItem(Pump pump)
+        {
+            if (pump == null) return;
+            if (mPassPumpList == null) mPassPumpList = new BindingList<Pump>();
+            mPassPumpList.Add(pump);
+            mRepairableItemNames.Add(StringUtil.NormalizeKey(pump.PumpName));
+        }
+
+        public void RemoveRepairableItem(Pump pump)
+        {
+            if (pump == null || mPassPumpList == null) return;
+            mPassPumpList.Remove(pump);
+            mRepairableItemNames.Remove(StringUtil.NormalizeKey(pump.PumpName));
         }
     }
 }

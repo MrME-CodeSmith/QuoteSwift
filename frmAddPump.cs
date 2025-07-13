@@ -39,9 +39,20 @@ namespace QuoteSwift
                     return;
                 }
 
+                string normalizedName = StringUtil.NormalizeKey(mtxtPumpName.Text);
+
                 if (passed.ChangeSpecificObject) // Update Part List if true
                 {
+                    string oldName = StringUtil.NormalizeKey(passed.PumpToChange.PumpName);
+                    if (passed.RepairableItemNames.Contains(normalizedName) && normalizedName != oldName)
+                    {
+                        MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
+                        return;
+                    }
+
                     RecordNewInformation();
+                    passed.RepairableItemNames.Remove(oldName);
+                    passed.RepairableItemNames.Add(normalizedName);
                     MainProgramCode.ShowInformation(passed.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
 
                     //Set ChangeSpecificObject to false and convert to View
@@ -54,8 +65,15 @@ namespace QuoteSwift
                 }
                 else //Create New Pump And Add To Pump List
                 {
+                    if (passed.RepairableItemNames.Contains(normalizedName))
+                    {
+                        MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
+                        return;
+                    }
+
                     Pump newPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, QuoteSwiftMainCode.ParseDecimal(mtxtNewPumpPrice.Text), ref NewPumpParts);
                     if (passed.PassPumpList == null) passed.PassPumpList = new BindingList<Pump> { newPump }; else passed.PassPumpList.Add(newPump);
+                    passed.RepairableItemNames.Add(normalizedName);
                     MainProgramCode.ShowInformation(newPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
                 }
             }
