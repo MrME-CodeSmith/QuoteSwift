@@ -22,7 +22,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                QuoteSwiftMainCode.CloseApplication(true, ref passed);
+                MainProgramCode.CloseApplication(true, ref passed);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
@@ -500,7 +500,7 @@ namespace QuoteSwift
 
         private void FrmAddPart_FormClosing(object sender, FormClosingEventArgs e)
         {
-            QuoteSwiftMainCode.CloseApplication(true, ref passed);
+            MainProgramCode.CloseApplication(true, ref passed);
         }
 
         /*********************************************************************************/
