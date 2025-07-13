@@ -133,7 +133,7 @@ namespace QuoteSwift
                 MainProgramCode.ShowError("a Valid Phone Number/s were not provided, please provide at least one valid phone number.", "ERROR - Invalid Number/s Provided");
             }
 
-            if (mtxtTelephoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
+            if (mtxtTelephoneNumber.Text.Length >= 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
             {
                 Business.AddTelephoneNumber(mtxtTelephoneNumber.Text);
                 Added = true;
@@ -141,7 +141,7 @@ namespace QuoteSwift
                 mtxtTelephoneNumber.ResetText();
             }
 
-            if (mtxtCellphoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
+            if (mtxtCellphoneNumber.Text.Length >= 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
             {
                 Business.AddCellphoneNumber(mtxtCellphoneNumber.Text);
                 Added = true;
