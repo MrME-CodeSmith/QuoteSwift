@@ -96,6 +96,8 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
+                    if (Business.BusinessPOBoxAddressList == null)
+                        Business.BusinessPOBoxAddressList = new BindingList<Address>();
                     Business.BusinessPOBoxAddressList.Add(address);
                     MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
 
