@@ -234,7 +234,7 @@ namespace QuoteSwift
                             Pump OldPump = null;
                             foreach (var pump in passed.PassPumpList)
                             {
-                                if (pump.PumpName == NewPump.PumpName)
+                                if (StringUtil.NormalizeKey(pump.PumpName) == StringUtil.NormalizeKey(NewPump.PumpName))
                                 {
                                     FoundPump = true;
                                     OldPump = pump;
