@@ -34,6 +34,11 @@ namespace QuoteSwift
             if (ValidBusiness() && !passed.ChangeSpecificObject)
             {
                 Business LinkBusiness = GetSelectedBusiness();
+                if (LinkBusiness == null)
+                {
+                    MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                    return;
+                }
 
                 //Add Final Details to Customer object
                 Customer.CustomerName = "";
@@ -66,19 +71,22 @@ namespace QuoteSwift
                 passed.CustomerToChange.VendorNumber = mtxtVendorNumber.Text;
 
                 Business container = GetSelectedBusiness();
-                if (container != null)
+                if (container == null)
                 {
-                    if (container.CustomerMap.TryGetValue(passed.CustomerToChange.CustomerCompanyName, out Customer existing)
-                        && existing != passed.CustomerToChange)
-                    {
-                        MainProgramCode.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
-                        passed.CustomerToChange.CustomerCompanyName = oldName;
-                        return;
-                    }
-
-                    container.CustomerMap.Remove(oldName);
-                    container.CustomerMap[passed.CustomerToChange.CustomerCompanyName] = passed.CustomerToChange;
+                    MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                    return;
                 }
+
+                if (container.CustomerMap.TryGetValue(passed.CustomerToChange.CustomerCompanyName, out Customer existing)
+                    && existing != passed.CustomerToChange)
+                {
+                    MainProgramCode.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
+                    passed.CustomerToChange.CustomerCompanyName = oldName;
+                    return;
+                }
+
+                container.CustomerMap.Remove(oldName);
+                container.CustomerMap[passed.CustomerToChange.CustomerCompanyName] = passed.CustomerToChange;
 
                 MainProgramCode.ShowInformation(Customer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
                 ConvertToViewOnly();
