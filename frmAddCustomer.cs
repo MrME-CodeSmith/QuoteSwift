@@ -68,6 +68,14 @@ namespace QuoteSwift
                 Business container = GetSelectedBusiness();
                 if (container != null)
                 {
+                    if (container.CustomerMap.TryGetValue(passed.CustomerToChange.CustomerCompanyName, out Customer existing)
+                        && existing != passed.CustomerToChange)
+                    {
+                        MainProgramCode.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
+                        passed.CustomerToChange.CustomerCompanyName = oldName;
+                        return;
+                    }
+
                     container.CustomerMap.Remove(oldName);
                     container.CustomerMap[passed.CustomerToChange.CustomerCompanyName] = passed.CustomerToChange;
                 }
