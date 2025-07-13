@@ -69,15 +69,13 @@ namespace QuoteSwift
                 {
                     if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
                     {
-                        passed.BusinessToChange.BusinessEmailAddressList.Remove(SelectedEmail);
+                        passed.BusinessToChange.RemoveEmailAddress(SelectedEmail);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-                        if (passed.BusinessToChange.BusinessEmailAddressList.Count == 0) passed.BusinessToChange.BusinessEmailAddressList = null;
                     }
                     else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
                     {
-                        passed.CustomerToChange.CustomerEmailList.Remove(SelectedEmail);
+                        passed.CustomerToChange.RemoveEmailAddress(SelectedEmail);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-                        if (passed.CustomerToChange.CustomerEmailList.Count == 0) passed.CustomerToChange.CustomerEmailList = null;
                     }
 
 
@@ -99,23 +97,11 @@ namespace QuoteSwift
 
             if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                for (int i = 0; i < passed.BusinessToChange.BusinessEmailAddressList.Count; i++)
-                {
-                    if (passed.BusinessToChange.BusinessEmailAddressList[i] == email)
-                    {
-                        passed.BusinessToChange.BusinessEmailAddressList[i] = passed.EmailToChange;
-                    }
-                }
+                passed.BusinessToChange.UpdateEmailAddress(email, passed.EmailToChange);
             }
             else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
             {
-                for (int i = 0; i < passed.CustomerToChange.CustomerEmailList.Count; i++)
-                {
-                    if (passed.CustomerToChange.CustomerEmailList[i] == email)
-                    {
-                        passed.CustomerToChange.CustomerEmailList[i] = passed.EmailToChange;
-                    }
-                }
+                passed.CustomerToChange.UpdateEmailAddress(email, passed.EmailToChange);
             }
 
             passed.ChangeSpecificObject = false;
