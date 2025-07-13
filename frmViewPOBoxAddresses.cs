@@ -122,27 +122,24 @@ namespace QuoteSwift
 
         Address GetAddressSelection()
         {
-            Address SelectedAddress;
-            string SearchName;
-            int iGridSelection = dgvPOBoxAddresses.CurrentCell.RowIndex;
-            try
-            {
-                SearchName = dgvPOBoxAddresses.Rows[iGridSelection].Cells[0].Value.ToString();
-            }
-            catch
-            {
+            if (dgvPOBoxAddresses.CurrentCell == null || dgvPOBoxAddresses.CurrentRow == null)
                 return null;
-            }
+
+            int iGridSelection = dgvPOBoxAddresses.CurrentCell.RowIndex;
+            if (iGridSelection < 0 || iGridSelection >= dgvPOBoxAddresses.Rows.Count)
+                return null;
+
+            string SearchName = dgvPOBoxAddresses.Rows[iGridSelection].Cells[0].Value?.ToString();
+            if (string.IsNullOrEmpty(SearchName))
+                return null;
 
             if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
             {
-                SelectedAddress = passed.BusinessToChange.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-                return SelectedAddress;
+                return passed.BusinessToChange.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
             }
             else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
             {
-                SelectedAddress = passed.CustomerToChange.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == SearchName);
-                return SelectedAddress;
+                return passed.CustomerToChange.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == SearchName);
             }
 
             return null;

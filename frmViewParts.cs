@@ -135,35 +135,27 @@ namespace QuoteSwift
 
         Part GetSelectedPart()
         {
-            Part SelectedPart;
-            string SearchName;
-            int iGridSelection = 0;
-            try
-            {
-                iGridSelection = dgvAllParts.CurrentCell.RowIndex;
-                SearchName = dgvAllParts.Rows[iGridSelection].Cells[2].Value.ToString();
-            }
-            catch (NullReferenceException)
-            {
+            if (dgvAllParts.CurrentCell == null || dgvAllParts.CurrentRow == null)
                 return null;
-            }
 
+            int iGridSelection = dgvAllParts.CurrentCell.RowIndex;
+            if (iGridSelection < 0 || iGridSelection >= dgvAllParts.Rows.Count)
+                return null;
+
+            string SearchName = dgvAllParts.Rows[iGridSelection].Cells[2].Value?.ToString();
+            if (string.IsNullOrEmpty(SearchName))
+                return null;
 
             if (passed.PassMandatoryPartList.Count > 0 || passed.PassNonMandatoryPartList.Count > 0 || passed != null || passed.PassMandatoryPartList != null || passed.PassNonMandatoryPartList != null)
             {
-
                 if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
                 {
                     //Search for part in mandatory
-
-                    SelectedPart = passed.PassMandatoryPartList.SingleOrDefault(p => p.OriginalItemPartNumber == SearchName);
-                    return SelectedPart;
-
+                    return passed.PassMandatoryPartList.SingleOrDefault(p => p.OriginalItemPartNumber == SearchName);
                 }
                 else // Search in Non-Mandatory
                 {
-                    SelectedPart = passed.PassNonMandatoryPartList.SingleOrDefault(p => p.OriginalItemPartNumber == SearchName);
-                    return SelectedPart;
+                    return passed.PassNonMandatoryPartList.SingleOrDefault(p => p.OriginalItemPartNumber == SearchName);
                 }
             }
 

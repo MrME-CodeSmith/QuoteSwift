@@ -111,29 +111,27 @@ namespace QuoteSwift
 
         string GetEmailSelection()
         {
-            string SearchName;
+            if (DgvEmails.CurrentCell == null || DgvEmails.CurrentRow == null)
+                return string.Empty;
+
             int iGridSelection = DgvEmails.CurrentCell.RowIndex;
-            try
-            {
-                SearchName = DgvEmails.Rows[iGridSelection].Cells[0].Value.ToString();
-            }
-            catch
-            {
-                return "";
-            }
+            if (iGridSelection < 0 || iGridSelection >= DgvEmails.Rows.Count)
+                return string.Empty;
+
+            string SearchName = DgvEmails.Rows[iGridSelection].Cells[0].Value?.ToString();
+            if (string.IsNullOrEmpty(SearchName))
+                return string.Empty;
 
             if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
             {
-                SearchName = passed.BusinessToChange.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName);
-                return SearchName;
+                return passed.BusinessToChange.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
             }
             else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
             {
-                SearchName = passed.CustomerToChange.CustomerEmailList.SingleOrDefault(p => p == SearchName);
-                return SearchName;
+                return passed.CustomerToChange.CustomerEmailList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
             }
 
-            return "";
+            return string.Empty;
         }
 
         private void LoadInformation()
