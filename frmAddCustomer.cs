@@ -51,6 +51,8 @@ namespace QuoteSwift
                     MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
                     return;
                 }
+                if (LinkBusiness.BusinessCustomerList == null)
+                    LinkBusiness.BusinessCustomerList = new BindingList<Customer>();
                 LinkBusiness.BusinessCustomerList.Add(Customer);
 
                 LinkBusiness.CustomerMap[Customer.CustomerCompanyName] = Customer;
