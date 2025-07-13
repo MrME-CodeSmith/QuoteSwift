@@ -9,8 +9,12 @@ namespace QuoteSwift
         private SortedDictionary<string, Quote> mPassQuoteMap;
         private BindingList<Business> mPassBusinessList;
         private BindingList<Pump> mPassPumpList;
-        private BindingList<Part> mPassMandatoryPartList;
-        private BindingList<Part> mPassNonMandatoryPartList;
+        // dictionaries for parts keyed by original part number
+        private Dictionary<string, Part> mPassMandatoryPartList;
+        private Dictionary<string, Part> mPassNonMandatoryPartList;
+        // lookup dictionaries for part new numbers
+        private Dictionary<string, Part> mMandatoryNewPartMap = new Dictionary<string, Part>();
+        private Dictionary<string, Part> mNonMandatoryNewPartMap = new Dictionary<string, Part>();
 
         // lookup collections for businesses
         private Dictionary<string, Business> mBusinessLookup = new Dictionary<string, Business>();
@@ -29,7 +33,7 @@ namespace QuoteSwift
 
         //Pass All Constructor :
 
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList)
+        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList)
         {
             PassQuoteMap = quoteMap;
             PassBusinessList = mPassBusinessList;
@@ -40,7 +44,7 @@ namespace QuoteSwift
 
         //Pass Quote Constructor:
 
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
             PassBusinessList = mPassBusinessList;
@@ -53,7 +57,7 @@ namespace QuoteSwift
 
         //Pass Business Constructor:
 
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Business mBusinessToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Business mBusinessToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
             PassBusinessList = mPassBusinessList;
@@ -66,7 +70,7 @@ namespace QuoteSwift
 
         //Pass Customer Constructor:
 
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
             PassBusinessList = mPassBusinessList;
@@ -79,7 +83,7 @@ namespace QuoteSwift
 
         //Pass Pump Constructor:
 
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Pump mPumpToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Pump mPumpToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
             PassBusinessList = mPassBusinessList;
@@ -92,7 +96,7 @@ namespace QuoteSwift
 
         //Pass Part Constructor:
 
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, BindingList<Part> mPassMandatoryPartList, BindingList<Part> mPassNonMandatoryPartList, ref Part mPartToChange, bool mChangeSpecificObject = false)
+        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Part mPartToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
             PassBusinessList = mPassBusinessList;
@@ -121,8 +125,24 @@ namespace QuoteSwift
         public bool ChangeSpecificObject { get => mChangeSpecificObject; set => mChangeSpecificObject = value; }
         public Pump PumpToChange { get => mPumpToChange; set => mPumpToChange = value; }
         public Part PartToChange { get => mPartToChange; set => mPartToChange = value; }
-        public BindingList<Part> PassMandatoryPartList { get => mPassMandatoryPartList; set => mPassMandatoryPartList = value; }
-        public BindingList<Part> PassNonMandatoryPartList { get => mPassNonMandatoryPartList; set => mPassNonMandatoryPartList = value; }
+        public Dictionary<string, Part> PassMandatoryPartList
+        {
+            get => mPassMandatoryPartList;
+            set
+            {
+                mPassMandatoryPartList = value;
+                SyncMandatoryPartLookup();
+            }
+        }
+        public Dictionary<string, Part> PassNonMandatoryPartList
+        {
+            get => mPassNonMandatoryPartList;
+            set
+            {
+                mPassNonMandatoryPartList = value;
+                SyncNonMandatoryPartLookup();
+            }
+        }
         public Address AddressToChange { get => mAddressToChange; set => mAddressToChange = value; }
         public string EmailToChange { get => mEmailToChange; set => mEmailToChange = value; }
         public string PhoneNumberToChange { get => mPhoneNumberToChange; set => mPhoneNumberToChange = value; }
@@ -146,6 +166,68 @@ namespace QuoteSwift
                     mBusinessRegNumbers.Add(b.BusinessLegalDetails?.RegistrationNumber);
                 }
             }
+        }
+
+        private void SyncMandatoryPartLookup()
+        {
+            mMandatoryNewPartMap.Clear();
+            if (mPassMandatoryPartList != null)
+            {
+                foreach (var p in mPassMandatoryPartList.Values)
+                    mMandatoryNewPartMap[StringUtil.NormalizeKey(p.NewPartNumber)] = p;
+            }
+        }
+
+        private void SyncNonMandatoryPartLookup()
+        {
+            mNonMandatoryNewPartMap.Clear();
+            if (mPassNonMandatoryPartList != null)
+            {
+                foreach (var p in mPassNonMandatoryPartList.Values)
+                    mNonMandatoryNewPartMap[StringUtil.NormalizeKey(p.NewPartNumber)] = p;
+            }
+        }
+
+        public void AddMandatoryPart(Part part)
+        {
+            if (part == null) return;
+            if (mPassMandatoryPartList == null) mPassMandatoryPartList = new Dictionary<string, Part>();
+            string origKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
+            mPassMandatoryPartList[origKey] = part;
+            mMandatoryNewPartMap[StringUtil.NormalizeKey(part.NewPartNumber)] = part;
+        }
+
+        public void RemoveMandatoryPart(Part part)
+        {
+            if (part == null || mPassMandatoryPartList == null) return;
+            mPassMandatoryPartList.Remove(StringUtil.NormalizeKey(part.OriginalItemPartNumber));
+            mMandatoryNewPartMap.Remove(StringUtil.NormalizeKey(part.NewPartNumber));
+        }
+
+        public bool TryGetMandatoryPartByNew(string newNumber, out Part part)
+        {
+            return mMandatoryNewPartMap.TryGetValue(StringUtil.NormalizeKey(newNumber), out part);
+        }
+
+        public void AddNonMandatoryPart(Part part)
+        {
+            if (part == null) return;
+            if (mPassNonMandatoryPartList == null) mPassNonMandatoryPartList = new Dictionary<string, Part>();
+            string origKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
+            mPassNonMandatoryPartList[origKey] = part;
+            mNonMandatoryNewPartMap[StringUtil.NormalizeKey(part.NewPartNumber)] = part;
+        }
+
+        public void RemoveNonMandatoryPart(Part part)
+        {
+            if (part == null || mPassNonMandatoryPartList == null) return;
+            mPassNonMandatoryPartList.Remove(StringUtil.NormalizeKey(part.OriginalItemPartNumber));
+            mNonMandatoryNewPartMap.Remove(StringUtil.NormalizeKey(part.NewPartNumber));
+        }
+
+        public bool TryGetNonMandatoryPartByNew(string newNumber, out Part part)
+        {
+            return mNonMandatoryNewPartMap.TryGetValue(StringUtil.NormalizeKey(newNumber), out part);
         }
     }
 }

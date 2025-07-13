@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -187,7 +188,7 @@ namespace QuoteSwift
             mtxtPumpName.Text = passed.PumpToChange.PumpName;
 
             int mIndex = 0;
-            foreach (var part in passed.PassMandatoryPartList)
+            foreach (var part in passed.PassMandatoryPartList.Values)
             {
                 foreach (var pumpPart in passed.PumpToChange.PartList)
                 {
@@ -202,7 +203,7 @@ namespace QuoteSwift
             }
 
             int nmIndex = 0;
-            foreach (var part in passed.PassNonMandatoryPartList)
+            foreach (var part in passed.PassNonMandatoryPartList.Values)
             {
                 foreach (var pumpPart in passed.PumpToChange.PartList)
                 {
@@ -260,8 +261,12 @@ namespace QuoteSwift
                     {
                         try
                         {
-                            newPart = new Pump_Part(passed.PassMandatoryPartList[mPartIndex],
-                                QuoteSwiftMainCode.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
+                            string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
+                            if (passed.PassMandatoryPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
+                                newPart = new Pump_Part(part,
+                                    QuoteSwiftMainCode.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
+                            else
+                                newPart = null;
                         }
                         catch
                         {
@@ -290,8 +295,12 @@ namespace QuoteSwift
                     {
                         try
                         {
-                            newPart = new Pump_Part(passed.PassNonMandatoryPartList[nmPartIndex],
-                                QuoteSwiftMainCode.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
+                            string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
+                            if (passed.PassNonMandatoryPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
+                                newPart = new Pump_Part(part,
+                                    QuoteSwiftMainCode.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
+                            else
+                                newPart = null;
                         }
                         catch
                         {
@@ -348,7 +357,7 @@ namespace QuoteSwift
             {
                 dgvMandatoryPartView.Rows.Clear();
 
-                foreach (var part in passed.PassMandatoryPartList)
+                foreach (var part in passed.PassMandatoryPartList.Values)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvMandatoryPartView.Rows.Add(part.PartName,
@@ -368,7 +377,7 @@ namespace QuoteSwift
             {
                 dgvNonMandatoryPartView.Rows.Clear();
 
-                foreach (var part in passed.PassNonMandatoryPartList)
+                foreach (var part in passed.PassNonMandatoryPartList.Values)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvNonMandatoryPartView.Rows.Add(part.PartName,

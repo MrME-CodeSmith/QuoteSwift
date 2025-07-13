@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -82,17 +83,11 @@ namespace QuoteSwift
                         if (!DistinctInput(ref newPart))
                             return;
 
-
                     if (passed.PassMandatoryPartList == null)
-                    {
-                        passed.PassMandatoryPartList = new BindingList<Part>() { newPart };
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
-                    }
-                    else
-                    {
-                        passed.PassMandatoryPartList.Add(newPart);
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
-                    }
+                        passed.PassMandatoryPartList = new Dictionary<string, Part>();
+
+                    passed.AddMandatoryPart(newPart);
+                    MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
 
                 }
                 else //newPart is Non-Mandatory
@@ -101,17 +96,15 @@ namespace QuoteSwift
                         if (!DistinctInput(ref newPart))
                             return;
 
+                    if (passed.PassNonMandatoryPartList != null)
+                        if (!DistinctInput(ref newPart))
+                            return;
+
                     if (passed.PassNonMandatoryPartList == null)
-                    {
-                        passed.PassNonMandatoryPartList = new BindingList<Part>() { newPart };
-                        passed.PassNonMandatoryPartList.Add(newPart);
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
-                    }
-                    else
-                    {
-                        passed.PassNonMandatoryPartList.Add(newPart);
-                        MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
-                    }
+                        passed.PassNonMandatoryPartList = new Dictionary<string, Part>();
+
+                    passed.AddNonMandatoryPart(newPart);
+                    MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
                 }
 
 
@@ -180,36 +173,36 @@ namespace QuoteSwift
 
                                 if (UpdateDuplicated)
                                 {
+                                    string oKey = StringUtil.NormalizeKey(newPart.OriginalItemPartNumber);
+                                    string nKey = StringUtil.NormalizeKey(newPart.NewPartNumber);
+
                                     if (newPart.MandatoryPart)
-                                        foreach (var data in passed.PassMandatoryPartList)
+                                    {
+                                        if (!passed.PassMandatoryPartList.TryGetValue(oKey, out var data))
+                                            passed.TryGetMandatoryPartByNew(nKey, out data);
+
+                                        if (data != null)
                                         {
-                                            if (data.NewPartNumber == newPart.NewPartNumber || data.OriginalItemPartNumber == newPart.OriginalItemPartNumber)
-                                            {
-
-                                                data.MandatoryPart = newPart.MandatoryPart;
-                                                data.PartDescription = newPart.PartDescription;
-                                                data.PartName = newPart.PartName;
-                                                data.PartPrice = newPart.PartPrice;
-
-                                                break;
-                                            }
+                                            data.MandatoryPart = newPart.MandatoryPart;
+                                            data.PartDescription = newPart.PartDescription;
+                                            data.PartName = newPart.PartName;
+                                            data.PartPrice = newPart.PartPrice;
                                         }
+                                    }
 
                                     if (!newPart.MandatoryPart)
-                                        foreach (var data in passed.PassNonMandatoryPartList)
+                                    {
+                                        if (!passed.PassNonMandatoryPartList.TryGetValue(oKey, out var data))
+                                            passed.TryGetNonMandatoryPartByNew(nKey, out data);
+
+                                        if (data != null)
                                         {
-                                            if (data.NewPartNumber == newPart.NewPartNumber || data.OriginalItemPartNumber == newPart.OriginalItemPartNumber)
-                                            {
-
-
-                                                data.MandatoryPart = newPart.MandatoryPart;
-                                                data.PartDescription = newPart.PartDescription;
-                                                data.PartName = newPart.PartName;
-                                                data.PartPrice = newPart.PartPrice;
-
-                                                break;
-                                            }
+                                            data.MandatoryPart = newPart.MandatoryPart;
+                                            data.PartDescription = newPart.PartDescription;
+                                            data.PartName = newPart.PartName;
+                                            data.PartPrice = newPart.PartPrice;
                                         }
+                                    }
 
                                 }
                             }
@@ -220,15 +213,16 @@ namespace QuoteSwift
                             return;
                         }
 
-                        if (passed.PassMandatoryPartList == null) passed.PassMandatoryPartList = new BindingList<Part>();
-                        if (passed.PassNonMandatoryPartList == null) passed.PassNonMandatoryPartList = new BindingList<Part>();
+                        if (passed.PassMandatoryPartList == null) passed.PassMandatoryPartList = new Dictionary<string, Part>();
+                        if (passed.PassNonMandatoryPartList == null) passed.PassNonMandatoryPartList = new Dictionary<string, Part>();
 
 
                         if (newPart != null && newPart.MandatoryPart && DistinctInput(ref newPart))
                         {
-                            passed.PassMandatoryPartList.Add(newPart);
+                            passed.AddMandatoryPart(newPart);
                         }
-                        else if (newPart != null && DistinctInput(ref newPart)) passed.PassNonMandatoryPartList.Add(newPart);
+                        else if (newPart != null && DistinctInput(ref newPart))
+                            passed.AddNonMandatoryPart(newPart);
 
                         bool FoundPump = false;
 
@@ -396,8 +390,8 @@ namespace QuoteSwift
         {
             if (SwitchPart != null)
             {
-                passed.PassMandatoryPartList.Add(SwitchPart);
-                passed.PassNonMandatoryPartList.Remove(SwitchPart);
+                passed.AddMandatoryPart(SwitchPart);
+                passed.RemoveNonMandatoryPart(SwitchPart);
                 return true;
             }
             return false;
@@ -407,8 +401,8 @@ namespace QuoteSwift
         {
             if (SwitchPart != null)
             {
-                passed.PassNonMandatoryPartList.Add(SwitchPart);
-                passed.PassMandatoryPartList.Remove(SwitchPart);
+                passed.AddNonMandatoryPart(SwitchPart);
+                passed.RemoveMandatoryPart(SwitchPart);
                 return true;
             }
             return false;
@@ -422,14 +416,13 @@ namespace QuoteSwift
             {
                 if (passed.PassMandatoryPartList != null)
                 {
-                    foreach (var existing in passed.PassMandatoryPartList)
+                    string oKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
+                    string nKey = StringUtil.NormalizeKey(part.NewPartNumber);
+                    if (passed.PassMandatoryPartList.ContainsKey(oKey) || passed.TryGetMandatoryPartByNew(nKey, out _))
                     {
-                        if (existing.NewPartNumber == part.NewPartNumber || existing.OriginalItemPartNumber == part.OriginalItemPartNumber)
-                        {
-                            if (passed.PartToChange == null)
-                                MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
-                            return false;
-                        }
+                        if (passed.PartToChange == null)
+                            MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
+                        return false;
                     }
                 }
             }
@@ -437,14 +430,13 @@ namespace QuoteSwift
             {
                 if (passed.PassNonMandatoryPartList != null)
                 {
-                    foreach (var existing in passed.PassNonMandatoryPartList)
+                    string oKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
+                    string nKey = StringUtil.NormalizeKey(part.NewPartNumber);
+                    if (passed.PassNonMandatoryPartList.ContainsKey(oKey) || passed.TryGetNonMandatoryPartByNew(nKey, out _))
                     {
-                        if (existing.NewPartNumber == part.NewPartNumber || existing.OriginalItemPartNumber == part.OriginalItemPartNumber)
-                        {
-                            if (passed.PartToChange == null)
-                                MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
-                            return false;
-                        }
+                        if (passed.PartToChange == null)
+                            MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
+                        return false;
                     }
                 }
             }
