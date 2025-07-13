@@ -41,20 +41,12 @@ namespace QuoteSwift
                 Customer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
                 Customer.VendorNumber = mtxtVendorNumber.Text;
 
-                if (LinkBusiness.BusinessCustomerList == null)
+                if (LinkBusiness.CustomerMap.ContainsKey(Customer.CustomerCompanyName))
                 {
-                    //Create New Customer List
-                    LinkBusiness.BusinessCustomerList = new BindingList<Customer> { Customer };
+                    MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
+                    return;
                 }
-                else //Add To List
-                {
-                    if (LinkBusiness.CustomerMap.ContainsKey(Customer.CustomerCompanyName))
-                    {
-                        MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
-                        return;
-                    }
-                    LinkBusiness.BusinessCustomerList.Add(Customer);
-                }
+                LinkBusiness.BusinessCustomerList.Add(Customer);
 
                 LinkBusiness.CustomerMap[Customer.CustomerCompanyName] = Customer;
 
@@ -144,15 +136,7 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
-                    if (Customer.CustomerPOBoxAddress == null)
-                    {
-                        //Create New List
-                        Customer.CustomerPOBoxAddress = new BindingList<Address> { address };
-                    }
-                    else // AddingNewEventArgs To list
-                    {
-                        Customer.CustomerPOBoxAddress.Add(address);
-                    }
+                    Customer.CustomerPOBoxAddress.Add(address);
                     Customer.POBoxMap[address.AddressDescription] = address;
                     MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
 
@@ -171,15 +155,7 @@ namespace QuoteSwift
 
             if (mtxtTelephoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
             {
-                if (Customer.CustomerTelephoneNumberList == null)
-                {
-                    // Create new List
-                    Customer.CustomerTelephoneNumberList = new BindingList<string> { mtxtTelephoneNumber.Text };
-                }
-                else // Add To List
-                {
-                    Customer.CustomerTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
-                }
+                Customer.CustomerTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
                 Customer.TelephoneNumbers.Add(mtxtTelephoneNumber.Text);
                 Added = true;
 
@@ -188,15 +164,7 @@ namespace QuoteSwift
 
             if (mtxtCellphoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
             {
-                if (Customer.CustomerCellphoneNumberList == null)
-                {
-                    // Create new List
-                    Customer.CustomerCellphoneNumberList = new BindingList<string> { mtxtCellphoneNumber.Text };
-                }
-                else // Add To List
-                {
-                    Customer.CustomerCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
-                }
+                Customer.CustomerCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
                 Customer.CellphoneNumbers.Add(mtxtCellphoneNumber.Text);
                 Added = true;
 
@@ -300,15 +268,7 @@ namespace QuoteSwift
             {
                 if (!EmailAddressExisting(mtxtEmailAddress.Text))
                 {
-                    if (Customer.CustomerEmailList == null)
-                    {
-                        //Create New List
-                        Customer.CustomerEmailList = new BindingList<string> { mtxtEmailAddress.Text };
-                    }
-                    else //Add To Existing List
-                    {
-                        Customer.CustomerEmailList.Add(mtxtEmailAddress.Text);
-                    }
+                    Customer.CustomerEmailList.Add(mtxtEmailAddress.Text);
                     Customer.EmailAddresses.Add(mtxtEmailAddress.Text);
                     MainProgramCode.ShowInformation("Successfully added the customer Email address", "INFORMATION - Customer Email Address Added Successfully");
 
