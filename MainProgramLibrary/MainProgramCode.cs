@@ -151,12 +151,12 @@ namespace QuoteSwift
 
         //Serialize Part list:
 
-        public static byte[] SerializePartList(BindingList<Part> PartList)
+        public static byte[] SerializePartList(Dictionary<string, Part> PartList)
         {
             byte[] tempByte;
             try
             {
-                tempByte = MainProgramCode.JsonSerialize<BindingList<Part>>(PartList);
+                tempByte = MainProgramCode.JsonSerialize<Dictionary<string, Part>>(PartList);
             }
             catch
             {
@@ -168,11 +168,11 @@ namespace QuoteSwift
 
         //De-serialize Part list:
 
-        public static BindingList<Part> DeserializePartList(byte[] tempByte)
+        public static Dictionary<string, Part> DeserializePartList(byte[] tempByte)
         {
             try
             {
-                return MainProgramCode.JsonDeserialize<BindingList<Part>>(tempByte);
+                return MainProgramCode.JsonDeserialize<Dictionary<string, Part>>(tempByte);
             }
             catch
             {

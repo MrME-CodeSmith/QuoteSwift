@@ -17,7 +17,7 @@ namespace QuoteSwift
         {
             InitializeComponent();
             this.passed = passed;
-            if (this.passed == null) passed = new Pass(new SortedDictionary<string, Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new BindingList<Part>(), new BindingList<Part>());
+            if (this.passed == null) passed = new Pass(new SortedDictionary<string, Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new Dictionary<string, Part>(), new Dictionary<string, Part>());
 
         }
 
@@ -221,11 +221,11 @@ namespace QuoteSwift
 
                     byte[] RetreivedMandatoryPartList = MainProgramCode.RetreiveData("MandatoryParts.json");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassMandatoryPartList = MainProgramCode.DeserializePartList(RetreivedMandatoryPartList);
 
                     RetreivedMandatoryPartList = MainProgramCode.RetreiveData("NonMandatoryParts.json");
 
-                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassNonMandatoryPartList = new BindingList<Part>(MainProgramCode.DeserializePartList(RetreivedMandatoryPartList));
+                    if (RetreivedMandatoryPartList != null && RetreivedMandatoryPartList.Length > 0) passed.PassNonMandatoryPartList = MainProgramCode.DeserializePartList(RetreivedMandatoryPartList);
 
                     byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.json");
 
