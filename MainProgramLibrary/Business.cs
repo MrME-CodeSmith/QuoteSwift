@@ -84,12 +84,12 @@ namespace QuoteSwift
             mAddressMap = new Dictionary<string, Address>();
             if (mBusinessAddressList != null)
                 foreach (var a in mBusinessAddressList)
-                    mAddressMap[a.AddressDescription] = a;
+                    mAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
 
             mPOBoxMap = new Dictionary<string, Address>();
             if (mBusinessPOBoxAddressList != null)
                 foreach (var a in mBusinessPOBoxAddressList)
-                    mPOBoxMap[a.AddressDescription] = a;
+                    mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
 
             mTelephoneNumbers = new HashSet<string>(mBusinessTelephoneNumberList ?? new BindingList<string>());
             mCellphoneNumbers = new HashSet<string>(mBusinessCellphoneNumberList ?? new BindingList<string>());
@@ -112,7 +112,7 @@ namespace QuoteSwift
                 mAddressMap?.Clear();
                 if (mBusinessAddressList != null)
                     foreach (var a in mBusinessAddressList)
-                        mAddressMap[a.AddressDescription] = a;
+                        mAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
             }
         }
         public BindingList<Address> BusinessPOBoxAddressList
@@ -124,7 +124,7 @@ namespace QuoteSwift
                 mPOBoxMap?.Clear();
                 if (mBusinessPOBoxAddressList != null)
                     foreach (var a in mBusinessPOBoxAddressList)
-                        mPOBoxMap[a.AddressDescription] = a;
+                        mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
             }
         }
         public Legal BusinessLegalDetails { get => mBusinessLegalDetails; set => mBusinessLegalDetails = value; }
