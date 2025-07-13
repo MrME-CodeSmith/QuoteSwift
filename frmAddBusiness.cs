@@ -116,6 +116,8 @@ namespace QuoteSwift
                                               txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
                 if (!AddressExisting(address))
                 {
+                    if (Business.BusinessAddressList == null)
+                        Business.BusinessAddressList = new BindingList<Address>();
                     Business.BusinessAddressList.Add(address);
                     Business.AddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
                     MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
