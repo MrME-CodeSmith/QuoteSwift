@@ -35,6 +35,12 @@ namespace QuoteSwift
             {
                 Business LinkBusiness = GetSelectedBusiness();
 
+                if (LinkBusiness == null)
+                {
+                    MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                    return;
+                }
+
                 //Add Final Details to Customer object
                 Customer.CustomerName = "";
                 Customer.CustomerCompanyName = txtCustomerCompanyName.Text;
@@ -66,11 +72,14 @@ namespace QuoteSwift
                 passed.CustomerToChange.VendorNumber = mtxtVendorNumber.Text;
 
                 Business container = GetSelectedBusiness();
-                if (container != null)
+                if (container == null)
                 {
-                    container.CustomerMap.Remove(oldName);
-                    container.CustomerMap[passed.CustomerToChange.CustomerCompanyName] = passed.CustomerToChange;
+                    MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                    return;
                 }
+
+                container.CustomerMap.Remove(oldName);
+                container.CustomerMap[passed.CustomerToChange.CustomerCompanyName] = passed.CustomerToChange;
 
                 MainProgramCode.ShowInformation(Customer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
                 ConvertToViewOnly();
