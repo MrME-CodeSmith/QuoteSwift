@@ -68,6 +68,7 @@ namespace QuoteSwift // Repair Quote Swift
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
                     passed.PassPumpList.RemoveAt(iGridSelection);
+                    passed.RepairableItemNames.Remove(StringUtil.NormalizeKey(objPumpSelection.PumpName));
 
                     MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
                 }
