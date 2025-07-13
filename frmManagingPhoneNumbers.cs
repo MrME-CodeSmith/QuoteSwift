@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -247,11 +248,35 @@ namespace QuoteSwift
 
         private void SetNewNumber(string OldNumber, string NewNumber, BindingList<string> b)
         {
-            if (b != null)
+            if (b == null)
+                return;
+
+            // select the lookup collection maintained by the underlying object
+            HashSet<string> lookup = null;
+            if (passed.BusinessToChange != null)
             {
-                for (int i = 0; i < b.Count; i++)
+                if (ReferenceEquals(b, passed.BusinessToChange.BusinessTelephoneNumberList))
+                    lookup = passed.BusinessToChange.TelephoneNumbers;
+                else if (ReferenceEquals(b, passed.BusinessToChange.BusinessCellphoneNumberList))
+                    lookup = passed.BusinessToChange.CellphoneNumbers;
+            }
+            else if (passed.CustomerToChange != null)
+            {
+                if (ReferenceEquals(b, passed.CustomerToChange.CustomerTelephoneNumberList))
+                    lookup = passed.CustomerToChange.TelephoneNumbers;
+                else if (ReferenceEquals(b, passed.CustomerToChange.CustomerCellphoneNumberList))
+                    lookup = passed.CustomerToChange.CellphoneNumbers;
+            }
+
+            foreach (var number in b.ToList())
+            {
+                if (number == OldNumber)
                 {
-                    if (b[i] == OldNumber) b[i] = NewNumber;
+                    int index = b.IndexOf(number);
+                    if (index >= 0)
+                        b[index] = NewNumber;
+                    lookup?.Remove(OldNumber);
+                    lookup?.Add(NewNumber);
                     break;
                 }
             }
