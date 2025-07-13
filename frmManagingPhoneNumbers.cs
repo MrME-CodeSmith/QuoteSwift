@@ -34,7 +34,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
-                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.BusinessToChange.BusinessCellphoneNumberList);
+                passed.BusinessToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
@@ -46,7 +46,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
-                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.CustomerToChange.CustomerCellphoneNumberList);
+                passed.CustomerToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
@@ -64,7 +64,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
-                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.BusinessToChange.BusinessTelephoneNumberList);
+                passed.BusinessToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
@@ -76,7 +76,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
-                SetNewNumber(OldNumber, passed.PhoneNumberToChange, passed.CustomerToChange.CustomerTelephoneNumberList);
+                passed.CustomerToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
@@ -135,15 +135,15 @@ namespace QuoteSwift
                 {
                     if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
                     {
-                        passed.BusinessToChange.BusinessTelephoneNumberList.Remove(SelectedNumber);
+                        passed.BusinessToChange.RemoveTelephoneNumber(SelectedNumber);
                         MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-                        if (passed.BusinessToChange.BusinessTelephoneNumberList.Count == 0) passed.BusinessToChange.BusinessTelephoneNumberList = null;
+
                     }
                     else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
                     {
-                        passed.CustomerToChange.CustomerTelephoneNumberList.Remove(SelectedNumber);
+                        passed.CustomerToChange.RemoveTelephoneNumber(SelectedNumber);
                         MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-                        if (passed.CustomerToChange.CustomerTelephoneNumberList.Count == 0) passed.CustomerToChange.CustomerTelephoneNumberList = null;
+
                     }
 
                     LoadInformation();
@@ -162,15 +162,15 @@ namespace QuoteSwift
             {
                 if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
                 {
-                    passed.BusinessToChange.BusinessCellphoneNumberList.Remove(SelectedNumber);
+                    passed.BusinessToChange.RemoveCellphoneNumber(SelectedNumber);
                     MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-                    if (passed.BusinessToChange.BusinessCellphoneNumberList.Count == 0) passed.BusinessToChange.BusinessCellphoneNumberList = null;
+
                 }
                 else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
                 {
-                    passed.CustomerToChange.CustomerCellphoneNumberList.Remove(SelectedNumber);
+                    passed.CustomerToChange.RemoveCellphoneNumber(SelectedNumber);
                     MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-                    if (passed.CustomerToChange.CustomerCellphoneNumberList.Count == 0) passed.CustomerToChange.CustomerCellphoneNumberList = null;
+
                 }
 
                 LoadInformation();

@@ -182,5 +182,112 @@ namespace QuoteSwift
         public HashSet<string> CellphoneNumbers => mCellphoneNumbers;
         public HashSet<string> EmailAddresses => mEmailAddresses;
         public Dictionary<string, Customer> CustomerMap => mCustomerMap;
+
+        // helper methods to manage phone numbers and emails while keeping
+        // the lookup collections in sync
+        public void AddTelephoneNumber(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number)) return;
+            if (mBusinessTelephoneNumberList == null)
+                mBusinessTelephoneNumberList = new BindingList<string>();
+            if (mTelephoneNumbers.Add(number))
+                mBusinessTelephoneNumberList.Add(number);
+        }
+
+        public void RemoveTelephoneNumber(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number)) return;
+            if (mTelephoneNumbers.Remove(number))
+            {
+                mBusinessTelephoneNumberList?.Remove(number);
+                if (mBusinessTelephoneNumberList != null && mBusinessTelephoneNumberList.Count == 0)
+                    mBusinessTelephoneNumberList = null;
+            }
+        }
+
+        public void UpdateTelephoneNumber(string oldNumber, string newNumber)
+        {
+            if (string.IsNullOrWhiteSpace(oldNumber) || string.IsNullOrWhiteSpace(newNumber)) return;
+            if (mTelephoneNumbers.Remove(oldNumber))
+            {
+                mTelephoneNumbers.Add(newNumber);
+                if (mBusinessTelephoneNumberList != null)
+                {
+                    int index = mBusinessTelephoneNumberList.IndexOf(oldNumber);
+                    if (index >= 0)
+                        mBusinessTelephoneNumberList[index] = newNumber;
+                }
+            }
+        }
+
+        public void AddCellphoneNumber(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number)) return;
+            if (mBusinessCellphoneNumberList == null)
+                mBusinessCellphoneNumberList = new BindingList<string>();
+            if (mCellphoneNumbers.Add(number))
+                mBusinessCellphoneNumberList.Add(number);
+        }
+
+        public void RemoveCellphoneNumber(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number)) return;
+            if (mCellphoneNumbers.Remove(number))
+            {
+                mBusinessCellphoneNumberList?.Remove(number);
+                if (mBusinessCellphoneNumberList != null && mBusinessCellphoneNumberList.Count == 0)
+                    mBusinessCellphoneNumberList = null;
+            }
+        }
+
+        public void UpdateCellphoneNumber(string oldNumber, string newNumber)
+        {
+            if (string.IsNullOrWhiteSpace(oldNumber) || string.IsNullOrWhiteSpace(newNumber)) return;
+            if (mCellphoneNumbers.Remove(oldNumber))
+            {
+                mCellphoneNumbers.Add(newNumber);
+                if (mBusinessCellphoneNumberList != null)
+                {
+                    int index = mBusinessCellphoneNumberList.IndexOf(oldNumber);
+                    if (index >= 0)
+                        mBusinessCellphoneNumberList[index] = newNumber;
+                }
+            }
+        }
+
+        public void AddEmailAddress(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address)) return;
+            if (mBusinessEmailAddressList == null)
+                mBusinessEmailAddressList = new BindingList<string>();
+            if (mEmailAddresses.Add(address))
+                mBusinessEmailAddressList.Add(address);
+        }
+
+        public void RemoveEmailAddress(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address)) return;
+            if (mEmailAddresses.Remove(address))
+            {
+                mBusinessEmailAddressList?.Remove(address);
+                if (mBusinessEmailAddressList != null && mBusinessEmailAddressList.Count == 0)
+                    mBusinessEmailAddressList = null;
+            }
+        }
+
+        public void UpdateEmailAddress(string oldAddress, string newAddress)
+        {
+            if (string.IsNullOrWhiteSpace(oldAddress) || string.IsNullOrWhiteSpace(newAddress)) return;
+            if (mEmailAddresses.Remove(oldAddress))
+            {
+                mEmailAddresses.Add(newAddress);
+                if (mBusinessEmailAddressList != null)
+                {
+                    int index = mBusinessEmailAddressList.IndexOf(oldAddress);
+                    if (index >= 0)
+                        mBusinessEmailAddressList[index] = newAddress;
+                }
+            }
+        }
     }
 }

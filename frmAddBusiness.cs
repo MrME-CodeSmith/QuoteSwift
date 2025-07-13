@@ -133,8 +133,7 @@ namespace QuoteSwift
 
             if (mtxtTelephoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtTelephoneNumber.Text))
             {
-                Business.BusinessTelephoneNumberList.Add(mtxtTelephoneNumber.Text);
-                Business.TelephoneNumbers.Add(mtxtTelephoneNumber.Text);
+                Business.AddTelephoneNumber(mtxtTelephoneNumber.Text);
                 Added = true;
 
                 mtxtTelephoneNumber.ResetText();
@@ -142,8 +141,7 @@ namespace QuoteSwift
 
             if (mtxtCellphoneNumber.Text.Length > 10 && !PhoneNumberExisting(mtxtCellphoneNumber.Text))
             {
-                Business.BusinessCellphoneNumberList.Add(mtxtCellphoneNumber.Text);
-                Business.CellphoneNumbers.Add(mtxtCellphoneNumber.Text);
+                Business.AddCellphoneNumber(mtxtCellphoneNumber.Text);
                 Added = true;
 
                 mtxtCellphoneNumber.ResetText();
@@ -166,8 +164,7 @@ namespace QuoteSwift
             {
                 if (!EmailAddressExisting(mtxtEmail.Text))
                 {
-                    Business.BusinessEmailAddressList.Add(mtxtEmail.Text);
-                    Business.EmailAddresses.Add(mtxtEmail.Text);
+                    Business.AddEmailAddress(mtxtEmail.Text);
                     MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
 
                     mtxtEmail.ResetText();
