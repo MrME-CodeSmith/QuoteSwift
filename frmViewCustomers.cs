@@ -143,6 +143,13 @@ namespace QuoteSwift
         private bool ReplaceCustomer(Customer Original, Customer New, Business Container)
         {
             if (New != null && Original != null && Container != null && Container.BusinessCustomerList != null)
+            {
+                if (Container.CustomerMap.TryGetValue(New.CustomerCompanyName, out Customer existing) && existing != Original)
+                {
+                    MainProgramCode.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
+                    return false;
+                }
+
                 for (int i = 0; i < Container.BusinessCustomerList.Count; i++)
                     if (Container.BusinessCustomerList[i] == Original)
                     {
@@ -151,6 +158,7 @@ namespace QuoteSwift
                         Container.CustomerMap[New.CustomerCompanyName] = New;
                         return true;
                     }
+            }
 
             return false;
         }
