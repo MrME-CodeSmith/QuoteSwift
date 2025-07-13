@@ -152,6 +152,8 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
+                    if (Customer.CustomerPOBoxAddress == null)
+                        Customer.CustomerPOBoxAddress = new BindingList<Address>();
                     Customer.CustomerPOBoxAddress.Add(address);
                     Customer.POBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
                     MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
