@@ -7,14 +7,19 @@ namespace QuoteSwift
 {
     public partial class FrmViewCustomers : Form
     {
-        Pass passed;
+        readonly ViewCustomersViewModel viewModel;
 
-        public ref Pass Passed { get => ref passed; }
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
-        public FrmViewCustomers(ref Pass passed)
+        public FrmViewCustomers(ViewCustomersViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
+            passed = viewModel.Pass;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -62,6 +67,7 @@ namespace QuoteSwift
 
         private void FrmViewCustomers_Load(object sender, EventArgs e)
         {
+            viewModel.LoadData();
             LinkBusinessToSource(ref cbBusinessSelection);
 
             LoadInformation();
@@ -216,7 +222,9 @@ namespace QuoteSwift
 
         private void FrmViewCustomers_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true, ref passed);
+            var p = passed;
+            MainProgramCode.CloseApplication(true, ref p);
+            passed = p;
         }
 
         /**********************************************************************************/

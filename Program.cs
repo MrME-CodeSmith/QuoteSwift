@@ -11,10 +11,13 @@ namespace QuoteSwift
         [STAThread]
         static void Main()
         {
-            Pass passed = new Pass(null, null, null, null);
+            IDataService dataService = new FileDataService();
+            QuotesViewModel viewModel = new QuotesViewModel(dataService);
+            viewModel.LoadData();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmViewQuotes(ref passed));
+            Application.Run(new FrmViewQuotes(viewModel));
         }
     }
 }

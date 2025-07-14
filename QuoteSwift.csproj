@@ -226,6 +226,11 @@
       <DependentUpon>FrmViewQuotes.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="Services\IDataService.cs" />
+    <Compile Include="Services\FileDataService.cs" />
+    <Compile Include="ViewModels\QuotesViewModel.cs" />
+    <Compile Include="ViewModels\AddCustomerViewModel.cs" />
+    <Compile Include="ViewModels\ViewCustomersViewModel.cs" />
     <Compile Include="ExcelExporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmAddBusiness.resx">
