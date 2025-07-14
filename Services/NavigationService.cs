@@ -77,13 +77,13 @@ namespace QuoteSwift
         public void AddNewPart()
         {
             var vm = new AddPartViewModel(dataService);
-            vm.UpdatePass(Pass);
+            vm.UpdatePass(Pass.PassPartList, Pass.PassPumpList, Pass.PartToChange, Pass.ChangeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddPart(vm, this))
             {
+                form.SetPass(Pass);
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void AddCustomer()

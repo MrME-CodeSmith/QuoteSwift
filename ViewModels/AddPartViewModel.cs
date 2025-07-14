@@ -8,7 +8,10 @@ namespace QuoteSwift
     public class AddPartViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
+        Dictionary<string, Part> partMap;
+        BindingList<Pump> pumpList;
+        Part partToChange;
+        bool changeSpecificObject;
         BindingList<Part> parts;
         BindingList<Pump> pumps;
         Part currentPart;
@@ -20,13 +23,34 @@ namespace QuoteSwift
         public AddPartViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
             CurrentPart = new Part();
         }
 
         public IDataService DataService => dataService;
 
-        public Pass Pass => pass;
+        public Dictionary<string, Part> PartMap
+        {
+            get => partMap;
+            set => partMap = value;
+        }
+
+        public BindingList<Pump> PumpList
+        {
+            get => pumpList;
+            set => pumpList = value;
+        }
+
+        public Part PartToChange
+        {
+            get => partToChange;
+            set => partToChange = value;
+        }
+
+        public bool ChangeSpecificObject
+        {
+            get => changeSpecificObject;
+            set => changeSpecificObject = value;
+        }
 
         public BindingList<Part> Parts
         {
@@ -80,28 +104,30 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            pass.PassPartList = dataService.LoadPartList();
-            pass.PassPumpList = dataService.LoadPumpList();
-            Parts = new BindingList<Part>(pass.PassPartList?.Values.ToList() ?? new List<Part>());
-            Pumps = pass.PassPumpList;
-            CurrentPart = pass.PartToChange ?? new Part();
+            PartMap = dataService.LoadPartList();
+            PumpList = dataService.LoadPumpList();
+            Parts = new BindingList<Part>(PartMap?.Values.ToList() ?? new List<Part>());
+            Pumps = PumpList;
+            CurrentPart = PartToChange ?? new Part();
         }
 
-        public void UpdatePass(Pass newPass)
+        public void UpdatePass(Dictionary<string, Part> partMap,
+                               BindingList<Pump> pumpList,
+                               Part partToChange = null,
+                               bool changeSpecificObject = false)
         {
-            if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
-            Parts = new BindingList<Part>(pass.PassPartList?.Values.ToList() ?? new List<Part>());
-            Pumps = pass.PassPumpList;
-            CurrentPart = pass.PartToChange ?? new Part();
+            PartMap = partMap;
+            PumpList = pumpList;
+            PartToChange = partToChange;
+            ChangeSpecificObject = changeSpecificObject;
+            Parts = new BindingList<Part>(PartMap?.Values.ToList() ?? new List<Part>());
+            Pumps = PumpList;
+            CurrentPart = PartToChange ?? new Part();
         }
 
         public void Initialize()
         {
-            CurrentPart = pass.PartToChange ?? new Part();
+            CurrentPart = PartToChange ?? new Part();
         }
 
         public bool AddOrUpdatePart()
@@ -109,21 +135,21 @@ namespace QuoteSwift
             if (CurrentPart == null)
                 return false;
 
-            if (pass.ChangeSpecificObject && pass.PartToChange != null)
+            if (ChangeSpecificObject && PartToChange != null)
             {
-                Part before = new Part(pass.PartToChange);
+                Part before = new Part(PartToChange);
 
-                pass.PartToChange.PartName = CurrentPart.PartName;
-                pass.PartToChange.PartDescription = CurrentPart.PartDescription;
-                pass.PartToChange.OriginalItemPartNumber = CurrentPart.OriginalItemPartNumber;
-                pass.PartToChange.NewPartNumber = CurrentPart.NewPartNumber;
-                pass.PartToChange.PartPrice = CurrentPart.PartPrice;
-                pass.PartToChange.MandatoryPart = CurrentPart.MandatoryPart;
+                PartToChange.PartName = CurrentPart.PartName;
+                PartToChange.PartDescription = CurrentPart.PartDescription;
+                PartToChange.OriginalItemPartNumber = CurrentPart.OriginalItemPartNumber;
+                PartToChange.NewPartNumber = CurrentPart.NewPartNumber;
+                PartToChange.PartPrice = CurrentPart.PartPrice;
+                PartToChange.MandatoryPart = CurrentPart.MandatoryPart;
 
-                if (before.MandatoryPart && !pass.PartToChange.MandatoryPart)
-                    ChangeToNonMandatory(pass.PartToChange);
-                else if (!before.MandatoryPart && pass.PartToChange.MandatoryPart)
-                    ChangeToMandatory(pass.PartToChange);
+                if (before.MandatoryPart && !PartToChange.MandatoryPart)
+                    ChangeToNonMandatory(PartToChange);
+                else if (!before.MandatoryPart && PartToChange.MandatoryPart)
+                    ChangeToMandatory(PartToChange);
 
                 return true;
             }
@@ -132,10 +158,10 @@ namespace QuoteSwift
                 var newPart = new Part(CurrentPart);
                 if (!DistinctInput(newPart))
                     return false;
-                if (pass.PassPartList == null)
-                    pass.PassPartList = new Dictionary<string, Part>();
+                if (PartMap == null)
+                    PartMap = new Dictionary<string, Part>();
 
-                pass.AddPart(newPart);
+                AddPart(newPart);
                 Parts.Add(newPart);
 
                 if (SelectedPump != null)
@@ -161,18 +187,18 @@ namespace QuoteSwift
                         QuoteSwiftMainCode.ParseBoolean(readFields[6]),
                         QuoteSwiftMainCode.ParseDecimal(readFields[4]));
 
-                    Part old = pass.PartToChange;
-                    pass.PartToChange = newPart;
+                    Part old = PartToChange;
+                    PartToChange = newPart;
                     bool distinct = DistinctInput(newPart);
-                    pass.PartToChange = old;
+                    PartToChange = old;
 
-                    if (pass.PassPartList == null)
-                        pass.PassPartList = new Dictionary<string, Part>();
+                    if (PartMap == null)
+                        PartMap = new Dictionary<string, Part>();
 
                     Part partForPump = newPart;
                     if (distinct)
                     {
-                        pass.AddPart(newPart);
+                        AddPart(newPart);
                         Parts.Add(newPart);
                     }
                     else
@@ -182,8 +208,8 @@ namespace QuoteSwift
                         {
                             string oKey = StringUtil.NormalizeKey(newPart.OriginalItemPartNumber);
                             string nKey = StringUtil.NormalizeKey(newPart.NewPartNumber);
-                            if (pass.PassPartList.TryGetValue(oKey, out var data) ||
-                                pass.TryGetPartByNew(nKey, out data))
+                            if (PartMap.TryGetValue(oKey, out var data) ||
+                                TryGetPartByNew(nKey, out data))
                             {
                                 data.MandatoryPart = newPart.MandatoryPart;
                                 data.PartDescription = newPart.PartDescription;
@@ -196,12 +222,12 @@ namespace QuoteSwift
                     bool foundPump = false;
                     BindingList<Pump_Part> newPumpPartList = new BindingList<Pump_Part>();
 
-                    if (pass.PassPumpList != null)
+                    if (PumpList != null)
                     {
                         Pump newPump = new Pump(readFields[7], "",
                             QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref newPumpPartList);
                         Pump oldPump = null;
-                        foreach (var pump in pass.PassPumpList)
+                        foreach (var pump in PumpList)
                         {
                             if (StringUtil.NormalizeKey(pump.PumpName) == StringUtil.NormalizeKey(newPump.PumpName))
                             {
@@ -215,7 +241,7 @@ namespace QuoteSwift
                         {
                             newPumpPartList = new BindingList<Pump_Part> { new Pump_Part(partForPump, int.Parse(readFields[5])) };
                             newPump.PartList = newPumpPartList;
-                            pass.PassPumpList.Add(newPump);
+                            PumpList.Add(newPump);
                             Pumps.Add(newPump);
                         }
                         else
@@ -228,11 +254,11 @@ namespace QuoteSwift
                     else
                     {
                         newPumpPartList = new BindingList<Pump_Part> { new Pump_Part(partForPump, int.Parse(readFields[5])) };
-                        pass.PassPumpList = new BindingList<Pump>
+                        PumpList = new BindingList<Pump>
                         {
                             new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref newPumpPartList)
                         };
-                        Pumps = pass.PassPumpList;
+                        Pumps = PumpList;
                     }
                 }
             }
@@ -241,8 +267,7 @@ namespace QuoteSwift
         Part GetPartByOriginal(string originalNumber)
         {
             string key = StringUtil.NormalizeKey(originalNumber);
-            if (pass.PassPartList != null &&
-                pass.PassPartList.TryGetValue(key, out var part))
+            if (PartMap != null && PartMap.TryGetValue(key, out var part))
                 return part;
             return null;
         }
@@ -250,11 +275,11 @@ namespace QuoteSwift
         bool DistinctInput(Part part)
         {
             if (part == null) return false;
-            if (pass.PassPartList != null)
+            if (PartMap != null)
             {
                 string oKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
                 string nKey = StringUtil.NormalizeKey(part.NewPartNumber);
-                if (pass.PassPartList.ContainsKey(oKey) || pass.TryGetPartByNew(nKey, out _))
+                if (PartMap.ContainsKey(oKey) || TryGetPartByNew(nKey, out _))
                     return false;
             }
             return true;
@@ -276,6 +301,30 @@ namespace QuoteSwift
             {
                 switchPart.MandatoryPart = false;
                 return true;
+            }
+            return false;
+        }
+
+        void AddPart(Part part)
+        {
+            if (part == null) return;
+            if (PartMap == null) PartMap = new Dictionary<string, Part>();
+            string origKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
+            PartMap[origKey] = part;
+        }
+
+        bool TryGetPartByNew(string newNumber, out Part part)
+        {
+            part = null;
+            if (PartMap == null) return false;
+            string key = StringUtil.NormalizeKey(newNumber);
+            foreach (var p in PartMap.Values)
+            {
+                if (StringUtil.NormalizeKey(p.NewPartNumber) == key)
+                {
+                    part = p;
+                    return true;
+                }
             }
             return false;
         }
