@@ -9,7 +9,7 @@ namespace QuoteSwift
     public partial class FrmAddPump : Form
     {
         readonly AddPumpViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
         Pass passed
         {
@@ -19,7 +19,7 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null)
+        public FrmAddPump(AddPumpViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;

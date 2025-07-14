@@ -8,7 +8,7 @@ namespace QuoteSwift
     public partial class FrmViewCustomers : Form
     {
         readonly ViewCustomersViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
         Pass passed
         {
@@ -16,7 +16,7 @@ namespace QuoteSwift
             set => viewModel.UpdatePass(value);
         }
 
-        public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null)
+        public FrmViewCustomers(ViewCustomersViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;

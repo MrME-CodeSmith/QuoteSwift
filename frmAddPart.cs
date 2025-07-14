@@ -8,7 +8,7 @@ namespace QuoteSwift
     {
 
         readonly AddPartViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
         Pass passed
         {
@@ -18,7 +18,7 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null)
+        public FrmAddPart(AddPartViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
