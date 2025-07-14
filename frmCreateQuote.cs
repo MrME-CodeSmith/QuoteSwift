@@ -382,8 +382,16 @@ namespace QuoteSwift
 
         private void LoadComboBoxes()
         {
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(ref passed);
-            frmViewCustomers.LinkBusinessToSource(ref cbxBusinessSelection);
+            ViewCustomersViewModel vm = new ViewCustomersViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            vm.LoadData();
+            if (vm.Pass != null && vm.Pass.PassBusinessList != null)
+            {
+                BindingSource bs = new BindingSource { DataSource = vm.Pass.PassBusinessList };
+                cbxBusinessSelection.DataSource = bs.DataSource;
+                cbxBusinessSelection.DisplayMember = "BusinessName";
+                cbxBusinessSelection.ValueMember = "BusinessName";
+            }
 
             LinkBusinessTelephone(GetBusinessSelection(), ref cbxBusinessTelephoneNumberSelection);
             LinkBusinessCellphone(GetBusinessSelection(), ref cbxBusinessCellphoneNumberSelection);

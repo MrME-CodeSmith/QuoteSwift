@@ -10,6 +10,7 @@ namespace QuoteSwift
     {
 
         readonly AddPartViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -19,10 +20,11 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmAddPart(AddPartViewModel viewModel)
+        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

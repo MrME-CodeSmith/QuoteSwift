@@ -9,6 +9,7 @@ namespace QuoteSwift
     public partial class FrmAddPump : Form
     {
         readonly AddPumpViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -18,10 +19,11 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmAddPump(AddPumpViewModel viewModel)
+        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

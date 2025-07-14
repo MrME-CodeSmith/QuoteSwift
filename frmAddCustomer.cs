@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly AddCustomerViewModel viewModel;
+        readonly INavigationService navigation;
 
         Customer Customer;
 
@@ -20,10 +21,11 @@ namespace QuoteSwift
             set => viewModel.UpdatePass(value);
         }
 
-        public FrmAddCustomer(AddCustomerViewModel viewModel)
+        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
             Customer = viewModel.Pass.CustomerToChange;
         }
 
@@ -106,8 +108,13 @@ namespace QuoteSwift
             viewModel.LoadData();
             ViewCustomersViewModel vm = new ViewCustomersViewModel(viewModel.DataService);
             vm.LoadData();
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(vm);
-            frmViewCustomers.LinkBusinessToSource(ref cbBusinessSelection);
+            if (vm.Pass != null && vm.Pass.PassBusinessList != null)
+            {
+                BindingSource source = new BindingSource { DataSource = vm.Pass.PassBusinessList };
+                cbBusinessSelection.DataSource = source.DataSource;
+                cbBusinessSelection.DisplayMember = "BusinessName";
+                cbBusinessSelection.ValueMember = "BusinessName";
+            }
 
             if (passed.CustomerToChange != null && passed.ChangeSpecificObject) // Change Existing Customer Info
             {
@@ -205,7 +212,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPhoneNumbers(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesPhoneNumbers();
+                passed = navigation.Pass;
                 Show();
 
                 Customer = passed.CustomerToChange;
@@ -223,7 +232,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesPOBoxAddresses();
+                passed = navigation.Pass;
                 Show();
 
                 Customer = passed.CustomerToChange;
@@ -241,7 +252,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesEmailAddresses(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesEmailAddresses();
+                passed = navigation.Pass;
                 Show();
 
                 Customer = passed.CustomerToChange;
@@ -260,7 +273,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesAddresses(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesAddresses();
+                passed = navigation.Pass;
                 Show();
 
                 Customer = passed.CustomerToChange;

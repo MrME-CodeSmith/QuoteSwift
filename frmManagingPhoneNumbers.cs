@@ -11,6 +11,7 @@ namespace QuoteSwift
     {
 
         readonly ManagePhoneNumbersViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -20,10 +21,11 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel)
+        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,7 +42,9 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                navigation.Pass = passed;
+                navigation.EditPhoneNumber();
+                passed = navigation.Pass;
                 passed.BusinessToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
@@ -52,7 +56,9 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                navigation.Pass = passed;
+                navigation.EditPhoneNumber();
+                passed = navigation.Pass;
                 passed.CustomerToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
@@ -70,7 +76,9 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                navigation.Pass = passed;
+                navigation.EditPhoneNumber();
+                passed = navigation.Pass;
                 passed.BusinessToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
@@ -82,7 +90,9 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                passed = QuoteSwiftMainCode.EditPhoneNumber(ref passed);
+                navigation.Pass = passed;
+                navigation.EditPhoneNumber();
+                passed = navigation.Pass;
                 passed.CustomerToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";

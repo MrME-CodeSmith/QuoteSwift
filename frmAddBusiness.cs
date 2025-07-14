@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly AddBusinessViewModel viewModel;
+        readonly INavigationService navigation;
 
         Business Business;
 
@@ -18,10 +19,11 @@ namespace QuoteSwift
             set => viewModel.UpdatePass(value);
         }
 
-        public FrmAddBusiness(AddBusinessViewModel viewModel)
+        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
             Business = viewModel.Pass.BusinessToChange;
         }
 
@@ -184,7 +186,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesEmailAddresses(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesEmailAddresses();
+                passed = navigation.Pass;
                 Show();
 
                 Business = passed.BusinessToChange;
@@ -203,7 +207,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesAddresses(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesAddresses();
+                passed = navigation.Pass;
                 Show();
 
                 Business = passed.BusinessToChange;
@@ -221,7 +227,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPOBoxAddresses(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesPOBoxAddresses();
+                passed = navigation.Pass;
                 Show();
 
                 Business = passed.BusinessToChange;
@@ -239,7 +247,9 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                passed = QuoteSwiftMainCode.ViewBusinessesPhoneNumbers(ref passed);
+                navigation.Pass = passed;
+                navigation.ViewBusinessesPhoneNumbers();
+                passed = navigation.Pass;
                 Show();
 
                 Business = passed.BusinessToChange;

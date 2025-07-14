@@ -10,11 +10,13 @@ namespace QuoteSwift
     {
 
         readonly QuotesViewModel viewModel;
+        readonly INavigationService navigation;
 
-        public FrmViewQuotes(QuotesViewModel viewModel)
+        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void BtnCreateNewQuote_Click(object sender, EventArgs e)
@@ -22,9 +24,9 @@ namespace QuoteSwift
             if (viewModel.Pass != null && viewModel.Pass.PassBusinessList != null && viewModel.Pass.PassPumpList != null && viewModel.Pass.PassBusinessList[0].BusinessCustomerList != null)
             {
                 Hide();
-                var p = viewModel.Pass;
-                p = QuoteSwiftMainCode.CreateNewQuote(ref p);
-                viewModel.UpdatePass(p);
+                navigation.Pass = viewModel.Pass;
+                navigation.CreateNewQuote();
+                viewModel.UpdatePass(navigation.Pass);
                 try
                 {
                     Show();
@@ -56,9 +58,9 @@ namespace QuoteSwift
         private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.ViewAllPumps(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.ViewAllPumps();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();
@@ -72,9 +74,9 @@ namespace QuoteSwift
         private void CreateNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.CreateNewPump(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.CreateNewPump();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();
@@ -93,9 +95,9 @@ namespace QuoteSwift
         private void AddNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.AddCustomer(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.AddCustomer();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();
@@ -109,9 +111,9 @@ namespace QuoteSwift
         private void ViewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.ViewCustomers(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.ViewCustomers();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();
@@ -130,9 +132,9 @@ namespace QuoteSwift
         private void AddNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.AddBusiness(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.AddBusiness();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();
@@ -146,9 +148,9 @@ namespace QuoteSwift
         private void ViewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.ViewBusinesses(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.ViewBusinesses();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();
@@ -184,13 +186,13 @@ namespace QuoteSwift
                 if (selected != null)
                 {
                     Hide();
-                    var p = viewModel.Pass;
-                    p.QuoteTOChange = selected;
-                    p.ChangeSpecificObject = false;
-                    QuoteSwiftMainCode.CreateNewQuote(ref p);
-                    p.QuoteTOChange = null;
-                    p.ChangeSpecificObject = false;
-                    viewModel.UpdatePass(p);
+                    navigation.Pass = viewModel.Pass;
+                    navigation.Pass.QuoteTOChange = selected;
+                    navigation.Pass.ChangeSpecificObject = false;
+                    navigation.CreateNewQuote();
+                    navigation.Pass.QuoteTOChange = null;
+                    navigation.Pass.ChangeSpecificObject = false;
+                    viewModel.UpdatePass(navigation.Pass);
                     Show();
                 }
             }
@@ -204,13 +206,13 @@ namespace QuoteSwift
                 if (selected != null)
                 {
                     this.Hide();
-                    var p = viewModel.Pass;
-                    p.QuoteTOChange = selected;
-                    p.ChangeSpecificObject = true;
-                    QuoteSwiftMainCode.CreateNewQuote(ref p);
-                    p.QuoteTOChange = null;
-                    p.ChangeSpecificObject = false;
-                    viewModel.UpdatePass(p);
+                    navigation.Pass = viewModel.Pass;
+                    navigation.Pass.QuoteTOChange = selected;
+                    navigation.Pass.ChangeSpecificObject = true;
+                    navigation.CreateNewQuote();
+                    navigation.Pass.QuoteTOChange = null;
+                    navigation.Pass.ChangeSpecificObject = false;
+                    viewModel.UpdatePass(navigation.Pass);
                     this.Show();
                 }
             }
@@ -219,9 +221,9 @@ namespace QuoteSwift
         private void ViewAllPartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.ViewAllParts(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.ViewAllParts();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();
@@ -240,9 +242,9 @@ namespace QuoteSwift
         private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = viewModel.Pass;
-            p = QuoteSwiftMainCode.AddNewPart(ref p);
-            viewModel.UpdatePass(p);
+            navigation.Pass = viewModel.Pass;
+            navigation.AddNewPart();
+            viewModel.UpdatePass(navigation.Pass);
             try
             {
                 Show();

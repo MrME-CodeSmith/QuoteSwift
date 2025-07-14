@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly ViewBusinessesViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -18,10 +19,11 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel)
+        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -43,7 +45,9 @@ namespace QuoteSwift
 
             passed.BusinessToChange = Business;
             passed.ChangeSpecificObject = false;
-            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
+            navigation.Pass = passed;
+            navigation.AddBusiness();
+            passed = navigation.Pass;
 
             if (!ReplaceBusiness(Business, passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
 
@@ -57,7 +61,9 @@ namespace QuoteSwift
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
+            navigation.Pass = passed;
+            navigation.AddBusiness();
+            passed = navigation.Pass;
             Show();
 
             LoadInformation();
