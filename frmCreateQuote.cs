@@ -382,7 +382,7 @@ namespace QuoteSwift
 
         private void LoadComboBoxes()
         {
-            ViewCustomersViewModel vm = new ViewCustomersViewModel(new FileDataService());
+            ViewCustomersViewModel vm = new ViewCustomersViewModel(viewModel.DataService);
             vm.UpdatePass(passed);
             vm.LoadData();
             if (vm.Pass != null && vm.Pass.PassBusinessList != null)
