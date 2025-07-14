@@ -10,12 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Bogus">
-      <HintPath>..\QuoteSwift\packages\Bogus.33.0.2\lib\net40\Bogus.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>..\QuoteSwift\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows.Forms">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Windows.Forms.dll</HintPath>
     </Reference>

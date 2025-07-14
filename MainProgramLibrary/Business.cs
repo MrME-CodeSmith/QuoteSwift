@@ -28,13 +28,13 @@ namespace QuoteSwift
         {
             BusinessName = "";
             BusinessExtraInformation = "";
-            BusinessAddressList = new BindingList<Address>();
-            BusinessPOBoxAddressList = new BindingList<Address>();
+            mBusinessAddressList = new BindingList<Address>();
+            mBusinessPOBoxAddressList = new BindingList<Address>();
             BusinessLegalDetails = null;
-            BusinessTelephoneNumberList = new BindingList<string>();
-            BusinessCellphoneNumberList = new BindingList<string>();
-            BusinessEmailAddressList = new BindingList<string>();
-            BusinessCustomerList = new BindingList<Customer>();
+            mBusinessTelephoneNumberList = new BindingList<string>();
+            mBusinessCellphoneNumberList = new BindingList<string>();
+            mBusinessEmailAddressList = new BindingList<string>();
+            mBusinessCustomerList = new BindingList<Customer>();
 
             mAddressMap = new Dictionary<string, Address>();
             mPOBoxMap = new Dictionary<string, Address>();
@@ -53,24 +53,24 @@ namespace QuoteSwift
 
             if (b.mBusinessAddressList != null)
             {
-                BusinessAddressList = new BindingList<Address>();
+                mBusinessAddressList = new BindingList<Address>();
                 foreach (var a in b.mBusinessAddressList)
-                    BusinessAddressList.Add(new Address(a));
+                    mBusinessAddressList.Add(new Address(a));
             }
             else
             {
-                BusinessAddressList = null;
+                mBusinessAddressList = null;
             }
 
             if (b.mBusinessPOBoxAddressList != null)
             {
-                BusinessPOBoxAddressList = new BindingList<Address>();
+                mBusinessPOBoxAddressList = new BindingList<Address>();
                 foreach (var a in b.mBusinessPOBoxAddressList)
-                    BusinessPOBoxAddressList.Add(new Address(a));
+                    mBusinessPOBoxAddressList.Add(new Address(a));
             }
             else
             {
-                BusinessPOBoxAddressList = null;
+                mBusinessPOBoxAddressList = null;
             }
 
             BusinessLegalDetails = b.mBusinessLegalDetails != null
@@ -79,46 +79,46 @@ namespace QuoteSwift
 
             if (b.mBusinessTelephoneNumberList != null)
             {
-                BusinessTelephoneNumberList = new BindingList<string>();
+                mBusinessTelephoneNumberList = new BindingList<string>();
                 foreach (var n in b.mBusinessTelephoneNumberList)
-                    BusinessTelephoneNumberList.Add(n);
+                    mBusinessTelephoneNumberList.Add(n);
             }
             else
             {
-                BusinessTelephoneNumberList = null;
+                mBusinessTelephoneNumberList = null;
             }
 
             if (b.mBusinessCellphoneNumberList != null)
             {
-                BusinessCellphoneNumberList = new BindingList<string>();
+                mBusinessCellphoneNumberList = new BindingList<string>();
                 foreach (var n in b.mBusinessCellphoneNumberList)
-                    BusinessCellphoneNumberList.Add(n);
+                    mBusinessCellphoneNumberList.Add(n);
             }
             else
             {
-                BusinessCellphoneNumberList = null;
+                mBusinessCellphoneNumberList = null;
             }
 
             if (b.mBusinessEmailAddressList != null)
             {
-                BusinessEmailAddressList = new BindingList<string>();
+                mBusinessEmailAddressList = new BindingList<string>();
                 foreach (var e in b.mBusinessEmailAddressList)
-                    BusinessEmailAddressList.Add(e);
+                    mBusinessEmailAddressList.Add(e);
             }
             else
             {
-                BusinessEmailAddressList = null;
+                mBusinessEmailAddressList = null;
             }
 
             if (b.mBusinessCustomerList != null)
             {
-                BusinessCustomerList = new BindingList<Customer>();
+                mBusinessCustomerList = new BindingList<Customer>();
                 foreach (var c in b.mBusinessCustomerList)
-                    BusinessCustomerList.Add(new Customer(c));
+                    mBusinessCustomerList.Add(new Customer(c));
             }
             else
             {
-                BusinessCustomerList = null;
+                mBusinessCustomerList = null;
             }
 
             mAddressMap = new Dictionary<string, Address>();
@@ -148,13 +148,13 @@ namespace QuoteSwift
         {
             BusinessName = mBusinessName;
             BusinessExtraInformation = mBusinessExtraInformation;
-            BusinessAddressList = mBusinessAddressList;
-            BusinessPOBoxAddressList = mBusinessPOBoxAddressList;
+            this.mBusinessAddressList = mBusinessAddressList;
+            this.mBusinessPOBoxAddressList = mBusinessPOBoxAddressList;
             BusinessLegalDetails = mBusinessLegalDetails;
-            BusinessTelephoneNumberList = mBusinessTelephoneNumberList;
-            BusinessCellphoneNumberList = mBusinessCellphoneNumberList;
-            BusinessEmailAddressList = mBusinessEmailAddressList;
-            BusinessCustomerList = mBusinessCustomerList;
+            this.mBusinessTelephoneNumberList = mBusinessTelephoneNumberList;
+            this.mBusinessCellphoneNumberList = mBusinessCellphoneNumberList;
+            this.mBusinessEmailAddressList = mBusinessEmailAddressList;
+            this.mBusinessCustomerList = mBusinessCustomerList;
 
             mAddressMap = new Dictionary<string, Address>();
             if (mBusinessAddressList != null)
