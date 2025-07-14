@@ -290,8 +290,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Content Include="BusinessList.json" />
-    <Content Include="MandatoryParts.json" />
-    <Content Include="NonMandatoryParts.json" />
+    <Content Include="Parts.json" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

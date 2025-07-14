@@ -77,35 +77,18 @@ namespace QuoteSwift
 
 
 
-                if (newPart.MandatoryPart)
-                {
-                    if (passed.PassMandatoryPartList != null)
-                        if (!DistinctInput(ref newPart))
-                            return;
+                if (passed.PassPartList != null)
+                    if (!DistinctInput(ref newPart))
+                        return;
 
-                    if (passed.PassMandatoryPartList == null)
-                        passed.PassMandatoryPartList = new Dictionary<string, Part>();
+                if (passed.PassPartList == null)
+                    passed.PassPartList = new Dictionary<string, Part>();
 
-                    passed.AddMandatoryPart(newPart);
-                    MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the mandatory part list.", "INFORMATION - Mandatory Part Added Success");
-
-                }
-                else //newPart is Non-Mandatory
-                {
-                    if (passed.PassNonMandatoryPartList != null)
-                        if (!DistinctInput(ref newPart))
-                            return;
-
-                    if (passed.PassNonMandatoryPartList != null)
-                        if (!DistinctInput(ref newPart))
-                            return;
-
-                    if (passed.PassNonMandatoryPartList == null)
-                        passed.PassNonMandatoryPartList = new Dictionary<string, Part>();
-
-                    passed.AddNonMandatoryPart(newPart);
-                    MainProgramCode.ShowInformation(newPart.PartName + " successfully added to the non-mandatory part list.", "INFORMATION - Non-Mandatory Part Added Success");
-                }
+                passed.AddPart(newPart);
+                string info = newPart.MandatoryPart ?
+                    " successfully added to the mandatory part list." :
+                    " successfully added to the non-mandatory part list.";
+                MainProgramCode.ShowInformation(newPart.PartName + info, "INFORMATION - Part Added Success");
 
 
                 if (cbAddToPumpSelection.SelectedIndex > -1)
@@ -176,32 +159,13 @@ namespace QuoteSwift
                                     string oKey = StringUtil.NormalizeKey(newPart.OriginalItemPartNumber);
                                     string nKey = StringUtil.NormalizeKey(newPart.NewPartNumber);
 
-                                    if (newPart.MandatoryPart)
+                                    if (passed.PassPartList.TryGetValue(oKey, out var data) ||
+                                        passed.TryGetPartByNew(nKey, out data))
                                     {
-                                        if (!passed.PassMandatoryPartList.TryGetValue(oKey, out var data))
-                                            passed.TryGetMandatoryPartByNew(nKey, out data);
-
-                                        if (data != null)
-                                        {
-                                            data.MandatoryPart = newPart.MandatoryPart;
-                                            data.PartDescription = newPart.PartDescription;
-                                            data.PartName = newPart.PartName;
-                                            data.PartPrice = newPart.PartPrice;
-                                        }
-                                    }
-
-                                    if (!newPart.MandatoryPart)
-                                    {
-                                        if (!passed.PassNonMandatoryPartList.TryGetValue(oKey, out var data))
-                                            passed.TryGetNonMandatoryPartByNew(nKey, out data);
-
-                                        if (data != null)
-                                        {
-                                            data.MandatoryPart = newPart.MandatoryPart;
-                                            data.PartDescription = newPart.PartDescription;
-                                            data.PartName = newPart.PartName;
-                                            data.PartPrice = newPart.PartPrice;
-                                        }
+                                        data.MandatoryPart = newPart.MandatoryPart;
+                                        data.PartDescription = newPart.PartDescription;
+                                        data.PartName = newPart.PartName;
+                                        data.PartPrice = newPart.PartPrice;
                                     }
 
                                 }
@@ -213,24 +177,16 @@ namespace QuoteSwift
                             return;
                         }
 
-                        if (passed.PassMandatoryPartList == null) passed.PassMandatoryPartList = new Dictionary<string, Part>();
-                        if (passed.PassNonMandatoryPartList == null) passed.PassNonMandatoryPartList = new Dictionary<string, Part>();
+                        if (passed.PassPartList == null) passed.PassPartList = new Dictionary<string, Part>();
 
 
                         Part partForPump = newPart;
                         bool partIsDistinct = newPart != null && DistinctInput(ref newPart);
 
-                        if (newPart != null && newPart.MandatoryPart)
+                        if (newPart != null)
                         {
                             if (partIsDistinct)
-                                passed.AddMandatoryPart(newPart);
-                            else
-                                partForPump = GetPartByOriginal(newPart.OriginalItemPartNumber) ?? newPart;
-                        }
-                        else if (newPart != null)
-                        {
-                            if (partIsDistinct)
-                                passed.AddNonMandatoryPart(newPart);
+                                passed.AddPart(newPart);
                             else
                                 partForPump = GetPartByOriginal(newPart.OriginalItemPartNumber) ?? newPart;
                         }
@@ -401,8 +357,7 @@ namespace QuoteSwift
         {
             if (SwitchPart != null)
             {
-                passed.AddMandatoryPart(SwitchPart);
-                passed.RemoveNonMandatoryPart(SwitchPart);
+                SwitchPart.MandatoryPart = true;
                 return true;
             }
             return false;
@@ -412,8 +367,7 @@ namespace QuoteSwift
         {
             if (SwitchPart != null)
             {
-                passed.AddNonMandatoryPart(SwitchPart);
-                passed.RemoveMandatoryPart(SwitchPart);
+                SwitchPart.MandatoryPart = false;
                 return true;
             }
             return false;
@@ -423,27 +377,13 @@ namespace QuoteSwift
 
         private bool DistinctInput(ref Part part)
         {
-            if (part != null && part.MandatoryPart)
+            if (part != null)
             {
-                if (passed.PassMandatoryPartList != null)
+                if (passed.PassPartList != null)
                 {
                     string oKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
                     string nKey = StringUtil.NormalizeKey(part.NewPartNumber);
-                    if (passed.PassMandatoryPartList.ContainsKey(oKey) || passed.TryGetMandatoryPartByNew(nKey, out _))
-                    {
-                        if (passed.PartToChange == null)
-                            MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
-                        return false;
-                    }
-                }
-            }
-            else if (part != null) // Part is NON-Mandatory
-            {
-                if (passed.PassNonMandatoryPartList != null)
-                {
-                    string oKey = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
-                    string nKey = StringUtil.NormalizeKey(part.NewPartNumber);
-                    if (passed.PassNonMandatoryPartList.ContainsKey(oKey) || passed.TryGetNonMandatoryPartByNew(nKey, out _))
+                    if (passed.PassPartList.ContainsKey(oKey) || passed.TryGetPartByNew(nKey, out _))
                     {
                         if (passed.PartToChange == null)
                             MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
@@ -517,11 +457,8 @@ namespace QuoteSwift
         private Part GetPartByOriginal(string originalNumber)
         {
             string key = StringUtil.NormalizeKey(originalNumber);
-            if (passed.PassMandatoryPartList != null &&
-                passed.PassMandatoryPartList.TryGetValue(key, out var part))
-                return part;
-            if (passed.PassNonMandatoryPartList != null &&
-                passed.PassNonMandatoryPartList.TryGetValue(key, out part))
+            if (passed.PassPartList != null &&
+                passed.PassPartList.TryGetValue(key, out var part))
                 return part;
             return null;
         }

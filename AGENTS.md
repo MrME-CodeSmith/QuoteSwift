@@ -6,7 +6,7 @@ This repository contains **QuoteSwift**, a Windows Forms application built with 
 - **QuoteSwift.sln** – Visual Studio solution including the main WinForms app and supporting class library (`MainProgramLibrary`).
 - **MainProgramLibrary/** – Core business classes (Quote, Pump, Business, etc.).
 - **Controls/** – Custom user controls, e.g. `NumericTextBox`.
-- JSON files such as `BusinessList.json`, `MandatoryParts.json` and `NonMandatoryParts.json` hold data used by the application.
+- JSON files such as `BusinessList.json`, `Parts.json` and `PumpList.json` hold data used by the application.
 
 ## Building
 1. Open the solution in Visual Studio (2019 or newer) **or** from a Developer Command Prompt run:
