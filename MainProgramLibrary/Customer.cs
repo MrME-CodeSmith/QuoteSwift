@@ -127,73 +127,89 @@ namespace QuoteSwift
 
         public string CustomerName { get => mCustomerName; set => mCustomerName = value; }
         public string CustomerCompanyName { get => mCustomerCompanyName; set => mCustomerCompanyName = value; }
-        public BindingList<Address> CustomerPOBoxAddress
-        {
-            get => mCustomerPOBoxAddress;
-            set
-            {
-                mCustomerPOBoxAddress = value;
-                mPOBoxMap?.Clear();
-                if (mCustomerPOBoxAddress != null)
-                    foreach (var a in mCustomerPOBoxAddress)
-                        mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
-        public BindingList<Address> CustomerDeliveryAddressList
-        {
-            get => mCustomerDeliveryAddressList;
-            set
-            {
-                mCustomerDeliveryAddressList = value;
-                mDeliveryAddressMap?.Clear();
-                if (mCustomerDeliveryAddressList != null)
-                    foreach (var a in mCustomerDeliveryAddressList)
-                        mDeliveryAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
+        public IReadOnlyList<Address> CustomerPOBoxAddress => mCustomerPOBoxAddress;
+        public IReadOnlyList<Address> CustomerDeliveryAddressList => mCustomerDeliveryAddressList;
         public Legal CustomerLegalDetails { get => mCustomerLegalDetails; set => mCustomerLegalDetails = value; }
-        public BindingList<string> CustomerTelephoneNumberList
-        {
-            get => mCustomerTelephoneNumberList;
-            set
-            {
-                mCustomerTelephoneNumberList = value;
-                mTelephoneNumbers?.Clear();
-                if (mCustomerTelephoneNumberList != null)
-                    foreach (var n in mCustomerTelephoneNumberList)
-                        mTelephoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> CustomerCellphoneNumberList
-        {
-            get => mCustomerCellphoneNumberList;
-            set
-            {
-                mCustomerCellphoneNumberList = value;
-                mCellphoneNumbers?.Clear();
-                if (mCustomerCellphoneNumberList != null)
-                    foreach (var n in mCustomerCellphoneNumberList)
-                        mCellphoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> CustomerEmailList
-        {
-            get => mCustomerEmailList;
-            set
-            {
-                mCustomerEmailList = value;
-                mEmailAddresses?.Clear();
-                if (mCustomerEmailList != null)
-                    foreach (var e in mCustomerEmailList)
-                        mEmailAddresses.Add(e);
-            }
-        }
+        public IReadOnlyList<string> CustomerTelephoneNumberList => mCustomerTelephoneNumberList;
+        public IReadOnlyList<string> CustomerCellphoneNumberList => mCustomerCellphoneNumberList;
+        public IReadOnlyList<string> CustomerEmailList => mCustomerEmailList;
         public string VendorNumber { get => mVendorNumber; set => mVendorNumber = value; }
         public Dictionary<string, Address> DeliveryAddressMap => mDeliveryAddressMap;
         public Dictionary<string, Address> POBoxMap => mPOBoxMap;
         public HashSet<string> TelephoneNumbers => mTelephoneNumbers;
         public HashSet<string> CellphoneNumbers => mCellphoneNumbers;
         public HashSet<string> EmailAddresses => mEmailAddresses;
+
+        // helper methods to manage addresses while keeping the lookup collections in sync
+        public void AddDeliveryAddress(Address address)
+        {
+            if (address == null) return;
+            if (mCustomerDeliveryAddressList == null)
+                mCustomerDeliveryAddressList = new BindingList<Address>();
+            mCustomerDeliveryAddressList.Add(address);
+            mDeliveryAddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemoveDeliveryAddress(Address address)
+        {
+            if (address == null) return;
+            if (mCustomerDeliveryAddressList != null && mCustomerDeliveryAddressList.Remove(address))
+            {
+                mDeliveryAddressMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+                if (mCustomerDeliveryAddressList.Count == 0)
+                    mCustomerDeliveryAddressList = null;
+            }
+        }
+
+        public void UpdateDeliveryAddress(Address original, Address updated)
+        {
+            if (original == null || updated == null) return;
+            if (mCustomerDeliveryAddressList != null)
+            {
+                int index = mCustomerDeliveryAddressList.IndexOf(original);
+                if (index >= 0)
+                {
+                    mCustomerDeliveryAddressList[index] = updated;
+                    mDeliveryAddressMap.Remove(StringUtil.NormalizeKey(original.AddressDescription));
+                    mDeliveryAddressMap[StringUtil.NormalizeKey(updated.AddressDescription)] = updated;
+                }
+            }
+        }
+
+        public void AddPOBoxAddress(Address address)
+        {
+            if (address == null) return;
+            if (mCustomerPOBoxAddress == null)
+                mCustomerPOBoxAddress = new BindingList<Address>();
+            mCustomerPOBoxAddress.Add(address);
+            mPOBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemovePOBoxAddress(Address address)
+        {
+            if (address == null) return;
+            if (mCustomerPOBoxAddress != null && mCustomerPOBoxAddress.Remove(address))
+            {
+                mPOBoxMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+                if (mCustomerPOBoxAddress.Count == 0)
+                    mCustomerPOBoxAddress = null;
+            }
+        }
+
+        public void UpdatePOBoxAddress(Address original, Address updated)
+        {
+            if (original == null || updated == null) return;
+            if (mCustomerPOBoxAddress != null)
+            {
+                int index = mCustomerPOBoxAddress.IndexOf(original);
+                if (index >= 0)
+                {
+                    mCustomerPOBoxAddress[index] = updated;
+                    mPOBoxMap.Remove(StringUtil.NormalizeKey(original.AddressDescription));
+                    mPOBoxMap[StringUtil.NormalizeKey(updated.AddressDescription)] = updated;
+                }
+            }
+        }
 
         // helper methods to manage phone numbers and emails while keeping
         // the lookup collections in sync

@@ -178,85 +178,126 @@ namespace QuoteSwift
 
         public string BusinessName { get => mBusinessName; set => mBusinessName = value; }
         public string BusinessExtraInformation { get => mBusinessExtraInformation; set => mBusinessExtraInformation = value; }
-        public BindingList<Address> BusinessAddressList
-        {
-            get => mBusinessAddressList;
-            set
-            {
-                mBusinessAddressList = value;
-                mAddressMap?.Clear();
-                if (mBusinessAddressList != null)
-                    foreach (var a in mBusinessAddressList)
-                        mAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
-        public BindingList<Address> BusinessPOBoxAddressList
-        {
-            get => mBusinessPOBoxAddressList;
-            set
-            {
-                mBusinessPOBoxAddressList = value;
-                mPOBoxMap?.Clear();
-                if (mBusinessPOBoxAddressList != null)
-                    foreach (var a in mBusinessPOBoxAddressList)
-                        mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
+        public IReadOnlyList<Address> BusinessAddressList => mBusinessAddressList;
+        public IReadOnlyList<Address> BusinessPOBoxAddressList => mBusinessPOBoxAddressList;
         public Legal BusinessLegalDetails { get => mBusinessLegalDetails; set => mBusinessLegalDetails = value; }
-        public BindingList<string> BusinessTelephoneNumberList
-        {
-            get => mBusinessTelephoneNumberList;
-            set
-            {
-                mBusinessTelephoneNumberList = value;
-                mTelephoneNumbers?.Clear();
-                if (mBusinessTelephoneNumberList != null)
-                    foreach (var n in mBusinessTelephoneNumberList)
-                        mTelephoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> BusinessCellphoneNumberList
-        {
-            get => mBusinessCellphoneNumberList;
-            set
-            {
-                mBusinessCellphoneNumberList = value;
-                mCellphoneNumbers?.Clear();
-                if (mBusinessCellphoneNumberList != null)
-                    foreach (var n in mBusinessCellphoneNumberList)
-                        mCellphoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> BusinessEmailAddressList
-        {
-            get => mBusinessEmailAddressList;
-            set
-            {
-                mBusinessEmailAddressList = value;
-                mEmailAddresses?.Clear();
-                if (mBusinessEmailAddressList != null)
-                    foreach (var e in mBusinessEmailAddressList)
-                        mEmailAddresses.Add(e);
-            }
-        }
-        public BindingList<Customer> BusinessCustomerList
-        {
-            get => mBusinessCustomerList;
-            set
-            {
-                mBusinessCustomerList = value;
-                mCustomerMap?.Clear();
-                if (mBusinessCustomerList != null)
-                    foreach (var c in mBusinessCustomerList)
-                        mCustomerMap[c.CustomerCompanyName] = c;
-            }
-        }
+        public IReadOnlyList<string> BusinessTelephoneNumberList => mBusinessTelephoneNumberList;
+        public IReadOnlyList<string> BusinessCellphoneNumberList => mBusinessCellphoneNumberList;
+        public IReadOnlyList<string> BusinessEmailAddressList => mBusinessEmailAddressList;
+        public IReadOnlyList<Customer> BusinessCustomerList => mBusinessCustomerList;
         public Dictionary<string, Address> AddressMap => mAddressMap;
         public Dictionary<string, Address> POBoxMap => mPOBoxMap;
         public HashSet<string> TelephoneNumbers => mTelephoneNumbers;
         public HashSet<string> CellphoneNumbers => mCellphoneNumbers;
         public HashSet<string> EmailAddresses => mEmailAddresses;
         public Dictionary<string, Customer> CustomerMap => mCustomerMap;
+
+        // helper methods to manage addresses and customers while keeping
+        // the lookup collections in sync
+        public void AddAddress(Address address)
+        {
+            if (address == null) return;
+            if (mBusinessAddressList == null)
+                mBusinessAddressList = new BindingList<Address>();
+            mBusinessAddressList.Add(address);
+            mAddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemoveAddress(Address address)
+        {
+            if (address == null) return;
+            if (mBusinessAddressList != null && mBusinessAddressList.Remove(address))
+            {
+                mAddressMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+                if (mBusinessAddressList.Count == 0)
+                    mBusinessAddressList = null;
+            }
+        }
+
+        public void UpdateAddress(Address original, Address updated)
+        {
+            if (original == null || updated == null) return;
+            if (mBusinessAddressList != null)
+            {
+                int index = mBusinessAddressList.IndexOf(original);
+                if (index >= 0)
+                {
+                    mBusinessAddressList[index] = updated;
+                    mAddressMap.Remove(StringUtil.NormalizeKey(original.AddressDescription));
+                    mAddressMap[StringUtil.NormalizeKey(updated.AddressDescription)] = updated;
+                }
+            }
+        }
+
+        public void AddPOBoxAddress(Address address)
+        {
+            if (address == null) return;
+            if (mBusinessPOBoxAddressList == null)
+                mBusinessPOBoxAddressList = new BindingList<Address>();
+            mBusinessPOBoxAddressList.Add(address);
+            mPOBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemovePOBoxAddress(Address address)
+        {
+            if (address == null) return;
+            if (mBusinessPOBoxAddressList != null && mBusinessPOBoxAddressList.Remove(address))
+            {
+                mPOBoxMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+                if (mBusinessPOBoxAddressList.Count == 0)
+                    mBusinessPOBoxAddressList = null;
+            }
+        }
+
+        public void UpdatePOBoxAddress(Address original, Address updated)
+        {
+            if (original == null || updated == null) return;
+            if (mBusinessPOBoxAddressList != null)
+            {
+                int index = mBusinessPOBoxAddressList.IndexOf(original);
+                if (index >= 0)
+                {
+                    mBusinessPOBoxAddressList[index] = updated;
+                    mPOBoxMap.Remove(StringUtil.NormalizeKey(original.AddressDescription));
+                    mPOBoxMap[StringUtil.NormalizeKey(updated.AddressDescription)] = updated;
+                }
+            }
+        }
+
+        public void AddCustomer(Customer customer)
+        {
+            if (customer == null) return;
+            if (mBusinessCustomerList == null)
+                mBusinessCustomerList = new BindingList<Customer>();
+            mBusinessCustomerList.Add(customer);
+            mCustomerMap[customer.CustomerCompanyName] = customer;
+        }
+
+        public void RemoveCustomer(Customer customer)
+        {
+            if (customer == null) return;
+            if (mBusinessCustomerList != null && mBusinessCustomerList.Remove(customer))
+            {
+                mCustomerMap.Remove(customer.CustomerCompanyName);
+                if (mBusinessCustomerList.Count == 0)
+                    mBusinessCustomerList = null;
+            }
+        }
+
+        public void UpdateCustomer(Customer original, Customer updated)
+        {
+            if (original == null || updated == null) return;
+            if (mBusinessCustomerList != null)
+            {
+                int index = mBusinessCustomerList.IndexOf(original);
+                if (index >= 0)
+                {
+                    mBusinessCustomerList[index] = updated;
+                    mCustomerMap.Remove(original.CustomerCompanyName);
+                    mCustomerMap[updated.CustomerCompanyName] = updated;
+                }
+            }
+        }
 
         // helper methods to manage phone numbers and emails while keeping
         // the lookup collections in sync
