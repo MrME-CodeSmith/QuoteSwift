@@ -197,10 +197,10 @@ namespace QuoteSwift
         public static ref Pass AddNewPart(ref Pass passed)
         {
             var vm = new AddPartViewModel(new FileDataService());
-            vm.UpdatePass(passed);
+            vm.UpdatePass(passed.PassPartList, passed.PassPumpList, passed.PartToChange, passed.ChangeSpecificObject);
             FrmAddPart frmAddPart = new FrmAddPart(vm, null);
+            frmAddPart.SetPass(passed);
             frmAddPart.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 

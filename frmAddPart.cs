@@ -10,13 +10,16 @@ namespace QuoteSwift
         readonly AddPartViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
+        Pass passed;
 
         public ref Pass Passed { get => ref passed; }
+
+        public void SetPass(Pass value)
+        {
+            passed = value;
+            if (value != null)
+                viewModel.UpdatePass(value.PassPartList, value.PassPumpList, value.PartToChange, value.ChangeSpecificObject);
+        }
 
         public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null)
         {
