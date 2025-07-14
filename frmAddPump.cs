@@ -11,13 +11,18 @@ namespace QuoteSwift
         readonly AddPumpViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
+        Pass passed;
+
+        public ref Pass Passed
         {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
+            get => ref passed;
         }
 
-        public ref Pass Passed { get => ref passed; }
+        public void SetPass(Pass value)
+        {
+            passed = value;
+            viewModel.UpdatePass(value);
+        }
 
         public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null)
         {
