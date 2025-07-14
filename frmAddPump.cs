@@ -34,59 +34,49 @@ namespace QuoteSwift
 
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
-            //When done Editing / Adding a pump, all mandatory parts need to be added first to the part list
-            //This is for the for loop when the form gets activated to work correctly.
+            if (!ValidInput())
+                return;
 
-            if (ValidInput())
+            BindingList<Pump_Part> newPumpParts = RetreivePumpPartList();
+
+            if (newPumpParts == null)
             {
-                BindingList<Pump_Part> NewPumpParts = RetreivePumpPartList();
-
-                if (NewPumpParts == null)
-                {
-                    MainProgramCode.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.", "ERROR - No Pump Part Selection");
-                    return;
-                }
-
-                string normalizedName = StringUtil.NormalizeKey(mtxtPumpName.Text);
-
-                if (passed.ChangeSpecificObject) // Update Part List if true
-                {
-                    string oldName = StringUtil.NormalizeKey(passed.PumpToChange.PumpName);
-                    if (passed.RepairableItemNames.Contains(normalizedName) && normalizedName != oldName)
-                    {
-                        MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
-                        return;
-                    }
-
-                    RecordNewInformation();
-                    passed.RepairableItemNames.Remove(oldName);
-                    passed.RepairableItemNames.Add(normalizedName);
-                    MainProgramCode.ShowInformation(passed.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
-
-                    //Set ChangeSpecificObject to false and convert to View
-
-                    passed.ChangeSpecificObject = false;
-                    ConvertToViewForm();
-
-                    //Enable menu strip item that converts form to Update a pump 
-                    updatePumpToolStripMenuItem.Enabled = true;
-                }
-                else //Create New Pump And Add To Pump List
-                {
-                    if (passed.RepairableItemNames.Contains(normalizedName))
-                    {
-                        MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
-                        return;
-                    }
-
-                    Pump newPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, QuoteSwiftMainCode.ParseDecimal(mtxtNewPumpPrice.Text), ref NewPumpParts);
-                    if (passed.PassPumpList == null) passed.PassPumpList = new BindingList<Pump> { newPump }; else passed.PassPumpList.Add(newPump);
-                    passed.RepairableItemNames.Add(normalizedName);
-                    MainProgramCode.ShowInformation(newPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
-                }
+                MainProgramCode.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.", "ERROR - No Pump Part Selection");
+                return;
             }
 
+            viewModel.CurrentPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, QuoteSwiftMainCode.ParseDecimal(mtxtNewPumpPrice.Text), ref newPumpParts);
+
+            bool result;
+            if (passed.ChangeSpecificObject)
+            {
+                result = viewModel.UpdatePump();
+                if (result)
+                {
+                    MainProgramCode.ShowInformation(passed.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
+                    passed.ChangeSpecificObject = false;
+                    ConvertToViewForm();
+                    updatePumpToolStripMenuItem.Enabled = true;
+                }
+                else
+                {
+                    MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
+                }
+            }
+            else
+            {
+                result = viewModel.AddPump();
+                if (result)
+                {
+                    MainProgramCode.ShowInformation(viewModel.CurrentPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
+                }
+                else
+                {
+                    MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
+                }
+            }
         }
+
 
         private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
