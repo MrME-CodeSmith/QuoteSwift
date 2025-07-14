@@ -96,12 +96,8 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
-                    if (Business.BusinessPOBoxAddressList == null)
-                        Business.BusinessPOBoxAddressList = new BindingList<Address>();
-                    Business.BusinessPOBoxAddressList.Add(address);
+                    Business.AddPOBoxAddress(address);
                     MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
-
-                    Business.POBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
 
                     ClearPOBoxAddressInput();
                 }
@@ -116,10 +112,7 @@ namespace QuoteSwift
                                               txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
                 if (!AddressExisting(address))
                 {
-                    if (Business.BusinessAddressList == null)
-                        Business.BusinessAddressList = new BindingList<Address>();
-                    Business.BusinessAddressList.Add(address);
-                    Business.AddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+                    Business.AddAddress(address);
                     MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
 
                     ClearBusinessAddressInput();

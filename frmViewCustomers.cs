@@ -79,11 +79,8 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?", "REQUEST - Deletion Request"))
                 {
-                    container.BusinessCustomerList.Remove(customer);
-                    container.CustomerMap.Remove(customer.CustomerCompanyName);
+                    container.RemoveCustomer(customer);
                     MainProgramCode.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
-
-                    if (container.BusinessCustomerList.Count == 0) container.BusinessCustomerList = null;
 
                     LoadInformation();
                 }
@@ -150,14 +147,8 @@ namespace QuoteSwift
                     return false;
                 }
 
-                for (int i = 0; i < Container.BusinessCustomerList.Count; i++)
-                    if (Container.BusinessCustomerList[i] == Original)
-                    {
-                        Container.BusinessCustomerList[i] = New;
-                        Container.CustomerMap.Remove(Original.CustomerCompanyName);
-                        Container.CustomerMap[New.CustomerCompanyName] = New;
-                        return true;
-                    }
+                Container.UpdateCustomer(Original, New);
+                return true;
             }
 
             return false;

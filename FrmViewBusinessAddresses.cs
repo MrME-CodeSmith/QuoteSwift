@@ -92,15 +92,13 @@ namespace QuoteSwift
                 {
                     if (passed.BusinessToChange != null && passed.CustomerToChange == null)
                     {
-                        passed.BusinessToChange.BusinessAddressList.Remove(SelectedAddress);
+                        passed.BusinessToChange.RemoveAddress(SelectedAddress);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
-                        if (passed.BusinessToChange.BusinessAddressList.Count == 0) passed.BusinessToChange.BusinessAddressList = null;
                     }
                     else if (passed.BusinessToChange == null && passed.CustomerToChange != null)
                     {
-                        passed.CustomerToChange.CustomerDeliveryAddressList.Remove(SelectedAddress);
+                        passed.CustomerToChange.RemoveDeliveryAddress(SelectedAddress);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
-                        if (passed.CustomerToChange.CustomerDeliveryAddressList.Count == 0) passed.CustomerToChange.CustomerDeliveryAddressList = null;
                     }
 
                     LoadInformation();
@@ -162,23 +160,17 @@ namespace QuoteSwift
 
         private bool ReplacePOBoxAddress(Address Original, Address New)
         {
-            if (passed != null && passed.BusinessToChange != null)
-                if (New != null && Original != null && passed.BusinessToChange.BusinessAddressList != null)
-                    for (int i = 0; i < passed.BusinessToChange.BusinessAddressList.Count; i++)
-                        if (passed.BusinessToChange.BusinessAddressList[i] == Original)
-                        {
-                            passed.BusinessToChange.BusinessAddressList[i] = New;
-                            return true;
-                        }
+            if (passed != null && passed.BusinessToChange != null && New != null && Original != null)
+            {
+                passed.BusinessToChange.UpdateAddress(Original, New);
+                return true;
+            }
 
-            if (passed != null && passed.CustomerToChange != null)
-                if (New != null && Original != null && passed.CustomerToChange.CustomerDeliveryAddressList != null)
-                    for (int i = 0; i < passed.CustomerToChange.CustomerDeliveryAddressList.Count; i++)
-                        if (passed.CustomerToChange.CustomerDeliveryAddressList[i] == Original)
-                        {
-                            passed.CustomerToChange.CustomerDeliveryAddressList[i] = New;
-                            return true;
-                        }
+            if (passed != null && passed.CustomerToChange != null && New != null && Original != null)
+            {
+                passed.CustomerToChange.UpdateDeliveryAddress(Original, New);
+                return true;
+            }
 
             return false;
         }
