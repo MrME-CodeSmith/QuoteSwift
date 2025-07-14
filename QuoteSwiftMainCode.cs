@@ -141,7 +141,7 @@ namespace QuoteSwift
             vm.UpdatePass(passed);
             FrmViewQuotes frmViewQuotes = new FrmViewQuotes(vm, null);
             frmViewQuotes.ShowDialog();
-            passed = vm.Pass;
+            passed = new Pass(vm.QuoteMap, vm.BusinessList, vm.PumpList, vm.PartMap);
             return ref passed;
         }
 

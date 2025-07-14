@@ -35,7 +35,7 @@ namespace QuoteSwift
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
+            Pass = new Pass(vm.QuoteMap, vm.BusinessList, vm.PumpList, vm.PartMap);
         }
 
         public void ViewAllPumps()
