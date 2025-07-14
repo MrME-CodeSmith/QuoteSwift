@@ -6,6 +6,9 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly Pass pass;
+        BindingList<Business> businessList;
+        Customer customerToChange;
+        bool changeSpecificObject;
         Customer currentCustomer;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -21,6 +24,36 @@ namespace QuoteSwift
 
         public Pass Pass => pass;
 
+        public BindingList<Business> BusinessList
+        {
+            get => businessList;
+            private set
+            {
+                businessList = value;
+                OnPropertyChanged(nameof(BusinessList));
+            }
+        }
+
+        public Customer CustomerToChange
+        {
+            get => customerToChange;
+            set
+            {
+                customerToChange = value;
+                OnPropertyChanged(nameof(CustomerToChange));
+            }
+        }
+
+        public bool ChangeSpecificObject
+        {
+            get => changeSpecificObject;
+            set
+            {
+                changeSpecificObject = value;
+                OnPropertyChanged(nameof(ChangeSpecificObject));
+            }
+        }
+
         public Customer CurrentCustomer
         {
             get => currentCustomer;
@@ -33,7 +66,7 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            pass.PassBusinessList = dataService.LoadBusinessList();
+            BusinessList = dataService.LoadBusinessList();
         }
 
         public void UpdatePass(Pass newPass)
@@ -43,6 +76,10 @@ namespace QuoteSwift
             pass.PassBusinessList = newPass.PassBusinessList;
             pass.PassPartList = newPass.PassPartList;
             pass.PassPumpList = newPass.PassPumpList;
+
+            BusinessList = newPass.PassBusinessList;
+            CustomerToChange = newPass.CustomerToChange;
+            ChangeSpecificObject = newPass.ChangeSpecificObject;
         }
 
         public bool AddCustomer(Business container)
@@ -61,8 +98,8 @@ namespace QuoteSwift
 
             container.AddCustomer(CurrentCustomer);
             container.CustomerMap[CurrentCustomer.CustomerCompanyName] = CurrentCustomer;
-            pass.CustomerToChange = null;
-            pass.ChangeSpecificObject = false;
+            CustomerToChange = null;
+            ChangeSpecificObject = false;
             return true;
         }
 
@@ -74,7 +111,7 @@ namespace QuoteSwift
                 return false;
             }
 
-            if (container.CustomerMap.TryGetValue(CurrentCustomer.CustomerCompanyName, out Customer existing) && existing != pass.CustomerToChange)
+            if (container.CustomerMap.TryGetValue(CurrentCustomer.CustomerCompanyName, out Customer existing) && existing != CustomerToChange)
             {
                 MainProgramCode.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
                 CurrentCustomer.CustomerCompanyName = oldName;
@@ -83,7 +120,7 @@ namespace QuoteSwift
 
             container.CustomerMap.Remove(oldName);
             container.CustomerMap[CurrentCustomer.CustomerCompanyName] = CurrentCustomer;
-            pass.ChangeSpecificObject = false;
+            ChangeSpecificObject = false;
             return true;
         }
 
