@@ -10,11 +10,19 @@ namespace QuoteSwift
         private BindingList<Pump_Part> mPartList;
         private decimal mNewPumpPrice;
 
+        public Pump()
+        {
+            PumpName = "";
+            PumpDescription = "";
+            PartList = new BindingList<Pump_Part>();
+            NewPumpPrice = 0m;
+        }
+
         public Pump(string mPumpName, string mPumpDescription, decimal mNewPumpPrice, ref BindingList<Pump_Part> mPartList)
         {
             PumpName = mPumpName;
             PumpDescription = mPumpDescription;
-            PartList = mPartList;
+            PartList = mPartList ?? new BindingList<Pump_Part>();
             NewPumpPrice = mNewPumpPrice;
         }
 
