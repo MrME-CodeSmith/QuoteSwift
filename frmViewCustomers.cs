@@ -8,6 +8,7 @@ namespace QuoteSwift
     public partial class FrmViewCustomers : Form
     {
         readonly ViewCustomersViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -15,10 +16,11 @@ namespace QuoteSwift
             set => viewModel.UpdatePass(value);
         }
 
-        public FrmViewCustomers(ViewCustomersViewModel viewModel)
+        public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
             passed = viewModel.Pass;
         }
 
@@ -43,7 +45,9 @@ namespace QuoteSwift
             passed.ChangeSpecificObject = false;
             passed.BusinessToChange = container;
 
-            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
+            navigation.Pass = passed;
+            navigation.AddCustomer();
+            passed = navigation.Pass;
 
             if (!ReplaceCustomer(customer, passed.CustomerToChange, container) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
 
@@ -59,7 +63,9 @@ namespace QuoteSwift
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
+            navigation.Pass = passed;
+            navigation.AddCustomer();
+            passed = navigation.Pass;
             Show();
 
             LoadInformation();

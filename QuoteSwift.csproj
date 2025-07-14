@@ -228,6 +228,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\FileDataService.cs" />
+    <Compile Include="Services\INavigationService.cs" />
+    <Compile Include="Services\NavigationService.cs" />
     <Compile Include="ViewModels\QuotesViewModel.cs" />
     <Compile Include="ViewModels\AddCustomerViewModel.cs" />
     <Compile Include="ViewModels\ViewCustomersViewModel.cs" />

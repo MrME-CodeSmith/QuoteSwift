@@ -12,12 +12,13 @@ namespace QuoteSwift
         static void Main()
         {
             IDataService dataService = new FileDataService();
+            var navigation = new NavigationService(dataService);
             QuotesViewModel viewModel = new QuotesViewModel(dataService);
             viewModel.LoadData();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmViewQuotes(viewModel));
+            Application.Run(new FrmViewQuotes(viewModel, navigation));
         }
     }
 }

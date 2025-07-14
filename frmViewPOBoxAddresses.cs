@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly ViewPOBoxAddressesViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -18,10 +19,11 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel)
+        public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -75,8 +77,9 @@ namespace QuoteSwift
             passed.ChangeSpecificObject = false;
             passed.AddressToChange = address;
 
-            //if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
-            passed = QuoteSwiftMainCode.EditBusinessAddress(ref passed);
+            navigation.Pass = passed;
+            navigation.EditBusinessAddress();
+            passed = navigation.Pass;
 
             if (!ReplacePOBoxAddress(address, passed.AddressToChange)) MainProgramCode.ShowError("An error occurred during the updating procedure of the P.O.Box Address.\nUpdated P.O.Box address will not be stored.", "ERROR - P.O.Box Address Not Updated");
 

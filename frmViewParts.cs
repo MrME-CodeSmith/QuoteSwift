@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly ViewPartsViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -16,10 +17,11 @@ namespace QuoteSwift
             set => viewModel.UpdatePass(value);
         }
 
-        public FrmViewParts(ViewPartsViewModel viewModel)
+        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         public ref Pass Passed { get => ref passed; }
@@ -33,7 +35,9 @@ namespace QuoteSwift
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+            navigation.Pass = passed;
+            navigation.AddNewPart();
+            passed = navigation.Pass;
             Show();
         }
 
@@ -47,7 +51,9 @@ namespace QuoteSwift
                 passed.PartToChange = objPartSelection;
 
                 Hide();
-                passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+                navigation.Pass = passed;
+                navigation.AddNewPart();
+                passed = navigation.Pass;
                 Show();
 
                 passed.ChangeSpecificObject = false;

@@ -113,6 +113,7 @@ namespace QuoteSwift
 
         // New Quote:
 
+        [Obsolete("Use NavigationService.CreateNewQuote instead")]
         public static ref Pass CreateNewQuote(ref Pass passed)
         {
             var vm = new CreateQuoteViewModel(new FileDataService());
@@ -133,11 +134,12 @@ namespace QuoteSwift
 
         //View Quote:
 
+        [Obsolete("Use NavigationService.ViewAllQuotes instead")]
         public static ref Pass ViewAllQuotes(ref Pass passed)
         {
             var vm = new QuotesViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmViewQuotes frmViewQuotes = new FrmViewQuotes(vm);
+            FrmViewQuotes frmViewQuotes = new FrmViewQuotes(vm, null);
             frmViewQuotes.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -145,11 +147,12 @@ namespace QuoteSwift
 
         // View Pumps:
 
+        [Obsolete("Use NavigationService.ViewAllPumps instead")]
         public static ref Pass ViewAllPumps(ref Pass passed)
         {
             var vm = new ViewPumpViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmViewPump frmViewPump = new FrmViewPump(vm);
+            FrmViewPump frmViewPump = new FrmViewPump(vm, null);
             frmViewPump.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -157,11 +160,12 @@ namespace QuoteSwift
 
         // New Pump:
 
+        [Obsolete("Use NavigationService.CreateNewPump instead")]
         public static ref Pass CreateNewPump(ref Pass passed)
         {
             var vm = new AddPumpViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmAddPump frmAddPump = new FrmAddPump(vm);
+            FrmAddPump frmAddPump = new FrmAddPump(vm, null);
             frmAddPump.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -169,11 +173,12 @@ namespace QuoteSwift
 
         // View Pump Parts:
 
+        [Obsolete("Use NavigationService.ViewAllParts instead")]
         public static ref Pass ViewAllParts(ref Pass passed)
         {
             var vm = new ViewPartsViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmViewParts frmViewParts = new FrmViewParts(vm);
+            FrmViewParts frmViewParts = new FrmViewParts(vm, null);
             try
             {
                 frmViewParts.ShowDialog();
@@ -188,11 +193,12 @@ namespace QuoteSwift
 
         // New Parts:
 
+        [Obsolete("Use NavigationService.AddNewPart instead")]
         public static ref Pass AddNewPart(ref Pass passed)
         {
             var vm = new AddPartViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmAddPart frmAddPart = new FrmAddPart(vm);
+            FrmAddPart frmAddPart = new FrmAddPart(vm, null);
             frmAddPart.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -200,11 +206,12 @@ namespace QuoteSwift
 
         // New Customer:
 
+        [Obsolete("Use NavigationService.AddCustomer instead")]
         public static ref Pass AddCustomer(ref Pass passed)
         {
             var vm = new AddCustomerViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
+            FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm, null);
             frmAddCustomer.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -212,11 +219,12 @@ namespace QuoteSwift
 
         // View Customers:
 
+        [Obsolete("Use NavigationService.ViewCustomers instead")]
         public static ref Pass ViewCustomers(ref Pass passed)
         {
             var vm = new ViewCustomersViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(vm);
+            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(vm, null);
             frmViewCustomers.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -224,11 +232,12 @@ namespace QuoteSwift
 
         // New Business:
 
+        [Obsolete("Use NavigationService.AddBusiness instead")]
         public static ref Pass AddBusiness(ref Pass passed)
         {
             var vm = new AddBusinessViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
+            FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm, null);
             frmAddBusiness.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -236,11 +245,12 @@ namespace QuoteSwift
 
         // View Businesses
 
+        [Obsolete("Use NavigationService.ViewBusinesses instead")]
         public static ref Pass ViewBusinesses(ref Pass passed)
         {
             var vm = new ViewBusinessesViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses(vm);
+            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses(vm, null);
             frmViewAllBusinesses.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -248,11 +258,12 @@ namespace QuoteSwift
 
         // View Business Addresses
 
+        [Obsolete("Use NavigationService.ViewBusinessesAddresses instead")]
         public static ref Pass ViewBusinessesAddresses(ref Pass passed)
         {
             var vm = new ViewBusinessAddressesViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm);
+            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm, null);
             FrmViewBusinessAddresses.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -260,11 +271,12 @@ namespace QuoteSwift
 
         // View Business P.O.Box Addresses
 
+        [Obsolete("Use NavigationService.ViewBusinessesPOBoxAddresses instead")]
         public static ref Pass ViewBusinessesPOBoxAddresses(ref Pass passed)
         {
             var vm = new ViewPOBoxAddressesViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(vm);
+            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(vm, null);
             FrmViewPOBoxAddresses.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -272,11 +284,12 @@ namespace QuoteSwift
 
         // View Business Email Addresses
 
+        [Obsolete("Use NavigationService.ViewBusinessesEmailAddresses instead")]
         public static ref Pass ViewBusinessesEmailAddresses(ref Pass passed)
         {
             var vm = new ManageEmailsViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm);
+            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm, null);
             FrmManageAllEmails.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -284,11 +297,12 @@ namespace QuoteSwift
 
         // View Business Phone Numbers
 
+        [Obsolete("Use NavigationService.ViewBusinessesPhoneNumbers instead")]
         public static ref Pass ViewBusinessesPhoneNumbers(ref Pass passed)
         {
             var vm = new ManagePhoneNumbersViewModel(new FileDataService());
             vm.UpdatePass(passed);
-            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm);
+            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm, null);
             FrmManagingPhoneNumbers.ShowDialog();
             passed = vm.Pass;
             return ref passed;
@@ -296,6 +310,7 @@ namespace QuoteSwift
 
         // Edit Business Address:
 
+        [Obsolete("Use NavigationService.EditBusinessAddress instead")]
         public static ref Pass EditBusinessAddress(ref Pass passed)
         {
             var vm = new ViewBusinessAddressesViewModel(new FileDataService());
@@ -308,6 +323,7 @@ namespace QuoteSwift
 
         // Edit Business Email Address:
 
+        [Obsolete("Use NavigationService.EditBusinessEmailAddress instead")]
         public static ref Pass EditBusinessEmailAddress(ref Pass passed)
         {
             var vm = new ManageEmailsViewModel(new FileDataService());
@@ -320,6 +336,7 @@ namespace QuoteSwift
 
         // Edit Business Phone nUmbers
 
+        [Obsolete("Use NavigationService.EditPhoneNumber instead")]
         public static ref Pass EditPhoneNumber(ref Pass passed)
         {
             var vm = new ManagePhoneNumbersViewModel(new FileDataService());

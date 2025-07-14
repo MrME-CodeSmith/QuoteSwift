@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly ManageEmailsViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -18,10 +19,11 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmManageAllEmails(ManageEmailsViewModel viewModel)
+        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -99,7 +101,9 @@ namespace QuoteSwift
             string email = GetEmailSelection();
             passed.EmailToChange = email;
             passed.ChangeSpecificObject = true;
-            passed = QuoteSwiftMainCode.EditBusinessEmailAddress(ref passed);
+            navigation.Pass = passed;
+            navigation.EditBusinessEmailAddress();
+            passed = navigation.Pass;
 
             if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
             {

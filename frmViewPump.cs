@@ -10,6 +10,7 @@ namespace QuoteSwift // Repair Quote Swift
     {
 
         readonly ViewPumpViewModel viewModel;
+        readonly INavigationService navigation;
 
         Pass passed
         {
@@ -19,10 +20,11 @@ namespace QuoteSwift // Repair Quote Swift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmViewPump(ViewPumpViewModel viewModel)
+        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -43,7 +45,9 @@ namespace QuoteSwift // Repair Quote Swift
                 passed.ChangeSpecificObject = false;
 
                 Hide();
-                passed = QuoteSwiftMainCode.CreateNewPump(ref passed);
+                navigation.Pass = passed;
+                navigation.CreateNewPump();
+                passed = navigation.Pass;
                 Show();
 
                 passed.ChangeSpecificObject = false;
@@ -60,7 +64,9 @@ namespace QuoteSwift // Repair Quote Swift
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.CreateNewPump(ref passed);
+            navigation.Pass = passed;
+            navigation.CreateNewPump();
+            passed = navigation.Pass;
             Show();
         }
 
