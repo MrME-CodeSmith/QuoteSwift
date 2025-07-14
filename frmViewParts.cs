@@ -72,7 +72,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.RemoveMandatoryPart(SelectedPart);
+                        passed.RemovePart(SelectedPart);
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -80,7 +80,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.RemoveNonMandatoryPart(SelectedPart);
+                        passed.RemovePart(SelectedPart);
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -101,9 +101,9 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if (passed.PassMandatoryPartList != null)
+            if (passed.PassPartList != null)
             {
-                foreach (var part in passed.PassMandatoryPartList.Values)
+                foreach (var part in passed.MandatoryParts)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(part.PartName,
@@ -118,9 +118,9 @@ namespace QuoteSwift
 
         void LoadNonMandatoryParts()
         {
-            if (passed.PassNonMandatoryPartList != null)
+            if (passed.PassPartList != null)
             {
-                foreach (var part in passed.PassNonMandatoryPartList.Values)
+                foreach (var part in passed.NonMandatoryParts)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(part.PartName,
@@ -146,18 +146,18 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(SearchName))
                 return null;
 
-            if (passed.PassMandatoryPartList.Count > 0 || passed.PassNonMandatoryPartList.Count > 0 || passed != null || passed.PassMandatoryPartList != null || passed.PassNonMandatoryPartList != null)
+            if (passed.PassPartList != null && passed.PassPartList.Count > 0)
             {
                 string key = StringUtil.NormalizeKey(SearchName);
                 if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
                 {
                     //Search for part in mandatory
-                    passed.PassMandatoryPartList.TryGetValue(key, out var part);
+                    passed.PassPartList.TryGetValue(key, out var part);
                     return part;
                 }
                 else // Search in Non-Mandatory
                 {
-                    passed.PassNonMandatoryPartList.TryGetValue(key, out var part);
+                    passed.PassPartList.TryGetValue(key, out var part);
                     return part;
                 }
             }

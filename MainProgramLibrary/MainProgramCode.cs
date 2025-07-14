@@ -181,29 +181,14 @@ namespace QuoteSwift
             }
         }
 
-        // Serialize Mandatory Part List Method
+        // Serialize Part List Method
 
-        public static void SerializeMandatoryPartList(ref Pass passed)
+        public static void SerializePartList(ref Pass passed)
         {
-            //Determine if Mandatory Parts exist:
-
-            if (passed != null && passed.PassMandatoryPartList != null && passed.PassMandatoryPartList.Count > 0)
+            if (passed != null && passed.PassPartList != null && passed.PassPartList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePartList(passed.PassMandatoryPartList);
-                MainProgramCode.SaveData("MandatoryParts.json", ToStore);
-            }
-        }
-
-        // Serialize Non-Mandatory Part List Method
-
-        public static void SerializeNonMandatoryPartList(ref Pass passed)
-        {
-            //Determine if Non-Mandatory Parts exist:
-
-            if (passed != null && passed.PassNonMandatoryPartList != null && passed.PassNonMandatoryPartList.Count > 0)
-            {
-                byte[] ToStore = MainProgramCode.SerializePartList(passed.PassNonMandatoryPartList);
-                MainProgramCode.SaveData("NonMandatoryParts.json", ToStore);
+                byte[] ToStore = MainProgramCode.SerializePartList(passed.PassPartList);
+                MainProgramCode.SaveData("Parts.json", ToStore);
             }
         }
 
@@ -430,8 +415,7 @@ namespace QuoteSwift
             {
                 try
                 {
-                    SerializeMandatoryPartList(ref passed);
-                    SerializeNonMandatoryPartList(ref passed);
+                    SerializePartList(ref passed);
                     SerializePumpList(ref passed);
                     SerializeBusinessList(ref passed);
                     SerializeQuoteList(ref passed);
