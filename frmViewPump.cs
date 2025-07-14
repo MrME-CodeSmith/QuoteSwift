@@ -12,19 +12,16 @@ namespace QuoteSwift // Repair Quote Swift
         readonly ViewPumpViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
+        Pass passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref Pass Passed => ref passed;
 
-        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null)
+        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            passed = pass ?? new Pass(null, null, null, null);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

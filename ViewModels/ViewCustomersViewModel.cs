@@ -1,35 +1,45 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
     public class ViewCustomersViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
+        BindingList<Business> businesses;
+        SortedDictionary<string, Quote> quoteMap;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewCustomersViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
         }
 
-        public Pass Pass => pass;
+        public BindingList<Business> Businesses
+        {
+            get => businesses;
+            private set
+            {
+                businesses = value;
+                OnPropertyChanged(nameof(Businesses));
+            }
+        }
+
+        public SortedDictionary<string, Quote> QuoteMap
+        {
+            get => quoteMap;
+            private set
+            {
+                quoteMap = value;
+                OnPropertyChanged(nameof(QuoteMap));
+            }
+        }
 
         public void LoadData()
         {
-            pass.PassBusinessList = dataService.LoadBusinessList();
-            pass.PassQuoteMap = dataService.LoadQuoteMap();
-        }
-
-        public void UpdatePass(Pass newPass)
-        {
-            if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
+            Businesses = dataService.LoadBusinessList();
+            QuoteMap = dataService.LoadQuoteMap();
         }
 
         protected void OnPropertyChanged(string name)

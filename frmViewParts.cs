@@ -11,20 +11,17 @@ namespace QuoteSwift
         readonly ViewPartsViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
+        Pass passed;
 
-        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null)
+        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            passed = pass ?? new Pass(null, null, null, null);
         }
 
-        public ref Pass Passed { get => ref passed; }
+        public ref Pass Passed => ref passed;
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {

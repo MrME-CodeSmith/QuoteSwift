@@ -5,32 +5,30 @@ namespace QuoteSwift
     public class ViewPOBoxAddressesViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
+        BindingList<Business> businesses;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewPOBoxAddressesViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
         }
 
         public IDataService DataService => dataService;
 
-        public Pass Pass => pass;
+        public BindingList<Business> Businesses
+        {
+            get => businesses;
+            private set
+            {
+                businesses = value;
+                OnPropertyChanged(nameof(Businesses));
+            }
+        }
 
         public void LoadData()
         {
-            pass.PassBusinessList = dataService.LoadBusinessList();
-        }
-
-        public void UpdatePass(Pass newPass)
-        {
-            if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
+            Businesses = dataService.LoadBusinessList();
         }
 
         protected void OnPropertyChanged(string propertyName)

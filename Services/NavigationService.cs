@@ -17,13 +17,11 @@ namespace QuoteSwift
         public void CreateNewQuote()
         {
             var vm = new CreateQuoteViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmCreateQuote(vm))
+            using (var form = new FrmCreateQuote(vm, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void ViewAllQuotes()
@@ -41,13 +39,11 @@ namespace QuoteSwift
         public void ViewAllPumps()
         {
             var vm = new ViewPumpViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmViewPump(vm, this))
+            using (var form = new FrmViewPump(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void CreateNewPump()
@@ -65,13 +61,11 @@ namespace QuoteSwift
         public void ViewAllParts()
         {
             var vm = new ViewPartsViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmViewParts(vm, this))
+            using (var form = new FrmViewParts(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void AddNewPart()
@@ -101,13 +95,11 @@ namespace QuoteSwift
         public void ViewCustomers()
         {
             var vm = new ViewCustomersViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmViewCustomers(vm, this))
+            using (var form = new FrmViewCustomers(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void AddBusiness()
@@ -125,97 +117,81 @@ namespace QuoteSwift
         public void ViewBusinesses()
         {
             var vm = new ViewBusinessesViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmViewAllBusinesses(vm, this))
+            using (var form = new FrmViewAllBusinesses(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void ViewBusinessesAddresses()
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmViewBusinessAddresses(vm, this))
+            using (var form = new FrmViewBusinessAddresses(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void ViewBusinessesPOBoxAddresses()
         {
             var vm = new ViewPOBoxAddressesViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmViewPOBoxAddresses(vm, this))
+            using (var form = new FrmViewPOBoxAddresses(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void ViewBusinessesEmailAddresses()
         {
             var vm = new ManageEmailsViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmManageAllEmails(vm, this))
+            using (var form = new FrmManageAllEmails(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void ViewBusinessesPhoneNumbers()
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmManagingPhoneNumbers(vm, this))
+            using (var form = new FrmManagingPhoneNumbers(vm, this, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void EditBusinessAddress()
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmEditBusinessAddress(vm))
+            using (var form = new FrmEditBusinessAddress(vm, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void EditBusinessEmailAddress()
         {
             var vm = new ManageEmailsViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmEditEmailAddress(vm))
+            using (var form = new FrmEditEmailAddress(vm, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
 
         public void EditPhoneNumber()
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
-            vm.UpdatePass(Pass);
             vm.LoadData();
-            using (var form = new FrmEditPhoneNumber(vm))
+            using (var form = new FrmEditPhoneNumber(vm, Pass))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
         }
     }
 }

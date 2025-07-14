@@ -1,36 +1,35 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
     public class ViewPartsViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
+        Dictionary<string, Part> partList;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewPartsViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
         }
 
         public IDataService DataService => dataService;
 
-        public Pass Pass => pass;
+        public Dictionary<string, Part> PartList
+        {
+            get => partList;
+            private set
+            {
+                partList = value;
+                OnPropertyChanged(nameof(PartList));
+            }
+        }
 
         public void LoadData()
         {
-            pass.PassPartList = dataService.LoadPartList();
-        }
-
-        public void UpdatePass(Pass newPass)
-        {
-            if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
+            PartList = dataService.LoadPartList();
         }
 
         protected void OnPropertyChanged(string propertyName)

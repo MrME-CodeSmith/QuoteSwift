@@ -14,23 +14,20 @@ namespace QuoteSwift
     {
         readonly CreateQuoteViewModel viewModel;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
+        Pass passed;
 
         public Quote NewQuote;
 
         readonly Pricing P = new Pricing();
 
-        public FrmCreateQuote(CreateQuoteViewModel viewModel)
+        public FrmCreateQuote(CreateQuoteViewModel viewModel, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            passed = pass ?? new Pass(null, null, null, null);
         }
 
-        public ref Pass Passed { get => ref passed; }
+        public ref Pass Passed => ref passed;
 
         private void BtnComplete_Click(object sender, EventArgs e)
         {
@@ -383,11 +380,10 @@ namespace QuoteSwift
         private void LoadComboBoxes()
         {
             ViewCustomersViewModel vm = new ViewCustomersViewModel(viewModel.DataService);
-            vm.UpdatePass(passed);
             vm.LoadData();
-            if (vm.Pass != null && vm.Pass.PassBusinessList != null)
+            if (vm.Businesses != null)
             {
-                BindingSource bs = new BindingSource { DataSource = vm.Pass.PassBusinessList };
+                BindingSource bs = new BindingSource { DataSource = vm.Businesses };
                 cbxBusinessSelection.DataSource = bs.DataSource;
                 cbxBusinessSelection.DisplayMember = "BusinessName";
                 cbxBusinessSelection.ValueMember = "BusinessName";

@@ -5,32 +5,30 @@ namespace QuoteSwift
     public class ViewPumpViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
+        BindingList<Pump> pumps;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewPumpViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
         }
 
         public IDataService DataService => dataService;
 
-        public Pass Pass => pass;
+        public BindingList<Pump> Pumps
+        {
+            get => pumps;
+            private set
+            {
+                pumps = value;
+                OnPropertyChanged(nameof(Pumps));
+            }
+        }
 
         public void LoadData()
         {
-            pass.PassPumpList = dataService.LoadPumpList();
-        }
-
-        public void UpdatePass(Pass newPass)
-        {
-            if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
+            Pumps = dataService.LoadPumpList();
         }
 
         protected void OnPropertyChanged(string propertyName)

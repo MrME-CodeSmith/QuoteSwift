@@ -7,18 +7,15 @@ namespace QuoteSwift
     {
         readonly ViewBusinessAddressesViewModel viewModel;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
+        Pass passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref Pass Passed => ref passed;
 
-        public FrmEditBusinessAddress(ViewBusinessAddressesViewModel viewModel)
+        public FrmEditBusinessAddress(ViewBusinessAddressesViewModel viewModel, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            passed = pass ?? new Pass(null, null, null, null);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

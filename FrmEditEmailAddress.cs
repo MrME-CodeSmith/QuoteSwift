@@ -8,18 +8,15 @@ namespace QuoteSwift
 
         readonly ManageEmailsViewModel viewModel;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
+        Pass passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref Pass Passed => ref passed;
 
-        public FrmEditEmailAddress(ManageEmailsViewModel viewModel)
+        public FrmEditEmailAddress(ManageEmailsViewModel viewModel, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            passed = pass ?? new Pass(null, null, null, null);
         }
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
