@@ -231,6 +231,17 @@
     <Compile Include="ViewModels\QuotesViewModel.cs" />
     <Compile Include="ViewModels\AddCustomerViewModel.cs" />
     <Compile Include="ViewModels\ViewCustomersViewModel.cs" />
+    <Compile Include="ViewModels\AddBusinessViewModel.cs" />
+    <Compile Include="ViewModels\AddPartViewModel.cs" />
+    <Compile Include="ViewModels\AddPumpViewModel.cs" />
+    <Compile Include="ViewModels\CreateQuoteViewModel.cs" />
+    <Compile Include="ViewModels\ManageEmailsViewModel.cs" />
+    <Compile Include="ViewModels\ManagePhoneNumbersViewModel.cs" />
+    <Compile Include="ViewModels\ViewBusinessesViewModel.cs" />
+    <Compile Include="ViewModels\ViewBusinessAddressesViewModel.cs" />
+    <Compile Include="ViewModels\ViewPOBoxAddressesViewModel.cs" />
+    <Compile Include="ViewModels\ViewPartsViewModel.cs" />
+    <Compile Include="ViewModels\ViewPumpViewModel.cs" />
     <Compile Include="ExcelExporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmAddBusiness.resx">
