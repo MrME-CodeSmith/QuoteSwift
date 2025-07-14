@@ -12,13 +12,6 @@ namespace QuoteSwift // Repair Quote Swift
         readonly ViewPumpViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
-
-        public ref Pass Passed { get => ref passed; }
 
         public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null)
         {
@@ -30,7 +23,11 @@ namespace QuoteSwift // Repair Quote Swift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true, ref passed);
+            {
+                var p = viewModel.Pass;
+                MainProgramCode.CloseApplication(true, ref p);
+                viewModel.UpdatePass(p);
+            }
         }
 
         private void BtnUpdateSelectedPump_Click(object sender, EventArgs e)
@@ -41,17 +38,16 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                passed.PumpToChange = passed.PassPumpList.ElementAt(iGridSelection);
-                passed.ChangeSpecificObject = false;
+                viewModel.Pass.PumpToChange = viewModel.Pass.PassPumpList.ElementAt(iGridSelection);
+                viewModel.Pass.ChangeSpecificObject = false;
 
                 Hide();
-                navigation.Pass = passed;
                 navigation.CreateNewPump();
-                passed = navigation.Pass;
+                viewModel.UpdatePass(navigation.Pass);
                 Show();
 
-                passed.ChangeSpecificObject = false;
-                passed.PumpToChange = null;
+                viewModel.Pass.ChangeSpecificObject = false;
+                viewModel.Pass.PumpToChange = null;
 
                 LoadInformation();
             }
@@ -64,9 +60,8 @@ namespace QuoteSwift // Repair Quote Swift
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.Pass = passed;
             navigation.CreateNewPump();
-            passed = navigation.Pass;
+            viewModel.UpdatePass(navigation.Pass);
             Show();
         }
 
@@ -76,12 +71,12 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                Pump objPumpSelection = passed.PassPumpList.ElementAt(iGridSelection);
+                Pump objPumpSelection = viewModel.Pass.PassPumpList.ElementAt(iGridSelection);
 
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
-                    passed.PassPumpList.RemoveAt(iGridSelection);
-                    passed.RepairableItemNames.Remove(StringUtil.NormalizeKey(objPumpSelection.PumpName));
+                    viewModel.Pass.PassPumpList.RemoveAt(iGridSelection);
+                    viewModel.Pass.RepairableItemNames.Remove(StringUtil.NormalizeKey(objPumpSelection.PumpName));
 
                     MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
                 }
@@ -117,9 +112,9 @@ namespace QuoteSwift // Repair Quote Swift
             //Manually Load Pump items:
             dgvPumpList.Rows.Clear();
 
-            if (passed.PassPumpList != null)
+            if (viewModel.Pass.PassPumpList != null)
             {
-                foreach (var pump in passed.PassPumpList)
+                foreach (var pump in viewModel.Pass.PassPumpList)
                 {
                     dgvPumpList.Rows.Add(pump.PumpName,
                                         pump.PumpDescription,
@@ -145,7 +140,7 @@ namespace QuoteSwift // Repair Quote Swift
                 {
                     try
                     {
-                        MainProgramCode.ExportInventory(passed.PassPumpList, sfd.FileName);
+                        MainProgramCode.ExportInventory(viewModel.Pass.PassPumpList, sfd.FileName);
                         MainProgramCode.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
                     }
                     catch (Exception ex)
@@ -158,7 +153,9 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void FrmViewPump_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true, ref passed);
+            var p = viewModel.Pass;
+            MainProgramCode.CloseApplication(true, ref p);
+            viewModel.UpdatePass(p);
         }
 
         /*********************************************************************************/

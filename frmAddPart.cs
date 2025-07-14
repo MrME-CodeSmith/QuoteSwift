@@ -10,13 +10,6 @@ namespace QuoteSwift
         readonly AddPartViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
-
-        public ref Pass Passed { get => ref passed; }
 
         public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null)
         {
@@ -46,7 +39,11 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true, ref passed);
+            {
+                var p = viewModel.Pass;
+                MainProgramCode.CloseApplication(true, ref p);
+                viewModel.UpdatePass(p);
+            }
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
@@ -55,7 +52,7 @@ namespace QuoteSwift
             if (!ValidInput())
                 return;
 
-            bool updating = passed.ChangeSpecificObject;
+            bool updating = viewModel.Pass.ChangeSpecificObject;
 
             if (!viewModel.AddOrUpdatePart())
             {
@@ -66,7 +63,7 @@ namespace QuoteSwift
             if (updating)
             {
                 MainProgramCode.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
-                passed.ChangeSpecificObject = false;
+                viewModel.Pass.ChangeSpecificObject = false;
                 Close();
             }
             else
@@ -144,13 +141,13 @@ namespace QuoteSwift
 
         private void FrmAddPart_Load(object sender, EventArgs e)
         {
-            if (passed.ChangeSpecificObject && passed.PartToChange != null)
+            if (viewModel.Pass.ChangeSpecificObject && viewModel.Pass.PartToChange != null)
             {
                 ReadWriteComponents();
                 btnAddPart.Text = "Update";
                 updatePartToolStripMenuItem.Enabled = false;
             }
-            else if (!passed.ChangeSpecificObject && passed.PartToChange != null)
+            else if (!viewModel.Pass.ChangeSpecificObject && viewModel.Pass.PartToChange != null)
             {
                 btnAddPart.Visible = false;
                 Read_OnlyComponents();
@@ -244,12 +241,12 @@ namespace QuoteSwift
 
         private void UpdatePartToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
-                if (MainProgramCode.RequestConfirmation("You are currently only viewing " + passed.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
+            if (!viewModel.Pass.ChangeSpecificObject)
+                if (MainProgramCode.RequestConfirmation("You are currently only viewing " + viewModel.Pass.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
                 {
                     ReadWriteComponents();
                     updatePartToolStripMenuItem.Enabled = false;
-                    passed.ChangeSpecificObject = true;
+                    viewModel.Pass.ChangeSpecificObject = true;
                 }
         }
 
@@ -260,7 +257,9 @@ namespace QuoteSwift
 
         private void FrmAddPart_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true, ref passed);
+            var p = viewModel.Pass;
+            MainProgramCode.CloseApplication(true, ref p);
+            viewModel.UpdatePass(p);
         }
 
 

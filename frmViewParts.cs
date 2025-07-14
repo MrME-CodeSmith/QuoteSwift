@@ -11,12 +11,6 @@ namespace QuoteSwift
         readonly ViewPartsViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
-
         public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
@@ -24,20 +18,22 @@ namespace QuoteSwift
             this.navigation = navigation;
         }
 
-        public ref Pass Passed { get => ref passed; }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true, ref passed);
+            {
+                var p = viewModel.Pass;
+                MainProgramCode.CloseApplication(true, ref p);
+                viewModel.UpdatePass(p);
+            }
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.Pass = passed;
             navigation.AddNewPart();
-            passed = navigation.Pass;
+            viewModel.UpdatePass(navigation.Pass);
             Show();
         }
 
@@ -47,17 +43,16 @@ namespace QuoteSwift
 
             if (objPartSelection != null)
             {
-                passed.ChangeSpecificObject = false;
-                passed.PartToChange = objPartSelection;
+                viewModel.Pass.ChangeSpecificObject = false;
+                viewModel.Pass.PartToChange = objPartSelection;
 
                 Hide();
-                navigation.Pass = passed;
                 navigation.AddNewPart();
-                passed = navigation.Pass;
+                viewModel.UpdatePass(navigation.Pass);
                 Show();
 
-                passed.ChangeSpecificObject = false;
-                passed.PartToChange = null;
+                viewModel.Pass.ChangeSpecificObject = false;
+                viewModel.Pass.PartToChange = null;
             }
             else
             {
@@ -67,7 +62,7 @@ namespace QuoteSwift
 
         private void FrmViewParts_Activated(object sender, EventArgs e)
         {
-            if (passed != null)
+            if (viewModel.Pass != null)
             {
                 dgvAllParts.Rows.Clear();
                 LoadMandatoryParts();
@@ -84,7 +79,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.RemovePart(SelectedPart);
+                        viewModel.Pass.RemovePart(SelectedPart);
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -92,7 +87,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.RemovePart(SelectedPart);
+                        viewModel.Pass.RemovePart(SelectedPart);
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -113,9 +108,9 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (viewModel.Pass.PassPartList != null)
             {
-                foreach (var part in passed.MandatoryParts)
+                foreach (var part in viewModel.Pass.MandatoryParts)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(part.PartName,
@@ -130,9 +125,9 @@ namespace QuoteSwift
 
         void LoadNonMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (viewModel.Pass.PassPartList != null)
             {
-                foreach (var part in passed.NonMandatoryParts)
+                foreach (var part in viewModel.Pass.NonMandatoryParts)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(part.PartName,
@@ -158,18 +153,18 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(SearchName))
                 return null;
 
-            if (passed.PassPartList != null && passed.PassPartList.Count > 0)
+            if (viewModel.Pass.PassPartList != null && viewModel.Pass.PassPartList.Count > 0)
             {
                 string key = StringUtil.NormalizeKey(SearchName);
                 if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
                 {
                     //Search for part in mandatory
-                    passed.PassPartList.TryGetValue(key, out var part);
+                    viewModel.Pass.PassPartList.TryGetValue(key, out var part);
                     return part;
                 }
                 else // Search in Non-Mandatory
                 {
-                    passed.PassPartList.TryGetValue(key, out var part);
+                    viewModel.Pass.PassPartList.TryGetValue(key, out var part);
                     return part;
                 }
             }
@@ -195,7 +190,9 @@ namespace QuoteSwift
 
         private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true, ref passed);
+            var p = viewModel.Pass;
+            MainProgramCode.CloseApplication(true, ref p);
+            viewModel.UpdatePass(p);
         }
 
         /*********************************************************************************/
