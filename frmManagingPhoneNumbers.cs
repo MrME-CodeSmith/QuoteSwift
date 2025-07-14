@@ -10,14 +10,20 @@ namespace QuoteSwift
     public partial class FrmManagingPhoneNumbers : Form
     {
 
-        Pass passed;
+        readonly ManagePhoneNumbersViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmManagingPhoneNumbers(ref Pass passed)
+        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

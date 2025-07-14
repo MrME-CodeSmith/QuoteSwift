@@ -23,6 +23,15 @@ namespace QuoteSwift
             pass.PassQuoteMap = dataService.LoadQuoteMap();
         }
 
+        public void UpdatePass(Pass newPass)
+        {
+            if (newPass == null) return;
+            pass.PassQuoteMap = newPass.PassQuoteMap;
+            pass.PassBusinessList = newPass.PassBusinessList;
+            pass.PassPartList = newPass.PassPartList;
+            pass.PassPumpList = newPass.PassPumpList;
+        }
+
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

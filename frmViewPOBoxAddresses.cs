@@ -8,14 +8,20 @@ namespace QuoteSwift
     public partial class FrmViewPOBoxAddresses : Form
     {
 
-        Pass passed;
+        readonly ViewPOBoxAddressesViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmViewPOBoxAddresses(ref Pass passed)
+        public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

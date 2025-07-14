@@ -6,14 +6,20 @@ namespace QuoteSwift
     public partial class FrmEditEmailAddress : Form
     {
 
-        Pass passed;
+        readonly ManageEmailsViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmEditEmailAddress(ref Pass passed)
+        public FrmEditEmailAddress(ManageEmailsViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
@@ -24,7 +30,9 @@ namespace QuoteSwift
                 passed.EmailToChange = mtxtEmail.Text;
                 if (passed != null && passed.BusinessToChange != null)
                 {
-                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
+                    var vm = new AddBusinessViewModel(new FileDataService());
+                    vm.UpdatePass(passed);
+                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
                     if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
@@ -34,7 +42,9 @@ namespace QuoteSwift
                 }
                 else if (passed != null && passed.CustomerToChange != null)
                 {
-                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
+                    var vm = new AddCustomerViewModel(new FileDataService());
+                    vm.UpdatePass(passed);
+                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
                     if (!frmAddCustomer.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");

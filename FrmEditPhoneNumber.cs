@@ -6,14 +6,20 @@ namespace QuoteSwift
     public partial class FrmEditPhoneNumber : Form
     {
 
-        Pass passed;
+        readonly ManagePhoneNumbersViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmEditPhoneNumber(ref Pass passed)
+        public FrmEditPhoneNumber(ManagePhoneNumbersViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
@@ -25,7 +31,9 @@ namespace QuoteSwift
         {
             if (passed != null && passed.BusinessToChange != null)
             {
-                FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
+                var vm = new AddBusinessViewModel(new FileDataService());
+                vm.UpdatePass(passed);
+                FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
                 if (!frmAddBusiness.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
                     passed.PhoneNumberToChange = txtPhoneNumber.Text;
@@ -35,7 +43,9 @@ namespace QuoteSwift
             }
             else if (passed != null && passed.CustomerToChange != null)
             {
-                FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
+                var vm = new AddCustomerViewModel(new FileDataService());
+                vm.UpdatePass(passed);
+                FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
                 if (!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
                     passed.PhoneNumberToChange = txtPhoneNumber.Text;

@@ -8,15 +8,21 @@ namespace QuoteSwift
     public partial class FrmAddBusiness : Form
     {
 
-        Pass passed;
+        readonly AddBusinessViewModel viewModel;
 
         Business Business;
 
-        public FrmAddBusiness(ref Pass passed)
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
+
+        public FrmAddBusiness(AddBusinessViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
-            Business = passed.BusinessToChange;
+            this.viewModel = viewModel;
+            Business = viewModel.Pass.BusinessToChange;
         }
 
         public ref Pass Passed { get => ref passed; }
