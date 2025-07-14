@@ -8,14 +8,20 @@ namespace QuoteSwift
 {
     public partial class FrmAddPump : Form
     {
-        Pass passed;
+        readonly AddPumpViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmAddPump(ref Pass passed)
+        public FrmAddPump(AddPumpViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

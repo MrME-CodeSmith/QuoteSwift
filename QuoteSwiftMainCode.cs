@@ -115,7 +115,9 @@ namespace QuoteSwift
 
         public static ref Pass CreateNewQuote(ref Pass passed)
         {
-            FrmCreateQuote newQuote = new FrmCreateQuote(ref passed);
+            var vm = new CreateQuoteViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmCreateQuote newQuote = new FrmCreateQuote(vm);
             try
             {
                 newQuote.ShowDialog();
@@ -125,41 +127,53 @@ namespace QuoteSwift
                 MainProgramCode.ShowError(e.ToString(), "ERROR - Error Occurred");
                 //Do Nothing
             }
-            return ref newQuote.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         //View Quote:
 
         public static ref Pass ViewAllQuotes(ref Pass passed)
         {
-            FrmViewQuotes frmViewQuotes = new FrmViewQuotes(ref passed);
+            var vm = new QuotesViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmViewQuotes frmViewQuotes = new FrmViewQuotes(vm);
             frmViewQuotes.ShowDialog();
-            return ref frmViewQuotes.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Pumps:
 
         public static ref Pass ViewAllPumps(ref Pass passed)
         {
-            FrmViewPump frmViewPump = new FrmViewPump(ref passed);
+            var vm = new ViewPumpViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmViewPump frmViewPump = new FrmViewPump(vm);
             frmViewPump.ShowDialog();
-            return ref frmViewPump.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // New Pump:
 
         public static ref Pass CreateNewPump(ref Pass passed)
         {
-            FrmAddPump frmAddPump = new FrmAddPump(ref passed);
+            var vm = new AddPumpViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmAddPump frmAddPump = new FrmAddPump(vm);
             frmAddPump.ShowDialog();
-            return ref frmAddPump.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Pump Parts:
 
         public static ref Pass ViewAllParts(ref Pass passed)
         {
-            FrmViewParts frmViewParts = new FrmViewParts(ref passed);
+            var vm = new ViewPartsViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmViewParts frmViewParts = new FrmViewParts(vm);
             try
             {
                 frmViewParts.ShowDialog();
@@ -168,115 +182,152 @@ namespace QuoteSwift
             {
                 //do nothing
             }
-            return ref frmViewParts.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // New Parts:
 
         public static ref Pass AddNewPart(ref Pass passed)
         {
-            FrmAddPart frmAddPart = new FrmAddPart(ref passed);
+            var vm = new AddPartViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmAddPart frmAddPart = new FrmAddPart(vm);
             frmAddPart.ShowDialog();
-            return ref frmAddPart.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // New Customer:
 
         public static ref Pass AddCustomer(ref Pass passed)
         {
-            FrmAddCustomer frmAddCustomer = new FrmAddCustomer(ref passed);
+            var vm = new AddCustomerViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
             frmAddCustomer.ShowDialog();
-            return ref frmAddCustomer.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Customers:
 
         public static ref Pass ViewCustomers(ref Pass passed)
         {
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(ref passed);
+            var vm = new ViewCustomersViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(vm);
             frmViewCustomers.ShowDialog();
-            return ref frmViewCustomers.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // New Business:
 
         public static ref Pass AddBusiness(ref Pass passed)
         {
-            FrmAddBusiness frmAddBusiness = new FrmAddBusiness(ref passed);
+            var vm = new AddBusinessViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
             frmAddBusiness.ShowDialog();
-            return ref frmAddBusiness.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Businesses
 
         public static ref Pass ViewBusinesses(ref Pass passed)
         {
-            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses(ref passed);
+            var vm = new ViewBusinessesViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses(vm);
             frmViewAllBusinesses.ShowDialog();
-            return ref frmViewAllBusinesses.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Business Addresses
 
         public static ref Pass ViewBusinessesAddresses(ref Pass passed)
         {
-            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(ref passed);
+            var vm = new ViewBusinessAddressesViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm);
             FrmViewBusinessAddresses.ShowDialog();
-            return ref FrmViewBusinessAddresses.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Business P.O.Box Addresses
 
         public static ref Pass ViewBusinessesPOBoxAddresses(ref Pass passed)
         {
-            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(ref passed);
+            var vm = new ViewPOBoxAddressesViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(vm);
             FrmViewPOBoxAddresses.ShowDialog();
-            return ref FrmViewPOBoxAddresses.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Business Email Addresses
 
         public static ref Pass ViewBusinessesEmailAddresses(ref Pass passed)
         {
-            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(ref passed);
+            var vm = new ManageEmailsViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm);
             FrmManageAllEmails.ShowDialog();
-            return ref FrmManageAllEmails.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // View Business Phone Numbers
 
         public static ref Pass ViewBusinessesPhoneNumbers(ref Pass passed)
         {
-            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(ref passed);
+            var vm = new ManagePhoneNumbersViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm);
             FrmManagingPhoneNumbers.ShowDialog();
-            return ref FrmManagingPhoneNumbers.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // Edit Business Address:
 
         public static ref Pass EditBusinessAddress(ref Pass passed)
         {
-            FrmEditBusinessAddress frmEditBusinessAddress = new FrmEditBusinessAddress(ref passed);
+            var vm = new ViewBusinessAddressesViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmEditBusinessAddress frmEditBusinessAddress = new FrmEditBusinessAddress(vm);
             frmEditBusinessAddress.ShowDialog();
-            return ref frmEditBusinessAddress.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // Edit Business Email Address:
 
         public static ref Pass EditBusinessEmailAddress(ref Pass passed)
         {
-            FrmEditEmailAddress FrmEditEmailAddress = new FrmEditEmailAddress(ref passed);
+            var vm = new ManageEmailsViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmEditEmailAddress FrmEditEmailAddress = new FrmEditEmailAddress(vm);
             FrmEditEmailAddress.ShowDialog();
-            return ref FrmEditEmailAddress.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         // Edit Business Phone nUmbers
 
         public static ref Pass EditPhoneNumber(ref Pass passed)
         {
-            FrmEditPhoneNumber frmEditPhoneNumber = new FrmEditPhoneNumber(ref passed);
+            var vm = new ManagePhoneNumbersViewModel(new FileDataService());
+            vm.UpdatePass(passed);
+            FrmEditPhoneNumber frmEditPhoneNumber = new FrmEditPhoneNumber(vm);
             frmEditPhoneNumber.ShowDialog();
-            return ref frmEditPhoneNumber.Passed;
+            passed = vm.Pass;
+            return ref passed;
         }
 
         /***************************************/

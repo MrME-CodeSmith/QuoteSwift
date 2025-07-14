@@ -8,12 +8,18 @@ namespace QuoteSwift
     public partial class FrmViewParts : Form
     {
 
-        Pass passed;
+        readonly ViewPartsViewModel viewModel;
 
-        public FrmViewParts(ref Pass passed)
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
+
+        public FrmViewParts(ViewPartsViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         public ref Pass Passed { get => ref passed; }

@@ -9,14 +9,20 @@ namespace QuoteSwift
     public partial class FrmAddPart : Form
     {
 
-        Pass passed;
+        readonly AddPartViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmAddPart(ref Pass passed)
+        public FrmAddPart(AddPartViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

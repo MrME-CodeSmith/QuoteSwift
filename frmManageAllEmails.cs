@@ -8,14 +8,20 @@ namespace QuoteSwift
     public partial class FrmManageAllEmails : Form
     {
 
-        Pass passed;
+        readonly ManageEmailsViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmManageAllEmails(ref Pass passed)
+        public FrmManageAllEmails(ManageEmailsViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

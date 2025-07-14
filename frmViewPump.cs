@@ -9,14 +9,20 @@ namespace QuoteSwift // Repair Quote Swift
     public partial class FrmViewPump : Form
     {
 
-        Pass passed;
+        readonly ViewPumpViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmViewPump(ref Pass passed)
+        public FrmViewPump(ViewPumpViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

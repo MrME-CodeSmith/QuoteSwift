@@ -12,16 +12,22 @@ namespace QuoteSwift
 {
     public partial class FrmCreateQuote : Form
     {
-        Pass passed;
+        readonly CreateQuoteViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public Quote NewQuote;
 
         readonly Pricing P = new Pricing();
 
-        public FrmCreateQuote(ref Pass passed)
+        public FrmCreateQuote(CreateQuoteViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         public ref Pass Passed { get => ref passed; }

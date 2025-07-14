@@ -5,14 +5,20 @@ namespace QuoteSwift
 {
     public partial class FrmEditBusinessAddress : Form
     {
-        Pass passed;
+        readonly ViewBusinessAddressesViewModel viewModel;
+
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmEditBusinessAddress(ref Pass passed)
+        public FrmEditBusinessAddress(ViewBusinessAddressesViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
+            this.viewModel = viewModel;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
