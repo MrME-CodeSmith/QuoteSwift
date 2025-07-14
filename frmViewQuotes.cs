@@ -26,7 +26,7 @@ namespace QuoteSwift
                 Hide();
                 navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
                 navigation.CreateNewQuote();
-                viewModel.UpdatePass(navigation.Pass);
+                viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
                 try
                 {
                     Show();
@@ -51,7 +51,7 @@ namespace QuoteSwift
             {
                 var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
                 MainProgramCode.CloseApplication(true, ref p);
-                viewModel.UpdatePass(p);
+                viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
             }
         }
 
@@ -60,7 +60,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.ViewAllPumps();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -76,7 +76,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.CreateNewPump();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -97,7 +97,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.AddCustomer();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -113,7 +113,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.ViewCustomers();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -134,7 +134,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.AddBusiness();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -150,7 +150,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.ViewBusinesses();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -192,7 +192,7 @@ namespace QuoteSwift
                     navigation.CreateNewQuote();
                     navigation.Pass.QuoteTOChange = null;
                     navigation.Pass.ChangeSpecificObject = false;
-                    viewModel.UpdatePass(navigation.Pass);
+                    viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
                     Show();
                 }
             }
@@ -212,7 +212,7 @@ namespace QuoteSwift
                     navigation.CreateNewQuote();
                     navigation.Pass.QuoteTOChange = null;
                     navigation.Pass.ChangeSpecificObject = false;
-                    viewModel.UpdatePass(navigation.Pass);
+                    viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
                     this.Show();
                 }
             }
@@ -223,7 +223,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.ViewAllParts();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -244,7 +244,7 @@ namespace QuoteSwift
             Hide();
             navigation.Pass = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             navigation.AddNewPart();
-            viewModel.UpdatePass(navigation.Pass);
+            viewModel.UpdateData(navigation.Pass.PassQuoteMap, navigation.Pass.PassBusinessList, navigation.Pass.PassPumpList, navigation.Pass.PassPartList);
             try
             {
                 Show();
@@ -267,7 +267,7 @@ namespace QuoteSwift
         {
             var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
             MainProgramCode.CloseApplication(true, ref p);
-            viewModel.UpdatePass(p);
+            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
         }
 
         void LoadDataGrid()

@@ -57,12 +57,13 @@ namespace QuoteSwift
             BusinessList = dataService.LoadBusinessList();
         }
 
-        public void UpdatePass(Pass newPass)
+        public void UpdateData(BindingList<Business> businessList,
+                               Business businessToChange = null,
+                               bool changeSpecificObject = false)
         {
-            if (newPass == null) return;
-            BusinessList = newPass.PassBusinessList;
-            businessToChange = newPass.BusinessToChange;
-            changeSpecificObject = newPass.ChangeSpecificObject;
+            BusinessList = businessList;
+            this.businessToChange = businessToChange;
+            this.changeSpecificObject = changeSpecificObject;
         }
 
         public bool AddBusiness()

@@ -27,7 +27,7 @@ namespace QuoteSwift
         public void ViewAllQuotes()
         {
             var vm = new QuotesViewModel(dataService);
-            vm.UpdatePass(Pass);
+            vm.UpdateData(Pass.PassQuoteMap, Pass.PassBusinessList, Pass.PassPumpList, Pass.PassPartList);
             vm.LoadData();
             using (var form = new FrmViewQuotes(vm, this))
             {
@@ -49,7 +49,7 @@ namespace QuoteSwift
         public void CreateNewPump()
         {
             var vm = new AddPumpViewModel(dataService);
-            vm.UpdatePass(Pass);
+            vm.UpdateData(Pass.PassPumpList, Pass.PassPartList, Pass.PumpToChange, Pass.ChangeSpecificObject, Pass.RepairableItemNames);
             vm.LoadData();
             using (var form = new FrmAddPump(vm, this))
             {
@@ -85,13 +85,15 @@ namespace QuoteSwift
         public void AddCustomer()
         {
             var vm = new AddCustomerViewModel(dataService);
-            vm.UpdatePass(Pass);
+            vm.UpdateData(Pass.PassBusinessList, Pass.CustomerToChange, Pass.ChangeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddCustomer(vm, this))
             {
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
+            Pass.PassBusinessList = vm.BusinessList;
+            Pass.CustomerToChange = vm.CustomerToChange;
+            Pass.ChangeSpecificObject = vm.ChangeSpecificObject;
         }
 
         public void ViewCustomers()
@@ -107,13 +109,16 @@ namespace QuoteSwift
         public void AddBusiness()
         {
             var vm = new AddBusinessViewModel(dataService);
-            vm.UpdatePass(Pass);
+            vm.UpdateData(Pass.PassBusinessList, Pass.BusinessToChange, Pass.ChangeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddBusiness(vm, this))
             {
+                form.SetPass(Pass);
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
+            Pass.PassBusinessList = vm.BusinessList;
+            Pass.BusinessToChange = vm.BusinessToChange;
+            Pass.ChangeSpecificObject = vm.ChangeSpecificObject;
         }
 
         public void ViewBusinesses()
