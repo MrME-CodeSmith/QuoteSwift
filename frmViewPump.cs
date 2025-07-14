@@ -10,7 +10,7 @@ namespace QuoteSwift // Repair Quote Swift
     {
 
         readonly ViewPumpViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
         Pass passed
         {
@@ -20,7 +20,7 @@ namespace QuoteSwift // Repair Quote Swift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null)
+        public FrmViewPump(ViewPumpViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;

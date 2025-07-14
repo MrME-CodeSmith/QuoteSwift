@@ -4,7 +4,6 @@ namespace QuoteSwift
 {
     public interface INavigationService
     {
-        Pass Pass { get; set; }
 
         void CreateNewQuote();
         void ViewAllQuotes();

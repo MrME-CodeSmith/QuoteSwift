@@ -10,9 +10,9 @@ namespace QuoteSwift
     {
 
         readonly QuotesViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
-        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null)
+        public FrmViewQuotes(QuotesViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;

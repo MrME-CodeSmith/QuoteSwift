@@ -9,7 +9,7 @@ namespace QuoteSwift
     {
 
         readonly ManageEmailsViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
         Pass passed
         {
@@ -19,7 +19,7 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null)
+        public FrmManageAllEmails(ManageEmailsViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;

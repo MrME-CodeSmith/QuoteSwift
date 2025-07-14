@@ -11,7 +11,7 @@ namespace QuoteSwift
     {
 
         readonly ManagePhoneNumbersViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
         Pass passed
         {
@@ -21,7 +21,7 @@ namespace QuoteSwift
 
         public ref Pass Passed { get => ref passed; }
 
-        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null)
+        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;

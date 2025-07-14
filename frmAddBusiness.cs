@@ -9,7 +9,7 @@ namespace QuoteSwift
     {
 
         readonly AddBusinessViewModel viewModel;
-        readonly INavigationService navigation;
+        readonly NavigationService navigation;
 
         Pass passed
         {
@@ -17,7 +17,7 @@ namespace QuoteSwift
             set => viewModel.UpdatePass(value);
         }
 
-        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null)
+        public FrmAddBusiness(AddBusinessViewModel viewModel, NavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
