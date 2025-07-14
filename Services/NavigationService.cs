@@ -57,9 +57,11 @@ namespace QuoteSwift
             vm.LoadData();
             using (var form = new FrmAddPump(vm, this))
             {
+                form.SetPass(Pass);
                 form.ShowDialog();
             }
-            Pass = vm.Pass;
+            Pass.PassPumpList = vm.PumpList;
+            Pass.PassPartList = vm.PartMap;
         }
 
         public void ViewAllParts()
