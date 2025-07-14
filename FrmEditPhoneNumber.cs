@@ -31,8 +31,9 @@ namespace QuoteSwift
         {
             if (passed != null && passed.BusinessToChange != null)
             {
-                var vm = new AddBusinessViewModel(new FileDataService());
+                var vm = new AddBusinessViewModel(viewModel.DataService);
                 vm.UpdatePass(passed);
+                vm.LoadData();
                 FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
                 if (!frmAddBusiness.PhoneNumberExisting(txtPhoneNumber.Text))
                 {
@@ -43,8 +44,9 @@ namespace QuoteSwift
             }
             else if (passed != null && passed.CustomerToChange != null)
             {
-                var vm = new AddCustomerViewModel(new FileDataService());
+                var vm = new AddCustomerViewModel(viewModel.DataService);
                 vm.UpdatePass(passed);
+                vm.LoadData();
                 FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
                 if (!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
                 {

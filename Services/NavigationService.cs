@@ -18,6 +18,7 @@ namespace QuoteSwift
         {
             var vm = new CreateQuoteViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmCreateQuote(vm))
             {
                 form.ShowDialog();
@@ -29,6 +30,7 @@ namespace QuoteSwift
         {
             var vm = new QuotesViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmViewQuotes(vm, this))
             {
                 form.ShowDialog();
@@ -40,6 +42,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPumpViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmViewPump(vm, this))
             {
                 form.ShowDialog();
@@ -51,6 +54,7 @@ namespace QuoteSwift
         {
             var vm = new AddPumpViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmAddPump(vm, this))
             {
                 form.ShowDialog();
@@ -62,6 +66,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPartsViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmViewParts(vm, this))
             {
                 form.ShowDialog();
@@ -73,6 +78,7 @@ namespace QuoteSwift
         {
             var vm = new AddPartViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmAddPart(vm, this))
             {
                 form.ShowDialog();
@@ -84,6 +90,7 @@ namespace QuoteSwift
         {
             var vm = new AddCustomerViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmAddCustomer(vm, this))
             {
                 form.ShowDialog();
@@ -95,6 +102,7 @@ namespace QuoteSwift
         {
             var vm = new ViewCustomersViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmViewCustomers(vm, this))
             {
                 form.ShowDialog();
@@ -106,6 +114,7 @@ namespace QuoteSwift
         {
             var vm = new AddBusinessViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmAddBusiness(vm, this))
             {
                 form.ShowDialog();
@@ -117,6 +126,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessesViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmViewAllBusinesses(vm, this))
             {
                 form.ShowDialog();
@@ -128,6 +138,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmViewBusinessAddresses(vm, this))
             {
                 form.ShowDialog();
@@ -139,6 +150,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPOBoxAddressesViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmViewPOBoxAddresses(vm, this))
             {
                 form.ShowDialog();
@@ -150,6 +162,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmManageAllEmails(vm, this))
             {
                 form.ShowDialog();
@@ -161,6 +174,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmManagingPhoneNumbers(vm, this))
             {
                 form.ShowDialog();
@@ -172,6 +186,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmEditBusinessAddress(vm))
             {
                 form.ShowDialog();
@@ -183,6 +198,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmEditEmailAddress(vm))
             {
                 form.ShowDialog();
@@ -194,6 +210,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.UpdatePass(Pass);
+            vm.LoadData();
             using (var form = new FrmEditPhoneNumber(vm))
             {
                 form.ShowDialog();
