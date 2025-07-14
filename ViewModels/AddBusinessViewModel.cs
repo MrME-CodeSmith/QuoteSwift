@@ -1,11 +1,17 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
     public class AddBusinessViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
+        BindingList<Business> businessList;
+        readonly Dictionary<string, Business> businessLookup = new Dictionary<string, Business>();
+        readonly HashSet<string> businessVatNumbers = new HashSet<string>();
+        readonly HashSet<string> businessRegNumbers = new HashSet<string>();
+        Business businessToChange;
+        bool changeSpecificObject;
         Business currentBusiness;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -13,12 +19,25 @@ namespace QuoteSwift
         public AddBusinessViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
         }
 
         public IDataService DataService => dataService;
 
-        public Pass Pass => pass;
+        public BindingList<Business> BusinessList
+        {
+            get => businessList;
+            set
+            {
+                businessList = value;
+                SyncLookup();
+            }
+        }
+
+        public Dictionary<string, Business> BusinessLookup => businessLookup;
+        public HashSet<string> BusinessVatNumbers => businessVatNumbers;
+        public HashSet<string> BusinessRegNumbers => businessRegNumbers;
+        public Business BusinessToChange { get => businessToChange; set => businessToChange = value; }
+        public bool ChangeSpecificObject { get => changeSpecificObject; set => changeSpecificObject = value; }
 
         public Business CurrentBusiness
         {
@@ -35,16 +54,15 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            pass.PassBusinessList = dataService.LoadBusinessList();
+            BusinessList = dataService.LoadBusinessList();
         }
 
         public void UpdatePass(Pass newPass)
         {
             if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
+            BusinessList = newPass.PassBusinessList;
+            businessToChange = newPass.BusinessToChange;
+            changeSpecificObject = newPass.ChangeSpecificObject;
         }
 
         public bool AddBusiness()
@@ -52,24 +70,24 @@ namespace QuoteSwift
             if (!ValidateBusiness())
                 return false;
 
-            if (pass.PassBusinessList == null)
-                pass.PassBusinessList = new BindingList<Business>();
+            if (businessList == null)
+                businessList = new BindingList<Business>();
 
-            if (pass.BusinessLookup.ContainsKey(CurrentBusiness.BusinessName) ||
-                pass.BusinessVatNumbers.Contains(CurrentBusiness.BusinessLegalDetails?.VatNumber) ||
-                pass.BusinessRegNumbers.Contains(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber))
+            if (businessLookup.ContainsKey(CurrentBusiness.BusinessName) ||
+                businessVatNumbers.Contains(CurrentBusiness.BusinessLegalDetails?.VatNumber) ||
+                businessRegNumbers.Contains(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber))
             {
                 MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
                 return false;
             }
 
-            pass.PassBusinessList.Add(CurrentBusiness);
-            pass.BusinessLookup[CurrentBusiness.BusinessName] = CurrentBusiness;
-            pass.BusinessVatNumbers.Add(CurrentBusiness.BusinessLegalDetails?.VatNumber);
-            pass.BusinessRegNumbers.Add(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber);
+            businessList.Add(CurrentBusiness);
+            businessLookup[CurrentBusiness.BusinessName] = CurrentBusiness;
+            businessVatNumbers.Add(CurrentBusiness.BusinessLegalDetails?.VatNumber);
+            businessRegNumbers.Add(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber);
 
-            pass.BusinessToChange = null;
-            pass.ChangeSpecificObject = false;
+            businessToChange = null;
+            changeSpecificObject = false;
             return true;
         }
 
@@ -78,26 +96,26 @@ namespace QuoteSwift
             if (!ValidateBusiness())
                 return false;
 
-            if (pass.BusinessToChange == null)
+            if (businessToChange == null)
                 return false;
 
-            string oldName = pass.BusinessToChange.BusinessName;
-            string oldVat = pass.BusinessToChange.BusinessLegalDetails?.VatNumber;
-            string oldReg = pass.BusinessToChange.BusinessLegalDetails?.RegistrationNumber;
+            string oldName = businessToChange.BusinessName;
+            string oldVat = businessToChange.BusinessLegalDetails?.VatNumber;
+            string oldReg = businessToChange.BusinessLegalDetails?.RegistrationNumber;
 
-            pass.BusinessToChange.BusinessName = CurrentBusiness.BusinessName;
-            pass.BusinessToChange.BusinessExtraInformation = CurrentBusiness.BusinessExtraInformation;
-            pass.BusinessToChange.BusinessLegalDetails = new Legal(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber, CurrentBusiness.BusinessLegalDetails?.VatNumber);
+            businessToChange.BusinessName = CurrentBusiness.BusinessName;
+            businessToChange.BusinessExtraInformation = CurrentBusiness.BusinessExtraInformation;
+            businessToChange.BusinessLegalDetails = new Legal(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber, CurrentBusiness.BusinessLegalDetails?.VatNumber);
 
-            pass.BusinessLookup.Remove(oldName);
-            pass.BusinessVatNumbers.Remove(oldVat);
-            pass.BusinessRegNumbers.Remove(oldReg);
+            businessLookup.Remove(oldName);
+            businessVatNumbers.Remove(oldVat);
+            businessRegNumbers.Remove(oldReg);
 
-            CurrentBusiness = pass.BusinessToChange;
-            pass.BusinessLookup[CurrentBusiness.BusinessName] = CurrentBusiness;
-            pass.BusinessVatNumbers.Add(CurrentBusiness.BusinessLegalDetails?.VatNumber);
-            pass.BusinessRegNumbers.Add(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber);
-
+            CurrentBusiness = businessToChange;
+            businessLookup[CurrentBusiness.BusinessName] = CurrentBusiness;
+            businessVatNumbers.Add(CurrentBusiness.BusinessLegalDetails?.VatNumber);
+            businessRegNumbers.Add(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber);
+            
             return true;
         }
 
@@ -317,6 +335,23 @@ namespace QuoteSwift
             }
 
             return true;
+        }
+
+        void SyncLookup()
+        {
+            businessLookup.Clear();
+            businessVatNumbers.Clear();
+            businessRegNumbers.Clear();
+            if (businessList != null)
+            {
+                foreach (var b in businessList)
+                {
+                    if (!businessLookup.ContainsKey(b.BusinessName))
+                        businessLookup[b.BusinessName] = b;
+                    businessVatNumbers.Add(b.BusinessLegalDetails?.VatNumber);
+                    businessRegNumbers.Add(b.BusinessLegalDetails?.RegistrationNumber);
+                }
+            }
         }
 
         protected void OnPropertyChanged(string propertyName)
