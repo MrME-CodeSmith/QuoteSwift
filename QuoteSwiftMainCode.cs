@@ -117,8 +117,8 @@ namespace QuoteSwift
         public static ref Pass CreateNewQuote(ref Pass passed)
         {
             var vm = new CreateQuoteViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmCreateQuote newQuote = new FrmCreateQuote(vm);
+            vm.LoadData();
+            FrmCreateQuote newQuote = new FrmCreateQuote(vm, passed);
             try
             {
                 newQuote.ShowDialog();
@@ -128,7 +128,6 @@ namespace QuoteSwift
                 MainProgramCode.ShowError(e.ToString(), "ERROR - Error Occurred");
                 //Do Nothing
             }
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -151,10 +150,9 @@ namespace QuoteSwift
         public static ref Pass ViewAllPumps(ref Pass passed)
         {
             var vm = new ViewPumpViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmViewPump frmViewPump = new FrmViewPump(vm, null);
+            vm.LoadData();
+            FrmViewPump frmViewPump = new FrmViewPump(vm, null, passed);
             frmViewPump.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -177,8 +175,8 @@ namespace QuoteSwift
         public static ref Pass ViewAllParts(ref Pass passed)
         {
             var vm = new ViewPartsViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmViewParts frmViewParts = new FrmViewParts(vm, null);
+            vm.LoadData();
+            FrmViewParts frmViewParts = new FrmViewParts(vm, null, passed);
             try
             {
                 frmViewParts.ShowDialog();
@@ -187,7 +185,6 @@ namespace QuoteSwift
             {
                 //do nothing
             }
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -249,10 +246,9 @@ namespace QuoteSwift
         public static ref Pass ViewBusinesses(ref Pass passed)
         {
             var vm = new ViewBusinessesViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses(vm, null);
+            vm.LoadData();
+            FrmViewAllBusinesses frmViewAllBusinesses = new FrmViewAllBusinesses(vm, null, passed);
             frmViewAllBusinesses.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -262,10 +258,9 @@ namespace QuoteSwift
         public static ref Pass ViewBusinessesAddresses(ref Pass passed)
         {
             var vm = new ViewBusinessAddressesViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm, null);
+            vm.LoadData();
+            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm, null, passed);
             FrmViewBusinessAddresses.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -275,10 +270,9 @@ namespace QuoteSwift
         public static ref Pass ViewBusinessesPOBoxAddresses(ref Pass passed)
         {
             var vm = new ViewPOBoxAddressesViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(vm, null);
+            vm.LoadData();
+            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(vm, null, passed);
             FrmViewPOBoxAddresses.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -288,10 +282,9 @@ namespace QuoteSwift
         public static ref Pass ViewBusinessesEmailAddresses(ref Pass passed)
         {
             var vm = new ManageEmailsViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm, null);
+            vm.LoadData();
+            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm, null, passed);
             FrmManageAllEmails.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -301,10 +294,9 @@ namespace QuoteSwift
         public static ref Pass ViewBusinessesPhoneNumbers(ref Pass passed)
         {
             var vm = new ManagePhoneNumbersViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm, null);
+            vm.LoadData();
+            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm, null, passed);
             FrmManagingPhoneNumbers.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -314,10 +306,9 @@ namespace QuoteSwift
         public static ref Pass EditBusinessAddress(ref Pass passed)
         {
             var vm = new ViewBusinessAddressesViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmEditBusinessAddress frmEditBusinessAddress = new FrmEditBusinessAddress(vm);
+            vm.LoadData();
+            FrmEditBusinessAddress frmEditBusinessAddress = new FrmEditBusinessAddress(vm, passed);
             frmEditBusinessAddress.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -327,10 +318,9 @@ namespace QuoteSwift
         public static ref Pass EditBusinessEmailAddress(ref Pass passed)
         {
             var vm = new ManageEmailsViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmEditEmailAddress FrmEditEmailAddress = new FrmEditEmailAddress(vm);
+            vm.LoadData();
+            FrmEditEmailAddress FrmEditEmailAddress = new FrmEditEmailAddress(vm, passed);
             FrmEditEmailAddress.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
@@ -340,10 +330,9 @@ namespace QuoteSwift
         public static ref Pass EditPhoneNumber(ref Pass passed)
         {
             var vm = new ManagePhoneNumbersViewModel(new FileDataService());
-            vm.UpdatePass(passed);
-            FrmEditPhoneNumber frmEditPhoneNumber = new FrmEditPhoneNumber(vm);
+            vm.LoadData();
+            FrmEditPhoneNumber frmEditPhoneNumber = new FrmEditPhoneNumber(vm, passed);
             frmEditPhoneNumber.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 

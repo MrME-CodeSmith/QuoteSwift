@@ -8,18 +8,15 @@ namespace QuoteSwift
 
         readonly ManagePhoneNumbersViewModel viewModel;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
+        Pass passed;
 
-        public ref Pass Passed { get => ref passed; }
+        public ref Pass Passed => ref passed;
 
-        public FrmEditPhoneNumber(ManagePhoneNumbersViewModel viewModel)
+        public FrmEditPhoneNumber(ManagePhoneNumbersViewModel viewModel, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            passed = pass ?? new Pass(null, null, null, null);
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)

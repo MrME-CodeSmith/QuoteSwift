@@ -1,39 +1,71 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
     public class CreateQuoteViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
+        Dictionary<string, Part> partList;
+        BindingList<Pump> pumps;
+        BindingList<Business> businesses;
+        SortedDictionary<string, Quote> quoteMap;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public CreateQuoteViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
         }
 
         public IDataService DataService => dataService;
 
-        public Pass Pass => pass;
+        public Dictionary<string, Part> PartList
+        {
+            get => partList;
+            private set
+            {
+                partList = value;
+                OnPropertyChanged(nameof(PartList));
+            }
+        }
+
+        public BindingList<Pump> Pumps
+        {
+            get => pumps;
+            private set
+            {
+                pumps = value;
+                OnPropertyChanged(nameof(Pumps));
+            }
+        }
+
+        public BindingList<Business> Businesses
+        {
+            get => businesses;
+            private set
+            {
+                businesses = value;
+                OnPropertyChanged(nameof(Businesses));
+            }
+        }
+
+        public SortedDictionary<string, Quote> QuoteMap
+        {
+            get => quoteMap;
+            private set
+            {
+                quoteMap = value;
+                OnPropertyChanged(nameof(QuoteMap));
+            }
+        }
 
         public void LoadData()
         {
-            pass.PassPartList = dataService.LoadPartList();
-            pass.PassPumpList = dataService.LoadPumpList();
-            pass.PassBusinessList = dataService.LoadBusinessList();
-            pass.PassQuoteMap = dataService.LoadQuoteMap();
-        }
-
-        public void UpdatePass(Pass newPass)
-        {
-            if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
+            PartList = dataService.LoadPartList();
+            Pumps = dataService.LoadPumpList();
+            Businesses = dataService.LoadBusinessList();
+            QuoteMap = dataService.LoadQuoteMap();
         }
 
         protected void OnPropertyChanged(string propertyName)
