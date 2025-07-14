@@ -41,68 +41,7 @@ namespace QuoteSwift
             PassPartList = partList;
         }
 
-        //Pass Quote Constructor:
-
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> partList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)
-        {
-            PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
-            PassPartList = partList;
-            QuoteTOChange = mQuoteTOChange;
-            ChangeSpecificObject = mChangeSpecificObject;
-        }
-
-        //Pass Business Constructor:
-
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> partList, ref Business mBusinessToChange, bool mChangeSpecificObject = false)
-        {
-            PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
-            PassPartList = partList;
-            BusinessToChange = mBusinessToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
-        }
-
-        //Pass Customer Constructor:
-
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> partList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false)
-        {
-            PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
-            PassPartList = partList;
-            CustomerToChange = mCustomerToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
-        }
-
-        //Pass Pump Constructor:
-
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> partList, ref Pump mPumpToChange, bool mChangeSpecificObject = false)
-        {
-            PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
-            PassPartList = partList;
-            PumpToChange = mPumpToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
-        }
-
-        //Pass Part Constructor:
-
-        public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> partList, ref Part mPartToChange, bool mChangeSpecificObject = false)
-        {
-            PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
-            PassPartList = partList;
-            PartToChange = mPartToChange;
-            ChangeSpecificObject = mChangeSpecificObject;
-        }
-
         public SortedDictionary<string, Quote> PassQuoteMap { get => mPassQuoteMap; set => mPassQuoteMap = value; }
-        public IEnumerable<Quote> PassQuoteList => mPassQuoteMap?.Values;
         public BindingList<Business> PassBusinessList
         {
             get => mPassBusinessList;
@@ -208,19 +147,5 @@ namespace QuoteSwift
             return mNewPartMap.TryGetValue(StringUtil.NormalizeKey(newNumber), out part);
         }
 
-        public void AddRepairableItem(Pump pump)
-        {
-            if (pump == null) return;
-            if (mPassPumpList == null) mPassPumpList = new BindingList<Pump>();
-            mPassPumpList.Add(pump);
-            mRepairableItemNames.Add(StringUtil.NormalizeKey(pump.PumpName));
-        }
-
-        public void RemoveRepairableItem(Pump pump)
-        {
-            if (pump == null || mPassPumpList == null) return;
-            mPassPumpList.Remove(pump);
-            mRepairableItemNames.Remove(StringUtil.NormalizeKey(pump.PumpName));
-        }
     }
 }
