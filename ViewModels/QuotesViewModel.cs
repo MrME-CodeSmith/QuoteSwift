@@ -94,13 +94,15 @@ namespace QuoteSwift
             Quotes = new BindingList<Quote>(QuoteMap.Values.ToList());
         }
 
-        public void UpdatePass(Pass newPass)
+        public void UpdateData(SortedDictionary<string, Quote> quoteMap,
+                               BindingList<Business> businessList,
+                               BindingList<Pump> pumpList,
+                               Dictionary<string, Part> partMap)
         {
-            if (newPass == null) return;
-            QuoteMap = newPass.PassQuoteMap;
-            BusinessList = newPass.PassBusinessList;
-            PartMap = newPass.PassPartList;
-            PumpList = newPass.PassPumpList;
+            QuoteMap = quoteMap;
+            BusinessList = businessList;
+            PumpList = pumpList;
+            PartMap = partMap;
             Quotes = new BindingList<Quote>(QuoteMap?.Values.ToList() ?? new List<Quote>());
         }
 

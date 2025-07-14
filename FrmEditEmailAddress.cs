@@ -28,9 +28,10 @@ namespace QuoteSwift
                 if (passed != null && passed.BusinessToChange != null)
                 {
                     var vm = new AddBusinessViewModel(viewModel.DataService);
-                    vm.UpdatePass(passed);
+                    vm.UpdateData(passed.PassBusinessList, passed.BusinessToChange, passed.ChangeSpecificObject);
                     vm.LoadData();
                     FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
+                    frmAddBusiness.SetPass(passed);
                     if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
@@ -41,9 +42,10 @@ namespace QuoteSwift
                 else if (passed != null && passed.CustomerToChange != null)
                 {
                     var vm = new AddCustomerViewModel(viewModel.DataService);
-                    vm.UpdatePass(passed);
+                    vm.UpdateData(passed.PassBusinessList, passed.CustomerToChange, passed.ChangeSpecificObject);
                     vm.LoadData();
                     FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
+                    frmAddCustomer.SetPass(passed);
                     if (!frmAddCustomer.EmailAddressExisting(mtxtEmail.Text))
                     {
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");

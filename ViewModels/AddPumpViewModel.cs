@@ -56,14 +56,18 @@ namespace QuoteSwift
             }
         }
 
-        public void UpdatePass(Pass newPass)
+        public void UpdateData(BindingList<Pump> pumpList,
+                               Dictionary<string, Part> partMap,
+                               Pump pumpToChange = null,
+                               bool changeSpecificObject = false,
+                               HashSet<string> repairableItemNames = null)
         {
-            if (newPass == null) return;
-            PumpList = newPass.PassPumpList;
-            PartMap = newPass.PassPartList;
-            RepairableItemNames = newPass.RepairableItemNames;
-            PumpToChange = newPass.PumpToChange;
-            ChangeSpecificObject = newPass.ChangeSpecificObject;
+            PumpList = pumpList;
+            PartMap = partMap;
+            PumpToChange = pumpToChange;
+            ChangeSpecificObject = changeSpecificObject;
+            if (repairableItemNames != null)
+                RepairableItemNames = repairableItemNames;
         }
 
         public bool AddPump()

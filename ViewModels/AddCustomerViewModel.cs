@@ -5,7 +5,6 @@ namespace QuoteSwift
     public class AddCustomerViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        readonly Pass pass;
         BindingList<Business> businessList;
         Customer customerToChange;
         bool changeSpecificObject;
@@ -16,13 +15,11 @@ namespace QuoteSwift
         public AddCustomerViewModel(IDataService service)
         {
             dataService = service;
-            pass = new Pass(null, null, null, null);
             currentCustomer = new Customer();
         }
 
         public IDataService DataService => dataService;
 
-        public Pass Pass => pass;
 
         public BindingList<Business> BusinessList
         {
@@ -69,17 +66,13 @@ namespace QuoteSwift
             BusinessList = dataService.LoadBusinessList();
         }
 
-        public void UpdatePass(Pass newPass)
+        public void UpdateData(BindingList<Business> businessList,
+                               Customer customerToChange = null,
+                               bool changeSpecificObject = false)
         {
-            if (newPass == null) return;
-            pass.PassQuoteMap = newPass.PassQuoteMap;
-            pass.PassBusinessList = newPass.PassBusinessList;
-            pass.PassPartList = newPass.PassPartList;
-            pass.PassPumpList = newPass.PassPumpList;
-
-            BusinessList = newPass.PassBusinessList;
-            CustomerToChange = newPass.CustomerToChange;
-            ChangeSpecificObject = newPass.ChangeSpecificObject;
+            BusinessList = businessList;
+            CustomerToChange = customerToChange;
+            ChangeSpecificObject = changeSpecificObject;
         }
 
         public bool AddCustomer(Business container)

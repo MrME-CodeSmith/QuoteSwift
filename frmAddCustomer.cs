@@ -13,10 +13,12 @@ namespace QuoteSwift
 
         Business Container;
 
-        Pass passed
+        Pass passed;
+
+        public void SetPass(Pass value)
         {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
+            passed = value;
+            viewModel.UpdateData(value.PassBusinessList, value.CustomerToChange, value.ChangeSpecificObject);
         }
 
         public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null)
@@ -24,7 +26,7 @@ namespace QuoteSwift
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            viewModel.CurrentCustomer = viewModel.Pass.CustomerToChange ?? new Customer();
+            viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
 
             txtCustomerCompanyName.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName), false, DataSourceUpdateMode.OnPropertyChanged);
             mtxtVendorNumber.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.VendorNumber), false, DataSourceUpdateMode.OnPropertyChanged);

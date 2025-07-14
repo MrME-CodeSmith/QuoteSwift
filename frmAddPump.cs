@@ -21,7 +21,9 @@ namespace QuoteSwift
         public void SetPass(Pass value)
         {
             passed = value;
-            viewModel.UpdatePass(value);
+            viewModel.UpdateData(value.PassPumpList, value.PassPartList,
+                                  value.PumpToChange, value.ChangeSpecificObject,
+                                  value.RepairableItemNames);
         }
 
         public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null)

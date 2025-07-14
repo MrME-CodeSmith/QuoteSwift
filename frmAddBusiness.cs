@@ -11,10 +11,12 @@ namespace QuoteSwift
         readonly AddBusinessViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
+        Pass passed;
+
+        public void SetPass(Pass value)
         {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
+            passed = value;
+            viewModel.UpdateData(value.PassBusinessList, value.BusinessToChange, value.ChangeSpecificObject);
         }
 
         public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null)

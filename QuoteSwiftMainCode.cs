@@ -137,7 +137,7 @@ namespace QuoteSwift
         public static ref Pass ViewAllQuotes(ref Pass passed)
         {
             var vm = new QuotesViewModel(new FileDataService());
-            vm.UpdatePass(passed);
+            vm.UpdateData(passed.PassQuoteMap, passed.PassBusinessList, passed.PassPumpList, passed.PassPartList);
             FrmViewQuotes frmViewQuotes = new FrmViewQuotes(vm, null);
             frmViewQuotes.ShowDialog();
             passed = new Pass(vm.QuoteMap, vm.BusinessList, vm.PumpList, vm.PartMap);
@@ -162,7 +162,7 @@ namespace QuoteSwift
         public static ref Pass CreateNewPump(ref Pass passed)
         {
             var vm = new AddPumpViewModel(new FileDataService());
-            vm.UpdatePass(passed);
+            vm.UpdateData(passed.PassPumpList, passed.PassPartList, passed.PumpToChange, passed.ChangeSpecificObject, passed.RepairableItemNames);
             FrmAddPump frmAddPump = new FrmAddPump(vm, null);
             frmAddPump.ShowDialog();
             passed = vm.Pass;
@@ -207,10 +207,12 @@ namespace QuoteSwift
         public static ref Pass AddCustomer(ref Pass passed)
         {
             var vm = new AddCustomerViewModel(new FileDataService());
-            vm.UpdatePass(passed);
+            vm.UpdateData(passed.PassBusinessList, passed.CustomerToChange, passed.ChangeSpecificObject);
             FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm, null);
             frmAddCustomer.ShowDialog();
-            passed = vm.Pass;
+            passed.PassBusinessList = vm.BusinessList;
+            passed.CustomerToChange = vm.CustomerToChange;
+            passed.ChangeSpecificObject = vm.ChangeSpecificObject;
             return ref passed;
         }
 
@@ -233,10 +235,12 @@ namespace QuoteSwift
         public static ref Pass AddBusiness(ref Pass passed)
         {
             var vm = new AddBusinessViewModel(new FileDataService());
-            vm.UpdatePass(passed);
+            vm.UpdateData(passed.PassBusinessList, passed.BusinessToChange, passed.ChangeSpecificObject);
             FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm, null);
             frmAddBusiness.ShowDialog();
-            passed = vm.Pass;
+            passed.PassBusinessList = vm.BusinessList;
+            passed.BusinessToChange = vm.BusinessToChange;
+            passed.ChangeSpecificObject = vm.ChangeSpecificObject;
             return ref passed;
         }
 
