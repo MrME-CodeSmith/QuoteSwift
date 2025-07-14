@@ -693,7 +693,10 @@ namespace QuoteSwift
 
 
             BindingList<Quote_Part> NonMandatoryPartList = new BindingList<Quote_Part>();
-            for (int i = 0; i < DgvNonMandatoryPartReplacement.Rows.Count - 4; i++)
+            // Exclude only the total row added during calculation.
+            // The data grid contains three cost category rows (Machining,
+            // Labour and Consumables) which must be included in the quote.
+            for (int i = 0; i < DgvNonMandatoryPartReplacement.Rows.Count - 1; i++)
             {
                 if (DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString() != "-")
                 {
