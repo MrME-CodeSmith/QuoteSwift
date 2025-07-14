@@ -27,12 +27,12 @@ namespace QuoteSwift
         {
             CustomerName = "";
             CustomerCompanyName = "";
-            CustomerPOBoxAddress = new BindingList<Address>();
-            CustomerDeliveryAddressList = new BindingList<Address>();
-            CustomerLegalDetails = null;
-            CustomerTelephoneNumberList = new BindingList<string>();
-            CustomerCellphoneNumberList = new BindingList<string>();
-            CustomerEmailList = new BindingList<string>();
+            mCustomerPOBoxAddress = new BindingList<Address>();
+            mCustomerDeliveryAddressList = new BindingList<Address>();
+            mCustomerLegalDetails = null;
+            mCustomerTelephoneNumberList = new BindingList<string>();
+            mCustomerCellphoneNumberList = new BindingList<string>();
+            mCustomerEmailList = new BindingList<string>();
             VendorNumber = "";
 
             mDeliveryAddressMap = new Dictionary<string, Address>();
@@ -50,24 +50,24 @@ namespace QuoteSwift
 
             if (c.mCustomerPOBoxAddress != null)
             {
-                CustomerPOBoxAddress = new BindingList<Address>();
+                mCustomerPOBoxAddress = new BindingList<Address>();
                 foreach (var a in c.mCustomerPOBoxAddress)
-                    CustomerPOBoxAddress.Add(new Address(a));
+                    mCustomerPOBoxAddress.Add(new Address(a));
             }
             else
             {
-                CustomerPOBoxAddress = null;
+                mCustomerPOBoxAddress = null;
             }
 
             if (c.mCustomerDeliveryAddressList != null)
             {
-                CustomerDeliveryAddressList = new BindingList<Address>();
+                mCustomerDeliveryAddressList = new BindingList<Address>();
                 foreach (var a in c.mCustomerDeliveryAddressList)
-                    CustomerDeliveryAddressList.Add(new Address(a));
+                    mCustomerDeliveryAddressList.Add(new Address(a));
             }
             else
             {
-                CustomerDeliveryAddressList = null;
+                mCustomerDeliveryAddressList = null;
             }
 
             CustomerLegalDetails = c.mCustomerLegalDetails != null
@@ -76,35 +76,35 @@ namespace QuoteSwift
 
             if (c.mCustomerTelephoneNumberList != null)
             {
-                CustomerTelephoneNumberList = new BindingList<string>();
+                mCustomerTelephoneNumberList = new BindingList<string>();
                 foreach (var n in c.mCustomerTelephoneNumberList)
-                    CustomerTelephoneNumberList.Add(n);
+                    mCustomerTelephoneNumberList.Add(n);
             }
             else
             {
-                CustomerTelephoneNumberList = null;
+                mCustomerTelephoneNumberList = null;
             }
 
             if (c.mCustomerCellphoneNumberList != null)
             {
-                CustomerCellphoneNumberList = new BindingList<string>();
+                mCustomerCellphoneNumberList = new BindingList<string>();
                 foreach (var n in c.mCustomerCellphoneNumberList)
-                    CustomerCellphoneNumberList.Add(n);
+                    mCustomerCellphoneNumberList.Add(n);
             }
             else
             {
-                CustomerCellphoneNumberList = null;
+                mCustomerCellphoneNumberList = null;
             }
 
             if (c.mCustomerEmailList != null)
             {
-                CustomerEmailList = new BindingList<string>();
+                mCustomerEmailList = new BindingList<string>();
                 foreach (var e in c.mCustomerEmailList)
-                    CustomerEmailList.Add(e);
+                    mCustomerEmailList.Add(e);
             }
             else
             {
-                CustomerEmailList = null;
+                mCustomerEmailList = null;
             }
 
             VendorNumber = c.VendorNumber;
@@ -127,67 +127,12 @@ namespace QuoteSwift
 
         public string CustomerName { get => mCustomerName; set => mCustomerName = value; }
         public string CustomerCompanyName { get => mCustomerCompanyName; set => mCustomerCompanyName = value; }
-        public BindingList<Address> CustomerPOBoxAddress
-        {
-            get => mCustomerPOBoxAddress;
-            set
-            {
-                mCustomerPOBoxAddress = value;
-                mPOBoxMap?.Clear();
-                if (mCustomerPOBoxAddress != null)
-                    foreach (var a in mCustomerPOBoxAddress)
-                        mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
-        public BindingList<Address> CustomerDeliveryAddressList
-        {
-            get => mCustomerDeliveryAddressList;
-            set
-            {
-                mCustomerDeliveryAddressList = value;
-                mDeliveryAddressMap?.Clear();
-                if (mCustomerDeliveryAddressList != null)
-                    foreach (var a in mCustomerDeliveryAddressList)
-                        mDeliveryAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
+        public IReadOnlyList<Address> CustomerPOBoxAddress => mCustomerPOBoxAddress;
+        public IReadOnlyList<Address> CustomerDeliveryAddressList => mCustomerDeliveryAddressList;
         public Legal CustomerLegalDetails { get => mCustomerLegalDetails; set => mCustomerLegalDetails = value; }
-        public BindingList<string> CustomerTelephoneNumberList
-        {
-            get => mCustomerTelephoneNumberList;
-            set
-            {
-                mCustomerTelephoneNumberList = value;
-                mTelephoneNumbers?.Clear();
-                if (mCustomerTelephoneNumberList != null)
-                    foreach (var n in mCustomerTelephoneNumberList)
-                        mTelephoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> CustomerCellphoneNumberList
-        {
-            get => mCustomerCellphoneNumberList;
-            set
-            {
-                mCustomerCellphoneNumberList = value;
-                mCellphoneNumbers?.Clear();
-                if (mCustomerCellphoneNumberList != null)
-                    foreach (var n in mCustomerCellphoneNumberList)
-                        mCellphoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> CustomerEmailList
-        {
-            get => mCustomerEmailList;
-            set
-            {
-                mCustomerEmailList = value;
-                mEmailAddresses?.Clear();
-                if (mCustomerEmailList != null)
-                    foreach (var e in mCustomerEmailList)
-                        mEmailAddresses.Add(e);
-            }
-        }
+        public IReadOnlyList<string> CustomerTelephoneNumberList => mCustomerTelephoneNumberList;
+        public IReadOnlyList<string> CustomerCellphoneNumberList => mCustomerCellphoneNumberList;
+        public IReadOnlyList<string> CustomerEmailList => mCustomerEmailList;
         public string VendorNumber { get => mVendorNumber; set => mVendorNumber = value; }
         public Dictionary<string, Address> DeliveryAddressMap => mDeliveryAddressMap;
         public Dictionary<string, Address> POBoxMap => mPOBoxMap;
@@ -299,6 +244,66 @@ namespace QuoteSwift
                     if (index >= 0)
                         mCustomerEmailList[index] = newAddress;
                 }
+            }
+        }
+
+        public void AddDeliveryAddress(Address address)
+        {
+            if (address == null) return;
+            if (mCustomerDeliveryAddressList == null)
+                mCustomerDeliveryAddressList = new BindingList<Address>();
+            mCustomerDeliveryAddressList.Add(address);
+            mDeliveryAddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemoveDeliveryAddress(Address address)
+        {
+            if (address == null || mCustomerDeliveryAddressList == null) return;
+            mCustomerDeliveryAddressList.Remove(address);
+            mDeliveryAddressMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+            if (mCustomerDeliveryAddressList.Count == 0)
+                mCustomerDeliveryAddressList = null;
+        }
+
+        public void UpdateDeliveryAddress(Address oldAddress, Address newAddress)
+        {
+            if (oldAddress == null || newAddress == null || mCustomerDeliveryAddressList == null) return;
+            int index = mCustomerDeliveryAddressList.IndexOf(oldAddress);
+            if (index >= 0)
+            {
+                mCustomerDeliveryAddressList[index] = newAddress;
+                mDeliveryAddressMap.Remove(StringUtil.NormalizeKey(oldAddress.AddressDescription));
+                mDeliveryAddressMap[StringUtil.NormalizeKey(newAddress.AddressDescription)] = newAddress;
+            }
+        }
+
+        public void AddPOBoxAddress(Address address)
+        {
+            if (address == null) return;
+            if (mCustomerPOBoxAddress == null)
+                mCustomerPOBoxAddress = new BindingList<Address>();
+            mCustomerPOBoxAddress.Add(address);
+            mPOBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemovePOBoxAddress(Address address)
+        {
+            if (address == null || mCustomerPOBoxAddress == null) return;
+            mCustomerPOBoxAddress.Remove(address);
+            mPOBoxMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+            if (mCustomerPOBoxAddress.Count == 0)
+                mCustomerPOBoxAddress = null;
+        }
+
+        public void UpdatePOBoxAddress(Address oldAddress, Address newAddress)
+        {
+            if (oldAddress == null || newAddress == null || mCustomerPOBoxAddress == null) return;
+            int index = mCustomerPOBoxAddress.IndexOf(oldAddress);
+            if (index >= 0)
+            {
+                mCustomerPOBoxAddress[index] = newAddress;
+                mPOBoxMap.Remove(StringUtil.NormalizeKey(oldAddress.AddressDescription));
+                mPOBoxMap[StringUtil.NormalizeKey(newAddress.AddressDescription)] = newAddress;
             }
         }
     }

@@ -14,13 +14,17 @@ namespace QuoteSwift
         {
             PumpName = mPumpName;
             PumpDescription = mPumpDescription;
-            PartList = mPartList;
+            mPartList = mPartList;
             NewPumpPrice = mNewPumpPrice;
         }
 
         public string PumpName { get => mPumpName; set => mPumpName = value; }
         public string PumpDescription { get => mPumpDescription; set => mPumpDescription = value; }
-        public BindingList<Pump_Part> PartList { get => mPartList; set => mPartList = value; }
+        public IReadOnlyList<Pump_Part> PartList => mPartList;
+        public void SetPartList(BindingList<Pump_Part> list)
+        {
+            mPartList = list;
+        }
         public decimal NewPumpPrice { get => mNewPumpPrice; set => mNewPumpPrice = value; }
     }
 }

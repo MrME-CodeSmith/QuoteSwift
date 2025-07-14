@@ -51,11 +51,7 @@ namespace QuoteSwift
                     MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
                     return;
                 }
-                if (LinkBusiness.BusinessCustomerList == null)
-                    LinkBusiness.BusinessCustomerList = new BindingList<Customer>();
-                LinkBusiness.BusinessCustomerList.Add(Customer);
-
-                LinkBusiness.CustomerMap[Customer.CustomerCompanyName] = Customer;
+                LinkBusiness.AddCustomer(Customer);
 
                 passed.CustomerToChange = null;
                 passed.ChangeSpecificObject = false;
@@ -129,16 +125,7 @@ namespace QuoteSwift
                 Address address = new Address(txtCustomerAddresssDescription.Text, 0, txtAtt.Text, txtWorkArea.Text, txtWorkPlace.Text, 0);
                 if (!AddressExisting(address))
                 {
-                    if (Customer.CustomerDeliveryAddressList == null)
-                    {
-                        //Create New List
-                        Customer.CustomerDeliveryAddressList = new BindingList<Address> { address };
-                    }
-                    else //Add To Current list
-                    {
-                        Customer.CustomerDeliveryAddressList.Add(address);
-                    }
-                    Customer.DeliveryAddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+                    Customer.AddDeliveryAddress(address);
                     MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
 
                     ClearCustomerAddressInput();
@@ -154,10 +141,7 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
-                    if (Customer.CustomerPOBoxAddress == null)
-                        Customer.CustomerPOBoxAddress = new BindingList<Address>();
-                    Customer.CustomerPOBoxAddress.Add(address);
-                    Customer.POBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+                    Customer.AddPOBoxAddress(address);
                     MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
 
                     ClearPOBoxAddressInput();

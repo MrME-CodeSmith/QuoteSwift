@@ -358,7 +358,7 @@ namespace QuoteSwift
 
             if (NewPumpValueInput() != passed.PumpToChange.NewPumpPrice) passed.PumpToChange.NewPumpPrice = NewPumpValueInput();
 
-            passed.PumpToChange.PartList = RetreivePumpPartList();
+            passed.PumpToChange.SetPartList(RetreivePumpPartList());
         }
 
         decimal NewPumpValueInput()

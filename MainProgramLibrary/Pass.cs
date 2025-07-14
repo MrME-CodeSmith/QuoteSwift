@@ -37,10 +37,12 @@ namespace QuoteSwift
         public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList)
         {
             PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
+            mPassBusinessList = mPassBusinessList;
+            mPassPumpList = mPassPumpList;
             PassMandatoryPartList = mPassMandatoryPartList;
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
+            SyncBusinessLookup();
+            SyncRepairableItemLookup();
         }
 
         //Pass Quote Constructor:
@@ -48,12 +50,14 @@ namespace QuoteSwift
         public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Quote mQuoteTOChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
+            mPassBusinessList = mPassBusinessList;
+            mPassPumpList = mPassPumpList;
             PassMandatoryPartList = mPassMandatoryPartList;
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
             QuoteTOChange = mQuoteTOChange;
             ChangeSpecificObject = mChangeSpecificObject;
+            SyncBusinessLookup();
+            SyncRepairableItemLookup();
         }
 
         //Pass Business Constructor:
@@ -61,12 +65,14 @@ namespace QuoteSwift
         public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Business mBusinessToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
+            mPassBusinessList = mPassBusinessList;
+            mPassPumpList = mPassPumpList;
             PassMandatoryPartList = mPassMandatoryPartList;
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
             BusinessToChange = mBusinessToChange;
             ChangeSpecificObject = mChangeSpecificObject;
+            SyncBusinessLookup();
+            SyncRepairableItemLookup();
         }
 
         //Pass Customer Constructor:
@@ -74,12 +80,14 @@ namespace QuoteSwift
         public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Customer mCustomerToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
+            mPassBusinessList = mPassBusinessList;
+            mPassPumpList = mPassPumpList;
             PassMandatoryPartList = mPassMandatoryPartList;
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
             CustomerToChange = mCustomerToChange;
             ChangeSpecificObject = mChangeSpecificObject;
+            SyncBusinessLookup();
+            SyncRepairableItemLookup();
         }
 
         //Pass Pump Constructor:
@@ -87,12 +95,14 @@ namespace QuoteSwift
         public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Pump mPumpToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
+            mPassBusinessList = mPassBusinessList;
+            mPassPumpList = mPassPumpList;
             PassMandatoryPartList = mPassMandatoryPartList;
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
             PumpToChange = mPumpToChange;
             ChangeSpecificObject = mChangeSpecificObject;
+            SyncBusinessLookup();
+            SyncRepairableItemLookup();
         }
 
         //Pass Part Constructor:
@@ -100,34 +110,20 @@ namespace QuoteSwift
         public Pass(SortedDictionary<string, Quote> quoteMap, BindingList<Business> mPassBusinessList, BindingList<Pump> mPassPumpList, Dictionary<string, Part> mPassMandatoryPartList, Dictionary<string, Part> mPassNonMandatoryPartList, ref Part mPartToChange, bool mChangeSpecificObject = false)
         {
             PassQuoteMap = quoteMap;
-            PassBusinessList = mPassBusinessList;
-            PassPumpList = mPassPumpList;
+            mPassBusinessList = mPassBusinessList;
+            mPassPumpList = mPassPumpList;
             PassMandatoryPartList = mPassMandatoryPartList;
             PassNonMandatoryPartList = mPassNonMandatoryPartList;
             PartToChange = mPartToChange;
             ChangeSpecificObject = mChangeSpecificObject;
+            SyncBusinessLookup();
+            SyncRepairableItemLookup();
         }
 
         public SortedDictionary<string, Quote> PassQuoteMap { get => mPassQuoteMap; set => mPassQuoteMap = value; }
         public IEnumerable<Quote> PassQuoteList => mPassQuoteMap?.Values;
-        public BindingList<Business> PassBusinessList
-        {
-            get => mPassBusinessList;
-            set
-            {
-                mPassBusinessList = value;
-                SyncBusinessLookup();
-            }
-        }
-        public BindingList<Pump> PassPumpList
-        {
-            get => mPassPumpList;
-            set
-            {
-                mPassPumpList = value;
-                SyncRepairableItemLookup();
-            }
-        }
+        public IReadOnlyList<Business> PassBusinessList => mPassBusinessList;
+        public IReadOnlyList<Pump> PassPumpList => mPassPumpList;
         public Business BusinessToChange { get => mBusinessToChange; set => mBusinessToChange = value; }
         public Customer CustomerToChange { get => mCustomerToChange; set => mCustomerToChange = value; }
         public Quote QuoteTOChange { get => mQuoteTOChange; set => mQuoteTOChange = value; }
@@ -265,6 +261,44 @@ namespace QuoteSwift
             if (pump == null || mPassPumpList == null) return;
             mPassPumpList.Remove(pump);
             mRepairableItemNames.Remove(StringUtil.NormalizeKey(pump.PumpName));
+        }
+
+        public void AddBusiness(Business business)
+        {
+            if (business == null) return;
+            if (mPassBusinessList == null) mPassBusinessList = new BindingList<Business>();
+            if (!mBusinessLookup.ContainsKey(business.BusinessName))
+                mPassBusinessList.Add(business);
+            mBusinessLookup[business.BusinessName] = business;
+            mBusinessVatNumbers.Add(business.BusinessLegalDetails?.VatNumber);
+            mBusinessRegNumbers.Add(business.BusinessLegalDetails?.RegistrationNumber);
+        }
+
+        public void RemoveBusiness(Business business)
+        {
+            if (business == null || mPassBusinessList == null) return;
+            mPassBusinessList.Remove(business);
+            mBusinessLookup.Remove(business.BusinessName);
+            mBusinessVatNumbers.Remove(business.BusinessLegalDetails?.VatNumber);
+            mBusinessRegNumbers.Remove(business.BusinessLegalDetails?.RegistrationNumber);
+            if (mPassBusinessList.Count == 0)
+                mPassBusinessList = null;
+        }
+
+        public void UpdateBusiness(Business oldBusiness, Business newBusiness)
+        {
+            if (oldBusiness == null || newBusiness == null || mPassBusinessList == null) return;
+            int index = mPassBusinessList.IndexOf(oldBusiness);
+            if (index >= 0)
+            {
+                mPassBusinessList[index] = newBusiness;
+                mBusinessLookup.Remove(oldBusiness.BusinessName);
+                mBusinessVatNumbers.Remove(oldBusiness.BusinessLegalDetails?.VatNumber);
+                mBusinessRegNumbers.Remove(oldBusiness.BusinessLegalDetails?.RegistrationNumber);
+                mBusinessLookup[newBusiness.BusinessName] = newBusiness;
+                mBusinessVatNumbers.Add(newBusiness.BusinessLegalDetails?.VatNumber);
+                mBusinessRegNumbers.Add(newBusiness.BusinessLegalDetails?.RegistrationNumber);
+            }
         }
     }
 }

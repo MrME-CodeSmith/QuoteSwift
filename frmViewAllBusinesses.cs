@@ -78,13 +78,8 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
-                    passed.PassBusinessList.Remove(business);
-                    passed.BusinessLookup.Remove(business.BusinessName);
-                    passed.BusinessVatNumbers.Remove(business.BusinessLegalDetails.VatNumber);
-                    passed.BusinessRegNumbers.Remove(business.BusinessLegalDetails.RegistrationNumber);
+                    passed.RemoveBusiness(business);
                     MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
-
-                    if (passed.PassBusinessList.Count == 0) passed.PassBusinessList = null;
 
                     LoadInformation();
                 }
@@ -133,18 +128,10 @@ namespace QuoteSwift
         private bool ReplaceBusiness(Business Original, Business New)
         {
             if (New != null && Original != null && passed.PassBusinessList != null)
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
-                    if (passed.PassBusinessList[i] == Original)
-                    {
-                        passed.PassBusinessList[i] = New;
-                        passed.BusinessLookup.Remove(Original.BusinessName);
-                        passed.BusinessVatNumbers.Remove(Original.BusinessLegalDetails.VatNumber);
-                        passed.BusinessRegNumbers.Remove(Original.BusinessLegalDetails.RegistrationNumber);
-                        passed.BusinessLookup[New.BusinessName] = New;
-                        passed.BusinessVatNumbers.Add(New.BusinessLegalDetails.VatNumber);
-                        passed.BusinessRegNumbers.Add(New.BusinessLegalDetails.RegistrationNumber);
-                        return true;
-                    }
+            {
+                passed.UpdateBusiness(Original, New);
+                return true;
+            }
 
             return false;
         }

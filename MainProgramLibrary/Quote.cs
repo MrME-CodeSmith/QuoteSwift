@@ -76,8 +76,10 @@ namespace QuoteSwift
         public string QuoteDeliveryAddress { get => mQuoteDeliveryAddress; set => mQuoteDeliveryAddress = value; }
         public Customer QuoteCustomer { get => mQuoteCustomer; set => mQuoteCustomer = value; }
         public Business QuoteCompany { get => mQuoteCompany; set => mQuoteCompany = value; }
-        public BindingList<Quote_Part> QuoteMandatoryPartList { get => mQuoteMandatoryPartList; set => mQuoteMandatoryPartList = value; }
-        public BindingList<Quote_Part> QuoteNewList { get => mQuoteNewList; set => mQuoteNewList = value; }
+        public IReadOnlyList<Quote_Part> QuoteMandatoryPartList => mQuoteMandatoryPartList;
+        public IReadOnlyList<Quote_Part> QuoteNewList => mQuoteNewList;
+        public void SetMandatoryPartList(BindingList<Quote_Part> list) => mQuoteMandatoryPartList = list;
+        public void SetNewPartList(BindingList<Quote_Part> list) => mQuoteNewList = list;
         public Address QuoteBusinessPOBox { get => mQuoteBusinessPOBox; set => mQuoteBusinessPOBox = value; }
         public string Telefone { get => mTelefone; set => mTelefone = value; }
         public string Cellphone { get => mCellphone; set => mCellphone = value; }

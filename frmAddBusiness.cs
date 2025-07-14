@@ -36,26 +36,14 @@ namespace QuoteSwift
                 Business.BusinessExtraInformation = rtxtExtraInformation.Text;
                 Business.BusinessLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
 
-                if (passed.PassBusinessList == null)
+                if (passed.BusinessLookup.ContainsKey(Business.BusinessName) ||
+                    passed.BusinessVatNumbers.Contains(Business.BusinessLegalDetails.VatNumber) ||
+                    passed.BusinessRegNumbers.Contains(Business.BusinessLegalDetails.RegistrationNumber))
                 {
-                    //Create New business List
-                    passed.PassBusinessList = new BindingList<Business> { Business };
+                    MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
+                    return;
                 }
-                else //Add To List
-                {
-                    if (passed.BusinessLookup.ContainsKey(Business.BusinessName) ||
-                        passed.BusinessVatNumbers.Contains(Business.BusinessLegalDetails.VatNumber) ||
-                        passed.BusinessRegNumbers.Contains(Business.BusinessLegalDetails.RegistrationNumber))
-                    {
-                        MainProgramCode.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
-                        return;
-                    }
-                    passed.PassBusinessList.Add(Business);
-                }
-
-                passed.BusinessLookup[Business.BusinessName] = Business;
-                passed.BusinessVatNumbers.Add(Business.BusinessLegalDetails.VatNumber);
-                passed.BusinessRegNumbers.Add(Business.BusinessLegalDetails.RegistrationNumber);
+                passed.AddBusiness(Business);
 
                 passed.BusinessToChange = null;
                 passed.ChangeSpecificObject = false;
@@ -96,12 +84,8 @@ namespace QuoteSwift
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
                 if (!POBoxAddressExisting(address))
                 {
-                    if (Business.BusinessPOBoxAddressList == null)
-                        Business.BusinessPOBoxAddressList = new BindingList<Address>();
-                    Business.BusinessPOBoxAddressList.Add(address);
+                    Business.AddPOBoxAddress(address);
                     MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
-
-                    Business.POBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
 
                     ClearPOBoxAddressInput();
                 }
@@ -116,10 +100,7 @@ namespace QuoteSwift
                                               txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
                 if (!AddressExisting(address))
                 {
-                    if (Business.BusinessAddressList == null)
-                        Business.BusinessAddressList = new BindingList<Address>();
-                    Business.BusinessAddressList.Add(address);
-                    Business.AddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+                    Business.AddAddress(address);
                     MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
 
                     ClearBusinessAddressInput();

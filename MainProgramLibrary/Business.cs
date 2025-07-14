@@ -28,13 +28,13 @@ namespace QuoteSwift
         {
             BusinessName = "";
             BusinessExtraInformation = "";
-            BusinessAddressList = new BindingList<Address>();
-            BusinessPOBoxAddressList = new BindingList<Address>();
-            BusinessLegalDetails = null;
-            BusinessTelephoneNumberList = new BindingList<string>();
-            BusinessCellphoneNumberList = new BindingList<string>();
-            BusinessEmailAddressList = new BindingList<string>();
-            BusinessCustomerList = new BindingList<Customer>();
+            mBusinessAddressList = new BindingList<Address>();
+            mBusinessPOBoxAddressList = new BindingList<Address>();
+            mBusinessLegalDetails = null;
+            mBusinessTelephoneNumberList = new BindingList<string>();
+            mBusinessCellphoneNumberList = new BindingList<string>();
+            mBusinessEmailAddressList = new BindingList<string>();
+            mBusinessCustomerList = new BindingList<Customer>();
 
             mAddressMap = new Dictionary<string, Address>();
             mPOBoxMap = new Dictionary<string, Address>();
@@ -53,72 +53,72 @@ namespace QuoteSwift
 
             if (b.mBusinessAddressList != null)
             {
-                BusinessAddressList = new BindingList<Address>();
+                mBusinessAddressList = new BindingList<Address>();
                 foreach (var a in b.mBusinessAddressList)
-                    BusinessAddressList.Add(new Address(a));
+                    mBusinessAddressList.Add(new Address(a));
             }
             else
             {
-                BusinessAddressList = null;
+                mBusinessAddressList = null;
             }
 
             if (b.mBusinessPOBoxAddressList != null)
             {
-                BusinessPOBoxAddressList = new BindingList<Address>();
+                mBusinessPOBoxAddressList = new BindingList<Address>();
                 foreach (var a in b.mBusinessPOBoxAddressList)
-                    BusinessPOBoxAddressList.Add(new Address(a));
+                    mBusinessPOBoxAddressList.Add(new Address(a));
             }
             else
             {
-                BusinessPOBoxAddressList = null;
+                mBusinessPOBoxAddressList = null;
             }
 
-            BusinessLegalDetails = b.mBusinessLegalDetails != null
+            mBusinessLegalDetails = b.mBusinessLegalDetails != null
                 ? new Legal(b.mBusinessLegalDetails.RegistrationNumber, b.mBusinessLegalDetails.VatNumber)
                 : null;
 
             if (b.mBusinessTelephoneNumberList != null)
             {
-                BusinessTelephoneNumberList = new BindingList<string>();
+                mBusinessTelephoneNumberList = new BindingList<string>();
                 foreach (var n in b.mBusinessTelephoneNumberList)
-                    BusinessTelephoneNumberList.Add(n);
+                    mBusinessTelephoneNumberList.Add(n);
             }
             else
             {
-                BusinessTelephoneNumberList = null;
+                mBusinessTelephoneNumberList = null;
             }
 
             if (b.mBusinessCellphoneNumberList != null)
             {
-                BusinessCellphoneNumberList = new BindingList<string>();
+                mBusinessCellphoneNumberList = new BindingList<string>();
                 foreach (var n in b.mBusinessCellphoneNumberList)
-                    BusinessCellphoneNumberList.Add(n);
+                    mBusinessCellphoneNumberList.Add(n);
             }
             else
             {
-                BusinessCellphoneNumberList = null;
+                mBusinessCellphoneNumberList = null;
             }
 
             if (b.mBusinessEmailAddressList != null)
             {
-                BusinessEmailAddressList = new BindingList<string>();
+                mBusinessEmailAddressList = new BindingList<string>();
                 foreach (var e in b.mBusinessEmailAddressList)
-                    BusinessEmailAddressList.Add(e);
+                    mBusinessEmailAddressList.Add(e);
             }
             else
             {
-                BusinessEmailAddressList = null;
+                mBusinessEmailAddressList = null;
             }
 
             if (b.mBusinessCustomerList != null)
             {
-                BusinessCustomerList = new BindingList<Customer>();
+                mBusinessCustomerList = new BindingList<Customer>();
                 foreach (var c in b.mBusinessCustomerList)
-                    BusinessCustomerList.Add(new Customer(c));
+                    mBusinessCustomerList.Add(new Customer(c));
             }
             else
             {
-                BusinessCustomerList = null;
+                mBusinessCustomerList = null;
             }
 
             mAddressMap = new Dictionary<string, Address>();
@@ -142,19 +142,19 @@ namespace QuoteSwift
         }
 
 
-        public Business(string mBusinessName, string mBusinessExtraInformation, BindingList<Address> mBusinessAddressList, BindingList<Address> mBusinessPOBoxAddressList,
-            Legal mBusinessLegalDetails, BindingList<string> mBusinessTelephoneNumberList, BindingList<string> mBusinessCellphoneNumberList,
-            BindingList<string> mBusinessEmailAddressList, BindingList<Customer> mBusinessCustomerList)
+        public Business(string mBusinessName, string mBusinessExtraInformation, BindingList<Address> addressList, BindingList<Address> poBoxList,
+            Legal legalDetails, BindingList<string> telephoneList, BindingList<string> cellphoneList,
+            BindingList<string> emailList, BindingList<Customer> customerList)
         {
             BusinessName = mBusinessName;
             BusinessExtraInformation = mBusinessExtraInformation;
-            BusinessAddressList = mBusinessAddressList;
-            BusinessPOBoxAddressList = mBusinessPOBoxAddressList;
-            BusinessLegalDetails = mBusinessLegalDetails;
-            BusinessTelephoneNumberList = mBusinessTelephoneNumberList;
-            BusinessCellphoneNumberList = mBusinessCellphoneNumberList;
-            BusinessEmailAddressList = mBusinessEmailAddressList;
-            BusinessCustomerList = mBusinessCustomerList;
+            mBusinessAddressList = addressList;
+            mBusinessPOBoxAddressList = poBoxList;
+            mBusinessLegalDetails = legalDetails;
+            mBusinessTelephoneNumberList = telephoneList;
+            mBusinessCellphoneNumberList = cellphoneList;
+            mBusinessEmailAddressList = emailList;
+            mBusinessCustomerList = customerList;
 
             mAddressMap = new Dictionary<string, Address>();
             if (mBusinessAddressList != null)
@@ -178,79 +178,13 @@ namespace QuoteSwift
 
         public string BusinessName { get => mBusinessName; set => mBusinessName = value; }
         public string BusinessExtraInformation { get => mBusinessExtraInformation; set => mBusinessExtraInformation = value; }
-        public BindingList<Address> BusinessAddressList
-        {
-            get => mBusinessAddressList;
-            set
-            {
-                mBusinessAddressList = value;
-                mAddressMap?.Clear();
-                if (mBusinessAddressList != null)
-                    foreach (var a in mBusinessAddressList)
-                        mAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
-        public BindingList<Address> BusinessPOBoxAddressList
-        {
-            get => mBusinessPOBoxAddressList;
-            set
-            {
-                mBusinessPOBoxAddressList = value;
-                mPOBoxMap?.Clear();
-                if (mBusinessPOBoxAddressList != null)
-                    foreach (var a in mBusinessPOBoxAddressList)
-                        mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
-            }
-        }
+        public IReadOnlyList<Address> BusinessAddressList => mBusinessAddressList;
+        public IReadOnlyList<Address> BusinessPOBoxAddressList => mBusinessPOBoxAddressList;
         public Legal BusinessLegalDetails { get => mBusinessLegalDetails; set => mBusinessLegalDetails = value; }
-        public BindingList<string> BusinessTelephoneNumberList
-        {
-            get => mBusinessTelephoneNumberList;
-            set
-            {
-                mBusinessTelephoneNumberList = value;
-                mTelephoneNumbers?.Clear();
-                if (mBusinessTelephoneNumberList != null)
-                    foreach (var n in mBusinessTelephoneNumberList)
-                        mTelephoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> BusinessCellphoneNumberList
-        {
-            get => mBusinessCellphoneNumberList;
-            set
-            {
-                mBusinessCellphoneNumberList = value;
-                mCellphoneNumbers?.Clear();
-                if (mBusinessCellphoneNumberList != null)
-                    foreach (var n in mBusinessCellphoneNumberList)
-                        mCellphoneNumbers.Add(n);
-            }
-        }
-        public BindingList<string> BusinessEmailAddressList
-        {
-            get => mBusinessEmailAddressList;
-            set
-            {
-                mBusinessEmailAddressList = value;
-                mEmailAddresses?.Clear();
-                if (mBusinessEmailAddressList != null)
-                    foreach (var e in mBusinessEmailAddressList)
-                        mEmailAddresses.Add(e);
-            }
-        }
-        public BindingList<Customer> BusinessCustomerList
-        {
-            get => mBusinessCustomerList;
-            set
-            {
-                mBusinessCustomerList = value;
-                mCustomerMap?.Clear();
-                if (mBusinessCustomerList != null)
-                    foreach (var c in mBusinessCustomerList)
-                        mCustomerMap[c.CustomerCompanyName] = c;
-            }
-        }
+        public IReadOnlyList<string> BusinessTelephoneNumberList => mBusinessTelephoneNumberList;
+        public IReadOnlyList<string> BusinessCellphoneNumberList => mBusinessCellphoneNumberList;
+        public IReadOnlyList<string> BusinessEmailAddressList => mBusinessEmailAddressList;
+        public IReadOnlyList<Customer> BusinessCustomerList => mBusinessCustomerList;
         public Dictionary<string, Address> AddressMap => mAddressMap;
         public Dictionary<string, Address> POBoxMap => mPOBoxMap;
         public HashSet<string> TelephoneNumbers => mTelephoneNumbers;
@@ -362,6 +296,96 @@ namespace QuoteSwift
                     if (index >= 0)
                         mBusinessEmailAddressList[index] = newAddress;
                 }
+            }
+        }
+
+        public void AddAddress(Address address)
+        {
+            if (address == null) return;
+            if (mBusinessAddressList == null)
+                mBusinessAddressList = new BindingList<Address>();
+            mBusinessAddressList.Add(address);
+            mAddressMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemoveAddress(Address address)
+        {
+            if (address == null || mBusinessAddressList == null) return;
+            mBusinessAddressList.Remove(address);
+            mAddressMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+            if (mBusinessAddressList.Count == 0)
+                mBusinessAddressList = null;
+        }
+
+        public void UpdateAddress(Address oldAddress, Address newAddress)
+        {
+            if (oldAddress == null || newAddress == null || mBusinessAddressList == null) return;
+            int index = mBusinessAddressList.IndexOf(oldAddress);
+            if (index >= 0)
+            {
+                mBusinessAddressList[index] = newAddress;
+                mAddressMap.Remove(StringUtil.NormalizeKey(oldAddress.AddressDescription));
+                mAddressMap[StringUtil.NormalizeKey(newAddress.AddressDescription)] = newAddress;
+            }
+        }
+
+        public void AddPOBoxAddress(Address address)
+        {
+            if (address == null) return;
+            if (mBusinessPOBoxAddressList == null)
+                mBusinessPOBoxAddressList = new BindingList<Address>();
+            mBusinessPOBoxAddressList.Add(address);
+            mPOBoxMap[StringUtil.NormalizeKey(address.AddressDescription)] = address;
+        }
+
+        public void RemovePOBoxAddress(Address address)
+        {
+            if (address == null || mBusinessPOBoxAddressList == null) return;
+            mBusinessPOBoxAddressList.Remove(address);
+            mPOBoxMap.Remove(StringUtil.NormalizeKey(address.AddressDescription));
+            if (mBusinessPOBoxAddressList.Count == 0)
+                mBusinessPOBoxAddressList = null;
+        }
+
+        public void UpdatePOBoxAddress(Address oldAddress, Address newAddress)
+        {
+            if (oldAddress == null || newAddress == null || mBusinessPOBoxAddressList == null) return;
+            int index = mBusinessPOBoxAddressList.IndexOf(oldAddress);
+            if (index >= 0)
+            {
+                mBusinessPOBoxAddressList[index] = newAddress;
+                mPOBoxMap.Remove(StringUtil.NormalizeKey(oldAddress.AddressDescription));
+                mPOBoxMap[StringUtil.NormalizeKey(newAddress.AddressDescription)] = newAddress;
+            }
+        }
+
+        public void AddCustomer(Customer customer)
+        {
+            if (customer == null) return;
+            if (mBusinessCustomerList == null)
+                mBusinessCustomerList = new BindingList<Customer>();
+            mBusinessCustomerList.Add(customer);
+            mCustomerMap[customer.CustomerCompanyName] = customer;
+        }
+
+        public void RemoveCustomer(Customer customer)
+        {
+            if (customer == null || mBusinessCustomerList == null) return;
+            mBusinessCustomerList.Remove(customer);
+            mCustomerMap.Remove(customer.CustomerCompanyName);
+            if (mBusinessCustomerList.Count == 0)
+                mBusinessCustomerList = null;
+        }
+
+        public void UpdateCustomer(Customer oldCustomer, Customer newCustomer)
+        {
+            if (oldCustomer == null || newCustomer == null || mBusinessCustomerList == null) return;
+            int index = mBusinessCustomerList.IndexOf(oldCustomer);
+            if (index >= 0)
+            {
+                mBusinessCustomerList[index] = newCustomer;
+                mCustomerMap.Remove(oldCustomer.CustomerCompanyName);
+                mCustomerMap[newCustomer.CustomerCompanyName] = newCustomer;
             }
         }
     }

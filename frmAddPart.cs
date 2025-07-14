@@ -256,8 +256,8 @@ namespace QuoteSwift
                             if (FoundPump == false) //Pump non existing
                             {
                                 NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(partForPump, int.Parse(readFields[5])) };
-                                NewPump.PartList = NewPumpPartList;
-                                passed.PassPumpList.Add(NewPump);
+                                NewPump.SetPartList(NewPumpPartList);
+                                passed.AddRepairableItem(NewPump);
                             }
                             else // Pump Existing
                             {
@@ -268,7 +268,8 @@ namespace QuoteSwift
                         else // passed.PassPumpList is empty
                         {
                             NewPumpPartList = new BindingList<Pump_Part> { new Pump_Part(partForPump, int.Parse(readFields[5])) };
-                            passed.PassPumpList = new BindingList<Pump> { new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref NewPumpPartList) };
+                            var np = new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref NewPumpPartList);
+                            passed.AddRepairableItem(np);
                         }
 
                     }

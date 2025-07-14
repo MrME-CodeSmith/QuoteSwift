@@ -33,15 +33,13 @@ namespace QuoteSwift
                 {
                     if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
                     {
-                        passed.BusinessToChange.BusinessPOBoxAddressList.Remove(SelectedAddress);
+                        passed.BusinessToChange.RemovePOBoxAddress(SelectedAddress);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
-                        if (passed.BusinessToChange.BusinessPOBoxAddressList.Count == 0) passed.BusinessToChange.BusinessPOBoxAddressList = null;
                     }
                     else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
                     {
-                        passed.CustomerToChange.CustomerPOBoxAddress.Remove(SelectedAddress);
+                        passed.CustomerToChange.RemovePOBoxAddress(SelectedAddress);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
-                        if (passed.CustomerToChange.CustomerPOBoxAddress.Count == 0) passed.CustomerToChange.CustomerPOBoxAddress = null;
                     }
 
                     LoadInformation();
@@ -164,22 +162,16 @@ namespace QuoteSwift
         private bool ReplacePOBoxAddress(Address Original, Address New)
         {
             if (passed != null && passed.BusinessToChange != null)
-                if (New != null && Original != null && passed.BusinessToChange.BusinessPOBoxAddressList != null)
-                    for (int i = 0; i < passed.BusinessToChange.BusinessPOBoxAddressList.Count; i++)
-                        if (passed.BusinessToChange.BusinessPOBoxAddressList[i] == Original)
-                        {
-                            passed.BusinessToChange.BusinessPOBoxAddressList[i] = New;
-                            return true;
-                        }
+            {
+                passed.BusinessToChange.UpdatePOBoxAddress(Original, New);
+                return true;
+            }
 
             if (passed != null && passed.CustomerToChange != null)
-                if (New != null && Original != null && passed.CustomerToChange.CustomerPOBoxAddress != null)
-                    for (int i = 0; i < passed.CustomerToChange.CustomerPOBoxAddress.Count; i++)
-                        if (passed.CustomerToChange.CustomerPOBoxAddress[i] == Original)
-                        {
-                            passed.CustomerToChange.CustomerPOBoxAddress[i] = New;
-                            return true;
-                        }
+            {
+                passed.CustomerToChange.UpdatePOBoxAddress(Original, New);
+                return true;
+            }
 
             return false;
         }
