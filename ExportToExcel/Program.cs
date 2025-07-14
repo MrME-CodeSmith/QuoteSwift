@@ -69,8 +69,16 @@ namespace ExportToExcel
                     MyWorkSheet.Cells.Replace("<<POBox Number>>", "P.O.BOX " + NewQuote.QuoteBusinessPOBox.AddressStreetNumber);
                     MyWorkSheet.Cells.Replace("<<POBox Suburb>>", NewQuote.QuoteBusinessPOBox.AddressSuburb);
                     MyWorkSheet.Cells.Replace("<<POBox City>>", NewQuote.QuoteBusinessPOBox.AddressCity);
-                    MyWorkSheet.Cells.Replace("<<Registration Number>>", NewQuote.QuoteCompany.BusinessLegalDetails.RegistrationNumber);
-                    MyWorkSheet.Cells.Replace("<<VAT Number>>", NewQuote.QuoteCompany.BusinessLegalDetails.VatNumber);
+                    if (NewQuote.QuoteCompany.BusinessLegalDetails != null)
+                    {
+                        MyWorkSheet.Cells.Replace("<<Registration Number>>", NewQuote.QuoteCompany.BusinessLegalDetails.RegistrationNumber ?? string.Empty);
+                        MyWorkSheet.Cells.Replace("<<VAT Number>>", NewQuote.QuoteCompany.BusinessLegalDetails.VatNumber ?? string.Empty);
+                    }
+                    else
+                    {
+                        MyWorkSheet.Cells.Replace("<<Registration Number>>", string.Empty);
+                        MyWorkSheet.Cells.Replace("<<VAT Number>>", string.Empty);
+                    }
                     MyWorkSheet.Cells.Replace("<<Telephone>>", NewQuote.Telefone);
                     MyWorkSheet.Cells.Replace("<<CellPhone>>", NewQuote.Cellphone);
                     MyWorkSheet.Cells.Replace("<<Email>>", NewQuote.Email);
