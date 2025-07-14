@@ -10,24 +10,22 @@ namespace QuoteSwift
         readonly ViewCustomersViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
 
         public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            passed = viewModel.Pass;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true, ref passed);
+            {
+                var p = viewModel.Pass;
+                MainProgramCode.CloseApplication(true, ref p);
+                viewModel.UpdatePass(p);
+            }
         }
 
         private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e)
@@ -41,19 +39,18 @@ namespace QuoteSwift
                 return;
             }
 
-            passed.CustomerToChange = customer;
-            passed.ChangeSpecificObject = false;
-            passed.BusinessToChange = container;
+            viewModel.Pass.CustomerToChange = customer;
+            viewModel.Pass.ChangeSpecificObject = false;
+            viewModel.Pass.BusinessToChange = container;
 
-            navigation.Pass = passed;
             navigation.AddCustomer();
-            passed = navigation.Pass;
+            viewModel.UpdatePass(navigation.Pass);
 
-            if (!ReplaceCustomer(customer, passed.CustomerToChange, container) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
+            if (!ReplaceCustomer(customer, viewModel.Pass.CustomerToChange, container) && viewModel.Pass.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
 
-            passed.CustomerToChange = null;
-            passed.BusinessToChange = null;
-            passed.ChangeSpecificObject = false;
+            viewModel.Pass.CustomerToChange = null;
+            viewModel.Pass.BusinessToChange = null;
+            viewModel.Pass.ChangeSpecificObject = false;
 
             LoadInformation();
 
@@ -63,9 +60,8 @@ namespace QuoteSwift
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.Pass = passed;
             navigation.AddCustomer();
-            passed = navigation.Pass;
+            viewModel.UpdatePass(navigation.Pass);
             Show();
 
             LoadInformation();
@@ -110,8 +106,8 @@ namespace QuoteSwift
         {
             DgvCustomerList.Rows.Clear();
 
-            if (passed != null && passed.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
-                foreach (var business in passed.PassBusinessList)
+            if (viewModel.Pass != null && viewModel.Pass.PassBusinessList != null && cbBusinessSelection.Text.Length > 0)
+                foreach (var business in viewModel.Pass.PassBusinessList)
                     if (cbBusinessSelection.Text == business.BusinessName)
                         if (business.BusinessCustomerList != null)
                             foreach (var customer in business.BusinessCustomerList)
@@ -122,12 +118,12 @@ namespace QuoteSwift
 
         private string GetPreviousQuoteDate(Customer c)
         {
-            if (passed.PassQuoteMap != null)
+            if (viewModel.Pass.PassQuoteMap != null)
             {
                 DateTime latest = DateTime.MinValue;
                 bool found = false;
 
-                foreach (var q in passed.PassQuoteMap.Values)
+                foreach (var q in viewModel.Pass.PassQuoteMap.Values)
                 {
                     if (q.QuoteCustomer != null && c != null &&
                         q.QuoteCustomer.CustomerCompanyName == c.CustomerCompanyName)
@@ -190,7 +186,7 @@ namespace QuoteSwift
         {
             string searchName = cbBusinessSelection.Text;
 
-            if (searchName.Length > 1 && passed.BusinessLookup.TryGetValue(searchName, out Business business))
+            if (searchName.Length > 1 && viewModel.Pass.BusinessLookup.TryGetValue(searchName, out Business business))
             {
                 return business;
             }
@@ -200,9 +196,9 @@ namespace QuoteSwift
 
         public void LinkBusinessToSource(ref ComboBox cb)
         {
-            if (passed != null && passed.PassBusinessList != null)
+            if (viewModel.Pass != null && viewModel.Pass.PassBusinessList != null)
             {
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = passed.PassBusinessList };
+                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = viewModel.Pass.PassBusinessList };
 
                 cb.DataSource = ComboBoxBusinessSource.DataSource;
 
@@ -228,9 +224,9 @@ namespace QuoteSwift
 
         private void FrmViewCustomers_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var p = passed;
+            var p = viewModel.Pass;
             MainProgramCode.CloseApplication(true, ref p);
-            passed = p;
+            viewModel.UpdatePass(p);
         }
 
         /**********************************************************************************/

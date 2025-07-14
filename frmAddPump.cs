@@ -11,13 +11,6 @@ namespace QuoteSwift
         readonly AddPumpViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
-
-        public ref Pass Passed { get => ref passed; }
 
         public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null)
         {
@@ -29,7 +22,11 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true, ref passed);
+            {
+                var p = viewModel.Pass;
+                MainProgramCode.CloseApplication(true, ref p);
+                viewModel.UpdatePass(p);
+            }
         }
 
         private void BtnAddPump_Click(object sender, EventArgs e)
@@ -48,13 +45,13 @@ namespace QuoteSwift
             viewModel.CurrentPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, QuoteSwiftMainCode.ParseDecimal(mtxtNewPumpPrice.Text), ref newPumpParts);
 
             bool result;
-            if (passed.ChangeSpecificObject)
+            if (viewModel.Pass.ChangeSpecificObject)
             {
                 result = viewModel.UpdatePump();
                 if (result)
                 {
-                    MainProgramCode.ShowInformation(passed.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
-                    passed.ChangeSpecificObject = false;
+                    MainProgramCode.ShowInformation(viewModel.Pass.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
+                    viewModel.Pass.ChangeSpecificObject = false;
                     ConvertToViewForm();
                     updatePumpToolStripMenuItem.Enabled = true;
                 }
@@ -80,31 +77,31 @@ namespace QuoteSwift
 
         private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.Pass.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void MtxtPumpDescription_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.Pass.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void MtxtNewPumpPrice_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.Pass.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void DgvMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.Pass.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void DgvNonMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.Pass.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
@@ -113,19 +110,19 @@ namespace QuoteSwift
             LoadMandatoryParts();
             LoadNonMandatoryParts();
 
-            if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == true) //Determine if Edit
+            if (viewModel.Pass != null && viewModel.Pass.PumpToChange != null && viewModel.Pass.ChangeSpecificObject == true) //Determine if Edit
             {
                 ConvertToEditForm();
                 Read_OnlyMainComponents();
                 PopulateFormWithPassedPump();
             }
-            else if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == false) //Determine if View
+            else if (viewModel.Pass != null && viewModel.Pass.PumpToChange != null && viewModel.Pass.ChangeSpecificObject == false) //Determine if View
             {
                 ConvertToViewForm();
                 Read_OnlyMainComponents();
                 PopulateFormWithPassedPump();
             }
-            else if (passed != null && passed.PumpToChange == null && passed.ChangeSpecificObject == false) // Determine if Add New
+            else if (viewModel.Pass != null && viewModel.Pass.PumpToChange == null && viewModel.Pass.ChangeSpecificObject == false) // Determine if Add New
             {
                 mtxtPumpName.Focus();
             }
@@ -179,7 +176,7 @@ namespace QuoteSwift
         void ConvertToEditForm()
         {
             ReadWriteMainComponents();
-            Text = "Updating " + passed.PumpToChange.PumpName + " Pump";
+            Text = "Updating " + viewModel.Pass.PumpToChange.PumpName + " Pump";
             btnAddPump.Text = "Update Pump";
             btnAddPump.Visible = true;
             updatePumpToolStripMenuItem.Enabled = true;
@@ -189,24 +186,24 @@ namespace QuoteSwift
 
         void ConvertToViewForm()
         {
-            Text = "Viewing " + passed.PumpToChange.PumpName + " Pump";
+            Text = "Viewing " + viewModel.Pass.PumpToChange.PumpName + " Pump";
             btnAddPump.Visible = false;
             Read_OnlyMainComponents();
             updatePumpToolStripMenuItem.Enabled = false;
         }
 
-        //Populates the form with the passed Pump object and checks the check boxes in the data grid view where parts are being used.
+        //Populates the form with the viewModel.Pass Pump object and checks the check boxes in the data grid view where parts are being used.
 
         void PopulateFormWithPassedPump()
         {
-            mtxtNewPumpPrice.Text = passed.PumpToChange.NewPumpPrice.ToString();
-            mtxtPumpDescription.Text = passed.PumpToChange.PumpDescription;
-            mtxtPumpName.Text = passed.PumpToChange.PumpName;
+            mtxtNewPumpPrice.Text = viewModel.Pass.PumpToChange.NewPumpPrice.ToString();
+            mtxtPumpDescription.Text = viewModel.Pass.PumpToChange.PumpDescription;
+            mtxtPumpName.Text = viewModel.Pass.PumpToChange.PumpName;
 
             int mIndex = 0;
-            foreach (var part in passed.MandatoryParts)
+            foreach (var part in viewModel.Pass.MandatoryParts)
             {
-                foreach (var pumpPart in passed.PumpToChange.PartList)
+                foreach (var pumpPart in viewModel.Pass.PumpToChange.PartList)
                 {
                     if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
                     {
@@ -219,9 +216,9 @@ namespace QuoteSwift
             }
 
             int nmIndex = 0;
-            foreach (var part in passed.NonMandatoryParts)
+            foreach (var part in viewModel.Pass.NonMandatoryParts)
             {
-                foreach (var pumpPart in passed.PumpToChange.PartList)
+                foreach (var pumpPart in viewModel.Pass.PumpToChange.PartList)
                 {
                     if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
                     {
@@ -278,7 +275,7 @@ namespace QuoteSwift
                         try
                         {
                             string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
-                            if (passed.PassPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
+                            if (viewModel.Pass.PassPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
                                 newPart = new Pump_Part(part,
                                     QuoteSwiftMainCode.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
                             else
@@ -312,7 +309,7 @@ namespace QuoteSwift
                         try
                         {
                             string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
-                            if (passed.PassPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
+                            if (viewModel.Pass.PassPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
                                 newPart = new Pump_Part(part,
                                     QuoteSwiftMainCode.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
                             else
@@ -340,23 +337,23 @@ namespace QuoteSwift
 
         void ChangeViewToEdit()
         {
-            if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == false)
-                if (MainProgramCode.RequestConfirmation("You are currently viewing " + passed.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
+            if (viewModel.Pass != null && viewModel.Pass.PumpToChange != null && viewModel.Pass.ChangeSpecificObject == false)
+                if (MainProgramCode.RequestConfirmation("You are currently viewing " + viewModel.Pass.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
                 {
                     ConvertToEditForm();
-                    passed.ChangeSpecificObject = true;
+                    viewModel.Pass.ChangeSpecificObject = true;
                 }
         }
 
         void RecordNewInformation()
         {
-            if (mtxtPumpName.Text != passed.PumpToChange.PumpName) passed.PumpToChange.PumpName = mtxtPumpName.Text;
+            if (mtxtPumpName.Text != viewModel.Pass.PumpToChange.PumpName) viewModel.Pass.PumpToChange.PumpName = mtxtPumpName.Text;
 
-            if (mtxtPumpDescription.Text != passed.PumpToChange.PumpDescription) passed.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
+            if (mtxtPumpDescription.Text != viewModel.Pass.PumpToChange.PumpDescription) viewModel.Pass.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
 
-            if (NewPumpValueInput() != passed.PumpToChange.NewPumpPrice) passed.PumpToChange.NewPumpPrice = NewPumpValueInput();
+            if (NewPumpValueInput() != viewModel.Pass.PumpToChange.NewPumpPrice) viewModel.Pass.PumpToChange.NewPumpPrice = NewPumpValueInput();
 
-            passed.PumpToChange.PartList = RetreivePumpPartList();
+            viewModel.Pass.PumpToChange.PartList = RetreivePumpPartList();
         }
 
         decimal NewPumpValueInput()
@@ -369,11 +366,11 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (viewModel.Pass.PassPartList != null)
             {
                 dgvMandatoryPartView.Rows.Clear();
 
-                foreach (var part in passed.MandatoryParts)
+                foreach (var part in viewModel.Pass.MandatoryParts)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvMandatoryPartView.Rows.Add(part.PartName,
@@ -389,11 +386,11 @@ namespace QuoteSwift
 
         void LoadNonMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (viewModel.Pass.PassPartList != null)
             {
                 dgvNonMandatoryPartView.Rows.Clear();
 
-                foreach (var part in passed.NonMandatoryParts)
+                foreach (var part in viewModel.Pass.NonMandatoryParts)
                 {
                     //Manually setting the data grid's rows' values:
                     dgvNonMandatoryPartView.Rows.Add(part.PartName,
@@ -414,7 +411,7 @@ namespace QuoteSwift
 
         private void UpdatePumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.Pass.ChangeSpecificObject)
                 ChangeViewToEdit();
             updatePumpToolStripMenuItem.Enabled = false;
         }
@@ -426,7 +423,9 @@ namespace QuoteSwift
 
         private void FrmAddPump_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true, ref passed);
+            var p = viewModel.Pass;
+            MainProgramCode.CloseApplication(true, ref p);
+            viewModel.UpdatePass(p);
         }
 
         /*********************************************************************************/

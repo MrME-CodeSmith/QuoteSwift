@@ -13,12 +13,6 @@ namespace QuoteSwift
 
         Business Container;
 
-        Pass passed
-        {
-            get => viewModel.Pass;
-            set => viewModel.UpdatePass(value);
-        }
-
         public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null)
         {
             InitializeComponent();
@@ -34,15 +28,15 @@ namespace QuoteSwift
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                var p = passed;
+                var p = viewModel.Pass;
                 MainProgramCode.CloseApplication(true, ref p);
-                passed = p;
+                viewModel.UpdatePass(p);
             }
         }
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
-            if (ValidBusiness() && !passed.ChangeSpecificObject)
+            if (ValidBusiness() && !viewModel.Pass.ChangeSpecificObject)
             {
                 Business linkBusiness = GetSelectedBusiness();
                 viewModel.CurrentCustomer.CustomerName = string.Empty;
@@ -55,9 +49,9 @@ namespace QuoteSwift
                     ResetScreenInput();
                 }
             }
-            else if (ValidBusiness() && passed.ChangeSpecificObject)
+            else if (ValidBusiness() && viewModel.Pass.ChangeSpecificObject)
             {
-                string oldName = passed.CustomerToChange.CustomerCompanyName;
+                string oldName = viewModel.Pass.CustomerToChange.CustomerCompanyName;
                 viewModel.CurrentCustomer.CustomerName = string.Empty;
                 viewModel.CurrentCustomer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
                 viewModel.CurrentCustomer.VendorNumber = mtxtVendorNumber.Text;
@@ -84,18 +78,18 @@ namespace QuoteSwift
                 cbBusinessSelection.ValueMember = "BusinessName";
             }
 
-            if (passed.CustomerToChange != null && passed.ChangeSpecificObject) // Change Existing Customer Info
+            if (viewModel.Pass.CustomerToChange != null && viewModel.Pass.ChangeSpecificObject) // Change Existing Customer Info
             {
-                viewModel.CurrentCustomer = passed.CustomerToChange;
+                viewModel.CurrentCustomer = viewModel.Pass.CustomerToChange;
             }
-            else if (passed.CustomerToChange != null && !passed.ChangeSpecificObject) // View Existing Customer Info
+            else if (viewModel.Pass.CustomerToChange != null && !viewModel.Pass.ChangeSpecificObject) // View Existing Customer Info
             {
-                viewModel.CurrentCustomer = passed.CustomerToChange;
+                viewModel.CurrentCustomer = viewModel.Pass.CustomerToChange;
                 ConvertToViewOnly();
                 LoadInformation();
 
             }
-            else if (passed.CustomerToChange == null && !passed.ChangeSpecificObject) // Add New Business Info
+            else if (viewModel.Pass.CustomerToChange == null && !viewModel.Pass.ChangeSpecificObject) // Add New Business Info
             {
                 viewModel.CurrentCustomer = new Customer();
             }
@@ -152,18 +146,17 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentCustomer.CustomerCellphoneNumberList != null || viewModel.CurrentCustomer.CustomerTelephoneNumberList != null)
             {
-                passed.CustomerToChange = viewModel.CurrentCustomer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                viewModel.Pass.CustomerToChange = viewModel.CurrentCustomer;
+                viewModel.Pass.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
                 navigation.ViewBusinessesPhoneNumbers();
-                passed = navigation.Pass;
+                viewModel.UpdatePass(navigation.Pass);
                 Show();
 
-                viewModel.CurrentCustomer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                viewModel.CurrentCustomer = viewModel.Pass.CustomerToChange;
+                viewModel.Pass.CustomerToChange = null;
+                viewModel.Pass.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Customer Phone Numbers");
         }
@@ -172,18 +165,17 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentCustomer.CustomerPOBoxAddress != null)
             {
-                passed.CustomerToChange = viewModel.CurrentCustomer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                viewModel.Pass.CustomerToChange = viewModel.CurrentCustomer;
+                viewModel.Pass.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
                 navigation.ViewBusinessesPOBoxAddresses();
-                passed = navigation.Pass;
+                viewModel.UpdatePass(navigation.Pass);
                 Show();
 
-                viewModel.CurrentCustomer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                viewModel.CurrentCustomer = viewModel.Pass.CustomerToChange;
+                viewModel.Pass.CustomerToChange = null;
+                viewModel.Pass.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer P.O.Box Addresses");
         }
@@ -192,18 +184,17 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentCustomer.CustomerEmailList != null)
             {
-                passed.CustomerToChange = viewModel.CurrentCustomer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                viewModel.Pass.CustomerToChange = viewModel.CurrentCustomer;
+                viewModel.Pass.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
                 navigation.ViewBusinessesEmailAddresses();
-                passed = navigation.Pass;
+                viewModel.UpdatePass(navigation.Pass);
                 Show();
 
-                viewModel.CurrentCustomer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                viewModel.CurrentCustomer = viewModel.Pass.CustomerToChange;
+                viewModel.Pass.CustomerToChange = null;
+                viewModel.Pass.ChangeSpecificObject = false;
 
             }
             else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Email Addresses");
@@ -213,18 +204,17 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentCustomer != null)
             {
-                passed.CustomerToChange = viewModel.CurrentCustomer;
-                passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
+                viewModel.Pass.CustomerToChange = viewModel.CurrentCustomer;
+                viewModel.Pass.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
                 navigation.ViewBusinessesAddresses();
-                passed = navigation.Pass;
+                viewModel.UpdatePass(navigation.Pass);
                 Show();
 
-                viewModel.CurrentCustomer = passed.CustomerToChange;
-                passed.CustomerToChange = null;
-                passed.ChangeSpecificObject = false;
+                viewModel.CurrentCustomer = viewModel.Pass.CustomerToChange;
+                viewModel.Pass.CustomerToChange = null;
+                viewModel.Pass.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Addresses");
         }
@@ -232,7 +222,7 @@ namespace QuoteSwift
         private void UpdatedCustomerInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConvertToEdit();
-            passed.ChangeSpecificObject = true;
+            viewModel.Pass.ChangeSpecificObject = true;
             updatedCustomerInformationToolStripMenuItem.Enabled = false;
         }
 
@@ -247,9 +237,9 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var p = passed;
+            var p = viewModel.Pass;
             MainProgramCode.CloseApplication(true, ref p);
-            passed = p;
+            viewModel.UpdatePass(p);
         }
 
         /** Form Specific Functions And Procedures: 
@@ -416,8 +406,8 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentCustomer != null)
             {
-                Container = passed.BusinessToChange;
-                passed.BusinessToChange = null;
+                Container = viewModel.Pass.BusinessToChange;
+                viewModel.Pass.BusinessToChange = null;
 
                 txtCustomerCompanyName.Text = viewModel.CurrentCustomer.CustomerCompanyName;
                 cbBusinessSelection.Text = Container.BusinessName;
@@ -457,16 +447,16 @@ namespace QuoteSwift
 
             btnAddCustomer.Visible = true;
             btnAddCustomer.Text = "Update Customer";
-            if (passed != null && passed.BusinessToChange != null)
-                Text = Text.Replace("Viewing " + passed.BusinessToChange.BusinessName, "Updating " + passed.BusinessToChange.BusinessName);
-            if (passed != null && passed.CustomerToChange != null)
-                Text = Text.Replace("Viewing " + passed.CustomerToChange.CustomerName, "Updating " + passed.CustomerToChange.CustomerName);
+            if (viewModel.Pass != null && viewModel.Pass.BusinessToChange != null)
+                Text = Text.Replace("Viewing " + viewModel.Pass.BusinessToChange.BusinessName, "Updating " + viewModel.Pass.BusinessToChange.BusinessName);
+            if (viewModel.Pass != null && viewModel.Pass.CustomerToChange != null)
+                Text = Text.Replace("Viewing " + viewModel.Pass.CustomerToChange.CustomerName, "Updating " + viewModel.Pass.CustomerToChange.CustomerName);
             updatedCustomerInformationToolStripMenuItem.Enabled = false;
         }
 
         private Business GetSelectedBusiness()
         {
-            if (cbBusinessSelection.Text.Length > 0 && passed.BusinessLookup.TryGetValue(cbBusinessSelection.Text, out Business business))
+            if (cbBusinessSelection.Text.Length > 0 && viewModel.Pass.BusinessLookup.TryGetValue(cbBusinessSelection.Text, out Business business))
             {
                 return business;
             }
