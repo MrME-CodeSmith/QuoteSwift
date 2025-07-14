@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -740,36 +739,9 @@ namespace QuoteSwift
 
         public void ExportQuoteToTemplate()
         {
-            MainProgramCode.ExportQuote(ref NewQuote);
-
-            try
-            {
-                Process ExportHandler = new Process();
-                ExportHandler.StartInfo.FileName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\ExportToExcel\\ExportToExcel.exe";
-                ExportHandler.StartInfo.Verb = "runas";
-                ExportHandler.StartInfo.Arguments = "-n";
-                ExportHandler.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                UseWaitCursor = true;
-
-                ExportHandler.Start();
-                ExportHandler.WaitForExit();
-            }
-            catch 
-            {
-                //Do Nothing...
-            }
-            finally
-            {
-                UseWaitCursor = false;
-                string StorePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\ExportToExcel\\ExportQuote.json";
-                if (File.Exists(StorePath))
-                {
-                    MainProgramCode.ShowError("The quote did not export as intended.", "ERROR - Export Failed Complete Successfully");
-                    File.Delete(StorePath);
-                }
-            }
-            
-
+            UseWaitCursor = true;
+            ExcelExporter.ExportQuoteToExcel(NewQuote);
+            UseWaitCursor = false;
         }
 
         private decimal GetPriceForNMItem(string s)
