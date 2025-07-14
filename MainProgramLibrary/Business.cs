@@ -50,20 +50,95 @@ namespace QuoteSwift
         {
             BusinessName = b.mBusinessName;
             BusinessExtraInformation = b.mBusinessExtraInformation;
-            BusinessAddressList = b.mBusinessAddressList;
-            BusinessPOBoxAddressList = b.mBusinessPOBoxAddressList;
-            BusinessLegalDetails = b.mBusinessLegalDetails;
-            BusinessTelephoneNumberList = b.mBusinessTelephoneNumberList;
-            BusinessCellphoneNumberList = b.mBusinessCellphoneNumberList;
-            BusinessEmailAddressList = b.mBusinessEmailAddressList;
-            BusinessCustomerList = b.mBusinessCustomerList;
 
-            mAddressMap = new Dictionary<string, Address>(b.mAddressMap);
-            mPOBoxMap = new Dictionary<string, Address>(b.mPOBoxMap);
-            mTelephoneNumbers = new HashSet<string>(b.mTelephoneNumbers);
-            mCellphoneNumbers = new HashSet<string>(b.mCellphoneNumbers);
-            mEmailAddresses = new HashSet<string>(b.mEmailAddresses);
-            mCustomerMap = new Dictionary<string, Customer>(b.mCustomerMap);
+            if (b.mBusinessAddressList != null)
+            {
+                BusinessAddressList = new BindingList<Address>();
+                foreach (var a in b.mBusinessAddressList)
+                    BusinessAddressList.Add(new Address(a));
+            }
+            else
+            {
+                BusinessAddressList = null;
+            }
+
+            if (b.mBusinessPOBoxAddressList != null)
+            {
+                BusinessPOBoxAddressList = new BindingList<Address>();
+                foreach (var a in b.mBusinessPOBoxAddressList)
+                    BusinessPOBoxAddressList.Add(new Address(a));
+            }
+            else
+            {
+                BusinessPOBoxAddressList = null;
+            }
+
+            BusinessLegalDetails = b.mBusinessLegalDetails != null
+                ? new Legal(b.mBusinessLegalDetails.RegistrationNumber, b.mBusinessLegalDetails.VatNumber)
+                : null;
+
+            if (b.mBusinessTelephoneNumberList != null)
+            {
+                BusinessTelephoneNumberList = new BindingList<string>();
+                foreach (var n in b.mBusinessTelephoneNumberList)
+                    BusinessTelephoneNumberList.Add(n);
+            }
+            else
+            {
+                BusinessTelephoneNumberList = null;
+            }
+
+            if (b.mBusinessCellphoneNumberList != null)
+            {
+                BusinessCellphoneNumberList = new BindingList<string>();
+                foreach (var n in b.mBusinessCellphoneNumberList)
+                    BusinessCellphoneNumberList.Add(n);
+            }
+            else
+            {
+                BusinessCellphoneNumberList = null;
+            }
+
+            if (b.mBusinessEmailAddressList != null)
+            {
+                BusinessEmailAddressList = new BindingList<string>();
+                foreach (var e in b.mBusinessEmailAddressList)
+                    BusinessEmailAddressList.Add(e);
+            }
+            else
+            {
+                BusinessEmailAddressList = null;
+            }
+
+            if (b.mBusinessCustomerList != null)
+            {
+                BusinessCustomerList = new BindingList<Customer>();
+                foreach (var c in b.mBusinessCustomerList)
+                    BusinessCustomerList.Add(new Customer(c));
+            }
+            else
+            {
+                BusinessCustomerList = null;
+            }
+
+            mAddressMap = new Dictionary<string, Address>();
+            if (mBusinessAddressList != null)
+                foreach (var a in mBusinessAddressList)
+                    mAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
+
+            mPOBoxMap = new Dictionary<string, Address>();
+            if (mBusinessPOBoxAddressList != null)
+                foreach (var a in mBusinessPOBoxAddressList)
+                    mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
+
+            mTelephoneNumbers = new HashSet<string>(mBusinessTelephoneNumberList ?? new BindingList<string>());
+            mCellphoneNumbers = new HashSet<string>(mBusinessCellphoneNumberList ?? new BindingList<string>());
+            mEmailAddresses = new HashSet<string>(mBusinessEmailAddressList ?? new BindingList<string>());
+
+            mCustomerMap = new Dictionary<string, Customer>();
+            if (mBusinessCustomerList != null)
+                foreach (var c in mBusinessCustomerList)
+                    mCustomerMap[c.CustomerCompanyName] = c;
         }
 
 

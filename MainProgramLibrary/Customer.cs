@@ -47,19 +47,81 @@ namespace QuoteSwift
         {
             CustomerName = c.CustomerName;
             CustomerCompanyName = c.CustomerCompanyName;
-            CustomerPOBoxAddress = c.CustomerPOBoxAddress;
-            CustomerDeliveryAddressList = c.CustomerDeliveryAddressList;
-            CustomerLegalDetails = c.CustomerLegalDetails;
-            CustomerTelephoneNumberList = c.CustomerTelephoneNumberList;
-            CustomerCellphoneNumberList = c.CustomerCellphoneNumberList;
-            CustomerEmailList = c.CustomerEmailList;
+
+            if (c.mCustomerPOBoxAddress != null)
+            {
+                CustomerPOBoxAddress = new BindingList<Address>();
+                foreach (var a in c.mCustomerPOBoxAddress)
+                    CustomerPOBoxAddress.Add(new Address(a));
+            }
+            else
+            {
+                CustomerPOBoxAddress = null;
+            }
+
+            if (c.mCustomerDeliveryAddressList != null)
+            {
+                CustomerDeliveryAddressList = new BindingList<Address>();
+                foreach (var a in c.mCustomerDeliveryAddressList)
+                    CustomerDeliveryAddressList.Add(new Address(a));
+            }
+            else
+            {
+                CustomerDeliveryAddressList = null;
+            }
+
+            CustomerLegalDetails = c.mCustomerLegalDetails != null
+                ? new Legal(c.mCustomerLegalDetails.RegistrationNumber, c.mCustomerLegalDetails.VatNumber)
+                : null;
+
+            if (c.mCustomerTelephoneNumberList != null)
+            {
+                CustomerTelephoneNumberList = new BindingList<string>();
+                foreach (var n in c.mCustomerTelephoneNumberList)
+                    CustomerTelephoneNumberList.Add(n);
+            }
+            else
+            {
+                CustomerTelephoneNumberList = null;
+            }
+
+            if (c.mCustomerCellphoneNumberList != null)
+            {
+                CustomerCellphoneNumberList = new BindingList<string>();
+                foreach (var n in c.mCustomerCellphoneNumberList)
+                    CustomerCellphoneNumberList.Add(n);
+            }
+            else
+            {
+                CustomerCellphoneNumberList = null;
+            }
+
+            if (c.mCustomerEmailList != null)
+            {
+                CustomerEmailList = new BindingList<string>();
+                foreach (var e in c.mCustomerEmailList)
+                    CustomerEmailList.Add(e);
+            }
+            else
+            {
+                CustomerEmailList = null;
+            }
+
             VendorNumber = c.VendorNumber;
 
-            mDeliveryAddressMap = new Dictionary<string, Address>(c.mDeliveryAddressMap);
-            mPOBoxMap = new Dictionary<string, Address>(c.mPOBoxMap);
-            mTelephoneNumbers = new HashSet<string>(c.mTelephoneNumbers);
-            mCellphoneNumbers = new HashSet<string>(c.mCellphoneNumbers);
-            mEmailAddresses = new HashSet<string>(c.mEmailAddresses);
+            mDeliveryAddressMap = new Dictionary<string, Address>();
+            if (mCustomerDeliveryAddressList != null)
+                foreach (var a in mCustomerDeliveryAddressList)
+                    mDeliveryAddressMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
+
+            mPOBoxMap = new Dictionary<string, Address>();
+            if (mCustomerPOBoxAddress != null)
+                foreach (var a in mCustomerPOBoxAddress)
+                    mPOBoxMap[StringUtil.NormalizeKey(a.AddressDescription)] = a;
+
+            mTelephoneNumbers = new HashSet<string>(mCustomerTelephoneNumberList ?? new BindingList<string>());
+            mCellphoneNumbers = new HashSet<string>(mCustomerCellphoneNumberList ?? new BindingList<string>());
+            mEmailAddresses = new HashSet<string>(mCustomerEmailList ?? new BindingList<string>());
         }
 
 
