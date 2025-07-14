@@ -226,6 +226,7 @@
       <DependentUpon>FrmViewQuotes.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="ExcelExporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmAddBusiness.resx">
       <DependentUpon>FrmAddBusiness.cs</DependentUpon>

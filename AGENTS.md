@@ -1,11 +1,10 @@
 # Agent Instructions
 
-This repository contains **QuoteSwift**, a Windows Forms application built with C# and .NET Framework 4.8. It helps manage pump quotes, parts and customer information. A companion utility **ExportToExcel** converts serialized quote data into Excel workbooks.
+This repository contains **QuoteSwift**, a Windows Forms application built with C# and .NET Framework 4.8. It helps manage pump quotes, parts and customer information. Quotes can be exported directly to Excel using `QuoteTemplate.xlsx`.
 
 ## Repository layout
-- **QuoteSwift.sln** – Visual Studio solution including the main WinForms app, a supporting class library (`MainProgramLibrary`) and the `ExportToExcel` tool.
+- **QuoteSwift.sln** – Visual Studio solution including the main WinForms app and supporting class library (`MainProgramLibrary`).
 - **MainProgramLibrary/** – Core business classes (Quote, Pump, Business, etc.).
-- **ExportToExcel/** – Auxiliary console application invoked when a quote is exported.
 - **Controls/** – Custom user controls, e.g. `NumericTextBox`.
 - JSON files such as `BusinessList.json`, `MandatoryParts.json` and `NonMandatoryParts.json` hold data used by the application.
 
@@ -17,13 +16,7 @@ This repository contains **QuoteSwift**, a Windows Forms application built with 
 2. All projects build together. After a successful build the main executable will be in `QuoteSwift/bin/Debug` (or `bin/Release`).
 
 ## Running
-Launch `QuoteSwift.exe` to start the quoting application. When exporting a quote, the main program calls `ExportToExcel/ExportToExcel.exe` to generate an Excel file from `QuoteTemplate.xlsx`.
-
-To run the export tool manually copy the serialized `ExportQuote.json` into the same directory as the tool and execute:
-```bash
-ExportToExcel.exe
-```
-You will be prompted for a location to save the workbook.
+Launch `QuoteSwift.exe` to start the quoting application. When exporting a quote you will be prompted for a location to save the Excel file generated from `QuoteTemplate.xlsx`.
 
 ## Code guidelines
 - Target framework: **.NET Framework 4.8**.

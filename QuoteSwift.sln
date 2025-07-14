@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoteSwift", "QuoteSwift.cs
 		{374F4D18-B639-468B-ADC7-88A9F39D6553} = {374F4D18-B639-468B-ADC7-88A9F39D6553}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportToExcel", "ExportToExcel\ExportToExcel.csproj", "{8C72EBF5-2DEF-471C-9A37-3993ECC03EAE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainProgramLibrary", "MainProgramLibrary\MainProgramLibrary.csproj", "{374F4D18-B639-468B-ADC7-88A9F39D6553}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "QuoteSwift Setup Wizard", "QuoteSwift Setup Wizard\QuoteSwift Setup Wizard.vdproj", "{D846DE8E-C845-4FA7-AE17-1EA9F95F47CE}"
@@ -24,10 +22,6 @@ Global
 		{2662F7B4-4179-46A3-8625-074BF4093962}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2662F7B4-4179-46A3-8625-074BF4093962}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2662F7B4-4179-46A3-8625-074BF4093962}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C72EBF5-2DEF-471C-9A37-3993ECC03EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C72EBF5-2DEF-471C-9A37-3993ECC03EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C72EBF5-2DEF-471C-9A37-3993ECC03EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C72EBF5-2DEF-471C-9A37-3993ECC03EAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{374F4D18-B639-468B-ADC7-88A9F39D6553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{374F4D18-B639-468B-ADC7-88A9F39D6553}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{374F4D18-B639-468B-ADC7-88A9F39D6553}.Release|Any CPU.ActiveCfg = Release|Any CPU
