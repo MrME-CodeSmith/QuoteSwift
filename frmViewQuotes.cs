@@ -9,24 +9,22 @@ namespace QuoteSwift
     public partial class FrmViewQuotes : Form
     {
 
-        Pass passed;
+        readonly QuotesViewModel viewModel;
 
-        public ref Pass Passed { get => ref passed; }
-
-        public FrmViewQuotes(ref Pass passed)
+        public FrmViewQuotes(QuotesViewModel viewModel)
         {
             InitializeComponent();
-            this.passed = passed;
-            if (this.passed == null) passed = new Pass(new SortedDictionary<string, Quote>(), new BindingList<Business>(), new BindingList<Pump>(), new Dictionary<string, Part>());
-
+            this.viewModel = viewModel;
         }
 
         private void BtnCreateNewQuote_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassBusinessList != null && passed.PassPumpList != null && passed.PassBusinessList[0].BusinessCustomerList != null)
+            if (viewModel.Pass != null && viewModel.Pass.PassBusinessList != null && viewModel.Pass.PassPumpList != null && viewModel.Pass.PassBusinessList[0].BusinessCustomerList != null)
             {
                 Hide();
-                passed = QuoteSwiftMainCode.CreateNewQuote(ref passed);
+                var p = viewModel.Pass;
+                p = QuoteSwiftMainCode.CreateNewQuote(ref p);
+                viewModel.UpdatePass(p);
                 try
                 {
                     Show();
@@ -48,13 +46,19 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true, ref passed);
+            {
+                var p = viewModel.Pass;
+                MainProgramCode.CloseApplication(true, ref p);
+                viewModel.UpdatePass(p);
+            }
         }
 
         private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewAllPumps(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.ViewAllPumps(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -68,7 +72,9 @@ namespace QuoteSwift
         private void CreateNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.CreateNewPump(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.CreateNewPump(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -87,7 +93,9 @@ namespace QuoteSwift
         private void AddNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddCustomer(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.AddCustomer(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -101,7 +109,9 @@ namespace QuoteSwift
         private void ViewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewCustomers(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.ViewCustomers(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -120,7 +130,9 @@ namespace QuoteSwift
         private void AddNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddBusiness(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.AddBusiness(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -134,7 +146,9 @@ namespace QuoteSwift
         private void ViewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewBusinesses(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.ViewBusinesses(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -164,17 +178,19 @@ namespace QuoteSwift
 
         private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteMap != null)
+            if (viewModel.Pass != null && viewModel.Pass.PassQuoteMap != null)
             {
                 Quote selected = GetSelectedQuote();
                 if (selected != null)
                 {
                     Hide();
-                    passed.QuoteTOChange = selected;
-                    passed.ChangeSpecificObject = false;
-                    QuoteSwiftMainCode.CreateNewQuote(ref passed);
-                    passed.QuoteTOChange = null;
-                    passed.ChangeSpecificObject = false;
+                    var p = viewModel.Pass;
+                    p.QuoteTOChange = selected;
+                    p.ChangeSpecificObject = false;
+                    QuoteSwiftMainCode.CreateNewQuote(ref p);
+                    p.QuoteTOChange = null;
+                    p.ChangeSpecificObject = false;
+                    viewModel.UpdatePass(p);
                     Show();
                 }
             }
@@ -182,17 +198,19 @@ namespace QuoteSwift
 
         private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteMap != null)
+            if (viewModel.Pass != null && viewModel.Pass.PassQuoteMap != null)
             {
                 Quote selected = GetSelectedQuote();
                 if (selected != null)
                 {
                     this.Hide();
-                    passed.QuoteTOChange = selected;
-                    passed.ChangeSpecificObject = true;
-                    QuoteSwiftMainCode.CreateNewQuote(ref passed);
-                    passed.QuoteTOChange = null;
-                    passed.ChangeSpecificObject = false;
+                    var p = viewModel.Pass;
+                    p.QuoteTOChange = selected;
+                    p.ChangeSpecificObject = true;
+                    QuoteSwiftMainCode.CreateNewQuote(ref p);
+                    p.QuoteTOChange = null;
+                    p.ChangeSpecificObject = false;
+                    viewModel.UpdatePass(p);
                     this.Show();
                 }
             }
@@ -201,7 +219,9 @@ namespace QuoteSwift
         private void ViewAllPartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.ViewAllParts(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.ViewAllParts(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -220,7 +240,9 @@ namespace QuoteSwift
         private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = QuoteSwiftMainCode.AddNewPart(ref passed);
+            var p = viewModel.Pass;
+            p = QuoteSwiftMainCode.AddNewPart(ref p);
+            viewModel.UpdatePass(p);
             try
             {
                 Show();
@@ -234,47 +256,16 @@ namespace QuoteSwift
         private void FrmViewQuotes_Load(object sender, EventArgs e)
         {
 
-            if (passed != null)
-            {
-                try
-                {
-
-                    byte[] retrievedPartList = MainProgramCode.RetreiveData("Parts.json");
-
-                    if (retrievedPartList != null && retrievedPartList.Length > 0)
-                        passed.PassPartList = MainProgramCode.DeserializePartList(retrievedPartList);
-
-                    byte[] RetreivePumpList = MainProgramCode.RetreiveData("PumpList.json");
-
-                    if (RetreivePumpList != null && RetreivePumpList.Length > 0) passed.PassPumpList = new BindingList<Pump>(MainProgramCode.DeserializePumpList(RetreivePumpList));
-
-                    byte[] RetreiveBusinessList = MainProgramCode.RetreiveData("BusinessList.json");
-
-                    if (RetreiveBusinessList != null && RetreiveBusinessList.Length > 0) passed.PassBusinessList = new BindingList<Business>(MainProgramCode.DeserializeBusinessList(RetreiveBusinessList));
-
-                    byte[] RetreiveQuoteList = MainProgramCode.RetreiveData("QuoteList.json");
-
-                    if (RetreiveQuoteList != null && RetreiveQuoteList.Length > 0)
-                        passed.PassQuoteMap = MainProgramCode.DeserializeQuoteList(RetreiveQuoteList);
-                }
-                catch (Exception Ex)
-                {
-                    while(Ex != null)
-                    {
-                        MainProgramCode.ShowError(Ex.Message, "ERROR On Load");
-                        Ex = Ex.InnerException;
-                    }
-                }
-
-            }
-
+            viewModel.LoadData();
             LoadDataGrid();
         }
 
         readonly int count = 0;
         private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true, ref passed);
+            var p = viewModel.Pass;
+            MainProgramCode.CloseApplication(true, ref p);
+            viewModel.UpdatePass(p);
         }
 
         void LoadDataGrid()
@@ -282,8 +273,8 @@ namespace QuoteSwift
 
 
             BindingSource PreviousQuotesDatagridBindingSource = null;
-            if (passed != null && passed.PassQuoteMap != null)
-                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = new BindingList<Quote>(passed.PassQuoteMap.Values.ToList()) };
+            if (viewModel.Pass != null && viewModel.Pass.PassQuoteMap != null)
+                PreviousQuotesDatagridBindingSource = new BindingSource { DataSource = new BindingList<Quote>(viewModel.Pass.PassQuoteMap.Values.ToList()) };
 
             if (PreviousQuotesDatagridBindingSource != null)
             {

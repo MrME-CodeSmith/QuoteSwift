@@ -8,25 +8,33 @@ namespace QuoteSwift
     public partial class FrmAddCustomer : Form
     {
 
-        Pass passed;
+        readonly AddCustomerViewModel viewModel;
 
         Customer Customer;
 
         Business Container;
 
-        public ref Pass Passed { get => ref passed; }
+        Pass passed
+        {
+            get => viewModel.Pass;
+            set => viewModel.UpdatePass(value);
+        }
 
-        public FrmAddCustomer(ref Pass passed)
+        public FrmAddCustomer(AddCustomerViewModel viewModel)
         {
             InitializeComponent();
-            Passed = passed;
-            Customer = passed.CustomerToChange;
+            this.viewModel = viewModel;
+            Customer = viewModel.Pass.CustomerToChange;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true, ref passed);
+            {
+                var p = passed;
+                MainProgramCode.CloseApplication(true, ref p);
+                passed = p;
+            }
         }
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
@@ -95,7 +103,10 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_Load(object sender, EventArgs e)
         {
-            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(ref passed);
+            viewModel.LoadData();
+            ViewCustomersViewModel vm = new ViewCustomersViewModel(viewModel.DataService);
+            vm.LoadData();
+            FrmViewCustomers frmViewCustomers = new FrmViewCustomers(vm);
             frmViewCustomers.LinkBusinessToSource(ref cbBusinessSelection);
 
             if (passed.CustomerToChange != null && passed.ChangeSpecificObject) // Change Existing Customer Info
@@ -283,7 +294,9 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true, ref passed);
+            var p = passed;
+            MainProgramCode.CloseApplication(true, ref p);
+            passed = p;
         }
 
         /** Form Specific Functions And Procedures: 
