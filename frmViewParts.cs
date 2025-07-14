@@ -35,9 +35,7 @@ namespace QuoteSwift
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.Pass = passed;
-            navigation.AddNewPart();
-            passed = navigation.Pass;
+            navigation.AddNewPart(passed);
             Show();
         }
 
@@ -51,9 +49,7 @@ namespace QuoteSwift
                 passed.PartToChange = objPartSelection;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.AddNewPart();
-                passed = navigation.Pass;
+                navigation.AddNewPart(passed);
                 Show();
 
                 passed.ChangeSpecificObject = false;

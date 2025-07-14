@@ -4,24 +4,22 @@ namespace QuoteSwift
 {
     public interface INavigationService
     {
-        Pass Pass { get; set; }
-
-        void CreateNewQuote();
-        void ViewAllQuotes();
-        void ViewAllPumps();
-        void CreateNewPump();
-        void ViewAllParts();
-        void AddNewPart();
-        void AddCustomer();
-        void ViewCustomers();
-        void AddBusiness();
-        void ViewBusinesses();
-        void ViewBusinessesAddresses();
-        void ViewBusinessesPOBoxAddresses();
-        void ViewBusinessesEmailAddresses();
-        void ViewBusinessesPhoneNumbers();
-        void EditBusinessAddress();
-        void EditBusinessEmailAddress();
-        void EditPhoneNumber();
+        void CreateNewQuote(Pass pass);
+        void ViewAllQuotes(Pass pass);
+        void ViewAllPumps(Pass pass);
+        void CreateNewPump(Pass pass);
+        void ViewAllParts(Pass pass);
+        void AddNewPart(Pass pass);
+        void AddCustomer(Pass pass);
+        void ViewCustomers(Pass pass);
+        void AddBusiness(Pass pass);
+        void ViewBusinesses(Pass pass);
+        void ViewBusinessesAddresses(Pass pass);
+        void ViewBusinessesPOBoxAddresses(Pass pass);
+        void ViewBusinessesEmailAddresses(Pass pass);
+        void ViewBusinessesPhoneNumbers(Pass pass);
+        void EditBusinessAddress(Pass pass);
+        void EditBusinessEmailAddress(Pass pass);
+        void EditPhoneNumber(Pass pass);
     }
 }
