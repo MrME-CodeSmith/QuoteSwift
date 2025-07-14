@@ -150,31 +150,51 @@ namespace QuoteSwift
             ViewAllBusinessesToolStripMenuItem.PerformClick();
         }
 
+        Quote GetSelectedQuote()
+        {
+            if (dgvPreviousQuotes.CurrentCell == null || dgvPreviousQuotes.CurrentRow == null)
+                return null;
+
+            int idx = dgvPreviousQuotes.CurrentCell.RowIndex;
+            if (idx < 0 || idx >= dgvPreviousQuotes.Rows.Count)
+                return null;
+
+            return dgvPreviousQuotes.Rows[idx].DataBoundItem as Quote;
+        }
+
         private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedRows.Count > 0)
+            if (passed != null && passed.PassQuoteMap != null)
             {
-                Hide();
-                passed.QuoteTOChange = dgvPreviousQuotes.SelectedRows[0].DataBoundItem as Quote;
-                passed.ChangeSpecificObject = false;
-                QuoteSwiftMainCode.CreateNewQuote(ref passed);
-                passed.QuoteTOChange = null;
-                passed.ChangeSpecificObject = false;
-                Show();
+                Quote selected = GetSelectedQuote();
+                if (selected != null)
+                {
+                    Hide();
+                    passed.QuoteTOChange = selected;
+                    passed.ChangeSpecificObject = false;
+                    QuoteSwiftMainCode.CreateNewQuote(ref passed);
+                    passed.QuoteTOChange = null;
+                    passed.ChangeSpecificObject = false;
+                    Show();
+                }
             }
         }
 
         private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.PassQuoteMap != null && dgvPreviousQuotes.SelectedRows.Count > 0)
+            if (passed != null && passed.PassQuoteMap != null)
             {
-                this.Hide();
-                passed.QuoteTOChange = dgvPreviousQuotes.SelectedRows[0].DataBoundItem as Quote;
-                passed.ChangeSpecificObject = true;
-                QuoteSwiftMainCode.CreateNewQuote(ref passed);
-                passed.QuoteTOChange = null;
-                passed.ChangeSpecificObject = false;
-                this.Show();
+                Quote selected = GetSelectedQuote();
+                if (selected != null)
+                {
+                    this.Hide();
+                    passed.QuoteTOChange = selected;
+                    passed.ChangeSpecificObject = true;
+                    QuoteSwiftMainCode.CreateNewQuote(ref passed);
+                    passed.QuoteTOChange = null;
+                    passed.ChangeSpecificObject = false;
+                    this.Show();
+                }
             }
         }
 
