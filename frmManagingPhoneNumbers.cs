@@ -187,7 +187,7 @@ namespace QuoteSwift
             if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
         }
 
-        string GetNumberSelection(BindingList<string> b, ref DataGridView d)
+        string GetNumberSelection(IReadOnlyList<string> b, ref DataGridView d)
         {
             if (d == null || d.CurrentCell == null || d.CurrentRow == null)
                 return string.Empty;
