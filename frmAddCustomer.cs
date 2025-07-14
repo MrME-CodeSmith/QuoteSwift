@@ -156,9 +156,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesPhoneNumbers();
-                passed = navigation.Pass;
+                navigation.ViewBusinessesPhoneNumbers(passed);
                 Show();
 
                 viewModel.CurrentCustomer = passed.CustomerToChange;
@@ -176,9 +174,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesPOBoxAddresses();
-                passed = navigation.Pass;
+                navigation.ViewBusinessesPOBoxAddresses(passed);
                 Show();
 
                 viewModel.CurrentCustomer = passed.CustomerToChange;
@@ -196,9 +192,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesEmailAddresses();
-                passed = navigation.Pass;
+                navigation.ViewBusinessesEmailAddresses(passed);
                 Show();
 
                 viewModel.CurrentCustomer = passed.CustomerToChange;
@@ -217,9 +211,7 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updatedCustomerInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesAddresses();
-                passed = navigation.Pass;
+                navigation.ViewBusinessesAddresses(passed);
                 Show();
 
                 viewModel.CurrentCustomer = passed.CustomerToChange;

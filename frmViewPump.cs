@@ -45,9 +45,7 @@ namespace QuoteSwift // Repair Quote Swift
                 passed.ChangeSpecificObject = false;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.CreateNewPump();
-                passed = navigation.Pass;
+                navigation.CreateNewPump(passed);
                 Show();
 
                 passed.ChangeSpecificObject = false;
@@ -64,9 +62,7 @@ namespace QuoteSwift // Repair Quote Swift
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.Pass = passed;
-            navigation.CreateNewPump();
-            passed = navigation.Pass;
+            navigation.CreateNewPump(passed);
             Show();
         }
 
