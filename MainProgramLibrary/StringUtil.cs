@@ -9,7 +9,7 @@ namespace QuoteSwift
             if (string.IsNullOrWhiteSpace(input))
                 return string.Empty;
             string trimmed = input.Trim();
-            string singleSpaced = Regex.Replace(trimmed, "\s+", " ");
+            string singleSpaced = Regex.Replace(trimmed, @"\s+", " ");
             return singleSpaced.ToUpperInvariant();
         }
     }

@@ -27,12 +27,12 @@ namespace QuoteSwift
         {
             CustomerName = "";
             CustomerCompanyName = "";
-            CustomerPOBoxAddress = new BindingList<Address>();
-            CustomerDeliveryAddressList = new BindingList<Address>();
+            mCustomerPOBoxAddress = new BindingList<Address>();
+            mCustomerDeliveryAddressList = new BindingList<Address>();
             CustomerLegalDetails = null;
-            CustomerTelephoneNumberList = new BindingList<string>();
-            CustomerCellphoneNumberList = new BindingList<string>();
-            CustomerEmailList = new BindingList<string>();
+            mCustomerTelephoneNumberList = new BindingList<string>();
+            mCustomerCellphoneNumberList = new BindingList<string>();
+            mCustomerEmailList = new BindingList<string>();
             VendorNumber = "";
 
             mDeliveryAddressMap = new Dictionary<string, Address>();
@@ -50,24 +50,24 @@ namespace QuoteSwift
 
             if (c.mCustomerPOBoxAddress != null)
             {
-                CustomerPOBoxAddress = new BindingList<Address>();
+                mCustomerPOBoxAddress = new BindingList<Address>();
                 foreach (var a in c.mCustomerPOBoxAddress)
-                    CustomerPOBoxAddress.Add(new Address(a));
+                    mCustomerPOBoxAddress.Add(new Address(a));
             }
             else
             {
-                CustomerPOBoxAddress = null;
+                mCustomerPOBoxAddress = null;
             }
 
             if (c.mCustomerDeliveryAddressList != null)
             {
-                CustomerDeliveryAddressList = new BindingList<Address>();
+                mCustomerDeliveryAddressList = new BindingList<Address>();
                 foreach (var a in c.mCustomerDeliveryAddressList)
-                    CustomerDeliveryAddressList.Add(new Address(a));
+                    mCustomerDeliveryAddressList.Add(new Address(a));
             }
             else
             {
-                CustomerDeliveryAddressList = null;
+                mCustomerDeliveryAddressList = null;
             }
 
             CustomerLegalDetails = c.mCustomerLegalDetails != null
@@ -76,35 +76,35 @@ namespace QuoteSwift
 
             if (c.mCustomerTelephoneNumberList != null)
             {
-                CustomerTelephoneNumberList = new BindingList<string>();
+                mCustomerTelephoneNumberList = new BindingList<string>();
                 foreach (var n in c.mCustomerTelephoneNumberList)
-                    CustomerTelephoneNumberList.Add(n);
+                    mCustomerTelephoneNumberList.Add(n);
             }
             else
             {
-                CustomerTelephoneNumberList = null;
+                mCustomerTelephoneNumberList = null;
             }
 
             if (c.mCustomerCellphoneNumberList != null)
             {
-                CustomerCellphoneNumberList = new BindingList<string>();
+                mCustomerCellphoneNumberList = new BindingList<string>();
                 foreach (var n in c.mCustomerCellphoneNumberList)
-                    CustomerCellphoneNumberList.Add(n);
+                    mCustomerCellphoneNumberList.Add(n);
             }
             else
             {
-                CustomerCellphoneNumberList = null;
+                mCustomerCellphoneNumberList = null;
             }
 
             if (c.mCustomerEmailList != null)
             {
-                CustomerEmailList = new BindingList<string>();
+                mCustomerEmailList = new BindingList<string>();
                 foreach (var e in c.mCustomerEmailList)
-                    CustomerEmailList.Add(e);
+                    mCustomerEmailList.Add(e);
             }
             else
             {
-                CustomerEmailList = null;
+                mCustomerEmailList = null;
             }
 
             VendorNumber = c.VendorNumber;
