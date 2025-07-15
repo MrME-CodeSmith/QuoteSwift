@@ -85,7 +85,7 @@ namespace QuoteSwift
             data.SaveAll();
         }
 
-        public Pass AddCustomer(Pass pass)
+        private Pass AddCustomer(Pass pass)
         {
             var vm = new AddCustomerViewModel(dataService);
             vm.UpdateData(pass.PassBusinessList, pass.CustomerToChange, pass.ChangeSpecificObject);
@@ -100,7 +100,7 @@ namespace QuoteSwift
             return pass;
         }
 
-        public Pass ViewCustomers(Pass pass)
+        private Pass ViewCustomers(Pass pass)
         {
             var vm = new ViewCustomersViewModel(dataService);
             vm.LoadData();
@@ -111,7 +111,7 @@ namespace QuoteSwift
             return pass;
         }
 
-        public Pass AddBusiness(Pass pass)
+        private Pass AddBusiness(Pass pass)
         {
             var vm = new AddBusinessViewModel(dataService);
             vm.UpdateData(pass.PassBusinessList, pass.BusinessToChange, pass.ChangeSpecificObject);
@@ -127,7 +127,7 @@ namespace QuoteSwift
             return pass;
         }
 
-        public Pass ViewBusinesses(Pass pass)
+        private Pass ViewBusinesses(Pass pass)
         {
             var vm = new ViewBusinessesViewModel(dataService);
             vm.LoadData();
@@ -138,30 +138,48 @@ namespace QuoteSwift
             return pass;
         }
 
-        public void AddCustomer(ApplicationData data)
+        public void AddCustomer(ApplicationData data, Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
         {
-            var pass = AddCustomer(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
-            data.BusinessList = pass.PassBusinessList;
+            var vm = new AddCustomerViewModel(dataService);
+            vm.UpdateData(data.BusinessList, customerToChange, changeSpecificObject);
+            using (var form = new FrmAddCustomer(vm, this, data, businessToChange))
+            {
+                form.ShowDialog();
+            }
             data.SaveAll();
         }
 
         public void ViewCustomers(ApplicationData data)
         {
-            var pass = ViewCustomers(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
-            data.BusinessList = pass.PassBusinessList;
+            var vm = new ViewCustomersViewModel(dataService);
+            vm.LoadData();
+            using (var form = new FrmViewCustomers(vm, this, data))
+            {
+                form.ShowDialog();
+            }
         }
 
-        public void AddBusiness(ApplicationData data)
+        public void AddBusiness(ApplicationData data, Business businessToChange = null, bool changeSpecificObject = false)
         {
-            var pass = AddBusiness(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
-            data.BusinessList = pass.PassBusinessList;
+            var vm = new AddBusinessViewModel(dataService);
+            vm.UpdateData(data.BusinessList, businessToChange, changeSpecificObject);
+            vm.LoadData();
+            using (var form = new FrmAddBusiness(vm, this, data))
+            {
+                form.ShowDialog();
+            }
+            data.BusinessList = vm.BusinessList;
             data.SaveAll();
         }
 
         public void ViewBusinesses(ApplicationData data)
         {
-            var pass = ViewBusinesses(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
-            data.BusinessList = pass.PassBusinessList;
+            var vm = new ViewBusinessesViewModel(dataService);
+            vm.LoadData();
+            using (var form = new FrmViewAllBusinesses(vm, this, data))
+            {
+                form.ShowDialog();
+            }
         }
 
         public Pass ViewBusinessesAddresses(Pass pass)
