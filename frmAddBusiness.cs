@@ -10,37 +10,29 @@ namespace QuoteSwift
 
         readonly AddBusinessViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
 
-        Pass passed;
-
-        public void SetPass(Pass value)
-        {
-            passed = value;
-            viewModel.UpdateData(value.PassBusinessList, value.BusinessToChange, value.ChangeSpecificObject);
-        }
-
-        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null)
+        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            this.appData = appData;
         }
-
-        public ref Pass Passed { get => ref passed; }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                    appData?.BusinessList,
+                    appData?.PumpList,
+                    appData?.PartList,
+                    appData?.QuoteMap);
         }
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.ChangeSpecificObject)
             {
                 if (viewModel.AddBusiness())
                 {
@@ -110,17 +102,15 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessEmailAddressList != null)
             {
-                passed.BusinessToChange = viewModel.CurrentBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
+                {
+                    BusinessToChange = viewModel.CurrentBusiness,
+                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
+                };
 
                 Hide();
-                passed = navigation.ViewBusinessesEmailAddresses(passed);
+                navigation.ViewBusinessesEmailAddresses(pass);
                 Show();
-                Show();
-
-                viewModel.CurrentBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
 
             }
             else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
@@ -130,17 +120,15 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessAddressList != null)
             {
-                passed.BusinessToChange = viewModel.CurrentBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
+                {
+                    BusinessToChange = viewModel.CurrentBusiness,
+                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
+                };
 
                 Hide();
-                passed = navigation.ViewBusinessesAddresses(passed);
+                navigation.ViewBusinessesAddresses(pass);
                 Show();
-                Show();
-
-                viewModel.CurrentBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
         }
@@ -149,17 +137,15 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessPOBoxAddressList != null)
             {
-                passed.BusinessToChange = viewModel.CurrentBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
+                {
+                    BusinessToChange = viewModel.CurrentBusiness,
+                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
+                };
 
                 Hide();
-                passed = navigation.ViewBusinessesPOBoxAddresses(passed);
+                navigation.ViewBusinessesPOBoxAddresses(pass);
                 Show();
-                Show();
-
-                viewModel.CurrentBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
         }
@@ -168,17 +154,15 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessTelephoneNumberList != null || viewModel.CurrentBusiness.BusinessCellphoneNumberList != null)
             {
-                passed.BusinessToChange = viewModel.CurrentBusiness;
-                passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
+                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
+                {
+                    BusinessToChange = viewModel.CurrentBusiness,
+                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
+                };
 
                 Hide();
-                passed = navigation.ViewBusinessesPhoneNumbers(passed);
+                navigation.ViewBusinessesPhoneNumbers(pass);
                 Show();
-                Show();
-
-                viewModel.CurrentBusiness = passed.BusinessToChange;
-                passed.BusinessToChange = null;
-                passed.ChangeSpecificObject = false;
             }
             else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
         }
@@ -186,16 +170,16 @@ namespace QuoteSwift
         private void FrmAddBusiness_Load(object sender, EventArgs e)
         {
             viewModel.LoadData();
-            if (passed.BusinessToChange != null && passed.ChangeSpecificObject) // Change Existing Business Info
+            if (viewModel.BusinessToChange != null && viewModel.ChangeSpecificObject) // Change Existing Business Info
             {
-                viewModel.CurrentBusiness = passed.BusinessToChange;
+                viewModel.CurrentBusiness = viewModel.BusinessToChange;
             }
-            else if (passed.BusinessToChange != null && !passed.ChangeSpecificObject) // View Existing Business Info
+            else if (viewModel.BusinessToChange != null && !viewModel.ChangeSpecificObject) // View Existing Business Info
             {
-                viewModel.CurrentBusiness = passed.BusinessToChange;
+                viewModel.CurrentBusiness = viewModel.BusinessToChange;
                 ConvertToViewOnly();
             }
-            else if (passed.BusinessToChange == null && !passed.ChangeSpecificObject) // Add New Business Info
+            else if (viewModel.BusinessToChange == null && !viewModel.ChangeSpecificObject) // Add New Business Info
             {
                 viewModel.CurrentBusiness = new Business();
             }
@@ -213,16 +197,18 @@ namespace QuoteSwift
         private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+                appData?.BusinessList,
+                appData?.PumpList,
+                appData?.PartList,
+                appData?.QuoteMap);
         }
 
         private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConvertToEdit();
-            passed.ChangeSpecificObject = true;
+            viewModel.ChangeSpecificObject = true;
+        }
+
         private void ConvertToViewOnly()
         {
             QuoteSwiftMainCode.ReadOnlyComponents(gbxBusinessAddress.Controls);
@@ -238,7 +224,7 @@ namespace QuoteSwift
             btnViewEmailAddresses.Enabled = true;
 
             btnAddBusiness.Visible = false;
-            Text = Text.Replace("Add Business", "Viewing " + passed.BusinessToChange.BusinessName);
+            Text = Text.Replace("Add Business", "Viewing " + viewModel.BusinessToChange.BusinessName);
             updateBusinessInformationToolStripMenuItem.Enabled = true;
         }
 

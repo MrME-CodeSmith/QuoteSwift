@@ -10,27 +10,24 @@ namespace QuoteSwift
 
         readonly ViewBusinessesViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, Pass pass = null)
+        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            passed = pass ?? new Pass(null, null, null, null);
+            this.appData = appData;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                    appData?.BusinessList,
+                    appData?.PumpList,
+                    appData?.PartList,
+                    appData?.QuoteMap);
         }
 
         private void BtnUpdateBusiness_Click(object sender, EventArgs e)
@@ -44,14 +41,7 @@ namespace QuoteSwift
                 return;
             }
 
-            passed.BusinessToChange = Business;
-            passed.ChangeSpecificObject = false;
-            passed = navigation.AddBusiness(passed);
-
-            if (!ReplaceBusiness(Business, passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
-
-            passed.BusinessToChange = null;
-            passed.ChangeSpecificObject = false;
+            navigation.AddBusiness(appData, Business, false);
 
             LoadInformation();
 
@@ -60,7 +50,7 @@ namespace QuoteSwift
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = navigation.AddBusiness(passed);
+            navigation.AddBusiness(appData);
             Show();
 
             LoadInformation();
@@ -68,9 +58,9 @@ namespace QuoteSwift
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {
-            if (passed.PassBusinessList != null)
+            if (appData.BusinessList != null)
             {
-                foreach (var business in passed.PassBusinessList)
+                foreach (var business in appData.BusinessList)
                     DgvBusinessList.Rows.Add(business.BusinessName);
             }
 
@@ -82,17 +72,12 @@ namespace QuoteSwift
         {
             Business business = GetBusinessSelection();
 
-            if (business != null && passed.PassBusinessList != null)
+            if (business != null && appData.BusinessList != null)
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
-                    passed.PassBusinessList.Remove(business);
-                    passed.BusinessLookup.Remove(business.BusinessName);
-                    passed.BusinessVatNumbers.Remove(business.BusinessLegalDetails.VatNumber);
-                    passed.BusinessRegNumbers.Remove(business.BusinessLegalDetails.RegistrationNumber);
+                    appData.BusinessList.Remove(business);
                     MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
-
-                    if (passed.PassBusinessList.Count == 0) passed.PassBusinessList = null;
 
                     LoadInformation();
                 }
@@ -119,9 +104,9 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(searchName))
                 return null;
 
-            if (passed.BusinessLookup != null && passed.BusinessLookup.TryGetValue(searchName, out Business business))
+            if (appData.BusinessList != null)
             {
-                return business;
+                return appData.BusinessList.FirstOrDefault(b => b.BusinessName == searchName);
             }
 
             return null;
@@ -131,31 +116,13 @@ namespace QuoteSwift
         {
             DgvBusinessList.Rows.Clear();
 
-            if (passed.PassBusinessList != null)
-                foreach (var business in passed.PassBusinessList)
+            if (appData.BusinessList != null)
+                foreach (var business in appData.BusinessList)
                 {
                     DgvBusinessList.Rows.Add(business.BusinessName);
                 }
         }
 
-        private bool ReplaceBusiness(Business Original, Business New)
-        {
-            if (New != null && Original != null && passed.PassBusinessList != null)
-                for (int i = 0; i < passed.PassBusinessList.Count; i++)
-                    if (passed.PassBusinessList[i] == Original)
-                    {
-                        passed.PassBusinessList[i] = New;
-                        passed.BusinessLookup.Remove(Original.BusinessName);
-                        passed.BusinessVatNumbers.Remove(Original.BusinessLegalDetails.VatNumber);
-                        passed.BusinessRegNumbers.Remove(Original.BusinessLegalDetails.RegistrationNumber);
-                        passed.BusinessLookup[New.BusinessName] = New;
-                        passed.BusinessVatNumbers.Add(New.BusinessLegalDetails.VatNumber);
-                        passed.BusinessRegNumbers.Add(New.BusinessLegalDetails.RegistrationNumber);
-                        return true;
-                    }
-
-            return false;
-        }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
@@ -170,10 +137,10 @@ namespace QuoteSwift
         private void FrmViewAllBusinesses_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+                appData?.BusinessList,
+                appData?.PumpList,
+                appData?.PartList,
+                appData?.QuoteMap);
         }
 
         /**********************************************************************************/
