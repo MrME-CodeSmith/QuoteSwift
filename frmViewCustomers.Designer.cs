@@ -149,6 +149,7 @@ namespace QuoteSwift
             // 
             // clmCustomerCompanyName
             // 
+            this.clmCustomerCompanyName.DataPropertyName = "CustomerCompanyName";
             this.clmCustomerCompanyName.HeaderText = "Customer Company Name";
             this.clmCustomerCompanyName.Name = "clmCustomerCompanyName";
             this.clmCustomerCompanyName.ReadOnly = true;

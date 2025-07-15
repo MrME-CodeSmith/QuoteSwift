@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -34,7 +33,7 @@ namespace QuoteSwift
         private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e)
         {
             Customer customer = GetCustomerSelection();
-            Business container = GetSelectedBusiness();
+            Business container = viewModel.SelectedBusiness;
 
             if (customer == null)
             {
@@ -44,7 +43,8 @@ namespace QuoteSwift
 
             navigation.AddCustomer(container, customer, false);
 
-            LoadInformation();
+            viewModel.RefreshCustomers();
+            RefreshBinding();
 
 
         }
@@ -55,7 +55,8 @@ namespace QuoteSwift
             navigation.AddCustomer();
             Show();
 
-            LoadInformation();
+            viewModel.RefreshCustomers();
+            RefreshBinding();
         }
 
         private void FrmViewCustomers_Load(object sender, EventArgs e)
@@ -63,7 +64,7 @@ namespace QuoteSwift
             viewModel.LoadData();
             LinkBusinessToSource(ref cbBusinessSelection);
 
-            LoadInformation();
+            RefreshBinding();
 
             DgvCustomerList.RowsDefaultCellStyle.BackColor = Color.Bisque;
             DgvCustomerList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
@@ -72,16 +73,14 @@ namespace QuoteSwift
         private void BtnRemoveSelectedCustomer_Click(object sender, EventArgs e)
         {
             Customer customer = GetCustomerSelection();
-            Business container = GetSelectedBusiness();
-
-            if (customer != null && container != null)
+            if (customer != null)
             {
                 if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?", "REQUEST - Deletion Request"))
                 {
-                    container.RemoveCustomer(customer);
+                    viewModel.RemoveCustomer(customer);
                     messageService.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
 
-                    LoadInformation();
+                    RefreshBinding();
                 }
             }
         }
@@ -93,48 +92,17 @@ namespace QuoteSwift
         *       and clutter free.                                                          
         */
 
-        private void LoadInformation()
+        void RefreshBinding()
         {
-            DgvCustomerList.Rows.Clear();
-
-            if (appData != null && appData.BusinessList != null && cbBusinessSelection.Text.Length > 0)
-                foreach (var business in appData.BusinessList)
-                    if (cbBusinessSelection.Text == business.BusinessName)
-                        if (business.BusinessCustomerList != null)
-                            foreach (var customer in business.BusinessCustomerList)
-                                DgvCustomerList.Rows.Add(customer.CustomerCompanyName,
-                                                         GetPreviousQuoteDate(customer));
-
-        }
-
-        private string GetPreviousQuoteDate(Customer c)
-        {
-            if (appData.QuoteMap != null)
+            DgvCustomerList.AutoGenerateColumns = false;
+            DgvCustomerList.DataSource = new BindingSource { DataSource = viewModel.Customers };
+            for (int i = 0; i < DgvCustomerList.Rows.Count; i++)
             {
-                DateTime latest = DateTime.MinValue;
-                bool found = false;
-
-                foreach (var q in appData.QuoteMap.Values)
-                {
-                    if (q.QuoteCustomer != null && c != null &&
-                        q.QuoteCustomer.CustomerCompanyName == c.CustomerCompanyName)
-                    {
-                        if (!found || q.QuoteCreationDate.Date > latest.Date)
-                        {
-                            latest = q.QuoteCreationDate;
-                            found = true;
-                        }
-                    }
-                }
-
-                if (found)
-                {
-                    return latest.ToShortDateString();
-                }
+                var cust = DgvCustomerList.Rows[i].DataBoundItem as Customer;
+                DgvCustomerList.Rows[i].Cells[clmPreviousQuoteDate.Name].Value = viewModel.GetPreviousQuoteDate(cust);
             }
-
-            return "No Previous Quote Date Available";
         }
+
 
         private bool ReplaceCustomer(Customer Original, Customer New, Business Container)
         {
@@ -155,43 +123,21 @@ namespace QuoteSwift
 
         private Customer GetCustomerSelection()
         {
-            if (DgvCustomerList.CurrentCell == null || DgvCustomerList.CurrentRow == null)
-                return null;
-
-            int iGridSelection = DgvCustomerList.CurrentCell.RowIndex;
-            if (iGridSelection < 0 || iGridSelection >= DgvCustomerList.Rows.Count)
-                return null;
-
-            string SearchName = DgvCustomerList.Rows[iGridSelection].Cells[0].Value?.ToString();
-            if (string.IsNullOrEmpty(SearchName))
-                return null;
-
-            Business selected = GetSelectedBusiness();
-            if (selected != null && selected.CustomerMap != null && selected.CustomerMap.TryGetValue(SearchName, out Customer customer))
-                return customer;
-
-            return null;
+            return DgvCustomerList.CurrentRow?.DataBoundItem as Customer;
         }
 
         private Business GetSelectedBusiness()
         {
-            string searchName = cbBusinessSelection.Text;
-
-            if (searchName.Length > 1 && appData.BusinessList != null)
-            {
-                return appData.BusinessList.FirstOrDefault(b => b.BusinessName == searchName);
-            }
-
-            return null;
+            return cbBusinessSelection.SelectedItem as Business;
         }
 
         public void LinkBusinessToSource(ref ComboBox cb)
         {
-            if (appData != null && appData.BusinessList != null)
+            if (viewModel.Businesses != null)
             {
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = appData.BusinessList };
+                BindingSource source = new BindingSource { DataSource = viewModel.Businesses };
 
-                cb.DataSource = ComboBoxBusinessSource.DataSource;
+                cb.DataSource = source.DataSource;
 
                 cb.DisplayMember = "BusinessName";
                 cb.ValueMember = "BusinessName";
@@ -200,7 +146,8 @@ namespace QuoteSwift
 
         private void CbBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadInformation();
+            viewModel.SelectBusiness(GetSelectedBusiness());
+            RefreshBinding();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
