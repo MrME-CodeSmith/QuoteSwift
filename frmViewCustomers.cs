@@ -41,9 +41,7 @@ namespace QuoteSwift
             passed.ChangeSpecificObject = false;
             passed.BusinessToChange = container;
 
-            navigation.Pass = passed;
-            navigation.AddCustomer();
-            passed = navigation.Pass;
+            passed = navigation.AddCustomer(passed);
 
             if (!ReplaceCustomer(customer, passed.CustomerToChange, container) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Customer will not be stored.", "ERROR - Customer Not Updated");
 
@@ -59,9 +57,7 @@ namespace QuoteSwift
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.Pass = passed;
-            navigation.AddCustomer();
-            passed = navigation.Pass;
+            passed = navigation.AddCustomer(passed);
             Show();
 
             LoadInformation();

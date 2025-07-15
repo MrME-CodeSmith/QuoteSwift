@@ -110,9 +110,8 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesEmailAddresses();
-                passed = navigation.Pass;
+                passed = navigation.ViewBusinessesEmailAddresses(passed);
+                Show();
                 Show();
 
                 viewModel.CurrentBusiness = passed.BusinessToChange;
@@ -131,9 +130,8 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesAddresses();
-                passed = navigation.Pass;
+                passed = navigation.ViewBusinessesAddresses(passed);
+                Show();
                 Show();
 
                 viewModel.CurrentBusiness = passed.BusinessToChange;
@@ -151,9 +149,8 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesPOBoxAddresses();
-                passed = navigation.Pass;
+                passed = navigation.ViewBusinessesPOBoxAddresses(passed);
+                Show();
                 Show();
 
                 viewModel.CurrentBusiness = passed.BusinessToChange;
@@ -171,9 +168,8 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled;
 
                 Hide();
-                navigation.Pass = passed;
-                navigation.ViewBusinessesPhoneNumbers();
-                passed = navigation.Pass;
+                passed = navigation.ViewBusinessesPhoneNumbers(passed);
+                Show();
                 Show();
 
                 viewModel.CurrentBusiness = passed.BusinessToChange;

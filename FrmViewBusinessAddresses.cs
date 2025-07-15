@@ -73,9 +73,7 @@ namespace QuoteSwift
             passed.AddressToChange = address;
             passed.ChangeSpecificObject = false;
 
-            navigation.Pass = passed;
-            navigation.EditBusinessAddress();
-            passed = navigation.Pass;
+            passed = navigation.EditBusinessAddress(passed);
 
             if (!ReplacePOBoxAddress(address, passed.AddressToChange)) MainProgramCode.ShowError("An error occurred during the updating procedure of the Address.\nUpdated address will not be stored.", "ERROR - Address Not Updated");
 

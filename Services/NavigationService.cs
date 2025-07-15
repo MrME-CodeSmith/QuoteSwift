@@ -9,196 +9,210 @@ namespace QuoteSwift
         public NavigationService(IDataService service)
         {
             dataService = service;
-            Pass = new Pass(null, null, null, null);
         }
 
-        public Pass Pass { get; set; }
-
-        public void CreateNewQuote()
+        public Pass CreateNewQuote(Pass pass)
         {
             var vm = new CreateQuoteViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmCreateQuote(vm, Pass))
+            using (var form = new FrmCreateQuote(vm, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void ViewAllQuotes()
+        public Pass ViewAllQuotes(Pass pass)
         {
             var vm = new QuotesViewModel(dataService);
-            vm.UpdateData(Pass.PassQuoteMap, Pass.PassBusinessList, Pass.PassPumpList, Pass.PassPartList);
+            vm.UpdateData(pass.PassQuoteMap, pass.PassBusinessList, pass.PassPumpList, pass.PassPartList);
             vm.LoadData();
             using (var form = new FrmViewQuotes(vm, this))
             {
                 form.ShowDialog();
             }
-            Pass = new Pass(vm.QuoteMap, vm.BusinessList, vm.PumpList, vm.PartMap);
+            pass = new Pass(vm.QuoteMap, vm.BusinessList, vm.PumpList, vm.PartMap);
+            return pass;
         }
 
-        public void ViewAllPumps()
+        public Pass ViewAllPumps(Pass pass)
         {
             var vm = new ViewPumpViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewPump(vm, this, Pass))
+            using (var form = new FrmViewPump(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void CreateNewPump()
+        public Pass CreateNewPump(Pass pass)
         {
             var vm = new AddPumpViewModel(dataService);
-            vm.UpdateData(Pass.PassPumpList, Pass.PassPartList, Pass.PumpToChange, Pass.ChangeSpecificObject, Pass.RepairableItemNames);
+            vm.UpdateData(pass.PassPumpList, pass.PassPartList, pass.PumpToChange, pass.ChangeSpecificObject, pass.RepairableItemNames);
             vm.LoadData();
             using (var form = new FrmAddPump(vm, this))
             {
-                form.SetPass(Pass);
+                form.SetPass(pass);
                 form.ShowDialog();
             }
-            Pass.PassPumpList = vm.PumpList;
-            Pass.PassPartList = vm.PartMap;
+            pass.PassPumpList = vm.PumpList;
+            pass.PassPartList = vm.PartMap;
+            return pass;
         }
 
-        public void ViewAllParts()
+        public Pass ViewAllParts(Pass pass)
         {
             var vm = new ViewPartsViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewParts(vm, this, Pass))
+            using (var form = new FrmViewParts(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void AddNewPart()
+        public Pass AddNewPart(Pass pass)
         {
             var vm = new AddPartViewModel(dataService);
-            vm.UpdatePass(Pass.PassPartList, Pass.PassPumpList, Pass.PartToChange, Pass.ChangeSpecificObject);
+            vm.UpdatePass(pass.PassPartList, pass.PassPumpList, pass.PartToChange, pass.ChangeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddPart(vm, this))
             {
-                form.SetPass(Pass);
+                form.SetPass(pass);
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void AddCustomer()
+        public Pass AddCustomer(Pass pass)
         {
             var vm = new AddCustomerViewModel(dataService);
-            vm.UpdateData(Pass.PassBusinessList, Pass.CustomerToChange, Pass.ChangeSpecificObject);
+            vm.UpdateData(pass.PassBusinessList, pass.CustomerToChange, pass.ChangeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddCustomer(vm, this))
             {
                 form.ShowDialog();
             }
-            Pass.PassBusinessList = vm.BusinessList;
-            Pass.CustomerToChange = vm.CustomerToChange;
-            Pass.ChangeSpecificObject = vm.ChangeSpecificObject;
+            pass.PassBusinessList = vm.BusinessList;
+            pass.CustomerToChange = vm.CustomerToChange;
+            pass.ChangeSpecificObject = vm.ChangeSpecificObject;
+            return pass;
         }
 
-        public void ViewCustomers()
+        public Pass ViewCustomers(Pass pass)
         {
             var vm = new ViewCustomersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewCustomers(vm, this, Pass))
+            using (var form = new FrmViewCustomers(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void AddBusiness()
+        public Pass AddBusiness(Pass pass)
         {
             var vm = new AddBusinessViewModel(dataService);
-            vm.UpdateData(Pass.PassBusinessList, Pass.BusinessToChange, Pass.ChangeSpecificObject);
+            vm.UpdateData(pass.PassBusinessList, pass.BusinessToChange, pass.ChangeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddBusiness(vm, this))
             {
-                form.SetPass(Pass);
+                form.SetPass(pass);
                 form.ShowDialog();
             }
-            Pass.PassBusinessList = vm.BusinessList;
-            Pass.BusinessToChange = vm.BusinessToChange;
-            Pass.ChangeSpecificObject = vm.ChangeSpecificObject;
+            pass.PassBusinessList = vm.BusinessList;
+            pass.BusinessToChange = vm.BusinessToChange;
+            pass.ChangeSpecificObject = vm.ChangeSpecificObject;
+            return pass;
         }
 
-        public void ViewBusinesses()
+        public Pass ViewBusinesses(Pass pass)
         {
             var vm = new ViewBusinessesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewAllBusinesses(vm, this, Pass))
+            using (var form = new FrmViewAllBusinesses(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void ViewBusinessesAddresses()
+        public Pass ViewBusinessesAddresses(Pass pass)
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewBusinessAddresses(vm, this, Pass))
+            using (var form = new FrmViewBusinessAddresses(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void ViewBusinessesPOBoxAddresses()
+        public Pass ViewBusinessesPOBoxAddresses(Pass pass)
         {
             var vm = new ViewPOBoxAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewPOBoxAddresses(vm, this, Pass))
+            using (var form = new FrmViewPOBoxAddresses(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void ViewBusinessesEmailAddresses()
+        public Pass ViewBusinessesEmailAddresses(Pass pass)
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManageAllEmails(vm, this, Pass))
+            using (var form = new FrmManageAllEmails(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void ViewBusinessesPhoneNumbers()
+        public Pass ViewBusinessesPhoneNumbers(Pass pass)
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManagingPhoneNumbers(vm, this, Pass))
+            using (var form = new FrmManagingPhoneNumbers(vm, this, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void EditBusinessAddress()
+        public Pass EditBusinessAddress(Pass pass)
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmEditBusinessAddress(vm, Pass))
+            using (var form = new FrmEditBusinessAddress(vm, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void EditBusinessEmailAddress()
+        public Pass EditBusinessEmailAddress(Pass pass)
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmEditEmailAddress(vm, Pass))
+            using (var form = new FrmEditEmailAddress(vm, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
 
-        public void EditPhoneNumber()
+        public Pass EditPhoneNumber(Pass pass)
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmEditPhoneNumber(vm, Pass))
+            using (var form = new FrmEditPhoneNumber(vm, pass))
             {
                 form.ShowDialog();
             }
+            return pass;
         }
     }
 }

@@ -42,9 +42,7 @@ namespace QuoteSwift
 
             passed.BusinessToChange = Business;
             passed.ChangeSpecificObject = false;
-            navigation.Pass = passed;
-            navigation.AddBusiness();
-            passed = navigation.Pass;
+            passed = navigation.AddBusiness(passed);
 
             if (!ReplaceBusiness(Business, passed.BusinessToChange) && passed.ChangeSpecificObject) MainProgramCode.ShowError("An error occurred during the updating procedure.\nUpdated Business will not be stored.", "ERROR - Business Not Updated");
 
@@ -58,9 +56,7 @@ namespace QuoteSwift
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.Pass = passed;
-            navigation.AddBusiness();
-            passed = navigation.Pass;
+            passed = navigation.AddBusiness(passed);
             Show();
 
             LoadInformation();
