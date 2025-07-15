@@ -32,6 +32,11 @@ namespace QuoteSwift
             PartList = dataService.LoadPartList();
         }
 
+        public void UpdateData(Dictionary<string, Part> parts)
+        {
+            PartList = parts;
+        }
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

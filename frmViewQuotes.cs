@@ -62,9 +62,8 @@ namespace QuoteSwift
         private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.ViewAllPumps(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.ViewAllPumps(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();
@@ -224,9 +223,8 @@ namespace QuoteSwift
         private void ViewAllPartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.ViewAllParts(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.ViewAllParts(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();
@@ -245,9 +243,8 @@ namespace QuoteSwift
         private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.AddNewPart(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.AddNewPart(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();

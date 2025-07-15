@@ -11,32 +11,32 @@ namespace QuoteSwift
         readonly ViewPartsViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed;
+        readonly ApplicationData appData;
 
-        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, Pass pass = null)
+        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            passed = pass ?? new Pass(null, null, null, null);
+            appData = data;
+            if (appData != null)
+                viewModel.UpdateData(appData.PartList);
         }
-
-        public ref Pass Passed => ref passed;
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                    appData?.BusinessList,
+                    appData?.PumpList,
+                    appData?.PartList,
+                    appData?.QuoteMap);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = navigation.AddNewPart(passed);
+            navigation.AddNewPart(appData);
             Show();
         }
 
@@ -46,15 +46,9 @@ namespace QuoteSwift
 
             if (objPartSelection != null)
             {
-                passed.ChangeSpecificObject = false;
-                passed.PartToChange = objPartSelection;
-
                 Hide();
-                passed = navigation.AddNewPart(passed);
+                navigation.AddNewPart(appData, objPartSelection, false);
                 Show();
-
-                passed.ChangeSpecificObject = false;
-                passed.PartToChange = null;
             }
             else
             {
@@ -64,7 +58,7 @@ namespace QuoteSwift
 
         private void FrmViewParts_Activated(object sender, EventArgs e)
         {
-            if (passed != null)
+            if (appData != null)
             {
                 dgvAllParts.Rows.Clear();
                 LoadMandatoryParts();
@@ -81,7 +75,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.RemovePart(SelectedPart);
+                        appData.PartList?.Remove(StringUtil.NormalizeKey(SelectedPart.OriginalItemPartNumber));
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -89,7 +83,7 @@ namespace QuoteSwift
                 {
                     if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                     {
-                        passed.RemovePart(SelectedPart);
+                        appData.PartList?.Remove(StringUtil.NormalizeKey(SelectedPart.OriginalItemPartNumber));
                         MainProgramCode.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
                     }
                 }
@@ -110,9 +104,9 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (appData.PartList != null)
             {
-                foreach (var part in passed.MandatoryParts)
+                foreach (var part in appData.PartList.Values.Where(p => p.MandatoryPart))
                 {
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(part.PartName,
@@ -127,9 +121,9 @@ namespace QuoteSwift
 
         void LoadNonMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (appData.PartList != null)
             {
-                foreach (var part in passed.NonMandatoryParts)
+                foreach (var part in appData.PartList.Values.Where(p => !p.MandatoryPart))
                 {
                     //Manually setting the data grid's rows' values:
                     dgvAllParts.Rows.Add(part.PartName,
@@ -155,18 +149,17 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(SearchName))
                 return null;
 
-            if (passed.PassPartList != null && passed.PassPartList.Count > 0)
+            if (appData.PartList != null && appData.PartList.Count > 0)
             {
                 string key = StringUtil.NormalizeKey(SearchName);
                 if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
                 {
-                    //Search for part in mandatory
-                    passed.PassPartList.TryGetValue(key, out var part);
+                    appData.PartList.TryGetValue(key, out var part);
                     return part;
                 }
                 else // Search in Non-Mandatory
                 {
-                    passed.PassPartList.TryGetValue(key, out var part);
+                    appData.PartList.TryGetValue(key, out var part);
                     return part;
                 }
             }
@@ -193,10 +186,10 @@ namespace QuoteSwift
         private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+                appData?.BusinessList,
+                appData?.PumpList,
+                appData?.PartList,
+                appData?.QuoteMap);
         }
 
         /*********************************************************************************/

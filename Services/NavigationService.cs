@@ -37,15 +37,14 @@ namespace QuoteSwift
             return pass;
         }
 
-        public Pass ViewAllPumps(Pass pass)
+        public void ViewAllPumps(ApplicationData data)
         {
             var vm = new ViewPumpViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewPump(vm, this, appData))
+            using (var form = new FrmViewPump(vm, this, data))
             {
                 form.ShowDialog();
             }
-            return pass;
         }
 
         public void CreateNewPump(ApplicationData data)
@@ -62,28 +61,27 @@ namespace QuoteSwift
             data.SaveAll();
         }
 
-        public Pass ViewAllParts(Pass pass)
+        public void ViewAllParts(ApplicationData data)
         {
             var vm = new ViewPartsViewModel(dataService);
-            vm.LoadData();
-            using (var form = new FrmViewParts(vm, this, pass))
+            vm.UpdateData(data.PartList);
+            using (var form = new FrmViewParts(vm, this, data))
             {
                 form.ShowDialog();
             }
-            return pass;
         }
 
-        public Pass AddNewPart(Pass pass)
+        public void AddNewPart(ApplicationData data, Part partToChange = null, bool changeSpecificObject = false)
         {
             var vm = new AddPartViewModel(dataService);
-            vm.UpdatePass(pass.PassPartList, pass.PassPumpList, pass.PartToChange, pass.ChangeSpecificObject);
-            vm.LoadData();
-            using (var form = new FrmAddPart(vm, this))
+            vm.UpdatePass(data.PartList, data.PumpList, partToChange, changeSpecificObject);
+            using (var form = new FrmAddPart(vm, this, data))
             {
-                form.SetPass(pass);
                 form.ShowDialog();
             }
-            return pass;
+            data.PartList = vm.PartMap;
+            data.PumpList = vm.PumpList;
+            data.SaveAll();
         }
 
         public Pass AddCustomer(Pass pass)
