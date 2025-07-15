@@ -15,7 +15,7 @@ namespace QuoteSwift
             var appData = new ApplicationData(dataService);
             appData.Load();
 
-            var navigation = new NavigationService(dataService);
+            var navigation = new NavigationService(dataService, appData);
             QuotesViewModel viewModel = new QuotesViewModel(dataService);
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
 

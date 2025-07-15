@@ -6,50 +6,55 @@ namespace QuoteSwift
     public partial class FrmEditPhoneNumber : Form
     {
 
-        readonly ManagePhoneNumbersViewModel viewModel;
+        readonly ApplicationData appData;
+        readonly Business business;
+        readonly Customer customer;
+        string number;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmEditPhoneNumber(ManagePhoneNumbersViewModel viewModel, Pass pass = null)
+        public FrmEditPhoneNumber(ApplicationData data, Business business = null, Customer customer = null, string number = "")
         {
             InitializeComponent();
-            this.viewModel = viewModel;
-            passed = pass ?? new Pass(null, null, null, null);
+            appData = data;
+            this.business = business;
+            this.customer = customer;
+            this.number = number;
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
         {
-            if (passed.PhoneNumberToChange != "") txtPhoneNumber.Text = passed.PhoneNumberToChange;
+            if (!string.IsNullOrWhiteSpace(number))
+                txtPhoneNumber.Text = number;
         }
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null)
+            string newNumber = txtPhoneNumber.Text;
+            if (business != null)
             {
-                var vm = new AddBusinessViewModel(viewModel.DataService);
-                vm.UpdateData(passed.PassBusinessList, passed.BusinessToChange, passed.ChangeSpecificObject);
-                vm.LoadData();
-                FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
-                frmAddBusiness.SetPass(passed);
-                if (!frmAddBusiness.PhoneNumberExisting(txtPhoneNumber.Text))
+                bool isCell = business.CellphoneNumbers.Contains(number);
+                bool isTel = business.TelephoneNumbers.Contains(number);
+                if (!business.CellphoneNumbers.Contains(newNumber) && !business.TelephoneNumbers.Contains(newNumber))
                 {
-                    passed.PhoneNumberToChange = txtPhoneNumber.Text;
+                    if (isCell)
+                        business.UpdateCellphoneNumber(number, newNumber);
+                    else if (isTel)
+                        business.UpdateTelephoneNumber(number, newNumber);
+                    number = newNumber;
                     MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
                     Close();
                 }
             }
-            else if (passed != null && passed.CustomerToChange != null)
+            else if (customer != null)
             {
-                var vm = new AddCustomerViewModel(viewModel.DataService);
-                vm.UpdateData(passed.PassBusinessList, passed.CustomerToChange, passed.ChangeSpecificObject);
-                vm.LoadData();
-                FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
-                frmAddCustomer.SetPass(passed);
-                if (!frmAddCustomer.PhoneNumberExisting(txtPhoneNumber.Text))
+                bool isCell = customer.CellphoneNumbers.Contains(number);
+                bool isTel = customer.TelephoneNumbers.Contains(number);
+                if (!customer.CellphoneNumbers.Contains(newNumber) && !customer.TelephoneNumbers.Contains(newNumber))
                 {
-                    passed.PhoneNumberToChange = txtPhoneNumber.Text;
+                    if (isCell)
+                        customer.UpdateCellphoneNumber(number, newNumber);
+                    else if (isTel)
+                        customer.UpdateTelephoneNumber(number, newNumber);
+                    number = newNumber;
                     MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
                     Close();
                 }
@@ -64,11 +69,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                appData.SaveAll();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -78,11 +79,7 @@ namespace QuoteSwift
 
         private void FrmEditPhoneNumber_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            appData.SaveAll();
         }
     }
 }

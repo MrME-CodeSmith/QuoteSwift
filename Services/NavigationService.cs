@@ -5,10 +5,12 @@ namespace QuoteSwift
     public class NavigationService : INavigationService
     {
         readonly IDataService dataService;
+        readonly ApplicationData appData;
 
-        public NavigationService(IDataService service)
+        public NavigationService(IDataService service, ApplicationData data)
         {
             dataService = service;
+            appData = data;
         }
 
         public Pass CreateNewQuote(Pass pass)
@@ -142,7 +144,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewBusinessAddresses(vm, this, pass))
+            using (var form = new FrmViewBusinessAddresses(vm, this, appData, pass))
             {
                 form.ShowDialog();
             }
@@ -164,7 +166,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManageAllEmails(vm, this, pass))
+            using (var form = new FrmManageAllEmails(vm, this, appData, pass))
             {
                 form.ShowDialog();
             }
@@ -175,7 +177,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManagingPhoneNumbers(vm, this, pass))
+            using (var form = new FrmManagingPhoneNumbers(vm, this, appData, pass))
             {
                 form.ShowDialog();
             }
@@ -184,9 +186,7 @@ namespace QuoteSwift
 
         public Pass EditBusinessAddress(Pass pass)
         {
-            var vm = new ViewBusinessAddressesViewModel(dataService);
-            vm.LoadData();
-            using (var form = new FrmEditBusinessAddress(vm, pass))
+            using (var form = new FrmEditBusinessAddress(appData, pass.BusinessToChange, pass.CustomerToChange, pass.AddressToChange))
             {
                 form.ShowDialog();
             }
@@ -195,9 +195,7 @@ namespace QuoteSwift
 
         public Pass EditBusinessEmailAddress(Pass pass)
         {
-            var vm = new ManageEmailsViewModel(dataService);
-            vm.LoadData();
-            using (var form = new FrmEditEmailAddress(vm, pass))
+            using (var form = new FrmEditEmailAddress(appData, pass.BusinessToChange, pass.CustomerToChange, pass.EmailToChange))
             {
                 form.ShowDialog();
             }
@@ -206,9 +204,7 @@ namespace QuoteSwift
 
         public Pass EditPhoneNumber(Pass pass)
         {
-            var vm = new ManagePhoneNumbersViewModel(dataService);
-            vm.LoadData();
-            using (var form = new FrmEditPhoneNumber(vm, pass))
+            using (var form = new FrmEditPhoneNumber(appData, pass.BusinessToChange, pass.CustomerToChange, pass.PhoneNumberToChange))
             {
                 form.ShowDialog();
             }
