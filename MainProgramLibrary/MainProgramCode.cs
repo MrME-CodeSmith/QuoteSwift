@@ -17,14 +17,14 @@ namespace QuoteSwift
     {
         //Get Last Quote
 
-        public static Quote GetLastQuote(ref Pass passed)
+        public static Quote GetLastQuote(SortedDictionary<string, Quote> quotes)
         {
-            if (passed != null && passed.PassQuoteMap != null && passed.PassQuoteMap.Count > 0)
+            if (quotes != null && quotes.Count > 0)
             {
-                Quote latest = passed.PassQuoteMap.First().Value;
+                Quote latest = quotes.First().Value;
                 DateTime dt = latest.QuoteCreationDate;
 
-                foreach (var quote in passed.PassQuoteMap.Values.Skip(1))
+                foreach (var quote in quotes.Values.Skip(1))
                 {
                     if (quote.QuoteCreationDate.Date > dt)
                     {
