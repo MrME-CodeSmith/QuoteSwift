@@ -36,7 +36,7 @@ namespace QuoteSwift
 
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
-            if (!ValidInput())
+            if (!viewModel.ValidateInput())
                 return;
 
             BindingList<Pump_Part> newPumpParts = RetreivePumpPartList();
@@ -236,32 +236,8 @@ namespace QuoteSwift
             }
         }
 
+
         //Links the binding-lists with the corresponding datagridview components
-
-        bool ValidInput()
-        {
-            if (mtxtPumpName.TextLength < 3)
-            {
-                MainProgramCode.ShowInformation("Please ensure the input for the Pump Name is correct and longer than 3 characters.", "INFORMATION -Pump Name Input Incorrect");
-                mtxtPumpName.Focus();
-                return false;
-            }
-
-            if (mtxtPumpDescription.TextLength < 3)
-            {
-                MainProgramCode.ShowInformation("Please ensure the input for the description of the pump is correct and longer than 3 characters.", "INFORMATION - Pump Description Input Incorrect");
-                mtxtPumpDescription.Focus();
-                return false;
-            }
-
-            if (NewPumpValueInput() == 0)
-            {
-                MainProgramCode.ShowInformation("Please ensure the input for the price of the pump is correct and longer than 2 characters.", "INFORMATION - Pump Price Input Incorrect");
-                mtxtNewPumpPrice.Focus();
-                return false;
-            }
-            return true;
-        }
 
         BindingList<Pump_Part> RetreivePumpPartList()
         {
