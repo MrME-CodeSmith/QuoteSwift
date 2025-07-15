@@ -29,7 +29,7 @@ namespace QuoteSwift
             var vm = new QuotesViewModel(dataService);
             vm.UpdateData(pass.PassQuoteMap, pass.PassBusinessList, pass.PassPumpList, pass.PassPartList);
             vm.LoadData();
-            using (var form = new FrmViewQuotes(vm, this))
+            using (var form = new FrmViewQuotes(vm, this, appData))
             {
                 form.ShowDialog();
             }
@@ -48,19 +48,18 @@ namespace QuoteSwift
             return pass;
         }
 
-        public Pass CreateNewPump(Pass pass)
+        public void CreateNewPump(ApplicationData data)
         {
             var vm = new AddPumpViewModel(dataService);
-            vm.UpdateData(pass.PassPumpList, pass.PassPartList, pass.PumpToChange, pass.ChangeSpecificObject, pass.RepairableItemNames);
+            vm.UpdateData(data.PumpList, data.PartList);
             vm.LoadData();
-            using (var form = new FrmAddPump(vm, this))
+            using (var form = new FrmAddPump(vm, this, data))
             {
-                form.SetPass(pass);
                 form.ShowDialog();
             }
-            pass.PassPumpList = vm.PumpList;
-            pass.PassPartList = vm.PartMap;
-            return pass;
+            data.PumpList = vm.PumpList;
+            data.PartList = vm.PartMap;
+            data.SaveAll();
         }
 
         public Pass ViewAllParts(Pass pass)
