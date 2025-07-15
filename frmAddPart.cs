@@ -10,22 +10,14 @@ namespace QuoteSwift
         readonly AddPartViewModel viewModel;
         readonly INavigationService navigation;
 
-        Pass passed;
+        readonly ApplicationData appData;
 
-        public ref Pass Passed { get => ref passed; }
-
-        public void SetPass(Pass value)
-        {
-            passed = value;
-            if (value != null)
-                viewModel.UpdatePass(value.PassPartList, value.PassPumpList, value.PartToChange, value.ChangeSpecificObject);
-        }
-
-        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null)
+        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            appData = data;
             viewModel.Initialize();
             SetupBindings();
         }
@@ -50,10 +42,10 @@ namespace QuoteSwift
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                    appData?.BusinessList,
+                    appData?.PumpList,
+                    appData?.PartList,
+                    appData?.QuoteMap);
         }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
@@ -62,7 +54,7 @@ namespace QuoteSwift
             if (!ValidInput())
                 return;
 
-            bool updating = passed.ChangeSpecificObject;
+            bool updating = viewModel.ChangeSpecificObject;
 
             if (!viewModel.AddOrUpdatePart())
             {
@@ -73,7 +65,7 @@ namespace QuoteSwift
             if (updating)
             {
                 MainProgramCode.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
-                passed.ChangeSpecificObject = false;
+                viewModel.ChangeSpecificObject = false;
                 Close();
             }
             else
@@ -151,13 +143,13 @@ namespace QuoteSwift
 
         private void FrmAddPart_Load(object sender, EventArgs e)
         {
-            if (passed.ChangeSpecificObject && passed.PartToChange != null)
+            if (viewModel.ChangeSpecificObject && viewModel.PartToChange != null)
             {
                 ReadWriteComponents();
                 btnAddPart.Text = "Update";
                 updatePartToolStripMenuItem.Enabled = false;
             }
-            else if (!passed.ChangeSpecificObject && passed.PartToChange != null)
+            else if (!viewModel.ChangeSpecificObject && viewModel.PartToChange != null)
             {
                 btnAddPart.Visible = false;
                 Read_OnlyComponents();
@@ -251,12 +243,12 @@ namespace QuoteSwift
 
         private void UpdatePartToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
-                if (MainProgramCode.RequestConfirmation("You are currently only viewing " + passed.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
+            if (!viewModel.ChangeSpecificObject)
+                if (MainProgramCode.RequestConfirmation("You are currently only viewing " + viewModel.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
                 {
                     ReadWriteComponents();
                     updatePartToolStripMenuItem.Enabled = false;
-                    passed.ChangeSpecificObject = true;
+                    viewModel.ChangeSpecificObject = true;
                 }
         }
 
@@ -268,10 +260,10 @@ namespace QuoteSwift
         private void FrmAddPart_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+                appData?.BusinessList,
+                appData?.PumpList,
+                appData?.PartList,
+                appData?.QuoteMap);
         }
 
 

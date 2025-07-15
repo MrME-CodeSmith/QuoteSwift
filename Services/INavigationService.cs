@@ -6,10 +6,10 @@ namespace QuoteSwift
     {
         Pass CreateNewQuote(Pass pass);
         Pass ViewAllQuotes(Pass pass);
-        Pass ViewAllPumps(Pass pass);
+        void ViewAllPumps(ApplicationData data);
         void CreateNewPump(ApplicationData data);
-        Pass ViewAllParts(Pass pass);
-        Pass AddNewPart(Pass pass);
+        void ViewAllParts(ApplicationData data);
+        void AddNewPart(ApplicationData data, Part partToChange = null, bool changeSpecificObject = false);
         Pass AddCustomer(Pass pass);
         Pass ViewCustomers(Pass pass);
         Pass AddBusiness(Pass pass);

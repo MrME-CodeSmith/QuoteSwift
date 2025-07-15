@@ -175,7 +175,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPartsViewModel(new FileDataService());
             vm.LoadData();
-            FrmViewParts frmViewParts = new FrmViewParts(vm, null, passed);
+            FrmViewParts frmViewParts = new FrmViewParts(vm, null, null);
             try
             {
                 frmViewParts.ShowDialog();
@@ -194,8 +194,7 @@ namespace QuoteSwift
         {
             var vm = new AddPartViewModel(new FileDataService());
             vm.UpdatePass(passed.PassPartList, passed.PassPumpList, passed.PartToChange, passed.ChangeSpecificObject);
-            FrmAddPart frmAddPart = new FrmAddPart(vm, null);
-            frmAddPart.SetPass(passed);
+            FrmAddPart frmAddPart = new FrmAddPart(vm, null, null);
             frmAddPart.ShowDialog();
             return ref passed;
         }
