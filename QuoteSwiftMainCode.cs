@@ -263,7 +263,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(new FileDataService());
             vm.LoadData();
-            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm, null, null, passed);
+            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm, null, null, passed.BusinessToChange, passed.CustomerToChange);
             FrmViewBusinessAddresses.ShowDialog();
             return ref passed;
         }
@@ -275,7 +275,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPOBoxAddressesViewModel(new FileDataService());
             vm.LoadData();
-            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(vm, null, passed);
+            FrmViewPOBoxAddresses FrmViewPOBoxAddresses = new FrmViewPOBoxAddresses(vm, null, null, passed.BusinessToChange, passed.CustomerToChange);
             FrmViewPOBoxAddresses.ShowDialog();
             return ref passed;
         }
@@ -287,7 +287,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(new FileDataService());
             vm.LoadData();
-            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm, null, null, passed);
+            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm, null, null, passed.BusinessToChange, passed.CustomerToChange);
             FrmManageAllEmails.ShowDialog();
             return ref passed;
         }
@@ -299,7 +299,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(new FileDataService());
             vm.LoadData();
-            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm, null, null, passed);
+            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm, null, null, passed.BusinessToChange, passed.CustomerToChange);
             FrmManagingPhoneNumbers.ShowDialog();
             return ref passed;
         }

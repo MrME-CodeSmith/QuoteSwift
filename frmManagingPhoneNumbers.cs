@@ -12,50 +12,46 @@ namespace QuoteSwift
 
         readonly ManagePhoneNumbersViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
+        readonly Business business;
+        readonly Customer customer;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, Pass pass = null)
+        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            passed = pass ?? new Pass(null, null, null, null);
+            appData = data;
+            this.business = business;
+            this.customer = customer;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+            {
+                appData.SaveAll();
+                Application.Exit();
+            }
         }
 
         private void BtnChangePhoneNumberInfo_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
+            if (business != null && business.BusinessCellphoneNumberList != null)
             {
-                string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
-                passed.PhoneNumberToChange = OldNumber;
-                passed.ChangeSpecificObject = true;
-
-                passed = navigation.EditPhoneNumber(passed);
-                passed.PhoneNumberToChange = "";
-                passed.ChangeSpecificObject = false;
+                string oldNumber = GetNumberSelection(business.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
+                using (var form = new FrmEditPhoneNumber(appData, business, null, oldNumber))
+                {
+                    form.ShowDialog();
+                }
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
+            else if (customer != null && customer.CustomerCellphoneNumberList != null)
             {
-                string OldNumber = GetNumberSelection(passed.CustomerToChange.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
-                passed.PhoneNumberToChange = OldNumber;
-                passed.ChangeSpecificObject = true;
-
-                passed = navigation.EditPhoneNumber(passed);
-                passed.PhoneNumberToChange = "";
-                passed.ChangeSpecificObject = false;
+                string oldNumber = GetNumberSelection(customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
+                using (var form = new FrmEditPhoneNumber(appData, null, customer, oldNumber))
+                {
+                    form.ShowDialog();
+                }
             }
 
             LoadInformation();
@@ -63,25 +59,21 @@ namespace QuoteSwift
 
         private void BtnUpdateTelephoneNumber_Click(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
+            if (business != null && business.BusinessTelephoneNumberList != null)
             {
-                string OldNumber = GetNumberSelection(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
-                passed.PhoneNumberToChange = OldNumber;
-                passed.ChangeSpecificObject = true;
-
-                passed = navigation.EditPhoneNumber(passed);
-                passed.PhoneNumberToChange = "";
-                passed.ChangeSpecificObject = false;
+                string oldNumber = GetNumberSelection(business.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
+                using (var form = new FrmEditPhoneNumber(appData, business, null, oldNumber))
+                {
+                    form.ShowDialog();
+                }
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
+            else if (customer != null && customer.CustomerTelephoneNumberList != null)
             {
-                string OldNumber = GetNumberSelection(passed.CustomerToChange.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
-                passed.PhoneNumberToChange = OldNumber;
-                passed.ChangeSpecificObject = true;
-
-                passed = navigation.EditPhoneNumber(passed);
-                passed.PhoneNumberToChange = "";
-                passed.ChangeSpecificObject = false;
+                string oldNumber = GetNumberSelection(customer.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
+                using (var form = new FrmEditPhoneNumber(appData, null, customer, oldNumber))
+                {
+                    form.ShowDialog();
+                }
             }
 
             LoadInformation();
@@ -89,27 +81,19 @@ namespace QuoteSwift
 
         private void FrmManagingPhoneNumbers_Load(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null && (passed.BusinessToChange.BusinessTelephoneNumberList != null || passed.BusinessToChange.BusinessCellphoneNumberList != null))
+            if (business != null && (business.BusinessTelephoneNumberList != null || business.BusinessCellphoneNumberList != null))
             {
-                Text = Text.Replace("< Business Name >", passed.BusinessToChange.BusinessName);
+                Text = Text.Replace("< Business Name >", business.BusinessName);
 
-                if (!passed.ChangeSpecificObject)
-                {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
-                    BtnCancel.Enabled = true;
-                }
+                // components remain editable
 
                 LoadInformation();
             }
-            else if (passed != null && passed.CustomerToChange != null && (passed.CustomerToChange.CustomerCellphoneNumberList != null || passed.CustomerToChange.CustomerTelephoneNumberList != null))
+            else if (customer != null && (customer.CustomerCellphoneNumberList != null || customer.CustomerTelephoneNumberList != null))
             {
-                Text = Text.Replace("< Business Name >", passed.CustomerToChange.CustomerName);
+                Text = Text.Replace("< Business Name >", customer.CustomerName);
 
-                if (!passed.ChangeSpecificObject)
-                {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
-                    BtnCancel.Enabled = true;
-                }
+                // components remain editable
 
                 LoadInformation();
             }
@@ -125,25 +109,25 @@ namespace QuoteSwift
         {
             string SelectedNumber = "";
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
-                SelectedNumber = GetNumberSelection(passed.BusinessToChange.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
+            if (business != null && business.BusinessTelephoneNumberList != null)
+                SelectedNumber = GetNumberSelection(business.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
 
-            if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
-                SelectedNumber = GetNumberSelection(passed.CustomerToChange.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
+            if (customer != null && customer.CustomerTelephoneNumberList != null)
+                SelectedNumber = GetNumberSelection(customer.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
 
             if (SelectedNumber != "")
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
                 {
-                    if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
+                    if (business != null && business.BusinessTelephoneNumberList != null)
                     {
-                        passed.BusinessToChange.RemoveTelephoneNumber(SelectedNumber);
+                        business.RemoveTelephoneNumber(SelectedNumber);
                         MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                     }
-                    else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
+                    else if (customer != null && customer.CustomerTelephoneNumberList != null)
                     {
-                        passed.CustomerToChange.RemoveTelephoneNumber(SelectedNumber);
+                        customer.RemoveTelephoneNumber(SelectedNumber);
                         MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                     }
@@ -159,18 +143,22 @@ namespace QuoteSwift
 
         private void BtnRemoveCellNumber_Click(object sender, EventArgs e)
         {
-            string SelectedNumber = GetNumberSelection(passed.BusinessToChange.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
+            string SelectedNumber = string.Empty;
+            if (business != null && business.BusinessCellphoneNumberList != null)
+                SelectedNumber = GetNumberSelection(business.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
+            else if (customer != null && customer.CustomerCellphoneNumberList != null)
+                SelectedNumber = GetNumberSelection(customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
             if (SelectedNumber != "")
             {
-                if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
+                if (business != null && business.BusinessCellphoneNumberList != null)
                 {
-                    passed.BusinessToChange.RemoveCellphoneNumber(SelectedNumber);
+                    business.RemoveCellphoneNumber(SelectedNumber);
                     MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                 }
-                else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
+                else if (customer != null && customer.CustomerCellphoneNumberList != null)
                 {
-                    passed.CustomerToChange.RemoveCellphoneNumber(SelectedNumber);
+                    customer.RemoveCellphoneNumber(SelectedNumber);
                     MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                 }
@@ -214,33 +202,33 @@ namespace QuoteSwift
             dgvTelephoneNumbers.Rows.Clear();
             dgvCellphoneNumbers.Rows.Clear();
 
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessTelephoneNumberList != null)
+            if (business != null && business.BusinessTelephoneNumberList != null)
             {
-                foreach (var number in passed.BusinessToChange.BusinessTelephoneNumberList)
+                foreach (var number in business.BusinessTelephoneNumberList)
                 {
                     dgvTelephoneNumbers.Rows.Add(number);
                 }
             }
 
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessCellphoneNumberList != null)
+            if (business != null && business.BusinessCellphoneNumberList != null)
             {
-                foreach (var number in passed.BusinessToChange.BusinessCellphoneNumberList)
+                foreach (var number in business.BusinessCellphoneNumberList)
                 {
                     dgvCellphoneNumbers.Rows.Add(number);
                 }
             }
 
-            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerCellphoneNumberList != null)
+            if (customer != null && customer.CustomerCellphoneNumberList != null)
             {
-                foreach (var number in passed.CustomerToChange.CustomerCellphoneNumberList)
+                foreach (var number in customer.CustomerCellphoneNumberList)
                 {
                     dgvCellphoneNumbers.Rows.Add(number);
                 }
             }
 
-            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerTelephoneNumberList != null)
+            if (customer != null && customer.CustomerTelephoneNumberList != null)
             {
-                foreach (var number in passed.CustomerToChange.CustomerTelephoneNumberList)
+                foreach (var number in customer.CustomerTelephoneNumberList)
                 {
                     dgvTelephoneNumbers.Rows.Add(number);
                 }

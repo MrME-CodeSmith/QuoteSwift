@@ -11,53 +11,43 @@ namespace QuoteSwift
         readonly ManageEmailsViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly Business business;
+        readonly Customer customer;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Pass pass = null)
+        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
-            passed = pass ?? new Pass(null, null, null, null);
+            this.business = business;
+            this.customer = customer;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+            {
+                appData.SaveAll();
+                Application.Exit();
+            }
         }
 
         private void FrmManageAllEmails_Load(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+            if (business != null && business.BusinessEmailAddressList != null)
             {
-                Text = Text.Replace("< Business Name >", passed.BusinessToChange.BusinessName);
+                Text = Text.Replace("< Business Name >", business.BusinessName);
 
-                if (!passed.ChangeSpecificObject)
-                {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
-                    BtnCancel.Enabled = true;
-                }
+                // components remain editable
 
                 LoadInformation();
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            else if (customer != null && customer.CustomerEmailList != null)
             {
-                Text = Text.Replace("< Business Name >", passed.CustomerToChange.CustomerName);
+                Text = Text.Replace("< Business Name >", customer.CustomerName);
 
-                if (!passed.ChangeSpecificObject)
-                {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
-                    BtnCancel.Enabled = true;
-                }
+                // components remain editable
 
                 LoadInformation();
             }
@@ -78,14 +68,14 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedEmail + "' email address from the list?", "REQUEST - Deletion Request"))
                 {
-                    if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+                    if (business != null && business.BusinessEmailAddressList != null)
                     {
-                        passed.BusinessToChange.RemoveEmailAddress(SelectedEmail);
+                        business.RemoveEmailAddress(SelectedEmail);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
                     }
-                    else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+                    else if (customer != null && customer.CustomerEmailList != null)
                     {
-                        passed.CustomerToChange.RemoveEmailAddress(SelectedEmail);
+                        customer.RemoveEmailAddress(SelectedEmail);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
                     }
 
@@ -102,7 +92,10 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             string email = GetEmailSelection();
-            navigation.EditBusinessEmailAddress(passed);
+            using (var form = new FrmEditEmailAddress(appData, business, customer, email))
+            {
+                form.ShowDialog();
+            }
             LoadInformation();
         }
 
@@ -119,13 +112,13 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(SearchName))
                 return string.Empty;
 
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+            if (business != null && business.BusinessEmailAddressList != null)
             {
-                return passed.BusinessToChange.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
+                return business.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
             }
-            else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            else if (customer != null && customer.CustomerEmailList != null)
             {
-                return passed.CustomerToChange.CustomerEmailList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
+                return customer.CustomerEmailList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
             }
 
             return string.Empty;
@@ -134,16 +127,16 @@ namespace QuoteSwift
         private void LoadInformation()
         {
             DgvEmails.Rows.Clear();
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
+            if (business != null && business.BusinessEmailAddressList != null)
             {
-                foreach (var email in passed.BusinessToChange.BusinessEmailAddressList)
+                foreach (var email in business.BusinessEmailAddressList)
                 {
                     DgvEmails.Rows.Add(email);
                 }
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
+            else if (customer != null && customer.CustomerEmailList != null)
             {
-                foreach (var email in passed.CustomerToChange.CustomerEmailList)
+                foreach (var email in customer.CustomerEmailList)
                 {
                     DgvEmails.Rows.Add(email);
                 }
@@ -157,11 +150,7 @@ namespace QuoteSwift
 
         private void FrmManageAllEmails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            appData.SaveAll();
         }
     }
 

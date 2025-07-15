@@ -144,7 +144,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewBusinessAddresses(vm, this, appData, pass))
+            using (var form = new FrmViewBusinessAddresses(vm, this, appData, pass.BusinessToChange, pass.CustomerToChange))
             {
                 form.ShowDialog();
             }
@@ -155,7 +155,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPOBoxAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewPOBoxAddresses(vm, this, pass))
+            using (var form = new FrmViewPOBoxAddresses(vm, this, appData, pass.BusinessToChange, pass.CustomerToChange))
             {
                 form.ShowDialog();
             }
@@ -166,7 +166,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManageAllEmails(vm, this, appData, pass))
+            using (var form = new FrmManageAllEmails(vm, this, appData, pass.BusinessToChange, pass.CustomerToChange))
             {
                 form.ShowDialog();
             }
@@ -177,7 +177,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManagingPhoneNumbers(vm, this, appData, pass))
+            using (var form = new FrmManagingPhoneNumbers(vm, this, appData, pass.BusinessToChange, pass.CustomerToChange))
             {
                 form.ShowDialog();
             }
