@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace QuoteSwift
 {
-    public class AddPartViewModel : INotifyPropertyChanged
+    public class AddPartViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
@@ -19,7 +19,6 @@ namespace QuoteSwift
         Pump selectedPump;
         int quantity;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public AddPartViewModel(IDataService service, INotificationService notifier)
         {
@@ -387,9 +386,5 @@ namespace QuoteSwift
             pump.PartList.Add(new Pump_Part(part, qty));
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

@@ -2,14 +2,13 @@ using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    public class ManageEmailsViewModel : INotifyPropertyChanged
+    public class ManageEmailsViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         Business business;
         Customer customer;
         BindingList<EmailEntry> emails;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ManageEmailsViewModel(IDataService service)
         {
@@ -102,10 +101,6 @@ namespace QuoteSwift
             RefreshEmails();
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public class EmailEntry
         {

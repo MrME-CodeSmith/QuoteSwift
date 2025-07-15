@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace QuoteSwift
 {
-    public class QuotesViewModel : INotifyPropertyChanged
+    public class QuotesViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         BindingList<Quote> quotes;
@@ -16,7 +16,6 @@ namespace QuoteSwift
         BindingList<Pump> pumpList;
         Dictionary<string, Part> partMap;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public QuotesViewModel(IDataService service)
         {
@@ -106,9 +105,5 @@ namespace QuoteSwift
             Quotes = new BindingList<Quote>(QuoteMap?.Values.ToList() ?? new List<Quote>());
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

@@ -2,12 +2,11 @@ using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    public class ViewBusinessesViewModel : INotifyPropertyChanged
+    public class ViewBusinessesViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         BindingList<Business> businesses;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewBusinessesViewModel(IDataService service)
         {
@@ -46,9 +45,5 @@ namespace QuoteSwift
             Businesses?.Remove(business);
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

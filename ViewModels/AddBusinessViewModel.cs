@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuoteSwift
 {
-    public class AddBusinessViewModel : INotifyPropertyChanged
+    public class AddBusinessViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         readonly IMessageService messageService;
@@ -15,7 +15,6 @@ namespace QuoteSwift
         bool changeSpecificObject;
         Business currentBusiness;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public AddBusinessViewModel(IDataService service, IMessageService messageService)
         {
@@ -357,9 +356,5 @@ namespace QuoteSwift
             }
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

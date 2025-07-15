@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    public class ManagePhoneNumbersViewModel : INotifyPropertyChanged
+    public class ManagePhoneNumbersViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         Business business;
@@ -10,7 +10,6 @@ namespace QuoteSwift
         BindingList<NumberEntry> telephoneNumbers;
         BindingList<NumberEntry> cellphoneNumbers;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ManagePhoneNumbersViewModel(IDataService service)
         {
@@ -135,10 +134,6 @@ namespace QuoteSwift
             RefreshNumbers();
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public class NumberEntry
         {

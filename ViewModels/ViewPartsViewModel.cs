@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace QuoteSwift
 {
-    public class ViewPartsViewModel : INotifyPropertyChanged
+    public class ViewPartsViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         Dictionary<string, Part> partList;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewPartsViewModel(IDataService service)
         {
@@ -37,9 +36,5 @@ namespace QuoteSwift
             PartList = parts;
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

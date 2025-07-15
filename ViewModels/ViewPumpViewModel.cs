@@ -3,13 +3,12 @@ using System.Collections.Generic;
 
 namespace QuoteSwift
 {
-    public class ViewPumpViewModel : INotifyPropertyChanged
+    public class ViewPumpViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         BindingList<Pump> pumps;
         HashSet<string> repairableItemNames;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ViewPumpViewModel(IDataService service)
         {
@@ -54,9 +53,5 @@ namespace QuoteSwift
             }
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

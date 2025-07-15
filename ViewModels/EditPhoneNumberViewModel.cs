@@ -2,14 +2,13 @@ using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    public class EditPhoneNumberViewModel : INotifyPropertyChanged
+    public class EditPhoneNumberViewModel : ViewModelBase
     {
         readonly Business business;
         readonly Customer customer;
         readonly IMessageService messageService;
         string originalNumber;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null)
         {
@@ -71,9 +70,5 @@ namespace QuoteSwift
             return true;
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
