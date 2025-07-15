@@ -39,9 +39,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                navigation.Pass = passed;
-                navigation.EditPhoneNumber();
-                passed = navigation.Pass;
+                passed = navigation.EditPhoneNumber(passed);
                 passed.BusinessToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
@@ -53,9 +51,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                navigation.Pass = passed;
-                navigation.EditPhoneNumber();
-                passed = navigation.Pass;
+                passed = navigation.EditPhoneNumber(passed);
                 passed.CustomerToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
@@ -73,9 +69,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                navigation.Pass = passed;
-                navigation.EditPhoneNumber();
-                passed = navigation.Pass;
+                passed = navigation.EditPhoneNumber(passed);
                 passed.BusinessToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";
@@ -87,9 +81,7 @@ namespace QuoteSwift
                 passed.PhoneNumberToChange = OldNumber;
                 passed.ChangeSpecificObject = true;
 
-                navigation.Pass = passed;
-                navigation.EditPhoneNumber();
-                passed = navigation.Pass;
+                passed = navigation.EditPhoneNumber(passed);
                 passed.CustomerToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
 
                 passed.PhoneNumberToChange = "";

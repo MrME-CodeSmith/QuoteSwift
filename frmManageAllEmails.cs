@@ -98,9 +98,7 @@ namespace QuoteSwift
             string email = GetEmailSelection();
             passed.EmailToChange = email;
             passed.ChangeSpecificObject = true;
-            navigation.Pass = passed;
-            navigation.EditBusinessEmailAddress();
-            passed = navigation.Pass;
+            passed = navigation.EditBusinessEmailAddress(passed);
 
             if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
             {
