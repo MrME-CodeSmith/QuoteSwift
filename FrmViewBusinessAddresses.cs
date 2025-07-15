@@ -11,37 +11,35 @@ namespace QuoteSwift
         readonly ViewBusinessAddressesViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly Business business;
+        readonly Customer customer;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Pass pass = null)
+        public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
-            passed = pass ?? new Pass(null, null, null, null);
+            this.business = business;
+            this.customer = customer;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+            {
+                appData.SaveAll();
+                Application.Exit();
+            }
         }
 
         private void FrmViewBusinessAddresses_Load(object sender, EventArgs e)
         {
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null) // View Business Address
+            if (business != null && business.BusinessAddressList != null) // View Business Address
             {
-                Text = Text.Replace("<<Business name>>", passed.BusinessToChange.BusinessName);
+                Text = Text.Replace("<<Business name>>", business.BusinessName);
 
-                if (!passed.ChangeSpecificObject)
+                if (!viewModel.ChangeSpecificObject)
                 {
                     QuoteSwiftMainCode.ReadOnlyComponents(Controls);
                     BtnCancel.Enabled = true;
@@ -49,11 +47,11 @@ namespace QuoteSwift
 
                 LoadInformation();
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerDeliveryAddressList != null) //View Customer Address
+            else if (customer != null && customer.CustomerDeliveryAddressList != null) //View Customer Address
             {
-                Text = Text.Replace("<<Business name>>", passed.CustomerToChange.CustomerName);
+                Text = Text.Replace("<<Business name>>", customer.CustomerName);
 
-                if (!passed.ChangeSpecificObject)
+                if (!viewModel.ChangeSpecificObject)
                 {
                     QuoteSwiftMainCode.ReadOnlyComponents(Controls);
                     BtnCancel.Enabled = true;
@@ -76,7 +74,10 @@ namespace QuoteSwift
                 return;
             }
 
-            navigation.EditBusinessAddress(passed);
+            using (var form = new FrmEditBusinessAddress(appData, business, customer, address))
+            {
+                form.ShowDialog();
+            }
 
             LoadInformation();
         }
@@ -93,14 +94,14 @@ namespace QuoteSwift
             {
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedAddress.AddressDescription + "' address from the list?", "REQUEST - Deletion Request"))
                 {
-                    if (passed.BusinessToChange != null && passed.CustomerToChange == null)
+                    if (business != null && customer == null)
                     {
-                        passed.BusinessToChange.RemoveAddress(SelectedAddress);
+                        business.RemoveAddress(SelectedAddress);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
                     }
-                    else if (passed.BusinessToChange == null && passed.CustomerToChange != null)
+                    else if (business == null && customer != null)
                     {
-                        passed.CustomerToChange.RemoveDeliveryAddress(SelectedAddress);
+                        customer.RemoveDeliveryAddress(SelectedAddress);
                         MainProgramCode.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
                     }
 
@@ -133,13 +134,13 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(SearchName))
                 return null;
 
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null)
+            if (business != null && business.BusinessAddressList != null)
             {
-                return passed.BusinessToChange.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
+                return business.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
             }
-            else if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerDeliveryAddressList != null)
+            else if (customer != null && customer.CustomerDeliveryAddressList != null)
             {
-                return passed.CustomerToChange.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
+                return customer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
             }
 
             return null;
@@ -148,17 +149,17 @@ namespace QuoteSwift
         private void LoadInformation()
         {
             DgvViewAllBusinessAddresses.Rows.Clear();
-            if (passed != null && passed.BusinessToChange != null && passed.BusinessToChange.BusinessAddressList != null)
-                for (int i = 0; i < passed.BusinessToChange.BusinessAddressList.Count; i++)
-                    DgvViewAllBusinessAddresses.Rows.Add(passed.BusinessToChange.BusinessAddressList[i].AddressDescription, passed.BusinessToChange.BusinessAddressList[i].AddressStreetNumber,
-                                                         passed.BusinessToChange.BusinessAddressList[i].AddressStreetName, passed.BusinessToChange.BusinessAddressList[i].AddressSuburb,
-                                                         passed.BusinessToChange.BusinessAddressList[i].AddressCity, passed.BusinessToChange.BusinessAddressList[i].AddressAreaCode);
+            if (business != null && business.BusinessAddressList != null)
+                for (int i = 0; i < business.BusinessAddressList.Count; i++)
+                    DgvViewAllBusinessAddresses.Rows.Add(business.BusinessAddressList[i].AddressDescription, business.BusinessAddressList[i].AddressStreetNumber,
+                                                         business.BusinessAddressList[i].AddressStreetName, business.BusinessAddressList[i].AddressSuburb,
+                                                         business.BusinessAddressList[i].AddressCity, business.BusinessAddressList[i].AddressAreaCode);
 
-            if (passed != null && passed.CustomerToChange != null && passed.CustomerToChange.CustomerDeliveryAddressList != null)
-                for (int i = 0; i < passed.CustomerToChange.CustomerDeliveryAddressList.Count; i++)
-                    DgvViewAllBusinessAddresses.Rows.Add(passed.CustomerToChange.CustomerDeliveryAddressList[i].AddressDescription, passed.CustomerToChange.CustomerDeliveryAddressList[i].AddressStreetNumber,
-                                                         passed.CustomerToChange.CustomerDeliveryAddressList[i].AddressStreetName, passed.CustomerToChange.CustomerDeliveryAddressList[i].AddressSuburb,
-                                                         passed.CustomerToChange.CustomerDeliveryAddressList[i].AddressCity, passed.CustomerToChange.CustomerDeliveryAddressList[i].AddressAreaCode);
+            if (customer != null && customer.CustomerDeliveryAddressList != null)
+                for (int i = 0; i < customer.CustomerDeliveryAddressList.Count; i++)
+                    DgvViewAllBusinessAddresses.Rows.Add(customer.CustomerDeliveryAddressList[i].AddressDescription, customer.CustomerDeliveryAddressList[i].AddressStreetNumber,
+                                                         customer.CustomerDeliveryAddressList[i].AddressStreetName, customer.CustomerDeliveryAddressList[i].AddressSuburb,
+                                                         customer.CustomerDeliveryAddressList[i].AddressCity, customer.CustomerDeliveryAddressList[i].AddressAreaCode);
         }
 
 
@@ -169,11 +170,7 @@ namespace QuoteSwift
 
         private void FrmViewBusinessAddresses_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            appData.SaveAll();
         }
 
 
