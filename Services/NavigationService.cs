@@ -17,7 +17,7 @@ namespace QuoteSwift
             messageService = messenger;
         }
 
-        public void CreateNewQuote(ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false)
+        public void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
         {
             var vm = new CreateQuoteViewModel(dataService);
             using (var form = new FrmCreateQuote(vm, appData, quoteToChange, changeSpecificObject, messageService))
@@ -27,7 +27,7 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewAllQuotes(ApplicationData data)
+        public void ViewAllQuotes()
         {
             var vm = new QuotesViewModel(dataService);
             vm.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
@@ -42,7 +42,7 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewAllPumps(ApplicationData data)
+        public void ViewAllPumps()
         {
             var vm = new ViewPumpViewModel(dataService);
             vm.LoadData();
@@ -52,7 +52,7 @@ namespace QuoteSwift
             }
         }
 
-        public void CreateNewPump(ApplicationData data)
+        public void CreateNewPump()
         {
             var vm = new AddPumpViewModel(dataService, notificationService);
             vm.UpdateData(appData.PumpList, appData.PartList);
@@ -66,7 +66,7 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewAllParts(ApplicationData data)
+        public void ViewAllParts()
         {
             var vm = new ViewPartsViewModel(dataService);
             vm.UpdateData(appData.PartList);
@@ -76,7 +76,7 @@ namespace QuoteSwift
             }
         }
 
-        public void AddNewPart(ApplicationData data, Part partToChange = null, bool changeSpecificObject = false)
+        public void AddNewPart(Part partToChange = null, bool changeSpecificObject = false)
         {
             var vm = new AddPartViewModel(dataService, notificationService);
             vm.UpdateData(appData.PartList, appData.PumpList, partToChange, changeSpecificObject);
@@ -90,7 +90,7 @@ namespace QuoteSwift
         }
 
 
-        public void AddCustomer(ApplicationData data, Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
+        public void AddCustomer(Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
         {
             var vm = new AddCustomerViewModel(dataService, notificationService, messageService);
             vm.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
@@ -101,7 +101,7 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewCustomers(ApplicationData data)
+        public void ViewCustomers()
         {
             var vm = new ViewCustomersViewModel(dataService);
             vm.LoadData();
@@ -111,7 +111,7 @@ namespace QuoteSwift
             }
         }
 
-        public void AddBusiness(ApplicationData data, Business businessToChange = null, bool changeSpecificObject = false)
+        public void AddBusiness(Business businessToChange = null, bool changeSpecificObject = false)
         {
             var vm = new AddBusinessViewModel(dataService, messageService);
             vm.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
@@ -124,7 +124,7 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewBusinesses(ApplicationData data)
+        public void ViewBusinesses()
         {
             var vm = new ViewBusinessesViewModel(dataService);
             vm.UpdateData(appData.BusinessList);

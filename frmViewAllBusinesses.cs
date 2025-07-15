@@ -37,7 +37,7 @@ namespace QuoteSwift
                 return;
             }
 
-            navigation.AddBusiness(null, Business, false);
+            navigation.AddBusiness(Business, false);
 
             LoadInformation();
 
@@ -46,7 +46,7 @@ namespace QuoteSwift
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.AddBusiness(null);
+            navigation.AddBusiness();
             Show();
 
             LoadInformation();

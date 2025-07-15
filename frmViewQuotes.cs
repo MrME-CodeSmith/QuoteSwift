@@ -28,7 +28,7 @@ namespace QuoteSwift
             if (viewModel.BusinessList != null && viewModel.BusinessList.Count > 0 && viewModel.PumpList != null && viewModel.BusinessList[0].BusinessCustomerList != null)
             {
                 Hide();
-                navigation.CreateNewQuote(appData);
+                navigation.CreateNewQuote();
                 viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
                 try
                 {
@@ -63,7 +63,7 @@ namespace QuoteSwift
         private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.ViewAllPumps(appData);
+            navigation.ViewAllPumps();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
@@ -78,7 +78,7 @@ namespace QuoteSwift
         private void CreateNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.CreateNewPump(appData);
+            navigation.CreateNewPump();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
@@ -98,7 +98,7 @@ namespace QuoteSwift
         private void AddNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.AddCustomer(appData);
+            navigation.AddCustomer();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
@@ -113,7 +113,7 @@ namespace QuoteSwift
         private void ViewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.ViewCustomers(appData);
+            navigation.ViewCustomers();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
@@ -133,7 +133,7 @@ namespace QuoteSwift
         private void AddNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.AddBusiness(appData);
+            navigation.AddBusiness();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
@@ -148,7 +148,7 @@ namespace QuoteSwift
         private void ViewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.ViewBusinesses(appData);
+            navigation.ViewBusinesses();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
@@ -185,7 +185,7 @@ namespace QuoteSwift
                 if (selected != null)
                 {
                     Hide();
-                    navigation.CreateNewQuote(appData, selected, false);
+                    navigation.CreateNewQuote(selected, false);
                     viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
                     Show();
                 }
@@ -200,7 +200,7 @@ namespace QuoteSwift
                 if (selected != null)
                 {
                     this.Hide();
-                    navigation.CreateNewQuote(appData, selected, true);
+                    navigation.CreateNewQuote(selected, true);
                     viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
                     this.Show();
                 }
@@ -210,7 +210,7 @@ namespace QuoteSwift
         private void ViewAllPartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.ViewAllParts(appData);
+            navigation.ViewAllParts();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
@@ -230,7 +230,7 @@ namespace QuoteSwift
         private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.AddNewPart(appData);
+            navigation.AddNewPart();
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
