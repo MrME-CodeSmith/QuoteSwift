@@ -36,15 +36,12 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                var p = new Pass(null, null, appData.PumpList, appData.PartList);
-                p.PumpToChange = appData.PumpList.ElementAt(iGridSelection);
-                p.ChangeSpecificObject = false;
-
+                var pToChange = appData.PumpList.ElementAt(iGridSelection);
                 Hide();
-                p = navigation.CreateNewPump(p);
+                navigation.CreateNewPump(appData);
                 Show();
 
-                viewModel.RepairableItemNames = p.RepairableItemNames;
+                viewModel.RepairableItemNames = new HashSet<string>(appData.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName)));
 
                 LoadInformation();
             }
@@ -57,9 +54,8 @@ namespace QuoteSwift // Repair Quote Swift
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(null, null, appData.PumpList, appData.PartList);
-            p = navigation.CreateNewPump(p);
-            viewModel.RepairableItemNames = p.RepairableItemNames;
+            navigation.CreateNewPump(appData);
+            viewModel.RepairableItemNames = new HashSet<string>(appData.PumpList.Select(pu => StringUtil.NormalizeKey(pu.PumpName)));
             Show();
         }
 

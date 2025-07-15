@@ -11,12 +11,14 @@ namespace QuoteSwift
 
         readonly QuotesViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
 
-        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null)
+        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            appData = data;
         }
 
         private void BtnCreateNewQuote_Click(object sender, EventArgs e)
@@ -76,9 +78,8 @@ namespace QuoteSwift
         private void CreateNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.CreateNewPump(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.CreateNewPump(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();

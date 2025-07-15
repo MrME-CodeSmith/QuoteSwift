@@ -7,7 +7,7 @@ namespace QuoteSwift
         Pass CreateNewQuote(Pass pass);
         Pass ViewAllQuotes(Pass pass);
         Pass ViewAllPumps(Pass pass);
-        Pass CreateNewPump(Pass pass);
+        void CreateNewPump(ApplicationData data);
         Pass ViewAllParts(Pass pass);
         Pass AddNewPart(Pass pass);
         Pass AddCustomer(Pass pass);

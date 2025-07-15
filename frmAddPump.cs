@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuoteSwift
 {
@@ -10,37 +11,27 @@ namespace QuoteSwift
     {
         readonly AddPumpViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
 
-        Pass passed;
-
-        public ref Pass Passed
-        {
-            get => ref passed;
-        }
-
-        public void SetPass(Pass value)
-        {
-            passed = value;
-            viewModel.UpdateData(value.PassPumpList, value.PassPartList,
-                                  value.PumpToChange, value.ChangeSpecificObject,
-                                  value.RepairableItemNames);
-        }
-
-        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null)
+        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            appData = data;
+            if (data != null)
+                viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
+                                     data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                    appData?.BusinessList,
+                    appData?.PumpList,
+                    appData?.PartList,
+                    appData?.QuoteMap);
         }
 
         private void BtnAddPump_Click(object sender, EventArgs e)
@@ -59,13 +50,13 @@ namespace QuoteSwift
             viewModel.CurrentPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, QuoteSwiftMainCode.ParseDecimal(mtxtNewPumpPrice.Text), ref newPumpParts);
 
             bool result;
-            if (passed.ChangeSpecificObject)
+            if (viewModel.ChangeSpecificObject)
             {
                 result = viewModel.UpdatePump();
                 if (result)
                 {
-                    MainProgramCode.ShowInformation(passed.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
-                    passed.ChangeSpecificObject = false;
+                    MainProgramCode.ShowInformation(viewModel.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
+                    viewModel.ChangeSpecificObject = false;
                     ConvertToViewForm();
                     updatePumpToolStripMenuItem.Enabled = true;
                 }
@@ -91,31 +82,31 @@ namespace QuoteSwift
 
         private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void MtxtPumpDescription_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void MtxtNewPumpPrice_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void DgvMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
         private void DgvNonMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.ChangeSpecificObject)
                 ChangeViewToEdit();
         }
 
@@ -124,19 +115,19 @@ namespace QuoteSwift
             LoadMandatoryParts();
             LoadNonMandatoryParts();
 
-            if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == true) //Determine if Edit
+            if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == true) //Determine if Edit
             {
                 ConvertToEditForm();
                 Read_OnlyMainComponents();
                 PopulateFormWithPassedPump();
             }
-            else if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == false) //Determine if View
+            else if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == false) //Determine if View
             {
                 ConvertToViewForm();
                 Read_OnlyMainComponents();
                 PopulateFormWithPassedPump();
             }
-            else if (passed != null && passed.PumpToChange == null && passed.ChangeSpecificObject == false) // Determine if Add New
+            else if (viewModel.PumpToChange == null && viewModel.ChangeSpecificObject == false) // Determine if Add New
             {
                 mtxtPumpName.Focus();
             }
@@ -190,7 +181,7 @@ namespace QuoteSwift
         void ConvertToEditForm()
         {
             ReadWriteMainComponents();
-            Text = "Updating " + passed.PumpToChange.PumpName + " Pump";
+            Text = "Updating " + viewModel.PumpToChange.PumpName + " Pump";
             btnAddPump.Text = "Update Pump";
             btnAddPump.Visible = true;
             updatePumpToolStripMenuItem.Enabled = true;
@@ -200,7 +191,7 @@ namespace QuoteSwift
 
         void ConvertToViewForm()
         {
-            Text = "Viewing " + passed.PumpToChange.PumpName + " Pump";
+            Text = "Viewing " + viewModel.PumpToChange.PumpName + " Pump";
             btnAddPump.Visible = false;
             Read_OnlyMainComponents();
             updatePumpToolStripMenuItem.Enabled = false;
@@ -210,14 +201,14 @@ namespace QuoteSwift
 
         void PopulateFormWithPassedPump()
         {
-            mtxtNewPumpPrice.Text = passed.PumpToChange.NewPumpPrice.ToString();
-            mtxtPumpDescription.Text = passed.PumpToChange.PumpDescription;
-            mtxtPumpName.Text = passed.PumpToChange.PumpName;
+            mtxtNewPumpPrice.Text = viewModel.PumpToChange.NewPumpPrice.ToString();
+            mtxtPumpDescription.Text = viewModel.PumpToChange.PumpDescription;
+            mtxtPumpName.Text = viewModel.PumpToChange.PumpName;
 
             int mIndex = 0;
-            foreach (var part in passed.MandatoryParts)
+            foreach (var part in viewModel.PartMap?.Values?.Where(p => p.MandatoryPart) ?? Enumerable.Empty<Part>())
             {
-                foreach (var pumpPart in passed.PumpToChange.PartList)
+                foreach (var pumpPart in viewModel.PumpToChange.PartList)
                 {
                     if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
                     {
@@ -230,9 +221,9 @@ namespace QuoteSwift
             }
 
             int nmIndex = 0;
-            foreach (var part in passed.NonMandatoryParts)
+            foreach (var part in viewModel.PartMap?.Values?.Where(p => !p.MandatoryPart) ?? Enumerable.Empty<Part>())
             {
-                foreach (var pumpPart in passed.PumpToChange.PartList)
+                foreach (var pumpPart in viewModel.PumpToChange.PartList)
                 {
                     if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
                     {
@@ -289,7 +280,7 @@ namespace QuoteSwift
                         try
                         {
                             string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
-                            if (passed.PassPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
+                            if (viewModel.PartMap != null && viewModel.PartMap.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
                                 newPart = new Pump_Part(part,
                                     QuoteSwiftMainCode.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
                             else
@@ -323,7 +314,7 @@ namespace QuoteSwift
                         try
                         {
                             string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
-                            if (passed.PassPartList.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
+                            if (viewModel.PartMap != null && viewModel.PartMap.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
                                 newPart = new Pump_Part(part,
                                     QuoteSwiftMainCode.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
                             else
@@ -351,23 +342,23 @@ namespace QuoteSwift
 
         void ChangeViewToEdit()
         {
-            if (passed != null && passed.PumpToChange != null && passed.ChangeSpecificObject == false)
-                if (MainProgramCode.RequestConfirmation("You are currently viewing " + passed.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
+            if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == false)
+                if (MainProgramCode.RequestConfirmation("You are currently viewing " + viewModel.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
                 {
                     ConvertToEditForm();
-                    passed.ChangeSpecificObject = true;
+                    viewModel.ChangeSpecificObject = true;
                 }
         }
 
         void RecordNewInformation()
         {
-            if (mtxtPumpName.Text != passed.PumpToChange.PumpName) passed.PumpToChange.PumpName = mtxtPumpName.Text;
+            if (mtxtPumpName.Text != viewModel.PumpToChange.PumpName) viewModel.PumpToChange.PumpName = mtxtPumpName.Text;
 
-            if (mtxtPumpDescription.Text != passed.PumpToChange.PumpDescription) passed.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
+            if (mtxtPumpDescription.Text != viewModel.PumpToChange.PumpDescription) viewModel.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
 
-            if (NewPumpValueInput() != passed.PumpToChange.NewPumpPrice) passed.PumpToChange.NewPumpPrice = NewPumpValueInput();
+            if (NewPumpValueInput() != viewModel.PumpToChange.NewPumpPrice) viewModel.PumpToChange.NewPumpPrice = NewPumpValueInput();
 
-            passed.PumpToChange.PartList = RetreivePumpPartList();
+            viewModel.PumpToChange.PartList = RetreivePumpPartList();
         }
 
         decimal NewPumpValueInput()
@@ -380,11 +371,11 @@ namespace QuoteSwift
 
         void LoadMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (viewModel.PartMap != null)
             {
                 dgvMandatoryPartView.Rows.Clear();
 
-                foreach (var part in passed.MandatoryParts)
+                foreach (var part in viewModel.PartMap.Values.Where(p => p.MandatoryPart))
                 {
                     //Manually setting the data grid's rows' values:
                     dgvMandatoryPartView.Rows.Add(part.PartName,
@@ -400,11 +391,11 @@ namespace QuoteSwift
 
         void LoadNonMandatoryParts()
         {
-            if (passed.PassPartList != null)
+            if (viewModel.PartMap != null)
             {
                 dgvNonMandatoryPartView.Rows.Clear();
 
-                foreach (var part in passed.NonMandatoryParts)
+                foreach (var part in viewModel.PartMap.Values.Where(p => !p.MandatoryPart))
                 {
                     //Manually setting the data grid's rows' values:
                     dgvNonMandatoryPartView.Rows.Add(part.PartName,
@@ -425,7 +416,7 @@ namespace QuoteSwift
 
         private void UpdatePumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!passed.ChangeSpecificObject)
+            if (!viewModel.ChangeSpecificObject)
                 ChangeViewToEdit();
             updatePumpToolStripMenuItem.Enabled = false;
         }
@@ -438,10 +429,10 @@ namespace QuoteSwift
         private void FrmAddPump_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+                appData?.BusinessList,
+                appData?.PumpList,
+                appData?.PartList,
+                appData?.QuoteMap);
         }
 
         /*********************************************************************************/

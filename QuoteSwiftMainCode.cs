@@ -165,7 +165,6 @@ namespace QuoteSwift
             vm.UpdateData(passed.PassPumpList, passed.PassPartList, passed.PumpToChange, passed.ChangeSpecificObject, passed.RepairableItemNames);
             FrmAddPump frmAddPump = new FrmAddPump(vm, null);
             frmAddPump.ShowDialog();
-            passed = vm.Pass;
             return ref passed;
         }
 
