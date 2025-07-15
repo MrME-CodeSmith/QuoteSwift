@@ -41,7 +41,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPumpViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewPump(vm, this, pass))
+            using (var form = new FrmViewPump(vm, this, appData))
             {
                 form.ShowDialog();
             }

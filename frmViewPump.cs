@@ -11,46 +11,40 @@ namespace QuoteSwift // Repair Quote Swift
 
         readonly ViewPumpViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, Pass pass = null)
+        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            passed = pass ?? new Pass(null, null, null, null);
+            appData = data;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+            {
+                appData.SaveAll();
+                Application.Exit();
+            }
         }
 
         private void BtnUpdateSelectedPump_Click(object sender, EventArgs e)
         {
-            int iGridSelection;
-
             if (dgvPumpList.SelectedCells.Count > 0)
             {
-                iGridSelection = dgvPumpList.CurrentCell.RowIndex;
+                int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                passed.PumpToChange = passed.PassPumpList.ElementAt(iGridSelection);
-                passed.ChangeSpecificObject = false;
+                var p = new Pass(null, null, appData.PumpList, appData.PartList);
+                p.PumpToChange = appData.PumpList.ElementAt(iGridSelection);
+                p.ChangeSpecificObject = false;
 
                 Hide();
-                passed = navigation.CreateNewPump(passed);
+                p = navigation.CreateNewPump(p);
                 Show();
 
-                passed.ChangeSpecificObject = false;
-                passed.PumpToChange = null;
+                viewModel.RepairableItemNames = p.RepairableItemNames;
 
                 LoadInformation();
             }
@@ -63,7 +57,9 @@ namespace QuoteSwift // Repair Quote Swift
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
             Hide();
-            passed = navigation.CreateNewPump(passed);
+            var p = new Pass(null, null, appData.PumpList, appData.PartList);
+            p = navigation.CreateNewPump(p);
+            viewModel.RepairableItemNames = p.RepairableItemNames;
             Show();
         }
 
@@ -73,12 +69,12 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                Pump objPumpSelection = passed.PassPumpList.ElementAt(iGridSelection);
+                Pump objPumpSelection = appData.PumpList.ElementAt(iGridSelection);
 
                 if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
-                    passed.PassPumpList.RemoveAt(iGridSelection);
-                    passed.RepairableItemNames.Remove(StringUtil.NormalizeKey(objPumpSelection.PumpName));
+                    appData.PumpList.RemoveAt(iGridSelection);
+                    viewModel.RepairableItemNames.Remove(StringUtil.NormalizeKey(objPumpSelection.PumpName));
 
                     MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
                 }
@@ -114,9 +110,9 @@ namespace QuoteSwift // Repair Quote Swift
             //Manually Load Pump items:
             dgvPumpList.Rows.Clear();
 
-            if (passed.PassPumpList != null)
+            if (appData.PumpList != null)
             {
-                foreach (var pump in passed.PassPumpList)
+                foreach (var pump in appData.PumpList)
                 {
                     dgvPumpList.Rows.Add(pump.PumpName,
                                         pump.PumpDescription,
@@ -142,7 +138,7 @@ namespace QuoteSwift // Repair Quote Swift
                 {
                     try
                     {
-                        MainProgramCode.ExportInventory(passed.PassPumpList, sfd.FileName);
+                        MainProgramCode.ExportInventory(appData.PumpList, sfd.FileName);
                         MainProgramCode.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
                     }
                     catch (Exception ex)
@@ -155,11 +151,7 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void FrmViewPump_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            appData.SaveAll();
         }
 
         /*********************************************************************************/
