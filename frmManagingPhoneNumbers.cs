@@ -40,7 +40,8 @@ namespace QuoteSwift
             if (business != null && business.BusinessCellphoneNumberList != null)
             {
                 string oldNumber = GetNumberSelection(business.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
-                using (var form = new FrmEditPhoneNumber(appData, business, null, oldNumber))
+                var vm = new EditPhoneNumberViewModel(business, null, oldNumber);
+                using (var form = new FrmEditPhoneNumber(vm, appData))
                 {
                     form.ShowDialog();
                 }
@@ -48,7 +49,8 @@ namespace QuoteSwift
             else if (customer != null && customer.CustomerCellphoneNumberList != null)
             {
                 string oldNumber = GetNumberSelection(customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
-                using (var form = new FrmEditPhoneNumber(appData, null, customer, oldNumber))
+                var vm = new EditPhoneNumberViewModel(null, customer, oldNumber);
+                using (var form = new FrmEditPhoneNumber(vm, appData))
                 {
                     form.ShowDialog();
                 }
@@ -62,7 +64,8 @@ namespace QuoteSwift
             if (business != null && business.BusinessTelephoneNumberList != null)
             {
                 string oldNumber = GetNumberSelection(business.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
-                using (var form = new FrmEditPhoneNumber(appData, business, null, oldNumber))
+                var vm = new EditPhoneNumberViewModel(business, null, oldNumber);
+                using (var form = new FrmEditPhoneNumber(vm, appData))
                 {
                     form.ShowDialog();
                 }
@@ -70,7 +73,8 @@ namespace QuoteSwift
             else if (customer != null && customer.CustomerTelephoneNumberList != null)
             {
                 string oldNumber = GetNumberSelection(customer.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
-                using (var form = new FrmEditPhoneNumber(appData, null, customer, oldNumber))
+                var vm = new EditPhoneNumberViewModel(null, customer, oldNumber);
+                using (var form = new FrmEditPhoneNumber(vm, appData))
                 {
                     form.ShowDialog();
                 }

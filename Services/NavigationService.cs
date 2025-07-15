@@ -172,7 +172,8 @@ namespace QuoteSwift
 
         public void EditBusinessAddress(Business business = null, Customer customer = null, Address address = null)
         {
-            using (var form = new FrmEditBusinessAddress(appData, business, customer, address))
+            var vm = new EditBusinessAddressViewModel(business, customer, address);
+            using (var form = new FrmEditBusinessAddress(vm, appData))
             {
                 form.ShowDialog();
             }
@@ -180,7 +181,8 @@ namespace QuoteSwift
 
         public void EditBusinessEmailAddress(Business business = null, Customer customer = null, string email = "")
         {
-            using (var form = new FrmEditEmailAddress(appData, business, customer, email))
+            var vm = new EditEmailAddressViewModel(business, customer, email);
+            using (var form = new FrmEditEmailAddress(vm, appData))
             {
                 form.ShowDialog();
             }
@@ -188,7 +190,8 @@ namespace QuoteSwift
 
         public void EditPhoneNumber(Business business = null, Customer customer = null, string number = "")
         {
-            using (var form = new FrmEditPhoneNumber(appData, business, customer, number))
+            var vm = new EditPhoneNumberViewModel(business, customer, number);
+            using (var form = new FrmEditPhoneNumber(vm, appData))
             {
                 form.ShowDialog();
             }

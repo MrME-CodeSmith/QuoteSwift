@@ -92,7 +92,8 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             string email = GetEmailSelection();
-            using (var form = new FrmEditEmailAddress(appData, business, customer, email))
+            var vm = new EditEmailAddressViewModel(business, customer, email);
+            using (var form = new FrmEditEmailAddress(vm, appData))
             {
                 form.ShowDialog();
             }
