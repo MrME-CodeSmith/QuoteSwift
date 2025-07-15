@@ -75,7 +75,7 @@ namespace QuoteSwift
         public void AddNewPart(ApplicationData data, Part partToChange = null, bool changeSpecificObject = false)
         {
             var vm = new AddPartViewModel(dataService);
-            vm.UpdatePass(appData.PartList, appData.PumpList, partToChange, changeSpecificObject);
+            vm.UpdateData(appData.PartList, appData.PumpList, partToChange, changeSpecificObject);
             using (var form = new FrmAddPart(vm, this, appData))
             {
                 form.ShowDialog();

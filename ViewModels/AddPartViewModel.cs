@@ -111,7 +111,7 @@ namespace QuoteSwift
             CurrentPart = PartToChange ?? new Part();
         }
 
-        public void UpdatePass(Dictionary<string, Part> partMap,
+        public void UpdateData(Dictionary<string, Part> partMap,
                                BindingList<Pump> pumpList,
                                Part partToChange = null,
                                bool changeSpecificObject = false)
