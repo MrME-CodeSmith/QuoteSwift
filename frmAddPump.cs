@@ -54,7 +54,8 @@ namespace QuoteSwift
             bool result;
             if (viewModel.ChangeSpecificObject)
             {
-                result = viewModel.UpdatePump();
+                viewModel.UpdatePumpCommand.Execute(null);
+                result = viewModel.LastOperationSuccessful;
                 if (result)
                 {
                     messageService.ShowInformation(viewModel.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
@@ -69,7 +70,8 @@ namespace QuoteSwift
             }
             else
             {
-                result = viewModel.AddPump();
+                viewModel.AddPumpCommand.Execute(null);
+                result = viewModel.LastOperationSuccessful;
                 if (result)
                 {
                     messageService.ShowInformation(viewModel.CurrentPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");

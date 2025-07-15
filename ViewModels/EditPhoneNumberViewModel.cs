@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -9,6 +10,8 @@ namespace QuoteSwift
         readonly IMessageService messageService;
         string originalNumber;
 
+        public ICommand UpdateNumberCommand { get; }
+
 
         public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null)
         {
@@ -17,6 +20,7 @@ namespace QuoteSwift
             originalNumber = number ?? string.Empty;
             this.messageService = messageService;
             CurrentNumber = originalNumber;
+            UpdateNumberCommand = new RelayCommand(_ => UpdateNumber());
         }
 
         public Business Business => business;

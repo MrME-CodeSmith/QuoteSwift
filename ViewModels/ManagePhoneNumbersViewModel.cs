@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -10,10 +11,27 @@ namespace QuoteSwift
         BindingList<NumberEntry> telephoneNumbers;
         BindingList<NumberEntry> cellphoneNumbers;
 
+        public ICommand RemoveTelephoneCommand { get; }
+        public ICommand RemoveCellphoneCommand { get; }
+        public ICommand UpdateTelephoneCommand { get; }
+        public ICommand UpdateCellphoneCommand { get; }
+
 
         public ManagePhoneNumbersViewModel(IDataService service)
         {
             dataService = service;
+            RemoveTelephoneCommand = new RelayCommand(n => RemoveTelephone(n as string));
+            RemoveCellphoneCommand = new RelayCommand(n => RemoveCellphone(n as string));
+            UpdateTelephoneCommand = new RelayCommand(p =>
+            {
+                if (p is object[] arr && arr.Length == 2 && arr[0] is string oldN && arr[1] is string newN)
+                    UpdateTelephone(oldN, newN);
+            });
+            UpdateCellphoneCommand = new RelayCommand(p =>
+            {
+                if (p is object[] arr && arr.Length == 2 && arr[0] is string oldN && arr[1] is string newN)
+                    UpdateCellphone(oldN, newN);
+            });
         }
 
         public IDataService DataService => dataService;

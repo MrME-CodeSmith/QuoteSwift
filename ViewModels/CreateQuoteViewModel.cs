@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -17,10 +18,13 @@ namespace QuoteSwift
         BindingList<Quote_Part> mandatoryParts = new BindingList<Quote_Part>();
         BindingList<Quote_Part> nonMandatoryParts = new BindingList<Quote_Part>();
 
+        public ICommand AddQuoteCommand { get; }
+
 
         public CreateQuoteViewModel(IDataService service)
         {
             dataService = service;
+            AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
         }
 
         public IDataService DataService => dataService;

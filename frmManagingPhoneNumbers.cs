@@ -116,7 +116,7 @@ namespace QuoteSwift
             {
                 if (messageService.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
                 {
-                    viewModel.RemoveTelephone(SelectedNumber);
+                    viewModel.RemoveTelephoneCommand.Execute(SelectedNumber);
                     messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                     LoadInformation();
@@ -137,7 +137,7 @@ namespace QuoteSwift
                 SelectedNumber = GetNumberSelection(viewModel.Customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
             if (SelectedNumber != "")
             {
-                viewModel.RemoveCellphone(SelectedNumber);
+                viewModel.RemoveCellphoneCommand.Execute(SelectedNumber);
                 messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                 LoadInformation();

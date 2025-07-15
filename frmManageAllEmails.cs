@@ -61,7 +61,7 @@ namespace QuoteSwift
             {
                 if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedEmail + "' email address from the list?", "REQUEST - Deletion Request"))
                 {
-                    viewModel.RemoveEmail(SelectedEmail);
+                    viewModel.RemoveEmailCommand.Execute(SelectedEmail);
                     messageService.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
 
 

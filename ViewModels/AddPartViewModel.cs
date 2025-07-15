@@ -2,6 +2,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -18,6 +19,22 @@ namespace QuoteSwift
         Part currentPart;
         Pump selectedPump;
         int quantity;
+        bool lastOperationSuccessful;
+
+        public ICommand SavePartCommand { get; }
+
+        public bool LastOperationSuccessful
+        {
+            get => lastOperationSuccessful;
+            private set
+            {
+                if (lastOperationSuccessful != value)
+                {
+                    lastOperationSuccessful = value;
+                    OnPropertyChanged(nameof(LastOperationSuccessful));
+                }
+            }
+        }
 
 
         public AddPartViewModel(IDataService service, INotificationService notifier)
@@ -25,6 +42,7 @@ namespace QuoteSwift
             dataService = service;
             notificationService = notifier;
             CurrentPart = new Part();
+            SavePartCommand = new RelayCommand(_ => LastOperationSuccessful = AddOrUpdatePart());
         }
 
         public IDataService DataService => dataService;
