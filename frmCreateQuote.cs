@@ -14,17 +14,19 @@ namespace QuoteSwift
     {
         readonly CreateQuoteViewModel viewModel;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
         Quote quoteToChange;
         bool changeSpecificObject;
         public Quote NewQuote;
 
         readonly Pricing P = new Pricing();
 
-        public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false)
+        public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             appData = data;
+            this.messageService = messageService;
             this.quoteToChange = quoteToChange;
             this.changeSpecificObject = changeSpecificObject;
         }
@@ -46,7 +48,7 @@ namespace QuoteSwift
                 {
                     if (!DistinctQuote(ref NewQuote))
                     {
-                        MainProgramCode.ShowError("The provided quote number or Job number has been used in a previous quote.\nPlease ensure that the provided details are indeed correct.", "ERROR - Quote Number or Job Number Already Exists.");
+                        messageService.ShowError("The provided quote number or Job number has been used in a previous quote.\nPlease ensure that the provided details are indeed correct.", "ERROR - Quote Number or Job Number Already Exists.");
                         return;
                     }
 
@@ -58,28 +60,28 @@ namespace QuoteSwift
                     else
                         appData.QuoteMap = new SortedDictionary<string, Quote> { [NewQuote.QuoteNumber] = NewQuote };
 
-                    if (MainProgramCode.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
+                    if (messageService.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
                         ExportQuoteToTemplate();
                     }
-                    else MainProgramCode.ShowInformation("The quote was successfully added to the list of quotes.", "INFORMATION - Quote Added To List");
+                    else messageService.ShowInformation("The quote was successfully added to the list of quotes.", "INFORMATION - Quote Added To List");
 
                     quoteToChange = NewQuote;
                     ConvertToReadOnly();
                     createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
                 }
-                else MainProgramCode.ShowError("The Quote could not be created successfully.", "ERROR - Quote Creation Unsuccessful");
+                else messageService.ShowError("The Quote could not be created successfully.", "ERROR - Quote Creation Unsuccessful");
             }
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
@@ -614,37 +616,37 @@ namespace QuoteSwift
         {
             if (txtCustomerVATNumber.Text.Length < 3)
             {
-                MainProgramCode.ShowError("Please provide a valid Customer VAT Number", "ERROR - Invalid Quote Input");
+                messageService.ShowError("Please provide a valid Customer VAT Number", "ERROR - Invalid Quote Input");
                 return false;
             }
 
             if (txtJobNumber.Text.Length < 3)
             {
-                MainProgramCode.ShowError("Please provide a valid Job Number", "ERROR - Invalid Quote Input");
+                messageService.ShowError("Please provide a valid Job Number", "ERROR - Invalid Quote Input");
                 return false;
             }
 
             if (txtReferenceNumber.Text.Length < 3)
             {
-                MainProgramCode.ShowError("Please provide a valid Reference Number", "ERROR - Invalid Quote Input");
+                messageService.ShowError("Please provide a valid Reference Number", "ERROR - Invalid Quote Input");
                 return false;
             }
 
             if (txtPRNumber.Text.Length < 3)
             {
-                MainProgramCode.ShowError("Please provide a valid PR Number", "ERROR - Invalid Quote Input");
+                messageService.ShowError("Please provide a valid PR Number", "ERROR - Invalid Quote Input");
                 return false;
             }
 
             if (txtLineNumber.Text.Length == 0)
             {
-                MainProgramCode.ShowError("Please provide a valid Line Number", "ERROR - Invalid Quote Input");
+                messageService.ShowError("Please provide a valid Line Number", "ERROR - Invalid Quote Input");
                 return false;
             }
 
             if (txtQuoteNumber.Text.Length < 8)
             {
-                MainProgramCode.ShowError("Please provide a valid Quote Number", "ERROR - Invalid Quote Input");
+                messageService.ShowError("Please provide a valid Quote Number", "ERROR - Invalid Quote Input");
                 return false;
             }
 
@@ -757,7 +759,7 @@ namespace QuoteSwift
         public void ExportQuoteToTemplate()
         {
             UseWaitCursor = true;
-            ExcelExporter.ExportQuoteToExcel(NewQuote);
+            ExcelExporter.ExportQuoteToExcel(NewQuote, messageService);
             UseWaitCursor = false;
         }
 

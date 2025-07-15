@@ -7,13 +7,15 @@ namespace QuoteSwift
     {
 
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
         readonly EditEmailAddressViewModel viewModel;
 
-        public FrmEditEmailAddress(EditEmailAddressViewModel viewModel, ApplicationData data = null)
+        public FrmEditEmailAddress(EditEmailAddressViewModel viewModel, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             appData = data;
+            this.messageService = messageService;
         }
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
@@ -21,7 +23,7 @@ namespace QuoteSwift
             viewModel.CurrentEmail = mtxtEmail.Text;
             if (viewModel.UpdateEmail())
             {
-                MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
+                messageService.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
                 Close();
             }
         }
@@ -34,18 +36,18 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
+            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"))
                 appData.SaveAll();
         }
 
         private void CloseToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 appData.SaveAll();
         }
 

@@ -7,13 +7,15 @@ namespace QuoteSwift
     {
 
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
         readonly EditPhoneNumberViewModel viewModel;
 
-        public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, ApplicationData data = null)
+        public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             appData = data;
+            this.messageService = messageService;
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
@@ -27,19 +29,19 @@ namespace QuoteSwift
             viewModel.CurrentNumber = txtPhoneNumber.Text;
             if (viewModel.UpdateNumber())
             {
-                MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
+                messageService.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
                 Close();
             }
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 appData.SaveAll();
         }
 

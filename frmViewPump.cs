@@ -12,18 +12,20 @@ namespace QuoteSwift // Repair Quote Swift
         readonly ViewPumpViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
-        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
+        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
+            this.messageService = messageService;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
                 appData.SaveAll();
                 Application.Exit();
@@ -47,7 +49,7 @@ namespace QuoteSwift // Repair Quote Swift
             }
             else
             {
-                MainProgramCode.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
+                messageService.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
             }
         }
 
@@ -67,17 +69,17 @@ namespace QuoteSwift // Repair Quote Swift
 
                 Pump objPumpSelection = appData.PumpList.ElementAt(iGridSelection);
 
-                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
+                if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
                     appData.PumpList.RemoveAt(iGridSelection);
                     viewModel.RepairableItemNames.Remove(StringUtil.NormalizeKey(objPumpSelection.PumpName));
 
-                    MainProgramCode.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
+                    messageService.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
                 }
             }
             else
             {
-                MainProgramCode.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
+                messageService.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
             }
         }
 
@@ -135,11 +137,11 @@ namespace QuoteSwift // Repair Quote Swift
                     try
                     {
                         MainProgramCode.ExportInventory(appData.PumpList, sfd.FileName);
-                        MainProgramCode.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
+                        messageService.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
                     }
                     catch (Exception ex)
                     {
-                        MainProgramCode.ShowError("Inventory export failed.\n" + ex.Message, "ERROR - Export Failed");
+                        messageService.ShowError("Inventory export failed.\n" + ex.Message, "ERROR - Export Failed");
                     }
                 }
             }

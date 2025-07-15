@@ -12,13 +12,15 @@ namespace QuoteSwift
         readonly AddPumpViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
-        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
+        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
+            this.messageService = messageService;
             if (data != null)
                 viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
                                      data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
@@ -26,7 +28,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
@@ -43,7 +45,7 @@ namespace QuoteSwift
 
             if (newPumpParts == null)
             {
-                MainProgramCode.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.", "ERROR - No Pump Part Selection");
+                messageService.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.", "ERROR - No Pump Part Selection");
                 return;
             }
 
@@ -55,14 +57,14 @@ namespace QuoteSwift
                 result = viewModel.UpdatePump();
                 if (result)
                 {
-                    MainProgramCode.ShowInformation(viewModel.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
+                    messageService.ShowInformation(viewModel.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
                     viewModel.ChangeSpecificObject = false;
                     ConvertToViewForm();
                     updatePumpToolStripMenuItem.Enabled = true;
                 }
                 else
                 {
-                    MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
+                    messageService.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
                 }
             }
             else
@@ -70,11 +72,11 @@ namespace QuoteSwift
                 result = viewModel.AddPump();
                 if (result)
                 {
-                    MainProgramCode.ShowInformation(viewModel.CurrentPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
+                    messageService.ShowInformation(viewModel.CurrentPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
                 }
                 else
                 {
-                    MainProgramCode.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
+                    messageService.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
                 }
             }
         }
@@ -133,7 +135,7 @@ namespace QuoteSwift
             }
             else //This should never happen. Error message displayed and application will not allow input
             {
-                MainProgramCode.ShowError("An error occurred that was not suppose to ever happen.\nAll input will now be disabled for this current screen", "ERROR - Undefined Action Called");
+                messageService.ShowError("An error occurred that was not suppose to ever happen.\nAll input will now be disabled for this current screen", "ERROR - Undefined Action Called");
 
                 Read_OnlyMainComponents();
             }
@@ -319,7 +321,7 @@ namespace QuoteSwift
         void ChangeViewToEdit()
         {
             if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == false)
-                if (MainProgramCode.RequestConfirmation("You are currently viewing " + viewModel.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
+                if (messageService.RequestConfirmation("You are currently viewing " + viewModel.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
                 {
                     ConvertToEditForm();
                     viewModel.ChangeSpecificObject = true;
@@ -387,7 +389,7 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
         }
 
         private void UpdatePumpToolStripMenuItem_Click(object sender, EventArgs e)

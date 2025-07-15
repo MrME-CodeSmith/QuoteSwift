@@ -6,7 +6,7 @@ namespace QuoteSwift
     {
         public void ShowError(string text, string caption)
         {
-            MainProgramCode.ShowError(text, caption);
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

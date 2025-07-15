@@ -9,7 +9,7 @@ namespace QuoteSwift
     public static class ExcelExporter
     {
         [STAThread]
-        public static void ExportQuoteToExcel(Quote quote)
+        public static void ExportQuoteToExcel(Quote quote, IMessageService messageService)
         {
             if (quote == null) return;
 
@@ -30,7 +30,7 @@ namespace QuoteSwift
 
                 if (excelApp == null)
                 {
-                    MainProgramCode.ShowError("Excel is not installed on this machine.", "ERROR - Excel Export Failed");
+                    messageService.ShowError("Excel is not installed on this machine.", "ERROR - Excel Export Failed");
                     return;
                 }
 
@@ -157,11 +157,11 @@ namespace QuoteSwift
 
                             if (dr != DialogResult.OK)
                             {
-                                MainProgramCode.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
+                                messageService.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
                                 return;
                             }
                         }
-                        MainProgramCode.ShowInformation("Excel file created and stored at selected location.", "INFORMATION - Quote Stored Successfully");
+                        messageService.ShowInformation("Excel file created and stored at selected location.", "INFORMATION - Quote Stored Successfully");
                     }
                     else return;
                 }
@@ -183,7 +183,7 @@ namespace QuoteSwift
                 }
                 else
                 {
-                    MainProgramCode.ShowError("The template file needed to export the quote cannot be found.\nQuote was created successfully but the exportation of the quote was unsuccessful.", "ERROR - Template File Missing");
+                    messageService.ShowError("The template file needed to export the quote cannot be found.\nQuote was created successfully but the exportation of the quote was unsuccessful.", "ERROR - Template File Missing");
                 }
             }
             finally
