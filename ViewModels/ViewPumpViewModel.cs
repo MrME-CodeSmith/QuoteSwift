@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -6,6 +7,7 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         BindingList<Pump> pumps;
+        HashSet<string> repairableItemNames;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -26,9 +28,30 @@ namespace QuoteSwift
             }
         }
 
+        public HashSet<string> RepairableItemNames
+        {
+            get => repairableItemNames;
+            set
+            {
+                repairableItemNames = value;
+                OnPropertyChanged(nameof(RepairableItemNames));
+            }
+        }
+
         public void LoadData()
         {
             Pumps = dataService.LoadPumpList();
+            if (Pumps != null)
+            {
+                var set = new HashSet<string>();
+                foreach (var p in Pumps)
+                    set.Add(StringUtil.NormalizeKey(p.PumpName));
+                RepairableItemNames = set;
+            }
+            else
+            {
+                RepairableItemNames = new HashSet<string>();
+            }
         }
 
         protected void OnPropertyChanged(string propertyName)
