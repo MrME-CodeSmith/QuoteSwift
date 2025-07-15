@@ -113,6 +113,7 @@ namespace QuoteSwift
             // 
             // clmPumpName
             // 
+            this.clmPumpName.DataPropertyName = "PumpName";
             this.clmPumpName.HeaderText = "Pump Name";
             this.clmPumpName.Name = "clmPumpName";
             this.clmPumpName.ReadOnly = true;
@@ -120,6 +121,7 @@ namespace QuoteSwift
             // 
             // clmPumpDescription
             // 
+            this.clmPumpDescription.DataPropertyName = "PumpDescription";
             this.clmPumpDescription.HeaderText = "Description";
             this.clmPumpDescription.Name = "clmPumpDescription";
             this.clmPumpDescription.ReadOnly = true;
@@ -127,6 +129,7 @@ namespace QuoteSwift
             // 
             // clmNewPumpPrice
             // 
+            this.clmNewPumpPrice.DataPropertyName = "NewPumpPrice";
             this.clmNewPumpPrice.HeaderText = "New Pump Price";
             this.clmNewPumpPrice.Name = "clmNewPumpPrice";
             this.clmNewPumpPrice.ReadOnly = true;
