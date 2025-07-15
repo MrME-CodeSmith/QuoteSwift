@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    public class AddCustomerViewModel : INotifyPropertyChanged
+    public class AddCustomerViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
@@ -12,7 +12,6 @@ namespace QuoteSwift
         bool changeSpecificObject;
         Customer currentCustomer;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public AddCustomerViewModel(IDataService service, INotificationService notifier, IMessageService messageService)
         {
@@ -314,9 +313,5 @@ namespace QuoteSwift
             return true;
         }
 
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
     }
 }

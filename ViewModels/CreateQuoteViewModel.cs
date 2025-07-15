@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuoteSwift
 {
-    public class CreateQuoteViewModel : INotifyPropertyChanged
+    public class CreateQuoteViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         Dictionary<string, Part> partList;
@@ -11,7 +11,6 @@ namespace QuoteSwift
         BindingList<Business> businesses;
         SortedDictionary<string, Quote> quoteMap;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public CreateQuoteViewModel(IDataService service)
         {
@@ -68,9 +67,5 @@ namespace QuoteSwift
             QuoteMap = dataService.LoadQuoteMap();
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

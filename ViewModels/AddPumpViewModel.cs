@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuoteSwift
 {
-    public class AddPumpViewModel : INotifyPropertyChanged
+    public class AddPumpViewModel : ViewModelBase
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
@@ -15,7 +15,6 @@ namespace QuoteSwift
         public Pump PumpToChange { get; set; }
         public bool ChangeSpecificObject { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public AddPumpViewModel(IDataService service, INotificationService notifier)
         {
@@ -156,9 +155,5 @@ namespace QuoteSwift
             pump.PartList.Add(new Pump_Part(part, quantity));
         }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
