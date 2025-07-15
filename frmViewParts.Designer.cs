@@ -86,12 +86,14 @@ namespace QuoteSwift
             // 
             // clmPartName
             // 
+            this.clmPartName.DataPropertyName = "PartName";
             this.clmPartName.HeaderText = "Part Name";
             this.clmPartName.Name = "clmPartName";
             this.clmPartName.ReadOnly = true;
             // 
             // clmDescription
             // 
+            this.clmDescription.DataPropertyName = "PartDescription";
             this.clmDescription.HeaderText = "Description";
             this.clmDescription.Name = "clmDescription";
             this.clmDescription.ReadOnly = true;
@@ -99,24 +101,28 @@ namespace QuoteSwift
             // 
             // clmOriginalPartNumber
             // 
+            this.clmOriginalPartNumber.DataPropertyName = "OriginalItemPartNumber";
             this.clmOriginalPartNumber.HeaderText = "Original Part Number";
             this.clmOriginalPartNumber.Name = "clmOriginalPartNumber";
             this.clmOriginalPartNumber.ReadOnly = true;
             // 
             // clmNewPartNumber
             // 
+            this.clmNewPartNumber.DataPropertyName = "NewPartNumber";
             this.clmNewPartNumber.HeaderText = "New Part Number";
             this.clmNewPartNumber.Name = "clmNewPartNumber";
             this.clmNewPartNumber.ReadOnly = true;
             // 
             // clmMandatoryPart
             // 
+            this.clmMandatoryPart.DataPropertyName = "MandatoryPart";
             this.clmMandatoryPart.HeaderText = "Mandatory Part";
             this.clmMandatoryPart.Name = "clmMandatoryPart";
             this.clmMandatoryPart.ReadOnly = true;
             // 
             // clmPartPrice
             // 
+            this.clmPartPrice.DataPropertyName = "PartPrice";
             this.clmPartPrice.HeaderText = "Part Price";
             this.clmPartPrice.Name = "clmPartPrice";
             this.clmPartPrice.ReadOnly = true;
