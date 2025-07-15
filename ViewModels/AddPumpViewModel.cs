@@ -6,6 +6,7 @@ namespace QuoteSwift
     public class AddPumpViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
+        readonly INotificationService notificationService;
         Pump currentPump;
 
         public BindingList<Pump> PumpList { get; private set; }
@@ -16,9 +17,10 @@ namespace QuoteSwift
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AddPumpViewModel(IDataService service)
+        public AddPumpViewModel(IDataService service, INotificationService notifier)
         {
             dataService = service;
+            notificationService = notifier;
             SelectedMandatoryParts = new BindingList<Pump_Part>();
             SelectedNonMandatoryParts = new BindingList<Pump_Part>();
             RepairableItemNames = new HashSet<string>();
@@ -107,6 +109,29 @@ namespace QuoteSwift
             if (RepairableItemNames == null)
                 RepairableItemNames = new HashSet<string>();
             RepairableItemNames.Add(newKey);
+            return true;
+        }
+
+        public bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(CurrentPump?.PumpName) || CurrentPump.PumpName.Length < 3)
+            {
+                notificationService.ShowError("Please ensure the input for the Pump Name is correct and longer than 3 characters.", "INFORMATION -Pump Name Input Incorrect");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentPump?.PumpDescription) || CurrentPump.PumpDescription.Length < 3)
+            {
+                notificationService.ShowError("Please ensure the input for the description of the pump is correct and longer than 3 characters.", "INFORMATION - Pump Description Input Incorrect");
+                return false;
+            }
+
+            if (CurrentPump.NewPumpPrice == 0)
+            {
+                notificationService.ShowError("Please ensure the input for the price of the pump is correct and longer than 2 characters.", "INFORMATION - Pump Price Input Incorrect");
+                return false;
+            }
+
             return true;
         }
 

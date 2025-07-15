@@ -5,6 +5,7 @@ namespace QuoteSwift
     public class AddCustomerViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
+        readonly INotificationService notificationService;
         BindingList<Business> businessList;
         Customer customerToChange;
         bool changeSpecificObject;
@@ -12,9 +13,10 @@ namespace QuoteSwift
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AddCustomerViewModel(IDataService service)
+        public AddCustomerViewModel(IDataService service, INotificationService notifier)
         {
             dataService = service;
+            notificationService = notifier;
             currentCustomer = new Customer();
         }
 
@@ -179,17 +181,134 @@ namespace QuoteSwift
         {
             if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
             {
-                MainProgramCode.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
+                notificationService.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
                 return false;
             }
 
             if (CurrentCustomer.EmailAddresses.Contains(email))
             {
-                MainProgramCode.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
+                notificationService.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
                 return false;
             }
 
             CurrentCustomer.AddEmailAddress(email);
+            return true;
+        }
+
+        public bool ValidateCustomerAddress(Address address)
+        {
+            if (address == null)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(address.AddressDescription) || address.AddressDescription.Length < 2)
+            {
+                notificationService.ShowError("The provided Business Address Description is invalid, please provide a valid description", "ERROR - Invalid Business Address Description");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(address.AddressStreetName) || address.AddressStreetName.Length < 2)
+            {
+                notificationService.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(address.AddressSuburb) || address.AddressSuburb.Length < 2)
+            {
+                notificationService.ShowError("The provided Business Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business Address Suburb");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(address.AddressCity) || address.AddressCity.Length < 2)
+            {
+                notificationService.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business Address City");
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ValidateCustomerPOBoxAddress(Address address)
+        {
+            if (address == null)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(address.AddressDescription) || address.AddressDescription.Length < 2)
+            {
+                notificationService.ShowError("The provided Business P.O.Box Address Description is invalid, please provide a valid description", "ERROR - Invalid Business P.O.Box Address Description");
+                return false;
+            }
+
+            if (address.AddressStreetNumber == 0)
+            {
+                notificationService.ShowError("The provided Business' P.O.Box Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business' P.O.Box Address Street Number");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(address.AddressSuburb) || address.AddressSuburb.Length < 2)
+            {
+                notificationService.ShowError("The provided Business' P.O.Box Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business' P.O.Box Address Suburb");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(address.AddressCity) || address.AddressCity.Length < 2)
+            {
+                notificationService.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business' P.O.Box Address City");
+                return false;
+            }
+
+            if (address.AddressAreaCode == 0)
+            {
+                notificationService.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business' P.O.Box Address Area Code");
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ValidateBusiness()
+        {
+            if (string.IsNullOrWhiteSpace(CurrentCustomer.CustomerLegalDetails?.VatNumber) || CurrentCustomer.CustomerLegalDetails.VatNumber.Length < 7)
+            {
+                notificationService.ShowError("The provided VAT number is invalid, please provide a valid VAT number.", "ERROR - Invalid Business VAT Number");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentCustomer.CustomerLegalDetails?.RegistrationNumber) || CurrentCustomer.CustomerLegalDetails.RegistrationNumber.Length < 7)
+            {
+                notificationService.ShowError("The provided registration number is invalid, please provide a valid registration number.", "ERROR - Invalid Business Registration Number");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentCustomer.VendorNumber) || CurrentCustomer.VendorNumber.Length < 5)
+            {
+                notificationService.ShowError("The provided vendor number is invalid, please provide a valid vendor number.", "ERROR - Invalid Business Registration Number");
+                return false;
+            }
+
+            if (CurrentCustomer.DeliveryAddressMap == null || CurrentCustomer.DeliveryAddressMap.Count == 0)
+            {
+                notificationService.ShowError("Please add a valid customer delivery address under the 'Customer Address' section.", "ERROR - Current Customer Invalid");
+                return false;
+            }
+
+            if (CurrentCustomer.POBoxMap == null || CurrentCustomer.POBoxMap.Count == 0)
+            {
+                notificationService.ShowError("Please add a valid customer P.O.Box address under the 'Customer P.O.Box Address' section.", "ERROR - Current Customer Invalid");
+                return false;
+            }
+
+            if ((CurrentCustomer.CellphoneNumbers == null || CurrentCustomer.CellphoneNumbers.Count == 0) && (CurrentCustomer.TelephoneNumbers == null || CurrentCustomer.TelephoneNumbers.Count == 0))
+            {
+                notificationService.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current Customer Invalid");
+                return false;
+            }
+
+            if (CurrentCustomer.EmailAddresses == null || CurrentCustomer.EmailAddresses.Count == 0)
+            {
+                notificationService.ShowError("Please add a valid customer email address under the 'Email Related' section.", "ERROR - Current Customer Invalid");
+                return false;
+            }
+
             return true;
         }
 

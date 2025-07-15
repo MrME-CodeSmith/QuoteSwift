@@ -41,7 +41,7 @@ namespace QuoteSwift
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
-            if (ValidBusiness() && !viewModel.ChangeSpecificObject)
+            if (viewModel.ValidateBusiness() && !viewModel.ChangeSpecificObject)
             {
                 Business linkBusiness = GetSelectedBusiness();
                 viewModel.CurrentCustomer.CustomerName = string.Empty;
@@ -54,7 +54,7 @@ namespace QuoteSwift
                     ResetScreenInput();
                 }
             }
-            else if (ValidBusiness() && viewModel.ChangeSpecificObject)
+            else if (viewModel.ValidateBusiness() && viewModel.ChangeSpecificObject)
             {
                 string oldName = viewModel.CustomerToChange.CustomerCompanyName;
                 viewModel.CurrentCustomer.CustomerName = string.Empty;
@@ -105,10 +105,10 @@ namespace QuoteSwift
 
         private void BtnAddAddress_Click(object sender, EventArgs e)
         {
-            if (ValidCustomerAddress())
+            var addr = new Address(txtCustomerAddresssDescription.Text, 0, txtAtt.Text, txtWorkArea.Text, txtWorkPlace.Text, 0);
+            if (viewModel.ValidateCustomerAddress(addr))
             {
-                Address address = new Address(txtCustomerAddresssDescription.Text, 0, txtAtt.Text, txtWorkArea.Text, txtWorkPlace.Text, 0);
-                if (viewModel.AddDeliveryAddress(address))
+                if (viewModel.AddDeliveryAddress(addr))
                 {
                     MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
                     ClearCustomerAddressInput();
@@ -118,11 +118,11 @@ namespace QuoteSwift
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            if (ValidCustomerPOBoxAddress())
-            {
-                Address address = new Address(txtCustomerPODescription.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text),
+            var po = new Address(txtCustomerPODescription.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text),
                                               "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
-                if (viewModel.AddPOBoxAddress(address))
+            if (viewModel.ValidateCustomerPOBoxAddress(po))
+            {
+                if (viewModel.AddPOBoxAddress(po))
                 {
                     MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                     ClearPOBoxAddressInput();
@@ -222,117 +222,6 @@ namespace QuoteSwift
        *       and clutter free.                                                          
        */
 
-        private bool ValidCustomerAddress()
-        {
-            if (txtCustomerAddresssDescription.Text.Length < 2)
-            {
-                MainProgramCode.ShowError("The provided Business Address Description is invalid, please provide a valid description", "ERROR - Invalid Business Address Description");
-                return (false);
-            }
-
-            if (txtAtt.Text.Length < 2)
-            {
-                MainProgramCode.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
-                return (false);
-            }
-
-            if (txtWorkArea.Text.Length < 2)
-            {
-                MainProgramCode.ShowError("The provided Business Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business Address Suburb");
-                return (false);
-            }
-
-            if (txtWorkPlace.Text.Length < 2)
-            {
-                MainProgramCode.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business Address City");
-                return (false);
-            }
-
-            return true;
-        }
-
-        private bool ValidCustomerPOBoxAddress()
-        {
-            if (txtCustomerPODescription.Text.Length < 2)
-            {
-                MainProgramCode.ShowError("The provided Business P.O.Box Address Description is invalid, please provide a valid description", "ERROR - Invalid Business P.O.Box Address Description");
-                return (false);
-            }
-
-            if (QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text) == 0)
-            {
-                MainProgramCode.ShowError("The provided Business' P.O.Box Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business' P.O.Box Address Street Number");
-                return (false);
-            }
-
-            if (txtPOBoxSuburb.Text.Length < 2)
-            {
-                MainProgramCode.ShowError("The provided Business' P.O.Box Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business' P.O.Box Address Suburb");
-                return (false);
-            }
-
-            if (txtPOBoxCity.Text.Length < 2)
-            {
-                MainProgramCode.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business' P.O.Box Address City");
-                return (false);
-            }
-
-            if (QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text) == 0)
-            {
-                MainProgramCode.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business' P.O.Box Address Area Code");
-                return (false);
-            }
-
-            return true;
-        }
-
-        private bool ValidBusiness()
-        {
-
-            if (mtxtVATNumber.Text.Length < 7)
-            {
-                MainProgramCode.ShowError("The provided VAT number is invalid, please provide a valid VAT number.", "ERROR - Invalid Business VAT Number");
-                return false;
-            }
-
-            if (mtxtRegistrationNumber.Text.Length < 7)
-            {
-                MainProgramCode.ShowError("The provided registration number is invalid, please provide a valid registration number.", "ERROR - Invalid Business Registration Number");
-                return false;
-            }
-
-            if (mtxtVendorNumber.Text.Length < 5)
-            {
-                MainProgramCode.ShowError("The provided vendor number is invalid, please provide a valid vendor number.", "ERROR - Invalid Business Registration Number");
-                return false;
-            }
-
-            if (viewModel.CurrentCustomer.CustomerDeliveryAddressList == null)
-            {
-                MainProgramCode.ShowError("Please add a valid customer delivery address under the 'Customer Address' section.", "ERROR - Current Customer Invalid");
-                return false;
-            }
-
-            if (viewModel.CurrentCustomer.CustomerPOBoxAddress == null)
-            {
-                MainProgramCode.ShowError("Please add a valid customer P.O.Box address under the 'Customer P.O.Box Address' section.", "ERROR - Current Customer Invalid");
-                return false;
-            }
-
-            if (viewModel.CurrentCustomer.CustomerCellphoneNumberList == null && viewModel.CurrentCustomer.CustomerTelephoneNumberList == null)
-            {
-                MainProgramCode.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current Customer Invalid");
-                return false;
-            }
-
-            if (viewModel.CurrentCustomer.CustomerEmailList == null)
-            {
-                MainProgramCode.ShowError("Please add a valid customer email address under the 'Email Related' section.", "ERROR - Current Customer Invalid");
-                return false;
-            }
-
-            return true;
-        }
 
         private void DisableMainComponents()
         {

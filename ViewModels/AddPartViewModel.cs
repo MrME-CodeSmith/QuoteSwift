@@ -8,6 +8,7 @@ namespace QuoteSwift
     public class AddPartViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
+        readonly INotificationService notificationService;
         Dictionary<string, Part> partMap;
         BindingList<Pump> pumpList;
         Part partToChange;
@@ -20,9 +21,10 @@ namespace QuoteSwift
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AddPartViewModel(IDataService service)
+        public AddPartViewModel(IDataService service, INotificationService notifier)
         {
             dataService = service;
+            notificationService = notifier;
             CurrentPart = new Part();
         }
 
@@ -303,6 +305,41 @@ namespace QuoteSwift
                 return true;
             }
             return false;
+        }
+
+        public bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(CurrentPart.PartName) || CurrentPart.PartName.Length < 3)
+            {
+                notificationService.ShowError("Please ensure that the name of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentPart.PartDescription) || CurrentPart.PartDescription.Length < 3)
+            {
+                notificationService.ShowError("Please ensure that the description of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentPart.OriginalItemPartNumber) || CurrentPart.OriginalItemPartNumber.Length < 3)
+            {
+                notificationService.ShowError("Please ensure that the original part number of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentPart.NewPartNumber) || CurrentPart.NewPartNumber.Length < 3)
+            {
+                notificationService.ShowError("Please ensure that the new part number of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
+                return false;
+            }
+
+            if (CurrentPart.PartPrice == 0)
+            {
+                notificationService.ShowError("Please ensure that the price of the Item is valid and it has a value greater than R99.", "ERROR - Invalid Input");
+                return false;
+            }
+
+            return true;
         }
 
         void AddPart(Part part)

@@ -6,11 +6,13 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly ApplicationData appData;
+        readonly INotificationService notificationService;
 
-        public NavigationService(ApplicationData data)
+        public NavigationService(ApplicationData data, INotificationService notifier)
         {
             dataService = new FileDataService();
             appData = data;
+            notificationService = notifier;
         }
 
         public void CreateNewQuote(ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false)
@@ -50,7 +52,7 @@ namespace QuoteSwift
 
         public void CreateNewPump(ApplicationData data)
         {
-            var vm = new AddPumpViewModel(dataService);
+            var vm = new AddPumpViewModel(dataService, notificationService);
             vm.UpdateData(appData.PumpList, appData.PartList);
             vm.LoadData();
             using (var form = new FrmAddPump(vm, this, appData))
@@ -74,7 +76,7 @@ namespace QuoteSwift
 
         public void AddNewPart(ApplicationData data, Part partToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddPartViewModel(dataService);
+            var vm = new AddPartViewModel(dataService, notificationService);
             vm.UpdateData(appData.PartList, appData.PumpList, partToChange, changeSpecificObject);
             using (var form = new FrmAddPart(vm, this, appData))
             {
@@ -88,7 +90,7 @@ namespace QuoteSwift
 
         public void AddCustomer(ApplicationData data, Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddCustomerViewModel(dataService);
+            var vm = new AddCustomerViewModel(dataService, notificationService);
             vm.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
             using (var form = new FrmAddCustomer(vm, this, appData, businessToChange))
             {

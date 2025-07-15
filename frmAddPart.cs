@@ -51,7 +51,7 @@ namespace QuoteSwift
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
 
-            if (!ValidInput())
+            if (!viewModel.ValidateInput())
                 return;
 
             bool updating = viewModel.ChangeSpecificObject;
@@ -164,45 +164,6 @@ namespace QuoteSwift
         *       and clutter free.                                                          
         */
 
-        private bool ValidInput()
-        {
-            if (mtxtPartName.Text.Length < 3)
-            {
-                MainProgramCode.ShowError("Please ensure that the name of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
-                mtxtPartName.Focus();
-                return false;
-            }
-
-            if (mtxtPartDescription.Text.Length < 3)
-            {
-                MainProgramCode.ShowError("Please ensure that the description of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
-                mtxtPartDescription.Focus();
-                return false;
-            }
-
-            if (mtxtOriginalPartNumber.Text.Length < 3)
-            {
-                MainProgramCode.ShowError("Please ensure that the original part number of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
-                mtxtOriginalPartNumber.Focus();
-                return false;
-            }
-
-            if (mtxtNewPartNumber.Text.Length < 3)
-            {
-                MainProgramCode.ShowError("Please ensure that the new part number of the Item is valid and it has a length greater than two(2) characters.", "ERROR - Invalid Input");
-                mtxtNewPartNumber.Focus();
-                return false;
-            }
-
-            if (QuoteSwiftMainCode.ParseDecimal(mtxtPartPrice.Text) == 0)
-            {
-                MainProgramCode.ShowError("Please ensure that the price of the Item is valid and it has a value greater than R99.", "ERROR - Invalid Input");
-                mtxtPartPrice.Focus();
-                return false;
-            }
-
-            return true;
-        }
 
         private void ClearInput()
         {
