@@ -29,6 +29,7 @@ namespace QuoteSwift
             this.messageService = messageService;
             this.quoteToChange = quoteToChange;
             this.changeSpecificObject = changeSpecificObject;
+            this.viewModel.LoadData();
         }
 
         private void BtnComplete_Click(object sender, EventArgs e)
@@ -36,7 +37,7 @@ namespace QuoteSwift
             if (!changeSpecificObject && quoteToChange != null)
             {
                 NewQuote = quoteToChange;
-                ExportQuoteToTemplate();
+                ExportQuoteToTemplate(NewQuote);
                 NewQuote = null;
             }
             else
@@ -46,23 +47,15 @@ namespace QuoteSwift
 
                 if (NewQuote != null)
                 {
-                    if (!DistinctQuote(ref NewQuote))
+                    if (!viewModel.AddQuote(NewQuote))
                     {
                         messageService.ShowError("The provided quote number or Job number has been used in a previous quote.\nPlease ensure that the provided details are indeed correct.", "ERROR - Quote Number or Job Number Already Exists.");
                         return;
                     }
 
-
-                    if (appData.QuoteMap != null)
-                    {
-                        appData.QuoteMap[NewQuote.QuoteNumber] = NewQuote;
-                    }
-                    else
-                        appData.QuoteMap = new SortedDictionary<string, Quote> { [NewQuote.QuoteNumber] = NewQuote };
-
                     if (messageService.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
-                        ExportQuoteToTemplate();
+                        ExportQuoteToTemplate(NewQuote);
                     }
                     else messageService.ShowInformation("The quote was successfully added to the list of quotes.", "INFORMATION - Quote Added To List");
 
@@ -130,7 +123,7 @@ namespace QuoteSwift
                 dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
 
                 Text = Text.Replace("<< Business Name >>", GetBusinessSelection().BusinessName);
-                if (appData.QuoteMap == null || appData.QuoteMap.Count == 0)
+                if (viewModel.QuoteMap == null || viewModel.QuoteMap.Count == 0)
                 {
                     cbxUseAutomaticNumberingScheme.Checked = false;
                     cbxUseAutomaticNumberingScheme.Enabled = false;
@@ -193,9 +186,9 @@ namespace QuoteSwift
             Business business;
             string SearchName = cbxBusinessSelection.Text;
 
-            if (appData.BusinessList != null && SearchName.Length > 1)
+            if (viewModel.Businesses != null && SearchName.Length > 1)
             {
-                business = appData.BusinessList.SingleOrDefault(p => p.BusinessName == SearchName);
+                business = viewModel.Businesses.SingleOrDefault(p => p.BusinessName == SearchName);
                 return business;
             }
 
@@ -206,7 +199,7 @@ namespace QuoteSwift
         {
             string SearchName = cbxCustomerSelection.Text;
 
-            if (SearchName.Length > 1 && appData.BusinessList != null)
+            if (SearchName.Length > 1 && viewModel.Businesses != null)
             {
                 Business selected = GetBusinessSelection();
                 if (selected != null && selected.BusinessCustomerList != null)
@@ -222,7 +215,7 @@ namespace QuoteSwift
         {
             string SearchName = cbxPumpSelection.Text;
 
-            if (appData.PumpList != null) return appData.PumpList.SingleOrDefault(p => p.PumpName == SearchName);
+            if (viewModel.Pumps != null) return viewModel.Pumps.SingleOrDefault(p => p.PumpName == SearchName);
 
             return null;
         }
@@ -258,7 +251,7 @@ namespace QuoteSwift
 
         private void LinkBusinessTelephone(Business b, ref ComboBox cb)
         {
-            if (appData != null && appData.BusinessList != null && b != null)
+            if (viewModel.Businesses != null && b != null)
             {
                 //Created a Binding Source for the Business' Telephone list to link the source
                 //directly to the combo-box's data-source:
@@ -271,7 +264,7 @@ namespace QuoteSwift
 
         private void LinkBusinessCellphone(Business b, ref ComboBox cb)
         {
-            if (appData != null && appData.BusinessList != null && b != null)
+            if (viewModel.Businesses != null && b != null)
             {
                 //Created a Binding Source for the Business' Cellphone list to link the source
                 //directly to the combo-box's data-source:
@@ -284,7 +277,7 @@ namespace QuoteSwift
 
         private void LinkBusinessEmail(Business b, ref ComboBox cb)
         {
-            if (appData != null && appData.BusinessList != null && b != null)
+            if (viewModel.Businesses != null && b != null)
             {
                 //Created a Binding Source for the Business' Email list to link the source
                 //directly to the combo-box's data-source:
@@ -347,12 +340,12 @@ namespace QuoteSwift
 
         private void LinkPumpList(ref ComboBox cb)
         {
-            if (appData != null && appData.PumpList != null)
+            if (viewModel.Pumps != null)
             {
                 //Created a Binding Source for the Pumps list to link the source
                 //directly to the combo-box's data-source:
 
-                BindingSource ComboBoxSource = new BindingSource { DataSource = appData.PumpList };
+                BindingSource ComboBoxSource = new BindingSource { DataSource = viewModel.Pumps };
 
                 cb.DataSource = ComboBoxSource.DataSource;
 
@@ -385,22 +378,23 @@ namespace QuoteSwift
 
         private void LoadComboBoxes()
         {
-            ViewCustomersViewModel vm = new ViewCustomersViewModel(viewModel.DataService);
-            vm.LoadData();
-            if (vm.Businesses != null)
+            if (viewModel.Businesses != null)
             {
-                BindingSource bs = new BindingSource { DataSource = vm.Businesses };
+                BindingSource bs = new BindingSource { DataSource = viewModel.Businesses };
                 cbxBusinessSelection.DataSource = bs.DataSource;
                 cbxBusinessSelection.DisplayMember = "BusinessName";
                 cbxBusinessSelection.ValueMember = "BusinessName";
+                cbxBusinessSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusiness), false, DataSourceUpdateMode.OnPropertyChanged);
             }
 
             LinkBusinessTelephone(GetBusinessSelection(), ref cbxBusinessTelephoneNumberSelection);
             LinkBusinessCellphone(GetBusinessSelection(), ref cbxBusinessCellphoneNumberSelection);
             LinkBusinessEmail(GetBusinessSelection(), ref cbxBusinessEmailAddressSelection);
             LinkCustomers(GetBusinessSelection(), ref cbxCustomerSelection);
+            cbxCustomerSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomer), false, DataSourceUpdateMode.OnPropertyChanged);
             LinkCustomerDeliveryAddress(GetCustomerSelection(), ref cbxCustomerDeliveryAddress);
             LinkPumpList(ref cbxPumpSelection);
+            cbxPumpSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
             LinkBusinesssPOBox(GetBusinessSelection(), ref CbxPOBoxSelection);
             LinkCustomerPOBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
         }
@@ -410,7 +404,7 @@ namespace QuoteSwift
             dgvMandatoryPartReplacement.Rows.Clear();
             DgvNonMandatoryPartReplacement.Rows.Clear();
 
-            if (appData != null && appData.PumpList != null && cbxPumpSelection.SelectedIndex > -1)
+            if (viewModel.Pumps != null && cbxPumpSelection.SelectedIndex > -1)
             {
                 Pump display = GetPumpSelection();
 
@@ -687,8 +681,6 @@ namespace QuoteSwift
         {
             if (!ValidInput()) return null;
 
-
-
             BindingList<Quote_Part> MandatoryPartList = new BindingList<Quote_Part>();
             for (int i = 0; i < dgvMandatoryPartReplacement.Rows.Count; i++)
             {
@@ -707,11 +699,7 @@ namespace QuoteSwift
                 }
             }
 
-
             BindingList<Quote_Part> NonMandatoryPartList = new BindingList<Quote_Part>();
-            // Exclude only the total row added during calculation.
-            // The data grid contains three cost category rows (Machining,
-            // Labour and Consumables) which must be included in the quote.
             for (int i = 0; i < DgvNonMandatoryPartReplacement.Rows.Count - 1; i++)
             {
                 if (DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString() != "-")
@@ -728,38 +716,37 @@ namespace QuoteSwift
                 }
             }
 
-            Quote CreateQuote = new Quote(txtQuoteNumber.Text,
-                                         dtpQuoteCreationDate.Value,
-                                         dtpQuoteExpiryDate.Value,
-                                         txtReferenceNumber.Text,
-                                         txtJobNumber.Text,
-                                         txtPRNumber.Text,
-                                         dtpPaymentTerm.Value,
-                                         new Address(GetBusinesssPOBoxAddressSelection(GetBusinessSelection())),
-                                         new Address(GetCustomerPOBoxAddressSelection(GetCustomerSelection())),
-                                         txtLineNumber.Text,
-                                         (float)GetPumpSelection().NewPumpPrice,
-                                         ((float)(QuoteSwiftMainCode.ParseDecimal(lblTotalDue.Text) / GetPumpSelection().NewPumpPrice) * 100),
-                                         rtxCustomerDeliveryDescripton.Text,
-                                         new Customer(GetCustomerSelection()),
-                                         new Business(GetBusinessSelection()),
-                                         MandatoryPartList,
-                                         NonMandatoryPartList,
-                                         cbxBusinessTelephoneNumberSelection.Text,
-                                         cbxBusinessCellphoneNumberSelection.Text,
-                                         cbxBusinessEmailAddressSelection.Text,
-                                         (int)(dtpPaymentTerm.Value.Subtract(dtpQuoteCreationDate.Value)).TotalDays,
-                                         P,
-                                         cbxPumpSelection.Text);
+            viewModel.MandatoryParts = MandatoryPartList;
+            viewModel.NonMandatoryParts = NonMandatoryPartList;
+            viewModel.SelectedBusiness = GetBusinessSelection();
+            viewModel.SelectedCustomer = GetCustomerSelection();
+            viewModel.SelectedPump = GetPumpSelection();
 
-            CreateQuote.QuoteRepairPercentage = ((float)(P.SubTotal / GetPumpSelection().NewPumpPrice * 100));
-            return CreateQuote;
+            Pricing pricing = P;
+
+            var quote = viewModel.CreateQuote(txtQuoteNumber.Text,
+                                               dtpQuoteCreationDate.Value,
+                                               dtpQuoteExpiryDate.Value,
+                                               txtReferenceNumber.Text,
+                                               txtJobNumber.Text,
+                                               txtPRNumber.Text,
+                                               dtpPaymentTerm.Value,
+                                               GetBusinesssPOBoxAddressSelection(viewModel.SelectedBusiness),
+                                               GetCustomerPOBoxAddressSelection(viewModel.SelectedCustomer),
+                                               txtLineNumber.Text,
+                                               cbxBusinessTelephoneNumberSelection.Text,
+                                               cbxBusinessCellphoneNumberSelection.Text,
+                                               cbxBusinessEmailAddressSelection.Text,
+                                               (int)(dtpPaymentTerm.Value.Subtract(dtpQuoteCreationDate.Value)).TotalDays,
+                                               pricing);
+
+            return quote;
         }
 
-        public void ExportQuoteToTemplate()
+        private void ExportQuoteToTemplate(Quote q)
         {
             UseWaitCursor = true;
-            ExcelExporter.ExportQuoteToExcel(NewQuote, messageService);
+            viewModel.ExportQuoteToTemplate(q);
             UseWaitCursor = false;
         }
 
@@ -778,30 +765,14 @@ namespace QuoteSwift
             return 0m;
         }
 
-        private bool DistinctQuote(ref Quote q)
-        {
-            Quote Provided = q;
-
-            if (appData.QuoteMap != null)
-            {
-                foreach (var kv in appData.QuoteMap)
-                {
-                    Quote ql = kv.Value;
-                    if (ql.QuoteJobNumber == Provided.QuoteJobNumber || ql.QuoteNumber == Provided.QuoteNumber)
-                        return false;
-                }
-            }
-
-            return true;
-        }
 
         private void GetNewQuotenumber()
         {
-            if (appData != null && appData.QuoteMap != null && appData.QuoteMap.Count > 0)
+            if (viewModel.QuoteMap != null && viewModel.QuoteMap.Count > 0)
             {
-                Quote temp = appData.QuoteMap.First().Value;
+                Quote temp = viewModel.QuoteMap.First().Value;
                 int LastQuoteNumber = GetQuoteNumber(ref temp);
-                foreach (var q in appData.QuoteMap.Values.Skip(1))
+                foreach (var q in viewModel.QuoteMap.Values.Skip(1))
                 {
                     temp = q;
                     if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
