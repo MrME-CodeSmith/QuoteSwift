@@ -7,57 +7,28 @@ namespace QuoteSwift
     {
 
         readonly ApplicationData appData;
-        readonly Business business;
-        readonly Customer customer;
-        string number;
+        readonly EditPhoneNumberViewModel viewModel;
 
-        public FrmEditPhoneNumber(ApplicationData data, Business business = null, Customer customer = null, string number = "")
+        public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, ApplicationData data = null)
         {
             InitializeComponent();
+            this.viewModel = viewModel;
             appData = data;
-            this.business = business;
-            this.customer = customer;
-            this.number = number;
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(number))
-                txtPhoneNumber.Text = number;
+            if (!string.IsNullOrWhiteSpace(viewModel.CurrentNumber))
+                txtPhoneNumber.Text = viewModel.CurrentNumber;
         }
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
-            string newNumber = txtPhoneNumber.Text;
-            if (business != null)
+            viewModel.CurrentNumber = txtPhoneNumber.Text;
+            if (viewModel.UpdateNumber())
             {
-                bool isCell = business.CellphoneNumbers.Contains(number);
-                bool isTel = business.TelephoneNumbers.Contains(number);
-                if (!business.CellphoneNumbers.Contains(newNumber) && !business.TelephoneNumbers.Contains(newNumber))
-                {
-                    if (isCell)
-                        business.UpdateCellphoneNumber(number, newNumber);
-                    else if (isTel)
-                        business.UpdateTelephoneNumber(number, newNumber);
-                    number = newNumber;
-                    MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
-                    Close();
-                }
-            }
-            else if (customer != null)
-            {
-                bool isCell = customer.CellphoneNumbers.Contains(number);
-                bool isTel = customer.TelephoneNumbers.Contains(number);
-                if (!customer.CellphoneNumbers.Contains(newNumber) && !customer.TelephoneNumbers.Contains(newNumber))
-                {
-                    if (isCell)
-                        customer.UpdateCellphoneNumber(number, newNumber);
-                    else if (isTel)
-                        customer.UpdateTelephoneNumber(number, newNumber);
-                    number = newNumber;
-                    MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
-                    Close();
-                }
+                MainProgramCode.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
+                Close();
             }
         }
 

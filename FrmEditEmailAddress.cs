@@ -7,51 +7,28 @@ namespace QuoteSwift
     {
 
         readonly ApplicationData appData;
-        readonly Business business;
-        readonly Customer customer;
-        string email;
+        readonly EditEmailAddressViewModel viewModel;
 
-        public FrmEditEmailAddress(ApplicationData data, Business business = null, Customer customer = null, string email = null)
+        public FrmEditEmailAddress(EditEmailAddressViewModel viewModel, ApplicationData data = null)
         {
             InitializeComponent();
+            this.viewModel = viewModel;
             appData = data;
-            this.business = business;
-            this.customer = customer;
-            this.email = email;
         }
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
         {
-            if (mtxtEmail.Text.Length > 3 && mtxtEmail.Text.Contains("@"))
+            viewModel.CurrentEmail = mtxtEmail.Text;
+            if (viewModel.UpdateEmail())
             {
-                string newEmail = mtxtEmail.Text;
-                if (business != null)
-                {
-                    if (!business.EmailAddresses.Contains(newEmail))
-                    {
-                        business.UpdateEmailAddress(email, newEmail);
-                        email = newEmail;
-                        MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
-                        Close();
-                    }
-                }
-                else if (customer != null)
-                {
-                    if (!customer.EmailAddresses.Contains(newEmail))
-                    {
-                        customer.UpdateEmailAddress(email, newEmail);
-                        email = newEmail;
-                        MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
-                        Close();
-                    }
-                }
+                MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
+                Close();
             }
-            else MainProgramCode.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
         }
 
         private void FrmEditEmailAddress_Load(object sender, EventArgs e)
         {
-            mtxtEmail.Text = email;
+            mtxtEmail.Text = viewModel.CurrentEmail;
 
         }
 

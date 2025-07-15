@@ -74,7 +74,8 @@ namespace QuoteSwift
                 return;
             }
 
-            using (var form = new FrmEditBusinessAddress(appData, business, customer, address))
+            var vm = new EditBusinessAddressViewModel(business, customer, address);
+            using (var form = new FrmEditBusinessAddress(vm, appData))
             {
                 form.ShowDialog();
             }
