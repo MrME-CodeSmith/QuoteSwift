@@ -27,10 +27,10 @@ namespace QuoteSwift
 
         public void SaveAll()
         {
-            MainProgramCode.SerializePartList(PartList);
-            MainProgramCode.SerializePumpList(PumpList);
-            MainProgramCode.SerializeBusinessList(BusinessList);
-            MainProgramCode.SerializeQuoteList(QuoteMap);
+            dataService.SaveParts(PartList);
+            dataService.SavePumps(PumpList);
+            dataService.SaveBusinesses(BusinessList);
+            dataService.SaveQuotes(QuoteMap);
         }
     }
 }

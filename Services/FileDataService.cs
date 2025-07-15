@@ -28,5 +28,25 @@ namespace QuoteSwift
             byte[] bytes = MainProgramCode.RetreiveData("QuoteList.json");
             return bytes != null && bytes.Length > 0 ? MainProgramCode.DeserializeQuoteList(bytes) : new SortedDictionary<string, Quote>();
         }
+
+        public void SaveParts(Dictionary<string, Part> parts)
+        {
+            MainProgramCode.SerializePartList(parts);
+        }
+
+        public void SavePumps(BindingList<Pump> pumps)
+        {
+            MainProgramCode.SerializePumpList(pumps);
+        }
+
+        public void SaveBusinesses(BindingList<Business> businesses)
+        {
+            MainProgramCode.SerializeBusinessList(businesses);
+        }
+
+        public void SaveQuotes(SortedDictionary<string, Quote> quotes)
+        {
+            MainProgramCode.SerializeQuoteList(quotes);
+        }
     }
 }
