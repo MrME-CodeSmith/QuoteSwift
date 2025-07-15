@@ -31,6 +31,21 @@ namespace QuoteSwift
             Businesses = dataService.LoadBusinessList();
         }
 
+        public void UpdateData(BindingList<Business> list)
+        {
+            Businesses = list;
+        }
+
+        public void AddBusiness(Business business)
+        {
+            Businesses?.Add(business);
+        }
+
+        public void RemoveBusiness(Business business)
+        {
+            Businesses?.Remove(business);
+        }
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

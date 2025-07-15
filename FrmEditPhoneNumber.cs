@@ -6,15 +6,13 @@ namespace QuoteSwift
     public partial class FrmEditPhoneNumber : Form
     {
 
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
         readonly EditPhoneNumberViewModel viewModel;
 
-        public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, ApplicationData data = null, IMessageService messageService = null)
+        public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
-            appData = data;
             this.messageService = messageService;
         }
 
@@ -42,7 +40,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                appData.SaveAll();
+                Application.Exit();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -52,7 +50,6 @@ namespace QuoteSwift
 
         private void FrmEditPhoneNumber_FormClosing(object sender, FormClosingEventArgs e)
         {
-            appData.SaveAll();
         }
     }
 }

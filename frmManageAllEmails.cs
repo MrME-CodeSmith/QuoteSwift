@@ -9,45 +9,36 @@ namespace QuoteSwift
     {
 
         readonly ManageEmailsViewModel viewModel;
-        readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
-        readonly Business business;
-        readonly Customer customer;
 
-        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null, IMessageService messageService = null)
+        public FrmManageAllEmails(ManageEmailsViewModel viewModel, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
-            this.navigation = navigation;
-            appData = data;
             this.messageService = messageService;
-            this.business = business;
-            this.customer = customer;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                appData.SaveAll();
                 Application.Exit();
             }
         }
 
         private void FrmManageAllEmails_Load(object sender, EventArgs e)
         {
-            if (business != null && business.BusinessEmailAddressList != null)
+            if (viewModel.Business != null && viewModel.Business.BusinessEmailAddressList != null)
             {
-                Text = Text.Replace("< Business Name >", business.BusinessName);
+                Text = Text.Replace("< Business Name >", viewModel.Business.BusinessName);
 
                 // components remain editable
 
                 LoadInformation();
             }
-            else if (customer != null && customer.CustomerEmailList != null)
+            else if (viewModel.Customer != null && viewModel.Customer.CustomerEmailList != null)
             {
-                Text = Text.Replace("< Business Name >", customer.CustomerName);
+                Text = Text.Replace("< Business Name >", viewModel.Customer.CustomerName);
 
                 // components remain editable
 
@@ -70,16 +61,8 @@ namespace QuoteSwift
             {
                 if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedEmail + "' email address from the list?", "REQUEST - Deletion Request"))
                 {
-                    if (business != null && business.BusinessEmailAddressList != null)
-                    {
-                        business.RemoveEmailAddress(SelectedEmail);
-                        messageService.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-                    }
-                    else if (customer != null && customer.CustomerEmailList != null)
-                    {
-                        customer.RemoveEmailAddress(SelectedEmail);
-                        messageService.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-                    }
+                    viewModel.RemoveEmail(SelectedEmail);
+                    messageService.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
 
 
                     LoadInformation();
@@ -94,8 +77,8 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             string email = GetEmailSelection();
-            var vm = new EditEmailAddressViewModel(business, customer, email);
-            using (var form = new FrmEditEmailAddress(vm, appData))
+            var vm = new EditEmailAddressViewModel(viewModel.Business, viewModel.Customer, email);
+            using (var form = new FrmEditEmailAddress(vm, messageService))
             {
                 form.ShowDialog();
             }
@@ -115,13 +98,13 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(SearchName))
                 return string.Empty;
 
-            if (business != null && business.BusinessEmailAddressList != null)
+            if (viewModel.Business != null && viewModel.Business.BusinessEmailAddressList != null)
             {
-                return business.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
+                return viewModel.Business.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
             }
-            else if (customer != null && customer.CustomerEmailList != null)
+            else if (viewModel.Customer != null && viewModel.Customer.CustomerEmailList != null)
             {
-                return customer.CustomerEmailList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
+                return viewModel.Customer.CustomerEmailList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
             }
 
             return string.Empty;
@@ -129,21 +112,7 @@ namespace QuoteSwift
 
         private void LoadInformation()
         {
-            DgvEmails.Rows.Clear();
-            if (business != null && business.BusinessEmailAddressList != null)
-            {
-                foreach (var email in business.BusinessEmailAddressList)
-                {
-                    DgvEmails.Rows.Add(email);
-                }
-            }
-            else if (customer != null && customer.CustomerEmailList != null)
-            {
-                foreach (var email in customer.CustomerEmailList)
-                {
-                    DgvEmails.Rows.Add(email);
-                }
-            }
+            DgvEmails.DataSource = new BindingSource { DataSource = viewModel.Emails };
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -153,7 +122,6 @@ namespace QuoteSwift
 
         private void FrmManageAllEmails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            appData.SaveAll();
         }
     }
 

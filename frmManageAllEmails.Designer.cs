@@ -75,6 +75,7 @@ namespace QuoteSwift
             // 
             // clmEmailAddresses
             // 
+            this.clmEmailAddresses.DataPropertyName = "Address";
             this.clmEmailAddresses.HeaderText = "Email Address";
             this.clmEmailAddresses.Name = "clmEmailAddresses";
             this.clmEmailAddresses.ReadOnly = true;

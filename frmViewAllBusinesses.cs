@@ -10,26 +10,20 @@ namespace QuoteSwift
 
         readonly ViewBusinessesViewModel viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
 
-        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null)
+        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            this.appData = appData;
             this.messageService = messageService;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    appData?.BusinessList,
-                    appData?.PumpList,
-                    appData?.PartList,
-                    appData?.QuoteMap);
+                Application.Exit();
         }
 
         private void BtnUpdateBusiness_Click(object sender, EventArgs e)
@@ -43,7 +37,7 @@ namespace QuoteSwift
                 return;
             }
 
-            navigation.AddBusiness(appData, Business, false);
+            navigation.AddBusiness(null, Business, false);
 
             LoadInformation();
 
@@ -52,7 +46,7 @@ namespace QuoteSwift
         private void BtnAddBusiness_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.AddBusiness(appData);
+            navigation.AddBusiness(null);
             Show();
 
             LoadInformation();
@@ -60,9 +54,9 @@ namespace QuoteSwift
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {
-            if (appData.BusinessList != null)
+            if (viewModel.Businesses != null)
             {
-                foreach (var business in appData.BusinessList)
+                foreach (var business in viewModel.Businesses)
                     DgvBusinessList.Rows.Add(business.BusinessName);
             }
 
@@ -74,11 +68,11 @@ namespace QuoteSwift
         {
             Business business = GetBusinessSelection();
 
-            if (business != null && appData.BusinessList != null)
+            if (business != null && viewModel.Businesses != null)
             {
                 if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
-                    appData.BusinessList.Remove(business);
+                    viewModel.RemoveBusiness(business);
                     messageService.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
 
                     LoadInformation();
@@ -106,9 +100,9 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(searchName))
                 return null;
 
-            if (appData.BusinessList != null)
+            if (viewModel.Businesses != null)
             {
-                return appData.BusinessList.FirstOrDefault(b => b.BusinessName == searchName);
+                return viewModel.Businesses.FirstOrDefault(b => b.BusinessName == searchName);
             }
 
             return null;
@@ -118,8 +112,8 @@ namespace QuoteSwift
         {
             DgvBusinessList.Rows.Clear();
 
-            if (appData.BusinessList != null)
-                foreach (var business in appData.BusinessList)
+            if (viewModel.Businesses != null)
+                foreach (var business in viewModel.Businesses)
                 {
                     DgvBusinessList.Rows.Add(business.BusinessName);
                 }
@@ -138,11 +132,6 @@ namespace QuoteSwift
 
         private void FrmViewAllBusinesses_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
         }
 
         /**********************************************************************************/

@@ -6,15 +6,13 @@ namespace QuoteSwift
     public partial class FrmEditEmailAddress : Form
     {
 
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
         readonly EditEmailAddressViewModel viewModel;
 
-        public FrmEditEmailAddress(EditEmailAddressViewModel viewModel, ApplicationData data = null, IMessageService messageService = null)
+        public FrmEditEmailAddress(EditEmailAddressViewModel viewModel, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
-            appData = data;
             this.messageService = messageService;
         }
 
@@ -42,13 +40,13 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"))
-                appData.SaveAll();
+                Application.Exit();
         }
 
         private void CloseToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                appData.SaveAll();
+                Application.Exit();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -58,7 +56,6 @@ namespace QuoteSwift
 
         private void FrmEditEmailAddress_FormClosing(object sender, FormClosingEventArgs e)
         {
-            appData.SaveAll();
         }
     }
 }
