@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -62,32 +62,21 @@ namespace QuoteSwift
         {
             if (appData != null)
             {
-                dgvAllParts.Rows.Clear();
-                LoadMandatoryParts();
-                LoadNonMandatoryParts();
+                viewModel.UpdateData(appData.PartList);
+                RefreshBinding();
             }
         }
 
         private void BtnRemovePart_Click(object sender, EventArgs e)
         {
-            Part SelectedPart = GetSelectedPart();
-            if (SelectedPart != null)
+            Part selectedPart = GetSelectedPart();
+            if (selectedPart != null)
             {
-                if (SelectedPart.MandatoryPart)
+                if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + selectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
                 {
-                    if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
-                    {
-                        appData.PartList?.Remove(StringUtil.NormalizeKey(SelectedPart.OriginalItemPartNumber));
-                        messageService.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
-                    }
-                }
-                else
-                {
-                    if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + SelectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
-                    {
-                        appData.PartList?.Remove(StringUtil.NormalizeKey(SelectedPart.OriginalItemPartNumber));
-                        messageService.ShowInformation("Successfully deleted " + SelectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
-                    }
+                    viewModel.RemovePart(selectedPart);
+                    messageService.ShowInformation("Successfully deleted " + selectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
+                    RefreshBinding();
                 }
             }
             else
@@ -104,69 +93,25 @@ namespace QuoteSwift
         *       and clutter free.                                                          
         */
 
-        void LoadMandatoryParts()
+        void RefreshBinding()
         {
-            if (appData.PartList != null)
+            var list = new BindingList<Part>();
+            if (viewModel.MandatoryParts != null)
             {
-                foreach (var part in appData.PartList.Values.Where(p => p.MandatoryPart))
-                {
-                    //Manually setting the data grid's rows' values:
-                    dgvAllParts.Rows.Add(part.PartName,
-                                         part.PartDescription,
-                                         part.OriginalItemPartNumber,
-                                         part.NewPartNumber,
-                                         true,
-                                         part.PartPrice);
-                }
+                foreach (var p in viewModel.MandatoryParts)
+                    list.Add(p);
             }
-        }
-
-        void LoadNonMandatoryParts()
-        {
-            if (appData.PartList != null)
+            if (viewModel.NonMandatoryParts != null)
             {
-                foreach (var part in appData.PartList.Values.Where(p => !p.MandatoryPart))
-                {
-                    //Manually setting the data grid's rows' values:
-                    dgvAllParts.Rows.Add(part.PartName,
-                                         part.PartDescription,
-                                         part.OriginalItemPartNumber,
-                                         part.NewPartNumber,
-                                         false,
-                                         part.PartPrice);
-                }
+                foreach (var p in viewModel.NonMandatoryParts)
+                    list.Add(p);
             }
+            dgvAllParts.DataSource = new BindingSource { DataSource = list };
         }
 
         Part GetSelectedPart()
         {
-            if (dgvAllParts.CurrentCell == null || dgvAllParts.CurrentRow == null)
-                return null;
-
-            int iGridSelection = dgvAllParts.CurrentCell.RowIndex;
-            if (iGridSelection < 0 || iGridSelection >= dgvAllParts.Rows.Count)
-                return null;
-
-            string SearchName = dgvAllParts.Rows[iGridSelection].Cells[2].Value?.ToString();
-            if (string.IsNullOrEmpty(SearchName))
-                return null;
-
-            if (appData.PartList != null && appData.PartList.Count > 0)
-            {
-                string key = StringUtil.NormalizeKey(SearchName);
-                if ((bool)(dgvAllParts.Rows[iGridSelection].Cells[4].Value) == true)
-                {
-                    appData.PartList.TryGetValue(key, out var part);
-                    return part;
-                }
-                else // Search in Non-Mandatory
-                {
-                    appData.PartList.TryGetValue(key, out var part);
-                    return part;
-                }
-            }
-
-            return null;
+            return dgvAllParts.CurrentRow?.DataBoundItem as Part;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -178,6 +123,7 @@ namespace QuoteSwift
         {
             dgvAllParts.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvAllParts.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+            RefreshBinding();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
