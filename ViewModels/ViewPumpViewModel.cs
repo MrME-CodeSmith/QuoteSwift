@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace QuoteSwift
 {
@@ -51,6 +53,32 @@ namespace QuoteSwift
             {
                 RepairableItemNames = new HashSet<string>();
             }
+        }
+
+        public void UpdateData(BindingList<Pump> pumpList)
+        {
+            Pumps = pumpList;
+            if (Pumps != null)
+                RepairableItemNames = new HashSet<string>(Pumps.Select(p => StringUtil.NormalizeKey(p.PumpName)));
+            else
+                RepairableItemNames = new HashSet<string>();
+        }
+
+        public void RemovePump(Pump pump)
+        {
+            if (pump == null || Pumps == null)
+                return;
+
+            Pumps.Remove(pump);
+            RepairableItemNames?.Remove(StringUtil.NormalizeKey(pump.PumpName));
+        }
+
+        public void ExportInventory(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+                throw new ArgumentNullException(nameof(filePath));
+
+            MainProgramCode.ExportInventory(Pumps, filePath);
         }
 
     }

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.IO;
 
 namespace QuoteSwift // Repair Quote Swift
 {
@@ -21,6 +20,8 @@ namespace QuoteSwift // Repair Quote Swift
             this.navigation = navigation;
             appData = data;
             this.messageService = messageService;
+            if (appData != null)
+                viewModel.UpdateData(appData.PumpList);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -38,14 +39,12 @@ namespace QuoteSwift // Repair Quote Swift
             {
                 int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
 
-                var pToChange = appData.PumpList.ElementAt(iGridSelection);
+                var pToChange = viewModel.Pumps.ElementAt(iGridSelection);
                 Hide();
                 navigation.CreateNewPump();
                 Show();
 
-                viewModel.RepairableItemNames = new HashSet<string>(appData.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName)));
-
-                LoadInformation();
+                viewModel.RepairableItemNames = new HashSet<string>(viewModel.Pumps.Select(p => StringUtil.NormalizeKey(p.PumpName)));
             }
             else
             {
@@ -57,23 +56,18 @@ namespace QuoteSwift // Repair Quote Swift
         {
             Hide();
             navigation.CreateNewPump();
-            viewModel.RepairableItemNames = new HashSet<string>(appData.PumpList.Select(pu => StringUtil.NormalizeKey(pu.PumpName)));
+            viewModel.RepairableItemNames = new HashSet<string>(viewModel.Pumps.Select(pu => StringUtil.NormalizeKey(pu.PumpName)));
             Show();
         }
 
         private void BtnRemovePumpSelection_Click(object sender, EventArgs e)
         {
-            if (dgvPumpList.SelectedCells.Count > 0)
+            Pump objPumpSelection = GetSelectedPump();
+            if (objPumpSelection != null)
             {
-                int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
-
-                Pump objPumpSelection = appData.PumpList.ElementAt(iGridSelection);
-
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + "pump from the list of pumps?", "REQUEST - Deletion Request"))
+                if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + " pump from the list of pumps?", "REQUEST - Deletion Request"))
                 {
-                    appData.PumpList.RemoveAt(iGridSelection);
-                    viewModel.RepairableItemNames.Remove(StringUtil.NormalizeKey(objPumpSelection.PumpName));
-
+                    viewModel.RemovePump(objPumpSelection);
                     messageService.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
                 }
             }
@@ -91,7 +85,7 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void FrmViewPump_Load(object sender, EventArgs e)
         {
-            LoadInformation();
+            RefreshBinding();
             dgvPumpList.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvPumpList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
@@ -103,20 +97,14 @@ namespace QuoteSwift // Repair Quote Swift
         *       and clutter free.                                                          
         */
 
-        private void LoadInformation()
+        void RefreshBinding()
         {
-            //Manually Load Pump items:
-            dgvPumpList.Rows.Clear();
+            dgvPumpList.DataSource = new BindingSource { DataSource = viewModel.Pumps };
+        }
 
-            if (appData.PumpList != null)
-            {
-                foreach (var pump in appData.PumpList)
-                {
-                    dgvPumpList.Rows.Add(pump.PumpName,
-                                        pump.PumpDescription,
-                                        pump.NewPumpPrice.ToString());
-                }
-            }
+        Pump GetSelectedPump()
+        {
+            return dgvPumpList.CurrentRow?.DataBoundItem as Pump;
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -136,7 +124,7 @@ namespace QuoteSwift // Repair Quote Swift
                 {
                     try
                     {
-                        MainProgramCode.ExportInventory(appData.PumpList, sfd.FileName);
+                        viewModel.ExportInventory(sfd.FileName);
                         messageService.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
                     }
                     catch (Exception ex)
