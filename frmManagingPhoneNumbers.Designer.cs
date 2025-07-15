@@ -82,6 +82,7 @@ namespace QuoteSwift
             // clmTelephoneNumbers
             // 
             this.clmTelephoneNumbers.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.clmTelephoneNumbers.DataPropertyName = "Number";
             this.clmTelephoneNumbers.HeaderText = "Telephone Numbers";
             this.clmTelephoneNumbers.Name = "clmTelephoneNumbers";
             this.clmTelephoneNumbers.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -123,6 +124,7 @@ namespace QuoteSwift
             // ClmCellphoneNumbers
             // 
             this.ClmCellphoneNumbers.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ClmCellphoneNumbers.DataPropertyName = "Number";
             this.ClmCellphoneNumbers.HeaderText = "Cellphone Numbers";
             this.ClmCellphoneNumbers.Name = "ClmCellphoneNumbers";
             this.ClmCellphoneNumbers.ReadOnly = true;

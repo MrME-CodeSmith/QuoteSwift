@@ -11,48 +11,39 @@ namespace QuoteSwift
     {
 
         readonly ManagePhoneNumbersViewModel viewModel;
-        readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
-        readonly Business business;
-        readonly Customer customer;
 
-        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null, IMessageService messageService = null)
+        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
-            this.navigation = navigation;
-            appData = data;
             this.messageService = messageService;
-            this.business = business;
-            this.customer = customer;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                appData.SaveAll();
                 Application.Exit();
             }
         }
 
         private void BtnChangePhoneNumberInfo_Click(object sender, EventArgs e)
         {
-            if (business != null && business.BusinessCellphoneNumberList != null)
+            if (viewModel.Business != null && viewModel.Business.BusinessCellphoneNumberList != null)
             {
-                string oldNumber = GetNumberSelection(business.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
-                var vm = new EditPhoneNumberViewModel(business, null, oldNumber);
-                using (var form = new FrmEditPhoneNumber(vm, appData))
+                string oldNumber = GetNumberSelection(viewModel.Business.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
+                var vm = new EditPhoneNumberViewModel(viewModel.Business, null, oldNumber, messageService);
+                using (var form = new FrmEditPhoneNumber(vm, messageService))
                 {
                     form.ShowDialog();
                 }
             }
-            else if (customer != null && customer.CustomerCellphoneNumberList != null)
+            else if (viewModel.Customer != null && viewModel.Customer.CustomerCellphoneNumberList != null)
             {
-                string oldNumber = GetNumberSelection(customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
-                var vm = new EditPhoneNumberViewModel(null, customer, oldNumber);
-                using (var form = new FrmEditPhoneNumber(vm, appData))
+                string oldNumber = GetNumberSelection(viewModel.Customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
+                var vm = new EditPhoneNumberViewModel(null, viewModel.Customer, oldNumber, messageService);
+                using (var form = new FrmEditPhoneNumber(vm, messageService))
                 {
                     form.ShowDialog();
                 }
@@ -63,20 +54,20 @@ namespace QuoteSwift
 
         private void BtnUpdateTelephoneNumber_Click(object sender, EventArgs e)
         {
-            if (business != null && business.BusinessTelephoneNumberList != null)
+            if (viewModel.Business != null && viewModel.Business.BusinessTelephoneNumberList != null)
             {
-                string oldNumber = GetNumberSelection(business.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
-                var vm = new EditPhoneNumberViewModel(business, null, oldNumber);
-                using (var form = new FrmEditPhoneNumber(vm, appData))
+                string oldNumber = GetNumberSelection(viewModel.Business.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
+                var vm = new EditPhoneNumberViewModel(viewModel.Business, null, oldNumber, messageService);
+                using (var form = new FrmEditPhoneNumber(vm, messageService))
                 {
                     form.ShowDialog();
                 }
             }
-            else if (customer != null && customer.CustomerTelephoneNumberList != null)
+            else if (viewModel.Customer != null && viewModel.Customer.CustomerTelephoneNumberList != null)
             {
-                string oldNumber = GetNumberSelection(customer.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
-                var vm = new EditPhoneNumberViewModel(null, customer, oldNumber);
-                using (var form = new FrmEditPhoneNumber(vm, appData))
+                string oldNumber = GetNumberSelection(viewModel.Customer.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
+                var vm = new EditPhoneNumberViewModel(null, viewModel.Customer, oldNumber, messageService);
+                using (var form = new FrmEditPhoneNumber(vm, messageService))
                 {
                     form.ShowDialog();
                 }
@@ -87,17 +78,17 @@ namespace QuoteSwift
 
         private void FrmManagingPhoneNumbers_Load(object sender, EventArgs e)
         {
-            if (business != null && (business.BusinessTelephoneNumberList != null || business.BusinessCellphoneNumberList != null))
+            if (viewModel.Business != null && (viewModel.Business.BusinessTelephoneNumberList != null || viewModel.Business.BusinessCellphoneNumberList != null))
             {
-                Text = Text.Replace("< Business Name >", business.BusinessName);
+                Text = Text.Replace("< Business Name >", viewModel.Business.BusinessName);
 
                 // components remain editable
 
                 LoadInformation();
             }
-            else if (customer != null && (customer.CustomerCellphoneNumberList != null || customer.CustomerTelephoneNumberList != null))
+            else if (viewModel.Customer != null && (viewModel.Customer.CustomerCellphoneNumberList != null || viewModel.Customer.CustomerTelephoneNumberList != null))
             {
-                Text = Text.Replace("< Business Name >", customer.CustomerName);
+                Text = Text.Replace("< Business Name >", viewModel.Customer.CustomerName);
 
                 // components remain editable
 
@@ -115,28 +106,18 @@ namespace QuoteSwift
         {
             string SelectedNumber = "";
 
-            if (business != null && business.BusinessTelephoneNumberList != null)
-                SelectedNumber = GetNumberSelection(business.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
+            if (viewModel.Business != null && viewModel.Business.BusinessTelephoneNumberList != null)
+                SelectedNumber = GetNumberSelection(viewModel.Business.BusinessTelephoneNumberList, ref dgvTelephoneNumbers);
 
-            if (customer != null && customer.CustomerTelephoneNumberList != null)
-                SelectedNumber = GetNumberSelection(customer.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
+            if (viewModel.Customer != null && viewModel.Customer.CustomerTelephoneNumberList != null)
+                SelectedNumber = GetNumberSelection(viewModel.Customer.CustomerTelephoneNumberList, ref dgvTelephoneNumbers);
 
             if (SelectedNumber != "")
             {
                 if (messageService.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
                 {
-                    if (business != null && business.BusinessTelephoneNumberList != null)
-                    {
-                        business.RemoveTelephoneNumber(SelectedNumber);
-                        messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-
-                    }
-                    else if (customer != null && customer.CustomerTelephoneNumberList != null)
-                    {
-                        customer.RemoveTelephoneNumber(SelectedNumber);
-                        messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-
-                    }
+                    viewModel.RemoveTelephone(SelectedNumber);
+                    messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                     LoadInformation();
                 }
@@ -150,24 +131,14 @@ namespace QuoteSwift
         private void BtnRemoveCellNumber_Click(object sender, EventArgs e)
         {
             string SelectedNumber = string.Empty;
-            if (business != null && business.BusinessCellphoneNumberList != null)
-                SelectedNumber = GetNumberSelection(business.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
-            else if (customer != null && customer.CustomerCellphoneNumberList != null)
-                SelectedNumber = GetNumberSelection(customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
+            if (viewModel.Business != null && viewModel.Business.BusinessCellphoneNumberList != null)
+                SelectedNumber = GetNumberSelection(viewModel.Business.BusinessCellphoneNumberList, ref dgvCellphoneNumbers);
+            else if (viewModel.Customer != null && viewModel.Customer.CustomerCellphoneNumberList != null)
+                SelectedNumber = GetNumberSelection(viewModel.Customer.CustomerCellphoneNumberList, ref dgvCellphoneNumbers);
             if (SelectedNumber != "")
             {
-                if (business != null && business.BusinessCellphoneNumberList != null)
-                {
-                    business.RemoveCellphoneNumber(SelectedNumber);
-                    messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-
-                }
-                else if (customer != null && customer.CustomerCellphoneNumberList != null)
-                {
-                    customer.RemoveCellphoneNumber(SelectedNumber);
-                    messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-
-                }
+                viewModel.RemoveCellphone(SelectedNumber);
+                messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                 LoadInformation();
             }
@@ -208,37 +179,8 @@ namespace QuoteSwift
             dgvTelephoneNumbers.Rows.Clear();
             dgvCellphoneNumbers.Rows.Clear();
 
-            if (business != null && business.BusinessTelephoneNumberList != null)
-            {
-                foreach (var number in business.BusinessTelephoneNumberList)
-                {
-                    dgvTelephoneNumbers.Rows.Add(number);
-                }
-            }
-
-            if (business != null && business.BusinessCellphoneNumberList != null)
-            {
-                foreach (var number in business.BusinessCellphoneNumberList)
-                {
-                    dgvCellphoneNumbers.Rows.Add(number);
-                }
-            }
-
-            if (customer != null && customer.CustomerCellphoneNumberList != null)
-            {
-                foreach (var number in customer.CustomerCellphoneNumberList)
-                {
-                    dgvCellphoneNumbers.Rows.Add(number);
-                }
-            }
-
-            if (customer != null && customer.CustomerTelephoneNumberList != null)
-            {
-                foreach (var number in customer.CustomerTelephoneNumberList)
-                {
-                    dgvTelephoneNumbers.Rows.Add(number);
-                }
-            }
+            dgvTelephoneNumbers.DataSource = new BindingSource { DataSource = viewModel.TelephoneNumbers };
+            dgvCellphoneNumbers.DataSource = new BindingSource { DataSource = viewModel.CellphoneNumbers };
         }
 
 
@@ -249,7 +191,6 @@ namespace QuoteSwift
 
         private void FrmManagingPhoneNumbers_FormClosing(object sender, FormClosingEventArgs e)
         {
-            appData.SaveAll();
         }
     }
 }

@@ -5,7 +5,9 @@ namespace QuoteSwift
     public class ManageEmailsViewModel : INotifyPropertyChanged
     {
         readonly IDataService dataService;
-        BindingList<Business> businesses;
+        Business business;
+        Customer customer;
+        BindingList<EmailEntry> emails;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -16,24 +18,98 @@ namespace QuoteSwift
 
         public IDataService DataService => dataService;
 
-        public BindingList<Business> Businesses
+        public Business Business
         {
-            get => businesses;
+            get => business;
             private set
             {
-                businesses = value;
-                OnPropertyChanged(nameof(Businesses));
+                business = value;
+                OnPropertyChanged(nameof(Business));
             }
         }
 
-        public void LoadData()
+        public Customer Customer
         {
-            Businesses = dataService.LoadBusinessList();
+            get => customer;
+            private set
+            {
+                customer = value;
+                OnPropertyChanged(nameof(Customer));
+            }
+        }
+
+        public BindingList<EmailEntry> Emails
+        {
+            get => emails;
+            private set
+            {
+                emails = value;
+                OnPropertyChanged(nameof(Emails));
+            }
+        }
+
+        public void UpdateData(Business business = null, Customer customer = null)
+        {
+            Business = business;
+            Customer = customer;
+            RefreshEmails();
+        }
+
+        void RefreshEmails()
+        {
+            if (Business != null && Business.BusinessEmailAddressList != null)
+            {
+                Emails = new BindingList<EmailEntry>();
+                foreach (var e in Business.BusinessEmailAddressList)
+                    Emails.Add(new EmailEntry { Address = e });
+            }
+            else if (Customer != null && Customer.CustomerEmailList != null)
+            {
+                Emails = new BindingList<EmailEntry>();
+                foreach (var e in Customer.CustomerEmailList)
+                    Emails.Add(new EmailEntry { Address = e });
+            }
+            else
+            {
+                Emails = new BindingList<EmailEntry>();
+            }
+        }
+
+        public void RemoveEmail(string email)
+        {
+            if (Business != null)
+                Business.RemoveEmailAddress(email);
+            else if (Customer != null)
+                Customer.RemoveEmailAddress(email);
+            RefreshEmails();
+        }
+
+        public void AddEmail(string email)
+        {
+            if (Business != null)
+                Business.AddEmailAddress(email);
+            else if (Customer != null)
+                Customer.AddEmailAddress(email);
+            RefreshEmails();
+        }
+
+        public void UpdateEmail(string oldEmail, string newEmail)
+        {
+            if (Business != null)
+                Business.UpdateEmailAddress(oldEmail, newEmail);
+            else if (Customer != null)
+                Customer.UpdateEmailAddress(oldEmail, newEmail);
+            RefreshEmails();
         }
 
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
+
+        public class EmailEntry
+        {
+            public string Address { get; set; }
+        }
+}
 }
