@@ -102,14 +102,8 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessEmailAddressList != null)
             {
-                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
-                {
-                    BusinessToChange = viewModel.CurrentBusiness,
-                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
-                };
-
                 Hide();
-                navigation.ViewBusinessesEmailAddresses(pass);
+                navigation.ViewBusinessesEmailAddresses(viewModel.CurrentBusiness, null);
                 Show();
 
             }
@@ -120,14 +114,8 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessAddressList != null)
             {
-                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
-                {
-                    BusinessToChange = viewModel.CurrentBusiness,
-                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
-                };
-
                 Hide();
-                navigation.ViewBusinessesAddresses(pass);
+                navigation.ViewBusinessesAddresses(viewModel.CurrentBusiness, null);
                 Show();
             }
             else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
@@ -137,14 +125,8 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessPOBoxAddressList != null)
             {
-                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
-                {
-                    BusinessToChange = viewModel.CurrentBusiness,
-                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
-                };
-
                 Hide();
-                navigation.ViewBusinessesPOBoxAddresses(pass);
+                navigation.ViewBusinessesPOBoxAddresses(viewModel.CurrentBusiness, null);
                 Show();
             }
             else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
@@ -154,14 +136,8 @@ namespace QuoteSwift
         {
             if (viewModel.CurrentBusiness.BusinessTelephoneNumberList != null || viewModel.CurrentBusiness.BusinessCellphoneNumberList != null)
             {
-                var pass = new Pass(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList)
-                {
-                    BusinessToChange = viewModel.CurrentBusiness,
-                    ChangeSpecificObject = !updateBusinessInformationToolStripMenuItem.Enabled
-                };
-
                 Hide();
-                navigation.ViewBusinessesPhoneNumbers(pass);
+                navigation.ViewBusinessesPhoneNumbers(viewModel.CurrentBusiness, null);
                 Show();
             }
             else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
