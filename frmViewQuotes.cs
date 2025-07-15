@@ -26,9 +26,8 @@ namespace QuoteSwift
             if (viewModel.BusinessList != null && viewModel.BusinessList.Count > 0 && viewModel.PumpList != null && viewModel.BusinessList[0].BusinessCustomerList != null)
             {
                 Hide();
-                var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-                p = navigation.CreateNewQuote(p);
-                viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+                navigation.CreateNewQuote(appData);
+                viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
                 try
                 {
                     Show();
@@ -97,9 +96,8 @@ namespace QuoteSwift
         private void AddNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.AddCustomer(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.AddCustomer(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();
@@ -113,9 +111,8 @@ namespace QuoteSwift
         private void ViewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.ViewCustomers(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.ViewCustomers(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();
@@ -134,9 +131,8 @@ namespace QuoteSwift
         private void AddNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.AddBusiness(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.AddBusiness(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();
@@ -150,9 +146,8 @@ namespace QuoteSwift
         private void ViewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Hide();
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            p = navigation.ViewBusinesses(p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            navigation.ViewBusinesses(appData);
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             try
             {
                 Show();
@@ -188,13 +183,8 @@ namespace QuoteSwift
                 if (selected != null)
                 {
                     Hide();
-                    var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-                    p.QuoteTOChange = selected;
-                    p.ChangeSpecificObject = false;
-                    p = navigation.CreateNewQuote(p);
-                    p.QuoteTOChange = null;
-                    p.ChangeSpecificObject = false;
-                    viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+                    navigation.CreateNewQuote(appData, selected, false);
+                    viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
                     Show();
                 }
             }
@@ -208,13 +198,8 @@ namespace QuoteSwift
                 if (selected != null)
                 {
                     this.Hide();
-                    var p2 = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-                    p2.QuoteTOChange = selected;
-                    p2.ChangeSpecificObject = true;
-                    p2 = navigation.CreateNewQuote(p2);
-                    p2.QuoteTOChange = null;
-                    p2.ChangeSpecificObject = false;
-                    viewModel.UpdateData(p2.PassQuoteMap, p2.PassBusinessList, p2.PassPumpList, p2.PassPartList);
+                    navigation.CreateNewQuote(appData, selected, true);
+                    viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
                     this.Show();
                 }
             }
