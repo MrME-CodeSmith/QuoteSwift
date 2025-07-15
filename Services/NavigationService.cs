@@ -13,28 +13,29 @@ namespace QuoteSwift
             appData = data;
         }
 
-        public Pass CreateNewQuote(Pass pass)
+        public void CreateNewQuote(ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false)
         {
             var vm = new CreateQuoteViewModel(dataService);
-            vm.LoadData();
-            using (var form = new FrmCreateQuote(vm, pass))
+            using (var form = new FrmCreateQuote(vm, data, quoteToChange, changeSpecificObject))
             {
                 form.ShowDialog();
             }
-            return pass;
+            data.SaveAll();
         }
 
-        public Pass ViewAllQuotes(Pass pass)
+        public void ViewAllQuotes(ApplicationData data)
         {
             var vm = new QuotesViewModel(dataService);
-            vm.UpdateData(pass.PassQuoteMap, pass.PassBusinessList, pass.PassPumpList, pass.PassPartList);
-            vm.LoadData();
-            using (var form = new FrmViewQuotes(vm, this, appData))
+            vm.UpdateData(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList);
+            using (var form = new FrmViewQuotes(vm, this, data))
             {
                 form.ShowDialog();
             }
-            pass = new Pass(vm.QuoteMap, vm.BusinessList, vm.PumpList, vm.PartMap);
-            return pass;
+            data.QuoteMap = vm.QuoteMap;
+            data.BusinessList = vm.BusinessList;
+            data.PumpList = vm.PumpList;
+            data.PartList = vm.PartMap;
+            data.SaveAll();
         }
 
         public void ViewAllPumps(ApplicationData data)
@@ -135,6 +136,32 @@ namespace QuoteSwift
                 form.ShowDialog();
             }
             return pass;
+        }
+
+        public void AddCustomer(ApplicationData data)
+        {
+            var pass = AddCustomer(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
+            data.BusinessList = pass.PassBusinessList;
+            data.SaveAll();
+        }
+
+        public void ViewCustomers(ApplicationData data)
+        {
+            var pass = ViewCustomers(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
+            data.BusinessList = pass.PassBusinessList;
+        }
+
+        public void AddBusiness(ApplicationData data)
+        {
+            var pass = AddBusiness(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
+            data.BusinessList = pass.PassBusinessList;
+            data.SaveAll();
+        }
+
+        public void ViewBusinesses(ApplicationData data)
+        {
+            var pass = ViewBusinesses(new Pass(data.QuoteMap, data.BusinessList, data.PumpList, data.PartList));
+            data.BusinessList = pass.PassBusinessList;
         }
 
         public Pass ViewBusinessesAddresses(Pass pass)

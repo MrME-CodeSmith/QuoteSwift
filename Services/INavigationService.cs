@@ -4,8 +4,8 @@ namespace QuoteSwift
 {
     public interface INavigationService
     {
-        Pass CreateNewQuote(Pass pass);
-        Pass ViewAllQuotes(Pass pass);
+        void CreateNewQuote(ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false);
+        void ViewAllQuotes(ApplicationData data);
         void ViewAllPumps(ApplicationData data);
         void CreateNewPump(ApplicationData data);
         void ViewAllParts(ApplicationData data);
@@ -14,6 +14,10 @@ namespace QuoteSwift
         Pass ViewCustomers(Pass pass);
         Pass AddBusiness(Pass pass);
         Pass ViewBusinesses(Pass pass);
+        void AddCustomer(ApplicationData data);
+        void ViewCustomers(ApplicationData data);
+        void AddBusiness(ApplicationData data);
+        void ViewBusinesses(ApplicationData data);
         Pass ViewBusinessesAddresses(Pass pass);
         Pass ViewBusinessesPOBoxAddresses(Pass pass);
         Pass ViewBusinessesEmailAddresses(Pass pass);
