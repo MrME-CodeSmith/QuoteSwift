@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -14,12 +15,31 @@ namespace QuoteSwift
         Business businessToChange;
         bool changeSpecificObject;
         Business currentBusiness;
+        bool lastOperationSuccessful;
+        
+        public ICommand AddBusinessCommand { get; }
+        public ICommand UpdateBusinessCommand { get; }
+
+        public bool LastOperationSuccessful
+        {
+            get => lastOperationSuccessful;
+            private set
+            {
+                if (lastOperationSuccessful != value)
+                {
+                    lastOperationSuccessful = value;
+                    OnPropertyChanged(nameof(LastOperationSuccessful));
+                }
+            }
+        }
 
 
         public AddBusinessViewModel(IDataService service, IMessageService messageService)
         {
             dataService = service;
             this.messageService = messageService;
+            AddBusinessCommand = new RelayCommand(_ => LastOperationSuccessful = AddBusiness());
+            UpdateBusinessCommand = new RelayCommand(_ => LastOperationSuccessful = UpdateBusiness());
         }
 
         public IDataService DataService => dataService;

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -9,10 +10,21 @@ namespace QuoteSwift
         Customer customer;
         BindingList<EmailEntry> emails;
 
+        public ICommand AddEmailCommand { get; }
+        public ICommand RemoveEmailCommand { get; }
+        public ICommand UpdateEmailCommand { get; }
+
 
         public ManageEmailsViewModel(IDataService service)
         {
             dataService = service;
+            AddEmailCommand = new RelayCommand(e => AddEmail(e as string));
+            RemoveEmailCommand = new RelayCommand(e => RemoveEmail(e as string));
+            UpdateEmailCommand = new RelayCommand(p =>
+            {
+                if (p is object[] arr && arr.Length == 2 && arr[0] is string oldE && arr[1] is string newE)
+                    UpdateEmail(oldE, newE);
+            });
         }
 
         public IDataService DataService => dataService;

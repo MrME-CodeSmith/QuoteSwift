@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -8,6 +9,23 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INotificationService notificationService;
         Pump currentPump;
+        bool lastOperationSuccessful;
+
+        public ICommand AddPumpCommand { get; }
+        public ICommand UpdatePumpCommand { get; }
+
+        public bool LastOperationSuccessful
+        {
+            get => lastOperationSuccessful;
+            private set
+            {
+                if (lastOperationSuccessful != value)
+                {
+                    lastOperationSuccessful = value;
+                    OnPropertyChanged(nameof(LastOperationSuccessful));
+                }
+            }
+        }
 
         public BindingList<Pump> PumpList { get; private set; }
         public Dictionary<string, Part> PartMap { get; private set; }
@@ -23,6 +41,8 @@ namespace QuoteSwift
             SelectedMandatoryParts = new BindingList<Pump_Part>();
             SelectedNonMandatoryParts = new BindingList<Pump_Part>();
             RepairableItemNames = new HashSet<string>();
+            AddPumpCommand = new RelayCommand(_ => LastOperationSuccessful = AddPump());
+            UpdatePumpCommand = new RelayCommand(_ => LastOperationSuccessful = UpdatePump());
         }
 
         public IDataService DataService => dataService;

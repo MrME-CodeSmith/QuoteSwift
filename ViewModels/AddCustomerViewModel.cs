@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -11,6 +12,23 @@ namespace QuoteSwift
         Customer customerToChange;
         bool changeSpecificObject;
         Customer currentCustomer;
+        bool lastOperationSuccessful;
+
+        public ICommand AddCustomerCommand { get; }
+        public ICommand UpdateCustomerCommand { get; }
+
+        public bool LastOperationSuccessful
+        {
+            get => lastOperationSuccessful;
+            private set
+            {
+                if (lastOperationSuccessful != value)
+                {
+                    lastOperationSuccessful = value;
+                    OnPropertyChanged(nameof(LastOperationSuccessful));
+                }
+            }
+        }
 
 
         public AddCustomerViewModel(IDataService service, INotificationService notifier, IMessageService messageService)
@@ -19,6 +37,12 @@ namespace QuoteSwift
             notificationService = notifier;
             this.messageService = messageService;
             currentCustomer = new Customer();
+            AddCustomerCommand = new RelayCommand(p => LastOperationSuccessful = AddCustomer(p as Business));
+            UpdateCustomerCommand = new RelayCommand(p =>
+            {
+                if (p is object[] arr && arr.Length == 2 && arr[0] is Business b && arr[1] is string name)
+                    LastOperationSuccessful = UpdateCustomer(b, name);
+            });
         }
 
         public IDataService DataService => dataService;

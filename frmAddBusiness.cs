@@ -36,7 +36,8 @@ namespace QuoteSwift
         {
             if (!viewModel.ChangeSpecificObject)
             {
-                if (viewModel.AddBusiness())
+                viewModel.AddBusinessCommand.Execute(null);
+                if (viewModel.LastOperationSuccessful)
                 {
                     messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been added.", "INFORMATION - Business Successfully Added");
                     viewModel.CurrentBusiness = new Business { BusinessLegalDetails = new Legal("", "") };
@@ -46,7 +47,8 @@ namespace QuoteSwift
             }
             else
             {
-                if (viewModel.UpdateBusiness())
+                viewModel.UpdateBusinessCommand.Execute(null);
+                if (viewModel.LastOperationSuccessful)
                 {
                     messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been successfully updated.", "INFORMATION - Business Successfully Updated");
                     ConvertToViewOnly();

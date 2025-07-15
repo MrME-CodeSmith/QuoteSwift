@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -9,6 +10,8 @@ namespace QuoteSwift
         readonly IMessageService messageService;
         string originalEmail;
 
+        public ICommand UpdateEmailCommand { get; }
+
 
         public EditEmailAddressViewModel(Business business = null, Customer customer = null, string email = null, IMessageService messageService = null)
         {
@@ -17,6 +20,7 @@ namespace QuoteSwift
             originalEmail = email ?? string.Empty;
             this.messageService = messageService;
             CurrentEmail = originalEmail;
+            UpdateEmailCommand = new RelayCommand(_ => UpdateEmail());
         }
 
         public string CurrentEmail { get; set; }

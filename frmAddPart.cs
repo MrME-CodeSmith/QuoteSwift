@@ -58,7 +58,8 @@ namespace QuoteSwift
 
             bool updating = viewModel.ChangeSpecificObject;
 
-            if (!viewModel.AddOrUpdatePart())
+            viewModel.SavePartCommand.Execute(null);
+            if (!viewModel.LastOperationSuccessful)
             {
                 messageService.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
                 return;

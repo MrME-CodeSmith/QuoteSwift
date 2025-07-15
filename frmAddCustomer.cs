@@ -50,7 +50,8 @@ namespace QuoteSwift
                 viewModel.CurrentCustomer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
                 viewModel.CurrentCustomer.VendorNumber = mtxtVendorNumber.Text;
 
-                if (viewModel.AddCustomer(linkBusiness))
+                viewModel.AddCustomerCommand.Execute(linkBusiness);
+                if (viewModel.LastOperationSuccessful)
                 {
                     messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
                     ResetScreenInput();
@@ -64,7 +65,8 @@ namespace QuoteSwift
                 viewModel.CurrentCustomer.VendorNumber = mtxtVendorNumber.Text;
 
                 Business container = GetSelectedBusiness();
-                if (viewModel.UpdateCustomer(container, oldName))
+                viewModel.UpdateCustomerCommand.Execute(new object[] { container, oldName });
+                if (viewModel.LastOperationSuccessful)
                 {
                     messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
                     ConvertToViewOnly();
