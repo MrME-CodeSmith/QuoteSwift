@@ -11,18 +11,20 @@ namespace QuoteSwift
         readonly ViewBusinessesViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
-        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null)
+        public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.appData = appData;
+            this.messageService = messageService;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
@@ -37,7 +39,7 @@ namespace QuoteSwift
 
             if (Business == null)
             {
-                MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                messageService.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
                 return;
             }
 
@@ -74,10 +76,10 @@ namespace QuoteSwift
 
             if (business != null && appData.BusinessList != null)
             {
-                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
+                if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
                 {
                     appData.BusinessList.Remove(business);
-                    MainProgramCode.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
+                    messageService.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
 
                     LoadInformation();
                 }
@@ -126,7 +128,7 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

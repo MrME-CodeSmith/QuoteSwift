@@ -12,13 +12,15 @@ namespace QuoteSwift
         readonly QuotesViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
-        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
+        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
+            this.messageService = messageService;
         }
 
         private void BtnCreateNewQuote_Click(object sender, EventArgs e)
@@ -39,7 +41,7 @@ namespace QuoteSwift
             }
             else
             {
-                MainProgramCode.ShowError("Please ensure that the following information is provided before creating a quote:\n" +
+                messageService.ShowError("Please ensure that the following information is provided before creating a quote:\n" +
                                           ">  Business Information.\n" +
                                           ">  Business' Customer's Information.\n" +
                                           ">  Pump Information.", "ERROR - Prerequisites Not Met");
@@ -48,7 +50,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
                 MainProgramCode.CloseApplication(true,
                     viewModel.BusinessList,

@@ -7,18 +7,20 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly ApplicationData appData;
         readonly INotificationService notificationService;
+        readonly IMessageService messageService;
 
-        public NavigationService(ApplicationData data, INotificationService notifier)
+        public NavigationService(ApplicationData data, INotificationService notifier, IMessageService messenger)
         {
-            dataService = new FileDataService();
+            dataService = new FileDataService(messenger);
             appData = data;
             notificationService = notifier;
+            messageService = messenger;
         }
 
         public void CreateNewQuote(ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false)
         {
             var vm = new CreateQuoteViewModel(dataService);
-            using (var form = new FrmCreateQuote(vm, appData, quoteToChange, changeSpecificObject))
+            using (var form = new FrmCreateQuote(vm, appData, quoteToChange, changeSpecificObject, messageService))
             {
                 form.ShowDialog();
             }
@@ -29,7 +31,7 @@ namespace QuoteSwift
         {
             var vm = new QuotesViewModel(dataService);
             vm.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
-            using (var form = new FrmViewQuotes(vm, this, appData))
+            using (var form = new FrmViewQuotes(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -44,7 +46,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPumpViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewPump(vm, this, appData))
+            using (var form = new FrmViewPump(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -55,7 +57,7 @@ namespace QuoteSwift
             var vm = new AddPumpViewModel(dataService, notificationService);
             vm.UpdateData(appData.PumpList, appData.PartList);
             vm.LoadData();
-            using (var form = new FrmAddPump(vm, this, appData))
+            using (var form = new FrmAddPump(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -68,7 +70,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPartsViewModel(dataService);
             vm.UpdateData(appData.PartList);
-            using (var form = new FrmViewParts(vm, this, appData))
+            using (var form = new FrmViewParts(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -78,7 +80,7 @@ namespace QuoteSwift
         {
             var vm = new AddPartViewModel(dataService, notificationService);
             vm.UpdateData(appData.PartList, appData.PumpList, partToChange, changeSpecificObject);
-            using (var form = new FrmAddPart(vm, this, appData))
+            using (var form = new FrmAddPart(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -90,9 +92,9 @@ namespace QuoteSwift
 
         public void AddCustomer(ApplicationData data, Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddCustomerViewModel(dataService, notificationService);
+            var vm = new AddCustomerViewModel(dataService, notificationService, messageService);
             vm.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
-            using (var form = new FrmAddCustomer(vm, this, appData, businessToChange))
+            using (var form = new FrmAddCustomer(vm, this, appData, businessToChange, messageService))
             {
                 form.ShowDialog();
             }
@@ -103,7 +105,7 @@ namespace QuoteSwift
         {
             var vm = new ViewCustomersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewCustomers(vm, this, appData))
+            using (var form = new FrmViewCustomers(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -111,10 +113,10 @@ namespace QuoteSwift
 
         public void AddBusiness(ApplicationData data, Business businessToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddBusinessViewModel(dataService);
+            var vm = new AddBusinessViewModel(dataService, messageService);
             vm.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
             vm.LoadData();
-            using (var form = new FrmAddBusiness(vm, this, appData))
+            using (var form = new FrmAddBusiness(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -126,7 +128,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewAllBusinesses(vm, this, appData))
+            using (var form = new FrmViewAllBusinesses(vm, this, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -136,7 +138,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewBusinessAddresses(vm, this, appData, business, customer))
+            using (var form = new FrmViewBusinessAddresses(vm, this, appData, business, customer, messageService))
             {
                 form.ShowDialog();
             }
@@ -146,7 +148,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPOBoxAddressesViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewPOBoxAddresses(vm, this, appData, business, customer))
+            using (var form = new FrmViewPOBoxAddresses(vm, this, appData, business, customer, messageService))
             {
                 form.ShowDialog();
             }
@@ -156,7 +158,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManageAllEmails(vm, this, appData, business, customer))
+            using (var form = new FrmManageAllEmails(vm, this, appData, business, customer, messageService))
             {
                 form.ShowDialog();
             }
@@ -166,7 +168,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmManagingPhoneNumbers(vm, this, appData, business, customer))
+            using (var form = new FrmManagingPhoneNumbers(vm, this, appData, business, customer, messageService))
             {
                 form.ShowDialog();
             }
@@ -174,8 +176,8 @@ namespace QuoteSwift
 
         public void EditBusinessAddress(Business business = null, Customer customer = null, Address address = null)
         {
-            var vm = new EditBusinessAddressViewModel(business, customer, address);
-            using (var form = new FrmEditBusinessAddress(vm, appData))
+            var vm = new EditBusinessAddressViewModel(business, customer, address, messageService);
+            using (var form = new FrmEditBusinessAddress(vm, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -183,8 +185,8 @@ namespace QuoteSwift
 
         public void EditBusinessEmailAddress(Business business = null, Customer customer = null, string email = "")
         {
-            var vm = new EditEmailAddressViewModel(business, customer, email);
-            using (var form = new FrmEditEmailAddress(vm, appData))
+            var vm = new EditEmailAddressViewModel(business, customer, email, messageService);
+            using (var form = new FrmEditEmailAddress(vm, appData, messageService))
             {
                 form.ShowDialog();
             }
@@ -192,8 +194,8 @@ namespace QuoteSwift
 
         public void EditPhoneNumber(Business business = null, Customer customer = null, string number = "")
         {
-            var vm = new EditPhoneNumberViewModel(business, customer, number);
-            using (var form = new FrmEditPhoneNumber(vm, appData))
+            var vm = new EditPhoneNumberViewModel(business, customer, number, messageService);
+            using (var form = new FrmEditPhoneNumber(vm, appData, messageService))
             {
                 form.ShowDialog();
             }

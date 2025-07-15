@@ -6,6 +6,7 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
+        readonly IMessageService messageService;
         BindingList<Business> businessList;
         Customer customerToChange;
         bool changeSpecificObject;
@@ -13,10 +14,11 @@ namespace QuoteSwift
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AddCustomerViewModel(IDataService service, INotificationService notifier)
+        public AddCustomerViewModel(IDataService service, INotificationService notifier, IMessageService messageService)
         {
             dataService = service;
             notificationService = notifier;
+            this.messageService = messageService;
             currentCustomer = new Customer();
         }
 
@@ -81,13 +83,13 @@ namespace QuoteSwift
         {
             if (container == null)
             {
-                MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                messageService.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
                 return false;
             }
 
             if (container.CustomerMap.ContainsKey(CurrentCustomer.CustomerCompanyName))
             {
-                MainProgramCode.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
+                messageService.ShowError("This customer has already been added previously.\nHINT: Customer Name,VAT Number and Registration Number should be unique", "ERROR - Customer Already Added");
                 return false;
             }
 
@@ -102,13 +104,13 @@ namespace QuoteSwift
         {
             if (container == null)
             {
-                MainProgramCode.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
+                messageService.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
                 return false;
             }
 
             if (container.CustomerMap.TryGetValue(CurrentCustomer.CustomerCompanyName, out Customer existing) && existing != CustomerToChange)
             {
-                MainProgramCode.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
+                messageService.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
                 CurrentCustomer.CustomerCompanyName = oldName;
                 return false;
             }
@@ -125,7 +127,7 @@ namespace QuoteSwift
             string key = StringUtil.NormalizeKey(address.AddressDescription);
             if (CurrentCustomer.DeliveryAddressMap.ContainsKey(key))
             {
-                MainProgramCode.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
+                messageService.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
                 return false;
             }
             CurrentCustomer.AddDeliveryAddress(address);
@@ -138,7 +140,7 @@ namespace QuoteSwift
             string key = StringUtil.NormalizeKey(address.AddressDescription);
             if (CurrentCustomer.POBoxMap.ContainsKey(key))
             {
-                MainProgramCode.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
+                messageService.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
                 return false;
             }
             CurrentCustomer.AddPOBoxAddress(address);
@@ -150,7 +152,7 @@ namespace QuoteSwift
             bool added = false;
             if (string.IsNullOrWhiteSpace(telephone) && string.IsNullOrWhiteSpace(cellphone))
             {
-                MainProgramCode.ShowError("a Valid Phone Number/s were not provided, please provide at least one valid phone number.", "ERROR - Invalid Number/s Provided");
+                messageService.ShowError("a Valid Phone Number/s were not provided, please provide at least one valid phone number.", "ERROR - Invalid Number/s Provided");
                 return false;
             }
 
@@ -161,7 +163,7 @@ namespace QuoteSwift
             }
             else if (!string.IsNullOrWhiteSpace(telephone) && CurrentCustomer.TelephoneNumbers.Contains(telephone))
             {
-                MainProgramCode.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
+                messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
             }
 
             if (!string.IsNullOrWhiteSpace(cellphone) && cellphone.Length >= 10 && !CurrentCustomer.CellphoneNumbers.Contains(cellphone))
@@ -171,7 +173,7 @@ namespace QuoteSwift
             }
             else if (!string.IsNullOrWhiteSpace(cellphone) && CurrentCustomer.CellphoneNumbers.Contains(cellphone))
             {
-                MainProgramCode.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
+                messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
             }
 
             return added;

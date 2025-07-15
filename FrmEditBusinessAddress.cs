@@ -6,18 +6,20 @@ namespace QuoteSwift
     public partial class FrmEditBusinessAddress : Form
     {
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
         readonly EditBusinessAddressViewModel viewModel;
 
-        public FrmEditBusinessAddress(EditBusinessAddressViewModel viewModel, ApplicationData data = null)
+        public FrmEditBusinessAddress(EditBusinessAddressViewModel viewModel, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             appData = data;
+            this.messageService = messageService;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void FrmEditBusinessAddress_Load(object sender, EventArgs e)
@@ -48,14 +50,14 @@ namespace QuoteSwift
 
             if (viewModel.UpdateAddress(updated))
             {
-                MainProgramCode.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
+                messageService.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
                 Close();
             }
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 appData.SaveAll();
         }
 

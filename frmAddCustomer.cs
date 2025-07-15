@@ -11,15 +11,17 @@ namespace QuoteSwift
         readonly AddCustomerViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
         Business Container;
 
-        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, Business container = null)
+        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, Business container = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.appData = appData;
+            this.messageService = messageService;
             this.Container = container;
             viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
 
@@ -29,7 +31,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
                 MainProgramCode.CloseApplication(true,
                     appData?.BusinessList,
@@ -50,7 +52,7 @@ namespace QuoteSwift
 
                 if (viewModel.AddCustomer(linkBusiness))
                 {
-                    MainProgramCode.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
+                    messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
                     ResetScreenInput();
                 }
             }
@@ -64,7 +66,7 @@ namespace QuoteSwift
                 Business container = GetSelectedBusiness();
                 if (viewModel.UpdateCustomer(container, oldName))
                 {
-                    MainProgramCode.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
+                    messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
                     ConvertToViewOnly();
                 }
             }
@@ -98,7 +100,7 @@ namespace QuoteSwift
             }
             else // Undefined Use - Show ERROR
             {
-                MainProgramCode.ShowError("The form was activated without the correct parameters to have an achievable goal.\nThe Form's input parameters will be disabled to avoid possible data corruption.", "ERROR - Undefined Form Use Called");
+                messageService.ShowError("The form was activated without the correct parameters to have an achievable goal.\nThe Form's input parameters will be disabled to avoid possible data corruption.", "ERROR - Undefined Form Use Called");
                 DisableMainComponents();
             }
         }
@@ -110,7 +112,7 @@ namespace QuoteSwift
             {
                 if (viewModel.AddDeliveryAddress(addr))
                 {
-                    MainProgramCode.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
+                    messageService.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
                     ClearCustomerAddressInput();
                 }
             }
@@ -124,7 +126,7 @@ namespace QuoteSwift
             {
                 if (viewModel.AddPOBoxAddress(po))
                 {
-                    MainProgramCode.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
+                    messageService.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                     ClearPOBoxAddressInput();
                 }
             }
@@ -136,13 +138,13 @@ namespace QuoteSwift
             {
                 mtxtTelephoneNumber.ResetText();
                 mtxtCellphoneNumber.ResetText();
-                MainProgramCode.ShowInformation("Successfully added the customer phone number/s", "INFORMATION - Customer Phone Number/s Added Successfully");
+                messageService.ShowInformation("Successfully added the customer phone number/s", "INFORMATION - Customer Phone Number/s Added Successfully");
             }
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void BtnViewAll_Click(object sender, EventArgs e)
@@ -153,7 +155,7 @@ namespace QuoteSwift
                 navigation.ViewBusinessesPhoneNumbers(null, viewModel.CurrentCustomer);
                 Show();
             }
-            else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Customer Phone Numbers");
+            else messageService.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Customer Phone Numbers");
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
@@ -164,7 +166,7 @@ namespace QuoteSwift
                 navigation.ViewBusinessesPOBoxAddresses(null, viewModel.CurrentCustomer);
                 Show();
             }
-            else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer P.O.Box Addresses");
+            else messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer P.O.Box Addresses");
         }
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
@@ -176,7 +178,7 @@ namespace QuoteSwift
                 Show();
 
             }
-            else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Email Addresses");
+            else messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Email Addresses");
         }
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
@@ -187,7 +189,7 @@ namespace QuoteSwift
                 navigation.ViewBusinessesAddresses(null, viewModel.CurrentCustomer);
                 Show();
             }
-            else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Addresses");
+            else messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Addresses");
         }
 
         private void UpdatedCustomerInformationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -201,7 +203,7 @@ namespace QuoteSwift
         {
             if (viewModel.AddEmailAddress(mtxtEmailAddress.Text))
             {
-                MainProgramCode.ShowInformation("Successfully added the customer Email address", "INFORMATION - Customer Email Address Added Successfully");
+                messageService.ShowInformation("Successfully added the customer Email address", "INFORMATION - Customer Email Address Added Successfully");
                 mtxtEmailAddress.ResetText();
             }
         }

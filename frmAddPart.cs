@@ -11,13 +11,15 @@ namespace QuoteSwift
         readonly INavigationService navigation;
 
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
-        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, ApplicationData data = null)
+        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
+            this.messageService = messageService;
             viewModel.Initialize();
             SetupBindings();
         }
@@ -40,7 +42,7 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
@@ -58,13 +60,13 @@ namespace QuoteSwift
 
             if (!viewModel.AddOrUpdatePart())
             {
-                MainProgramCode.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
+                messageService.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
                 return;
             }
 
             if (updating)
             {
-                MainProgramCode.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
+                messageService.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
                 viewModel.ChangeSpecificObject = false;
                 Close();
             }
@@ -73,10 +75,10 @@ namespace QuoteSwift
                 string info = viewModel.CurrentPart.MandatoryPart ?
                     " successfully added to the mandatory part list." :
                     " successfully added to the non-mandatory part list.";
-                MainProgramCode.ShowInformation(viewModel.CurrentPart.PartName + info, "INFORMATION - Part Added Success");
+                messageService.ShowInformation(viewModel.CurrentPart.PartName + info, "INFORMATION - Part Added Success");
                 if (viewModel.SelectedPump != null)
                 {
-                    MainProgramCode.ShowInformation(viewModel.CurrentPart.PartName + " successfully added to " + viewModel.SelectedPump.PumpName + " pump the part list.", "INFORMATION - Part Added  To Pump Success");
+                    messageService.ShowInformation(viewModel.CurrentPart.PartName + " successfully added to " + viewModel.SelectedPump.PumpName + " pump the part list.", "INFORMATION - Part Added  To Pump Success");
                 }
                 ClearInput();
             }
@@ -106,15 +108,15 @@ namespace QuoteSwift
             if (result == DialogResult.OK)
             {
                 OfdOpenCSVFile.ShowDialog();
-                bool updateDup = MainProgramCode.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part");
+                bool updateDup = messageService.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part");
                 try
                 {
                     viewModel.ImportPartsFromCsv(OfdOpenCSVFile.FileName, updateDup);
-                    MainProgramCode.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
+                    messageService.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
                 }
                 catch
                 {
-                    MainProgramCode.ShowError("The provided CSV File's format is incorrect, please try again once the format has been corrected.", "ERROR - CSV File Format Incorrect");
+                    messageService.ShowError("The provided CSV File's format is incorrect, please try again once the format has been corrected.", "ERROR - CSV File Format Incorrect");
                 }
             }
             else return;
@@ -128,7 +130,7 @@ namespace QuoteSwift
 
         private void ResetInputToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to reset the current screen to it's default values?", "REQUEST - Screen Defaults Reset"))
+            if (messageService.RequestConfirmation("Are you sure you want to reset the current screen to it's default values?", "REQUEST - Screen Defaults Reset"))
             {
                 ClearInput();
                 NudQuantity.Enabled = false;
@@ -138,7 +140,7 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
         }
 
         private void FrmAddPart_Load(object sender, EventArgs e)
@@ -205,7 +207,7 @@ namespace QuoteSwift
         private void UpdatePartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!viewModel.ChangeSpecificObject)
-                if (MainProgramCode.RequestConfirmation("You are currently only viewing " + viewModel.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
+                if (messageService.RequestConfirmation("You are currently only viewing " + viewModel.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
                 {
                     ReadWriteComponents();
                     updatePartToolStripMenuItem.Enabled = false;

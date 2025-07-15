@@ -6,15 +6,17 @@ namespace QuoteSwift
     {
         readonly Business business;
         readonly Customer customer;
+        readonly IMessageService messageService;
         string originalNumber;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "")
+        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null)
         {
             this.business = business;
             this.customer = customer;
             originalNumber = number ?? string.Empty;
+            this.messageService = messageService;
             CurrentNumber = originalNumber;
         }
 
@@ -33,7 +35,7 @@ namespace QuoteSwift
                 bool isTel = business.TelephoneNumbers.Contains(originalNumber);
                 if ((business.CellphoneNumbers.Contains(CurrentNumber) || business.TelephoneNumbers.Contains(CurrentNumber)) && CurrentNumber != originalNumber)
                 {
-                    MainProgramCode.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
+                    messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
                     return false;
                 }
                 if (isCell)
@@ -47,7 +49,7 @@ namespace QuoteSwift
                 bool isTel = customer.TelephoneNumbers.Contains(originalNumber);
                 if ((customer.CellphoneNumbers.Contains(CurrentNumber) || customer.TelephoneNumbers.Contains(CurrentNumber)) && CurrentNumber != originalNumber)
                 {
-                    MainProgramCode.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
+                    messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
                     return false;
                 }
                 if (isCell)
@@ -63,7 +65,7 @@ namespace QuoteSwift
         {
             if (string.IsNullOrWhiteSpace(number) || number.Length < 10)
             {
-                MainProgramCode.ShowError("A valid phone number was not provided.", "ERROR - Invalid Number Provided");
+                messageService.ShowError("A valid phone number was not provided.", "ERROR - Invalid Number Provided");
                 return false;
             }
             return true;

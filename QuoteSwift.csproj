@@ -231,6 +231,8 @@
     <Compile Include="Services\ApplicationData.cs" />
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\MessageBoxNotificationService.cs" />
+    <Compile Include="Services\IMessageService.cs" />
+    <Compile Include="Services\MessageBoxService.cs" />
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="ViewModels\QuotesViewModel.cs" />

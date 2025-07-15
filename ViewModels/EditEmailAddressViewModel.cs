@@ -6,15 +6,17 @@ namespace QuoteSwift
     {
         readonly Business business;
         readonly Customer customer;
+        readonly IMessageService messageService;
         string originalEmail;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public EditEmailAddressViewModel(Business business = null, Customer customer = null, string email = null)
+        public EditEmailAddressViewModel(Business business = null, Customer customer = null, string email = null, IMessageService messageService = null)
         {
             this.business = business;
             this.customer = customer;
             originalEmail = email ?? string.Empty;
+            this.messageService = messageService;
             CurrentEmail = originalEmail;
         }
 
@@ -31,7 +33,7 @@ namespace QuoteSwift
             {
                 if (business.EmailAddresses.Contains(CurrentEmail) && CurrentEmail != originalEmail)
                 {
-                    MainProgramCode.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
+                    messageService.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
                     return false;
                 }
                 business.UpdateEmailAddress(originalEmail, CurrentEmail);
@@ -40,7 +42,7 @@ namespace QuoteSwift
             {
                 if (customer.EmailAddresses.Contains(CurrentEmail) && CurrentEmail != originalEmail)
                 {
-                    MainProgramCode.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
+                    messageService.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
                     return false;
                 }
                 customer.UpdateEmailAddress(originalEmail, CurrentEmail);
@@ -53,7 +55,7 @@ namespace QuoteSwift
         {
             if (string.IsNullOrWhiteSpace(email) || email.Length <= 3 || !email.Contains("@"))
             {
-                MainProgramCode.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
+                messageService.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
                 return false;
             }
             return true;

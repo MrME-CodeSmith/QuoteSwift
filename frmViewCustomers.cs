@@ -10,18 +10,20 @@ namespace QuoteSwift
         readonly ViewCustomersViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
-        public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null)
+        public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.appData = appData;
+            this.messageService = messageService;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
@@ -36,7 +38,7 @@ namespace QuoteSwift
 
             if (customer == null)
             {
-                MainProgramCode.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
+                messageService.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
                 return;
             }
 
@@ -74,10 +76,10 @@ namespace QuoteSwift
 
             if (customer != null && container != null)
             {
-                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?", "REQUEST - Deletion Request"))
+                if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?", "REQUEST - Deletion Request"))
                 {
                     container.RemoveCustomer(customer);
-                    MainProgramCode.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
+                    messageService.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
 
                     LoadInformation();
                 }
@@ -140,7 +142,7 @@ namespace QuoteSwift
             {
                 if (Container.CustomerMap.TryGetValue(New.CustomerCompanyName, out Customer existing) && existing != Original)
                 {
-                    MainProgramCode.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
+                    messageService.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
                     return false;
                 }
 
@@ -203,7 +205,7 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.", "REQUEST - Cancellation")) Close();
+            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

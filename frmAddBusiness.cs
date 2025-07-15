@@ -11,18 +11,20 @@ namespace QuoteSwift
         readonly AddBusinessViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
 
-        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null)
+        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.appData = appData;
+            this.messageService = messageService;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
                 MainProgramCode.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
@@ -36,7 +38,7 @@ namespace QuoteSwift
             {
                 if (viewModel.AddBusiness())
                 {
-                    MainProgramCode.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been added.", "INFORMATION - Business Successfully Added");
+                    messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been added.", "INFORMATION - Business Successfully Added");
                     viewModel.CurrentBusiness = new Business { BusinessLegalDetails = new Legal("", "") };
                     SetupBindings();
                     ResetScreenInput();
@@ -46,7 +48,7 @@ namespace QuoteSwift
             {
                 if (viewModel.UpdateBusiness())
                 {
-                    MainProgramCode.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been successfully updated.", "INFORMATION - Business Successfully Updated");
+                    messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been successfully updated.", "INFORMATION - Business Successfully Updated");
                     ConvertToViewOnly();
                 }
             }
@@ -58,7 +60,7 @@ namespace QuoteSwift
                                           "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
             if (viewModel.AddPOBoxAddress(address))
             {
-                MainProgramCode.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
+                messageService.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                 ClearPOBoxAddressInput();
             }
         }
@@ -69,7 +71,7 @@ namespace QuoteSwift
                                           txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
             if (viewModel.AddAddress(address))
             {
-                MainProgramCode.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
+                messageService.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
                 ClearBusinessAddressInput();
             }
         }
@@ -78,7 +80,7 @@ namespace QuoteSwift
         {
             if (viewModel.AddPhoneNumber(mtxtTelephoneNumber.Text, mtxtCellphoneNumber.Text))
             {
-                MainProgramCode.ShowInformation("Successfully added the business phone number/s", "INFORMATION - Business Phone Number/s Added Successfully");
+                messageService.ShowInformation("Successfully added the business phone number/s", "INFORMATION - Business Phone Number/s Added Successfully");
                 mtxtTelephoneNumber.ResetText();
                 mtxtCellphoneNumber.ResetText();
             }
@@ -86,14 +88,14 @@ namespace QuoteSwift
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
         private void BtnAddBusinessEmail_Click(object sender, EventArgs e)
         {
             if (viewModel.AddEmailAddress(mtxtEmail.Text))
             {
-                MainProgramCode.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
+                messageService.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
                 mtxtEmail.ResetText();
             }
         }
@@ -107,7 +109,7 @@ namespace QuoteSwift
                 Show();
 
             }
-            else MainProgramCode.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
+            else messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
         }
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
@@ -118,7 +120,7 @@ namespace QuoteSwift
                 navigation.ViewBusinessesAddresses(viewModel.CurrentBusiness, null);
                 Show();
             }
-            else MainProgramCode.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
+            else messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
@@ -129,7 +131,7 @@ namespace QuoteSwift
                 navigation.ViewBusinessesPOBoxAddresses(viewModel.CurrentBusiness, null);
                 Show();
             }
-            else MainProgramCode.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
+            else messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
         }
 
         private void BtnViewAll_Click(object sender, EventArgs e)
@@ -140,7 +142,7 @@ namespace QuoteSwift
                 navigation.ViewBusinessesPhoneNumbers(viewModel.CurrentBusiness, null);
                 Show();
             }
-            else MainProgramCode.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
+            else messageService.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
         }
 
         private void FrmAddBusiness_Load(object sender, EventArgs e)
@@ -161,7 +163,7 @@ namespace QuoteSwift
             }
             else // Undefined Use - Show ERROR
             {
-                MainProgramCode.ShowError("The form was activated without the correct parameters to have an achievable goal.\nThe Form's input parameters will be disabled to avoid possible data corruption.", "ERROR - Undefined Form Use Called");
+                messageService.ShowError("The form was activated without the correct parameters to have an achievable goal.\nThe Form's input parameters will be disabled to avoid possible data corruption.", "ERROR - Undefined Form Use Called");
                 DisableMainComponents();
             }
 

@@ -13,22 +13,24 @@ namespace QuoteSwift
         readonly ManagePhoneNumbersViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly IMessageService messageService;
         readonly Business business;
         readonly Customer customer;
 
-        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null)
+        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
+            this.messageService = messageService;
             this.business = business;
             this.customer = customer;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
+            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
                 appData.SaveAll();
                 Application.Exit();
@@ -121,18 +123,18 @@ namespace QuoteSwift
 
             if (SelectedNumber != "")
             {
-                if (MainProgramCode.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
+                if (messageService.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
                 {
                     if (business != null && business.BusinessTelephoneNumberList != null)
                     {
                         business.RemoveTelephoneNumber(SelectedNumber);
-                        MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
+                        messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                     }
                     else if (customer != null && customer.CustomerTelephoneNumberList != null)
                     {
                         customer.RemoveTelephoneNumber(SelectedNumber);
-                        MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
+                        messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                     }
 
@@ -141,7 +143,7 @@ namespace QuoteSwift
             }
             else
             {
-                MainProgramCode.ShowError("The current selection is invalid.\nPlease choose a valid number from the list.", "ERROR - Invalid Selection");
+                messageService.ShowError("The current selection is invalid.\nPlease choose a valid number from the list.", "ERROR - Invalid Selection");
             }
         }
 
@@ -157,13 +159,13 @@ namespace QuoteSwift
                 if (business != null && business.BusinessCellphoneNumberList != null)
                 {
                     business.RemoveCellphoneNumber(SelectedNumber);
-                    MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
+                    messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                 }
                 else if (customer != null && customer.CustomerCellphoneNumberList != null)
                 {
                     customer.RemoveCellphoneNumber(SelectedNumber);
-                    MainProgramCode.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
+                    messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
 
                 }
 
@@ -171,13 +173,13 @@ namespace QuoteSwift
             }
             else
             {
-                MainProgramCode.ShowError("The current selection is invalid.\nPlease choose a valid number from the list.", "ERROR - Invalid Selection");
+                messageService.ShowError("The current selection is invalid.\nPlease choose a valid number from the list.", "ERROR - Invalid Selection");
             }
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (MainProgramCode.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
+            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
         }
 
         string GetNumberSelection(IReadOnlyList<string> b, ref DataGridView d)

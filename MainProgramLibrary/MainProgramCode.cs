@@ -39,33 +39,6 @@ namespace QuoteSwift
             return null;
         }
 
-        /** Message Box Custom Functions */
-
-
-
-        //Confirmation Request:
-
-        public static bool RequestConfirmation(string text, string caption)
-        {
-            DialogResult MessageBoxResult = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            return MessageBoxResult == DialogResult.Yes;
-        }
-
-        public static void ShowError(string text, string caption)
-        {
-            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-        public static void ShowInformation(string text, string caption)
-        {
-            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-
-        /*********************************/
-
-
         /** Serialization Methods: */
 
         //Read file into byte Array
@@ -81,10 +54,6 @@ namespace QuoteSwift
             }
             catch (FileNotFoundException)
             {
-                if (FileName != "ExportQuote.json")
-                    if (MainProgramCode.RequestConfirmation(FileName + " could not be found.\nWould you like to continue the execution? (Recommended for first launch)", "REQUEST - Execution Continuation")) return Data;
-                MainProgramCode.ShowError(FileName + " Could not be found, please contact the developer to fix this issue.", "ERROR - " + FileName + " Not Found");
-                
             }
             catch
             {
@@ -422,7 +391,6 @@ namespace QuoteSwift
                 {
                     while (ex != null)
                     {
-                        ShowError(ex.Message, "ERROR Occurred");
                         ex = ex.InnerException;
                     }
                 }
