@@ -12,9 +12,12 @@ namespace QuoteSwift
         static void Main()
         {
             IDataService dataService = new FileDataService();
+            var appData = new ApplicationData(dataService);
+            appData.Load();
+
             var navigation = new NavigationService(dataService);
             QuotesViewModel viewModel = new QuotesViewModel(dataService);
-            viewModel.LoadData();
+            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
