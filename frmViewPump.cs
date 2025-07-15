@@ -40,7 +40,7 @@ namespace QuoteSwift // Repair Quote Swift
 
                 var pToChange = appData.PumpList.ElementAt(iGridSelection);
                 Hide();
-                navigation.CreateNewPump(appData);
+                navigation.CreateNewPump();
                 Show();
 
                 viewModel.RepairableItemNames = new HashSet<string>(appData.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName)));
@@ -56,7 +56,7 @@ namespace QuoteSwift // Repair Quote Swift
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.CreateNewPump(appData);
+            navigation.CreateNewPump();
             viewModel.RepairableItemNames = new HashSet<string>(appData.PumpList.Select(pu => StringUtil.NormalizeKey(pu.PumpName)));
             Show();
         }

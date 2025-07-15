@@ -42,7 +42,7 @@ namespace QuoteSwift
                 return;
             }
 
-            navigation.AddCustomer(appData, container, customer, false);
+            navigation.AddCustomer(container, customer, false);
 
             LoadInformation();
 
@@ -52,7 +52,7 @@ namespace QuoteSwift
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.AddCustomer(appData);
+            navigation.AddCustomer();
             Show();
 
             LoadInformation();

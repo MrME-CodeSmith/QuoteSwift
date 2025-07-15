@@ -38,7 +38,7 @@ namespace QuoteSwift
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
             Hide();
-            navigation.AddNewPart(appData);
+            navigation.AddNewPart();
             Show();
         }
 
@@ -49,7 +49,7 @@ namespace QuoteSwift
             if (objPartSelection != null)
             {
                 Hide();
-                navigation.AddNewPart(appData, objPartSelection, false);
+                navigation.AddNewPart(objPartSelection, false);
                 Show();
             }
             else

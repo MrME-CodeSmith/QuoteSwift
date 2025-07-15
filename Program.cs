@@ -11,12 +11,12 @@ namespace QuoteSwift
         [STAThread]
         static void Main()
         {
+            IMessageService messenger = new MessageBoxService();
             IDataService dataService = new FileDataService(messenger);
             var appData = new ApplicationData(dataService);
             appData.Load();
 
             INotificationService notifier = new MessageBoxNotificationService();
-            IMessageService messenger = new MessageBoxService();
             var navigation = new NavigationService(appData, notifier, messenger);
             QuotesViewModel viewModel = new QuotesViewModel(dataService);
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
