@@ -152,7 +152,7 @@ namespace QuoteSwift
 
         //Serialize Part list:
 
-        public static byte[] SerializePartList(Dictionary<string, Part> PartList)
+        public static byte[] SerializePartListData(Dictionary<string, Part> PartList)
         {
             byte[] tempByte;
             try
@@ -181,20 +181,20 @@ namespace QuoteSwift
             }
         }
 
-        // Serialize Part List Method
+        // Serialize and store Part List
 
-        public static void SerializePartList(ref Pass passed)
+        public static void SerializePartList(Dictionary<string, Part> partList)
         {
-            if (passed != null && passed.PassPartList != null && passed.PassPartList.Count > 0)
+            if (partList != null && partList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePartList(passed.PassPartList);
+                byte[] ToStore = MainProgramCode.SerializePartListData(partList);
                 MainProgramCode.SaveData("Parts.json", ToStore);
             }
         }
 
         // Serialize Pump List Method
 
-        public static byte[] SerializePumpList(BindingList<Pump> PumpPartList)
+        public static byte[] SerializePumpListData(BindingList<Pump> PumpPartList)
         {
             byte[] tempByte;
             try
@@ -223,15 +223,13 @@ namespace QuoteSwift
             }
         }
 
-        // Serialize and Store Pump List Method
+        // Serialize and store Pump List
 
-        public static void SerializePumpList(ref Pass passed)
+        public static void SerializePumpList(BindingList<Pump> pumpList)
         {
-            //Determine if Pump List exist:
-
-            if (passed != null && passed.PassPumpList != null && passed.PassPumpList.Count > 0)
+            if (pumpList != null && pumpList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializePumpList(passed.PassPumpList);
+                byte[] ToStore = MainProgramCode.SerializePumpListData(pumpList);
                 MainProgramCode.SaveData("PumpList.json", ToStore);
             }
         }
@@ -239,7 +237,7 @@ namespace QuoteSwift
 
         // Serialize Business List Method
 
-        public static byte[] SerializeBusinessList(BindingList<Business> BusinessList)
+        public static byte[] SerializeBusinessListData(BindingList<Business> BusinessList)
         {
             byte[] tempByte;
             try
@@ -268,22 +266,20 @@ namespace QuoteSwift
             }
         }
 
-        // Serialize and Store Business List Method
+        // Serialize and store Business List
 
-        public static void SerializeBusinessList(ref Pass passed)
+        public static void SerializeBusinessList(BindingList<Business> businessList)
         {
-            //Determine if Pump List exist:
-
-            if (passed != null && passed.PassBusinessList != null && passed.PassBusinessList.Count > 0)
+            if (businessList != null && businessList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeBusinessList(passed.PassBusinessList);
+                byte[] ToStore = MainProgramCode.SerializeBusinessListData(businessList);
                 MainProgramCode.SaveData("BusinessList.json", ToStore);
             }
         }
 
         // Serialize Quote List Method
 
-        public static byte[] SerializeQuoteList(SortedDictionary<string, Quote> QuoteList)
+        public static byte[] SerializeQuoteListData(SortedDictionary<string, Quote> QuoteList)
         {
             byte[] tempByte;
             try
@@ -312,15 +308,13 @@ namespace QuoteSwift
             }
         }
 
-        // Serialize and Store Quote List Method
+        // Serialize and store Quote List
 
-        public static void SerializeQuoteList(ref Pass passed)
+        public static void SerializeQuoteList(SortedDictionary<string, Quote> quoteList)
         {
-            //Determine if Pump List exist:
-
-            if (passed != null && passed.PassQuoteMap != null && passed.PassQuoteMap.Count > 0)
+            if (quoteList != null && quoteList.Count > 0)
             {
-                byte[] ToStore = MainProgramCode.SerializeQuoteList(passed.PassQuoteMap);
+                byte[] ToStore = MainProgramCode.SerializeQuoteListData(quoteList);
                 MainProgramCode.SaveData("QuoteList.json", ToStore);
             }
         }
@@ -409,16 +403,20 @@ namespace QuoteSwift
 
 
         //Procedure Handling The Closing Of The Application
-        public static void CloseApplication(bool exitApp, ref Pass passed)
+        public static void CloseApplication(bool exitApp,
+            BindingList<Business> businessList,
+            BindingList<Pump> pumpList,
+            Dictionary<string, Part> partList,
+            SortedDictionary<string, Quote> quoteList)
         {
             if (exitApp)
             {
                 try
                 {
-                    SerializePartList(ref passed);
-                    SerializePumpList(ref passed);
-                    SerializeBusinessList(ref passed);
-                    SerializeQuoteList(ref passed);
+                    SerializePartList(partList);
+                    SerializePumpList(pumpList);
+                    SerializeBusinessList(businessList);
+                    SerializeQuoteList(quoteList);
                 }
                 catch (Exception ex)
                 {

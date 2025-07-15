@@ -36,9 +36,11 @@ namespace QuoteSwift
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                var p = passed;
-                MainProgramCode.CloseApplication(true, ref p);
-                passed = p;
+                MainProgramCode.CloseApplication(true,
+                    passed?.PassBusinessList,
+                    passed?.PassPumpList,
+                    passed?.PassPartList,
+                    passed?.PassQuoteMap);
             }
         }
 
@@ -241,9 +243,11 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var p = passed;
-            MainProgramCode.CloseApplication(true, ref p);
-            passed = p;
+            MainProgramCode.CloseApplication(true,
+                passed?.PassBusinessList,
+                passed?.PassPumpList,
+                passed?.PassPartList,
+                passed?.PassQuoteMap);
         }
 
         /** Form Specific Functions And Procedures: 

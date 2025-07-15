@@ -49,9 +49,11 @@ namespace QuoteSwift
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-                MainProgramCode.CloseApplication(true, ref p);
-                viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+                MainProgramCode.CloseApplication(true,
+                    viewModel.BusinessList,
+                    viewModel.PumpList,
+                    viewModel.PartMap,
+                    viewModel.QuoteMap);
             }
         }
 
@@ -265,9 +267,11 @@ namespace QuoteSwift
         readonly int count = 0;
         private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var p = new Pass(viewModel.QuoteMap, viewModel.BusinessList, viewModel.PumpList, viewModel.PartMap);
-            MainProgramCode.CloseApplication(true, ref p);
-            viewModel.UpdateData(p.PassQuoteMap, p.PassBusinessList, p.PassPumpList, p.PassPartList);
+            MainProgramCode.CloseApplication(true,
+                viewModel.BusinessList,
+                viewModel.PumpList,
+                viewModel.PartMap,
+                viewModel.QuoteMap);
         }
 
         void LoadDataGrid()
