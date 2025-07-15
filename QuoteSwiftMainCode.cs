@@ -263,7 +263,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(new FileDataService());
             vm.LoadData();
-            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm, null, passed);
+            FrmViewBusinessAddresses FrmViewBusinessAddresses = new FrmViewBusinessAddresses(vm, null, null, passed);
             FrmViewBusinessAddresses.ShowDialog();
             return ref passed;
         }
@@ -287,7 +287,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(new FileDataService());
             vm.LoadData();
-            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm, null, passed);
+            FrmManageAllEmails FrmManageAllEmails = new FrmManageAllEmails(vm, null, null, passed);
             FrmManageAllEmails.ShowDialog();
             return ref passed;
         }
@@ -299,7 +299,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(new FileDataService());
             vm.LoadData();
-            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm, null, passed);
+            FrmManagingPhoneNumbers FrmManagingPhoneNumbers = new FrmManagingPhoneNumbers(vm, null, null, passed);
             FrmManagingPhoneNumbers.ShowDialog();
             return ref passed;
         }

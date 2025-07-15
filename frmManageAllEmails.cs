@@ -10,16 +10,18 @@ namespace QuoteSwift
 
         readonly ManageEmailsViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
 
         Pass passed;
 
         public ref Pass Passed => ref passed;
 
-        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, Pass pass = null)
+        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            appData = data;
             passed = pass ?? new Pass(null, null, null, null);
         }
 
@@ -100,21 +102,7 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             string email = GetEmailSelection();
-            passed.EmailToChange = email;
-            passed.ChangeSpecificObject = true;
-            passed = navigation.EditBusinessEmailAddress(passed);
-
-            if (passed.BusinessToChange != null && passed.BusinessToChange.BusinessEmailAddressList != null)
-            {
-                passed.BusinessToChange.UpdateEmailAddress(email, passed.EmailToChange);
-            }
-            else if (passed.CustomerToChange != null && passed.CustomerToChange.CustomerEmailList != null)
-            {
-                passed.CustomerToChange.UpdateEmailAddress(email, passed.EmailToChange);
-            }
-
-            passed.ChangeSpecificObject = false;
-            passed.EmailToChange = null;
+            navigation.EditBusinessEmailAddress(passed);
             LoadInformation();
         }
 

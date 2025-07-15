@@ -44,8 +44,6 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = navigation.EditPhoneNumber(passed);
-                passed.BusinessToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
-
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
             }
@@ -56,8 +54,6 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = navigation.EditPhoneNumber(passed);
-                passed.CustomerToChange.UpdateCellphoneNumber(OldNumber, passed.PhoneNumberToChange);
-
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
             }
@@ -74,8 +70,6 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = navigation.EditPhoneNumber(passed);
-                passed.BusinessToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
-
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
             }
@@ -86,8 +80,6 @@ namespace QuoteSwift
                 passed.ChangeSpecificObject = true;
 
                 passed = navigation.EditPhoneNumber(passed);
-                passed.CustomerToChange.UpdateTelephoneNumber(OldNumber, passed.PhoneNumberToChange);
-
                 passed.PhoneNumberToChange = "";
                 passed.ChangeSpecificObject = false;
             }
@@ -263,11 +255,7 @@ namespace QuoteSwift
 
         private void FrmManagingPhoneNumbers_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            appData.SaveAll();
         }
     }
 }

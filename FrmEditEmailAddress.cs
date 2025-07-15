@@ -6,52 +6,44 @@ namespace QuoteSwift
     public partial class FrmEditEmailAddress : Form
     {
 
-        readonly ManageEmailsViewModel viewModel;
+        readonly ApplicationData appData;
+        readonly Business business;
+        readonly Customer customer;
+        string email;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmEditEmailAddress(ManageEmailsViewModel viewModel, Pass pass = null)
+        public FrmEditEmailAddress(ApplicationData data, Business business = null, Customer customer = null, string email = null)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
-            passed = pass ?? new Pass(null, null, null, null);
+            appData = data;
+            this.business = business;
+            this.customer = customer;
+            this.email = email;
         }
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
         {
             if (mtxtEmail.Text.Length > 3 && mtxtEmail.Text.Contains("@"))
             {
-                string oldEmail = passed.EmailToChange;
-                passed.EmailToChange = mtxtEmail.Text;
-                if (passed != null && passed.BusinessToChange != null)
+                string newEmail = mtxtEmail.Text;
+                if (business != null)
                 {
-                    var vm = new AddBusinessViewModel(viewModel.DataService);
-                    vm.UpdateData(passed.PassBusinessList, passed.BusinessToChange, passed.ChangeSpecificObject);
-                    vm.LoadData();
-                    FrmAddBusiness frmAddBusiness = new FrmAddBusiness(vm);
-                    frmAddBusiness.SetPass(passed);
-                    if (!frmAddBusiness.EmailAddressExisting(mtxtEmail.Text))
+                    if (!business.EmailAddresses.Contains(newEmail))
                     {
+                        business.UpdateEmailAddress(email, newEmail);
+                        email = newEmail;
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
                         Close();
                     }
-                    else passed.EmailToChange = oldEmail;
                 }
-                else if (passed != null && passed.CustomerToChange != null)
+                else if (customer != null)
                 {
-                    var vm = new AddCustomerViewModel(viewModel.DataService);
-                    vm.UpdateData(passed.PassBusinessList, passed.CustomerToChange, passed.ChangeSpecificObject);
-                    vm.LoadData();
-                    FrmAddCustomer frmAddCustomer = new FrmAddCustomer(vm);
-                    frmAddCustomer.SetPass(passed);
-                    if (!frmAddCustomer.EmailAddressExisting(mtxtEmail.Text))
+                    if (!customer.EmailAddresses.Contains(newEmail))
                     {
+                        customer.UpdateEmailAddress(email, newEmail);
+                        email = newEmail;
                         MainProgramCode.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
                         Close();
                     }
-                    else passed.EmailToChange = oldEmail;
                 }
             }
             else MainProgramCode.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
@@ -59,7 +51,7 @@ namespace QuoteSwift
 
         private void FrmEditEmailAddress_Load(object sender, EventArgs e)
         {
-            mtxtEmail.Text = passed.EmailToChange;
+            mtxtEmail.Text = email;
 
         }
 
@@ -70,22 +62,14 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainProgramCode.CloseApplication(
-                MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"),
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"))
+                appData.SaveAll();
         }
 
         private void CloseToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                appData.SaveAll();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -95,11 +79,7 @@ namespace QuoteSwift
 
         private void FrmEditEmailAddress_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            appData.SaveAll();
         }
     }
 }

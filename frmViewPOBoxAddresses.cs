@@ -10,16 +10,18 @@ namespace QuoteSwift
 
         readonly ViewPOBoxAddressesViewModel viewModel;
         readonly INavigationService navigation;
+        readonly ApplicationData appData;
 
         Pass passed;
 
         public ref Pass Passed => ref passed;
 
-        public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, Pass pass = null)
+        public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Pass pass = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            appData = data;
             passed = pass ?? new Pass(null, null, null, null);
         }
 
@@ -75,15 +77,7 @@ namespace QuoteSwift
                 return;
             }
 
-            passed.ChangeSpecificObject = false;
-            passed.AddressToChange = address;
-
-            passed = navigation.EditBusinessAddress(passed);
-
-            if (!ReplacePOBoxAddress(address, passed.AddressToChange)) MainProgramCode.ShowError("An error occurred during the updating procedure of the P.O.Box Address.\nUpdated P.O.Box address will not be stored.", "ERROR - P.O.Box Address Not Updated");
-
-            passed.AddressToChange = null;
-            passed.ChangeSpecificObject = false;
+            navigation.EditBusinessAddress(passed);
 
             LoadInformation();
         }
@@ -167,22 +161,6 @@ namespace QuoteSwift
                                                          passed.CustomerToChange.CustomerPOBoxAddress[i].AddressAreaCode);
         }
 
-        private bool ReplacePOBoxAddress(Address Original, Address New)
-        {
-            if (passed != null && passed.BusinessToChange != null && New != null && Original != null)
-            {
-                passed.BusinessToChange.UpdatePOBoxAddress(Original, New);
-                return true;
-            }
-
-            if (passed != null && passed.CustomerToChange != null && New != null && Original != null)
-            {
-                passed.CustomerToChange.UpdatePOBoxAddress(Original, New);
-                return true;
-            }
-
-            return false;
-        }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {

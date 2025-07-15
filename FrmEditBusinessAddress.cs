@@ -5,17 +5,18 @@ namespace QuoteSwift
 {
     public partial class FrmEditBusinessAddress : Form
     {
-        readonly ViewBusinessAddressesViewModel viewModel;
+        readonly ApplicationData appData;
+        readonly Business business;
+        readonly Customer customer;
+        readonly Address address;
 
-        Pass passed;
-
-        public ref Pass Passed => ref passed;
-
-        public FrmEditBusinessAddress(ViewBusinessAddressesViewModel viewModel, Pass pass = null)
+        public FrmEditBusinessAddress(ApplicationData data, Business business = null, Customer customer = null, Address address = null)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
-            passed = pass ?? new Pass(null, null, null, null);
+            appData = data;
+            this.business = business;
+            this.customer = customer;
+            this.address = address;
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -25,14 +26,14 @@ namespace QuoteSwift
 
         private void FrmEditBusinessAddress_Load(object sender, EventArgs e)
         {
-            if (passed.AddressToChange != null)
+            if (address != null)
             {
-                txtBusinessAddresssDescription.Text = passed.AddressToChange.AddressDescription;
-                mtxtStreetnumber.Text = passed.AddressToChange.AddressStreetNumber.ToString();
-                txtStreetName.Text = passed.AddressToChange.AddressStreetName;
-                txtSuburb.Text = passed.AddressToChange.AddressSuburb;
-                txtCity.Text = passed.AddressToChange.AddressCity;
-                mtxtAreaCode.Text = passed.AddressToChange.AddressAreaCode.ToString();
+                txtBusinessAddresssDescription.Text = address.AddressDescription;
+                mtxtStreetnumber.Text = address.AddressStreetNumber.ToString();
+                txtStreetName.Text = address.AddressStreetName;
+                txtSuburb.Text = address.AddressSuburb;
+                txtCity.Text = address.AddressCity;
+                mtxtAreaCode.Text = address.AddressAreaCode.ToString();
                 txtStreetName.Enabled = false;
             }
         }
@@ -54,7 +55,15 @@ namespace QuoteSwift
 
                 if (!AddressExists(UpdatedAddress))
                 {
-                    passed.AddressToChange = UpdatedAddress;
+                    if (address != null)
+                    {
+                        address.AddressDescription = UpdatedAddress.AddressDescription;
+                        address.AddressStreetNumber = UpdatedAddress.AddressStreetNumber;
+                        address.AddressStreetName = UpdatedAddress.AddressStreetName;
+                        address.AddressSuburb = UpdatedAddress.AddressSuburb;
+                        address.AddressCity = UpdatedAddress.AddressCity;
+                        address.AddressAreaCode = UpdatedAddress.AddressAreaCode;
+                    }
                     MainProgramCode.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
                     Close();
                 }
@@ -65,11 +74,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainProgramCode.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
-                    passed?.PassBusinessList,
-                    passed?.PassPumpList,
-                    passed?.PassPartList,
-                    passed?.PassQuoteMap);
+                appData.SaveAll();
         }
 
         private bool ValidInput()
@@ -86,7 +91,7 @@ namespace QuoteSwift
                 return (false);
             }
 
-            if (txtStreetName.Text.Length < 2 && passed.AddressToChange == null)
+            if (txtStreetName.Text.Length < 2 && address == null)
             {
                 MainProgramCode.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
                 return (false);
@@ -119,17 +124,17 @@ namespace QuoteSwift
 
             string key = StringUtil.NormalizeKey(a.AddressDescription);
 
-            if (passed?.BusinessToChange != null &&
-                passed.BusinessToChange.AddressMap.TryGetValue(key, out Address existingB))
+            if (business != null &&
+                business.AddressMap.TryGetValue(key, out Address existingB))
             {
-                if (!ReferenceEquals(existingB, passed.AddressToChange))
+                if (!ReferenceEquals(existingB, address))
                     return true;
             }
 
-            if (passed?.CustomerToChange != null &&
-                passed.CustomerToChange.DeliveryAddressMap.TryGetValue(key, out Address existingC))
+            if (customer != null &&
+                customer.DeliveryAddressMap.TryGetValue(key, out Address existingC))
             {
-                if (!ReferenceEquals(existingC, passed.AddressToChange))
+                if (!ReferenceEquals(existingC, address))
                     return true;
             }
 
@@ -143,11 +148,7 @@ namespace QuoteSwift
 
         private void FrmEditBusinessAddress_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                passed?.PassBusinessList,
-                passed?.PassPumpList,
-                passed?.PassPartList,
-                passed?.PassQuoteMap);
+            appData.SaveAll();
         }
     }
 }
