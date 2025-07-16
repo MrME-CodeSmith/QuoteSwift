@@ -20,6 +20,7 @@ namespace QuoteSwift
         Pump selectedPump;
         int quantity;
         bool lastOperationSuccessful;
+        string formTitle;
 
         public ICommand SavePartCommand { get; }
 
@@ -33,6 +34,20 @@ namespace QuoteSwift
                     lastOperationSuccessful = value;
                     OnPropertyChanged(nameof(LastOperationSuccessful));
                 }
+            }
+        }
+
+        public bool IsEditing => changeSpecificObject;
+
+        public string FormTitle
+        {
+            get
+            {
+                if (partToChange != null)
+                    return IsEditing ?
+                        $"Updating {partToChange.PartName}" :
+                        $"Viewing {partToChange.PartName}";
+                return "Add Part";
             }
         }
 
@@ -62,7 +77,15 @@ namespace QuoteSwift
         public Part PartToChange
         {
             get => partToChange;
-            set => partToChange = value;
+            set
+            {
+                if (partToChange != value)
+                {
+                    partToChange = value;
+                    OnPropertyChanged(nameof(PartToChange));
+                    OnPropertyChanged(nameof(FormTitle));
+                }
+            }
         }
 
         public bool ChangeSpecificObject
@@ -75,6 +98,8 @@ namespace QuoteSwift
                     changeSpecificObject = value;
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(FormTitle));
                 }
             }
         }
@@ -108,6 +133,7 @@ namespace QuoteSwift
             {
                 currentPart = value;
                 OnPropertyChanged(nameof(CurrentPart));
+                OnPropertyChanged(nameof(FormTitle));
             }
         }
 

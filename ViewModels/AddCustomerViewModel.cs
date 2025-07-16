@@ -13,6 +13,7 @@ namespace QuoteSwift
         bool changeSpecificObject;
         Customer currentCustomer;
         bool lastOperationSuccessful;
+        string formTitle;
 
         public ICommand AddCustomerCommand { get; }
         public ICommand UpdateCustomerCommand { get; }
@@ -27,6 +28,20 @@ namespace QuoteSwift
                     lastOperationSuccessful = value;
                     OnPropertyChanged(nameof(LastOperationSuccessful));
                 }
+            }
+        }
+
+        public bool IsEditing => changeSpecificObject;
+
+        public string FormTitle
+        {
+            get
+            {
+                if (customerToChange != null)
+                    return IsEditing ?
+                        $"Updating {customerToChange.CustomerName}" :
+                        $"Viewing {customerToChange.CustomerName}";
+                return "Add Customer";
             }
         }
 
@@ -63,8 +78,12 @@ namespace QuoteSwift
             get => customerToChange;
             set
             {
-                customerToChange = value;
-                OnPropertyChanged(nameof(CustomerToChange));
+                if (customerToChange != value)
+                {
+                    customerToChange = value;
+                    OnPropertyChanged(nameof(CustomerToChange));
+                    OnPropertyChanged(nameof(FormTitle));
+                }
             }
         }
 
@@ -78,6 +97,8 @@ namespace QuoteSwift
                     changeSpecificObject = value;
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(FormTitle));
                 }
             }
         }
@@ -91,6 +112,7 @@ namespace QuoteSwift
             {
                 currentCustomer = value;
                 OnPropertyChanged(nameof(CurrentCustomer));
+                OnPropertyChanged(nameof(FormTitle));
             }
         }
 

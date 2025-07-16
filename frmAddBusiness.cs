@@ -22,6 +22,9 @@ namespace QuoteSwift
             this.appData = appData;
             this.serializationService = serializationService;
             this.messageService = messageService;
+
+            DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.FormTitle));
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -53,8 +56,18 @@ namespace QuoteSwift
                 if (viewModel.LastOperationSuccessful)
                 {
                     messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been successfully updated.", "INFORMATION - Business Successfully Updated");
-                    ConvertToViewOnly();
+                    viewModel.ChangeSpecificObject = false;
                 }
+            }
+        }
+
+        void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(AddBusinessViewModel.IsEditing) ||
+                e.PropertyName == nameof(AddBusinessViewModel.IsReadOnly) ||
+                e.PropertyName == nameof(AddBusinessViewModel.ChangeSpecificObject))
+            {
+                ApplyControlState();
             }
         }
 
@@ -163,7 +176,6 @@ namespace QuoteSwift
             else if (viewModel.BusinessToChange != null && !viewModel.ChangeSpecificObject) // View Existing Business Info
             {
                 viewModel.CurrentBusiness = viewModel.BusinessToChange;
-                ConvertToViewOnly();
             }
             else if (viewModel.BusinessToChange == null && !viewModel.ChangeSpecificObject) // Add New Business Info
             {
@@ -178,6 +190,7 @@ namespace QuoteSwift
             if (viewModel.CurrentBusiness.BusinessLegalDetails == null)
                 viewModel.CurrentBusiness.BusinessLegalDetails = new Legal("", "");
             SetupBindings();
+            ApplyControlState();
         }
 
         private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
@@ -191,35 +204,10 @@ namespace QuoteSwift
 
         private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ConvertToEdit();
             viewModel.ChangeSpecificObject = true;
         }
 
-        private void ConvertToViewOnly()
-        {
-            viewModel.ChangeSpecificObject = false;
-            ApplyControlState();
 
-            btnViewAddresses.Enabled = true;
-            btnViewAll.Enabled = true;
-            btnViewAllPOBoxAddresses.Enabled = true;
-            btnViewEmailAddresses.Enabled = true;
-
-            btnAddBusiness.Visible = false;
-            Text = Text.Replace("Add Business", "Viewing " + viewModel.BusinessToChange.BusinessName);
-            updateBusinessInformationToolStripMenuItem.Enabled = true;
-        }
-
-        private void ConvertToEdit()
-        {
-            viewModel.ChangeSpecificObject = true;
-            ApplyControlState();
-
-            btnAddBusiness.Visible = true;
-            btnAddBusiness.Text = "Update Business";
-            Text = Text.Replace("Viewing " + viewModel.CurrentBusiness.BusinessName, "Updating " + viewModel.CurrentBusiness.BusinessName);
-            updateBusinessInformationToolStripMenuItem.Enabled = false;
-        }
 
         void ApplyControlState()
         {
@@ -230,6 +218,10 @@ namespace QuoteSwift
             ControlStateHelper.ApplyReadOnly(gbxLegalInformation.Controls, ro);
             ControlStateHelper.ApplyReadOnly(gbxPhoneRelated.Controls, ro);
             ControlStateHelper.ApplyReadOnly(gbxPOBoxAddress.Controls, ro);
+
+            btnAddBusiness.Visible = viewModel.ChangeSpecificObject || viewModel.BusinessToChange == null;
+            btnAddBusiness.Text = viewModel.ChangeSpecificObject ? "Update Business" : "Add Business";
+            updateBusinessInformationToolStripMenuItem.Enabled = !viewModel.ChangeSpecificObject && viewModel.BusinessToChange != null;
         }
 
         private void SetupBindings()
@@ -245,6 +237,8 @@ namespace QuoteSwift
 
             mtxtRegistrationNumber.DataBindings.Clear();
             mtxtRegistrationNumber.DataBindings.Add("Text", viewModel.CurrentBusiness, "BusinessLegalDetails.RegistrationNumber", false, DataSourceUpdateMode.OnPropertyChanged);
+
+            ApplyControlState();
         }
 
         /**********************************************************************************/

@@ -33,6 +33,20 @@ namespace QuoteSwift
             }
         }
 
+        public bool IsEditing => changeSpecificObject;
+
+        public string FormTitle
+        {
+            get
+            {
+                if (businessToChange != null)
+                    return IsEditing ?
+                        $"Updating {businessToChange.BusinessName}" :
+                        $"Viewing {businessToChange.BusinessName}";
+                return "Add Business";
+            }
+        }
+
 
         public AddBusinessViewModel(IDataService service, IMessageService messageService)
         {
@@ -57,7 +71,19 @@ namespace QuoteSwift
         public Dictionary<string, Business> BusinessLookup => businessLookup;
         public HashSet<string> BusinessVatNumbers => businessVatNumbers;
         public HashSet<string> BusinessRegNumbers => businessRegNumbers;
-        public Business BusinessToChange { get => businessToChange; set => businessToChange = value; }
+        public Business BusinessToChange
+        {
+            get => businessToChange;
+            set
+            {
+                if (businessToChange != value)
+                {
+                    businessToChange = value;
+                    OnPropertyChanged(nameof(BusinessToChange));
+                    OnPropertyChanged(nameof(FormTitle));
+                }
+            }
+        }
 
         public bool ChangeSpecificObject
         {
@@ -69,6 +95,8 @@ namespace QuoteSwift
                     changeSpecificObject = value;
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(FormTitle));
                 }
             }
         }
@@ -84,6 +112,7 @@ namespace QuoteSwift
                 {
                     currentBusiness = value;
                     OnPropertyChanged(nameof(CurrentBusiness));
+                    OnPropertyChanged(nameof(FormTitle));
                 }
             }
         }

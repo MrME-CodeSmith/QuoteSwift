@@ -10,6 +10,7 @@ namespace QuoteSwift
         readonly INotificationService notificationService;
         Pump currentPump;
         bool lastOperationSuccessful;
+        string formTitle;
 
         public ICommand AddPumpCommand { get; }
         public ICommand UpdatePumpCommand { get; }
@@ -27,10 +28,37 @@ namespace QuoteSwift
             }
         }
 
+        public bool IsEditing => changeSpecificObject;
+
+        public string FormTitle
+        {
+            get
+            {
+                if (PumpToChange != null)
+                    return IsEditing ?
+                        $"Updating {PumpToChange.PumpName} Pump" :
+                        $"Viewing {PumpToChange.PumpName} Pump";
+                return "Add Pump";
+            }
+        }
+
         public BindingList<Pump> PumpList { get; private set; }
         public Dictionary<string, Part> PartMap { get; private set; }
         public HashSet<string> RepairableItemNames { get; private set; }
-        public Pump PumpToChange { get; set; }
+        Pump pumpToChange;
+        public Pump PumpToChange
+        {
+            get => pumpToChange;
+            set
+            {
+                if (pumpToChange != value)
+                {
+                    pumpToChange = value;
+                    OnPropertyChanged(nameof(PumpToChange));
+                    OnPropertyChanged(nameof(FormTitle));
+                }
+            }
+        }
 
         bool changeSpecificObject;
         public bool ChangeSpecificObject
@@ -43,6 +71,8 @@ namespace QuoteSwift
                     changeSpecificObject = value;
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(FormTitle));
                 }
             }
         }
@@ -70,6 +100,7 @@ namespace QuoteSwift
             {
                 currentPump = value;
                 OnPropertyChanged(nameof(CurrentPump));
+                OnPropertyChanged(nameof(FormTitle));
             }
         }
 
