@@ -8,11 +8,13 @@ namespace QuoteSwift
         readonly ApplicationData appData;
         readonly INotificationService notificationService;
         readonly IMessageService messageService;
+        readonly ISerializationService serializationService;
 
-        public NavigationService(ApplicationData data, INotificationService notifier, IMessageService messenger)
+        public NavigationService(ApplicationData data, INotificationService notifier, IMessageService messenger, ISerializationService serializer)
         {
             dataService = new FileDataService(messenger);
             appData = data;
+            serializationService = serializer;
             notificationService = notifier;
             messageService = messenger;
         }
@@ -20,8 +22,7 @@ namespace QuoteSwift
         public void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
         {
             var vm = new CreateQuoteViewModel(dataService);
-            using (var form = new FrmCreateQuote(vm, appData, quoteToChange, changeSpecificObject, messageService))
-            {
+            using (var form = new FrmCreateQuote(vm, appData, quoteToChange, changeSpecificObject, messageService, serializationService))
                 form.ShowDialog();
             }
             appData.SaveAll();
@@ -31,7 +32,7 @@ namespace QuoteSwift
         {
             var vm = new QuotesViewModel(dataService);
             vm.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
-            using (var form = new FrmViewQuotes(vm, this, messageService))
+            using (var form = new FrmViewQuotes(vm, this, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -44,7 +45,7 @@ namespace QuoteSwift
 
         public void ViewAllPumps()
         {
-            var vm = new ViewPumpViewModel(dataService);
+            var vm = new ViewPumpViewModel(dataService, serializationService);
             vm.UpdateData(appData.PumpList);
             using (var form = new FrmViewPump(vm, this, messageService))
             {
@@ -57,7 +58,7 @@ namespace QuoteSwift
             var vm = new AddPumpViewModel(dataService, notificationService);
             vm.UpdateData(appData.PumpList, appData.PartList);
             vm.LoadData();
-            using (var form = new FrmAddPump(vm, this, appData, messageService))
+            using (var form = new FrmAddPump(vm, this, appData, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -70,7 +71,7 @@ namespace QuoteSwift
         {
             var vm = new ViewPartsViewModel(dataService);
             vm.UpdateData(appData.PartList);
-            using (var form = new FrmViewParts(vm, this, appData, messageService))
+            using (var form = new FrmViewParts(vm, this, appData, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -80,7 +81,7 @@ namespace QuoteSwift
         {
             var vm = new AddPartViewModel(dataService, notificationService);
             vm.UpdateData(appData.PartList, appData.PumpList, partToChange, changeSpecificObject);
-            using (var form = new FrmAddPart(vm, this, appData, messageService))
+            using (var form = new FrmAddPart(vm, this, appData, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -94,7 +95,7 @@ namespace QuoteSwift
         {
             var vm = new AddCustomerViewModel(dataService, notificationService, messageService);
             vm.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
-            using (var form = new FrmAddCustomer(vm, this, appData, businessToChange, messageService))
+            using (var form = new FrmAddCustomer(vm, this, appData, businessToChange, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -105,7 +106,7 @@ namespace QuoteSwift
         {
             var vm = new ViewCustomersViewModel(dataService);
             vm.LoadData();
-            using (var form = new FrmViewCustomers(vm, this, appData, messageService))
+            using (var form = new FrmViewCustomers(vm, this, appData, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -116,7 +117,7 @@ namespace QuoteSwift
             var vm = new AddBusinessViewModel(dataService, messageService);
             vm.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
             vm.LoadData();
-            using (var form = new FrmAddBusiness(vm, this, appData, messageService))
+            using (var form = new FrmAddBusiness(vm, this, appData, messageService, serializationService))
             {
                 form.ShowDialog();
             }

@@ -12,14 +12,16 @@ namespace QuoteSwift
         readonly AddPumpViewModel viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
+        readonly ISerializationService serializationService;
         readonly IMessageService messageService;
 
-        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
+        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
+            this.serializationService = serializationService;
             this.messageService = messageService;
             if (data != null)
                 viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
@@ -29,12 +31,11 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
+                serializationService.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
                     appData?.PartList,
                     appData?.QuoteMap);
-        }
 
         private void BtnAddPump_Click(object sender, EventArgs e)
         {
@@ -412,14 +413,11 @@ namespace QuoteSwift
         private void FrmAddPump_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainProgramCode.CloseApplication(true,
+            serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
-        }
-
-        /*********************************************************************************/
-
 
     }
 }

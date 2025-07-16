@@ -15,6 +15,7 @@ namespace QuoteSwift
         readonly CreateQuoteViewModel viewModel;
         readonly ApplicationData appData;
         readonly IMessageService messageService;
+        readonly ISerializationService serializationService;
         Quote quoteToChange;
         bool changeSpecificObject;
         public Quote NewQuote;
@@ -23,12 +24,13 @@ namespace QuoteSwift
         readonly BindingSource nonMandatorySource = new BindingSource();
 
 
-        public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false, IMessageService messageService = null)
+        public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             appData = data;
             this.messageService = messageService;
+            this.serializationService = serializationService;
             this.quoteToChange = quoteToChange;
             this.changeSpecificObject = changeSpecificObject;
             this.viewModel.LoadData();
@@ -78,12 +80,11 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
+                serializationService.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
                     appData?.PartList,
                     appData?.QuoteMap);
-        }
 
         private void CbxPumpSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -777,12 +778,11 @@ namespace QuoteSwift
 
         private void FrmCreateQuote_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
+            serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
-        }
     }
 
 }

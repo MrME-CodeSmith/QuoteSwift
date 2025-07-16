@@ -11,14 +11,16 @@ namespace QuoteSwift
         readonly INavigationService navigation;
 
         readonly ApplicationData appData;
+        readonly ISerializationService serializationService;
         readonly IMessageService messageService;
 
-        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
+        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             appData = data;
+            this.serializationService = serializationService;
             this.messageService = messageService;
             viewModel.Initialize();
             SetupBindings();
@@ -43,7 +45,7 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
+                serializationService.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
                     appData?.PartList,
@@ -213,12 +215,11 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmAddPart_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MainProgramCode.CloseApplication(true,
+            serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
+                appData?.QuoteMap);
                 appData?.QuoteMap);
         }
 

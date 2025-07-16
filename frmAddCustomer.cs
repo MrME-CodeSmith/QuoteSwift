@@ -12,15 +12,17 @@ namespace QuoteSwift
         readonly INavigationService navigation;
         readonly ApplicationData appData;
         readonly IMessageService messageService;
+        readonly ISerializationService serializationService;
 
         Business Container;
 
-        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, Business container = null, IMessageService messageService = null)
+        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, Business container = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.appData = appData;
+            this.serializationService = serializationService;
             this.messageService = messageService;
             this.Container = container;
             viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
@@ -33,12 +35,11 @@ namespace QuoteSwift
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                MainProgramCode.CloseApplication(true,
+                serializationService.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
                     appData?.PartList,
                     appData?.QuoteMap);
-            }
         }
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
@@ -214,12 +215,11 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
+            serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
-        }
 
         /** Form Specific Functions And Procedures: 
        *

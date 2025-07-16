@@ -12,13 +12,15 @@ namespace QuoteSwift
         readonly INavigationService navigation;
 
         readonly ApplicationData appData;
+        readonly ISerializationService serializationService;
         readonly IMessageService messageService;
-
+        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
         public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            this.serializationService = serializationService;
             appData = data;
             this.messageService = messageService;
             if (appData != null)
@@ -28,12 +30,11 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                MainProgramCode.CloseApplication(true,
+                serializationService.CloseApplication(true,
                     appData?.BusinessList,
                     appData?.PumpList,
                     appData?.PartList,
                     appData?.QuoteMap);
-        }
 
         private void BtnAddPart_Click(object sender, EventArgs e)
         {
@@ -132,14 +133,9 @@ namespace QuoteSwift
         }
 
         private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MainProgramCode.CloseApplication(true,
+            serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
-        }
-
-        /*********************************************************************************/
-    }
 }

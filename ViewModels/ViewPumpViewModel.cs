@@ -9,12 +9,14 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         BindingList<Pump> pumps;
+        readonly ISerializationService serializationService;
         HashSet<string> repairableItemNames;
 
 
-        public ViewPumpViewModel(IDataService service)
+        public ViewPumpViewModel(IDataService service, ISerializationService serializer)
         {
             dataService = service;
+            serializationService = serializer;
         }
 
         public IDataService DataService => dataService;
@@ -78,7 +80,7 @@ namespace QuoteSwift
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentNullException(nameof(filePath));
 
-            MainProgramCode.ExportInventory(Pumps, filePath);
+            serializationService.ExportInventory(Pumps, filePath);
         }
 
         public void SaveChanges()
