@@ -31,7 +31,7 @@ namespace QuoteSwift
         {
             var vm = new QuotesViewModel(dataService);
             vm.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
-            using (var form = new FrmViewQuotes(vm, this, appData, messageService))
+            using (var form = new FrmViewQuotes(vm, this, messageService))
             {
                 form.ShowDialog();
             }
@@ -45,8 +45,8 @@ namespace QuoteSwift
         public void ViewAllPumps()
         {
             var vm = new ViewPumpViewModel(dataService);
-            vm.LoadData();
-            using (var form = new FrmViewPump(vm, this, appData, messageService))
+            vm.UpdateData(appData.PumpList);
+            using (var form = new FrmViewPump(vm, this, messageService))
             {
                 form.ShowDialog();
             }

@@ -105,5 +105,17 @@ namespace QuoteSwift
             Quotes = new BindingList<Quote>(QuoteMap?.Values.ToList() ?? new List<Quote>());
         }
 
+        public void SaveChanges()
+        {
+            if (QuoteMap != null)
+                dataService.SaveQuotes(QuoteMap);
+            if (BusinessList != null)
+                dataService.SaveBusinesses(BusinessList);
+            if (PumpList != null)
+                dataService.SavePumps(PumpList);
+            if (PartMap != null)
+                dataService.SaveParts(PartMap);
+        }
+
     }
 }
