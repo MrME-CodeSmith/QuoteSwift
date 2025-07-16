@@ -45,7 +45,7 @@ namespace QuoteSwift
                 if (viewModel.LastOperationSuccessful)
                 {
                     messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been added.", "INFORMATION - Business Successfully Added");
-                    viewModel.CurrentBusiness = new Business { BusinessLegalDetails = new Legal("", "") };
+                    viewModel.ClearCurrentBusiness();
                     SetupBindings();
                     ResetScreenInput();
                 }
@@ -81,10 +81,11 @@ namespace QuoteSwift
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            Address address = new Address(txtBusinessPODescription.Text,
-                                          ParsingService.ParseInt(mtxtPOBoxStreetNumber.Text),
-                                          "", txtPOBoxSuburb.Text, txtPOBoxCity.Text,
-                                          ParsingService.ParseInt(mtxtPOBoxAreaCode.Text));
+            var address = viewModel.BuildPOBoxAddress(txtBusinessPODescription.Text,
+                                                      mtxtPOBoxStreetNumber.Text,
+                                                      txtPOBoxSuburb.Text,
+                                                      txtPOBoxCity.Text,
+                                                      mtxtPOBoxAreaCode.Text);
             var result = viewModel.AddPOBoxAddress(address);
             if (result.Success)
             {
@@ -97,10 +98,12 @@ namespace QuoteSwift
 
         private void BtnAddAddress_Click(object sender, EventArgs e)
         {
-            Address address = new Address(txtBusinessAddresssDescription.Text,
-                                          ParsingService.ParseInt(mtxtStreetnumber.Text),
-                                          txtStreetName.Text, txtSuburb.Text, txtCity.Text,
-                                          ParsingService.ParseInt(mtxtAreaCode.Text));
+            var address = viewModel.BuildAddress(txtBusinessAddresssDescription.Text,
+                                                mtxtStreetnumber.Text,
+                                                txtStreetName.Text,
+                                                txtSuburb.Text,
+                                                txtCity.Text,
+                                                mtxtAreaCode.Text);
             result = viewModel.AddAddress(address);
             if (result.Success)
             {
@@ -199,7 +202,7 @@ namespace QuoteSwift
             }
             else if (viewModel.BusinessToChange == null && !viewModel.ChangeSpecificObject) // Add New Business Info
             {
-                viewModel.CurrentBusiness = new Business();
+                viewModel.ClearCurrentBusiness();
             }
             else // Undefined Use - Show ERROR
             {
