@@ -524,18 +524,20 @@ namespace QuoteSwift
             {
                 if (b)
                 {
-                    dgvMandatoryPartReplacement.Rows[i].Cells["clmMMissing_Scrap"].Value = QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmQuantity"].Value.ToString()) -
-                                                                                               QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmMRepaired"].Value.ToString());
+                    dgvMandatoryPartReplacement.Rows[i].Cells["clmMMissing_Scrap"].Value =
+                        ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmQuantity"].Value.ToString()) -
+                        ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmMRepaired"].Value.ToString());
 
                     dgvMandatoryPartReplacement.Rows[i].Cells["clmNew"].Value = dgvMandatoryPartReplacement.Rows[i].Cells["clmMMissing_Scrap"].Value;
                 }
-                dgvMandatoryPartReplacement.Rows[i].Cells["clmPrice"].Value = (QuoteSwiftMainCode.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmUnitPrice"].Value.ToString()) *
-                                                                               QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmNew"].Value.ToString())) +
-                                                                              (QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmMRepaired"].Value.ToString()) *
-      (QuoteSwiftMainCode.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmUnitPrice"].Value.ToString()) /
-       QuoteSwiftMainCode.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["ClmRepairDevider"].Value.ToString())));
+                dgvMandatoryPartReplacement.Rows[i].Cells["clmPrice"].Value =
+                    (ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmUnitPrice"].Value.ToString()) *
+                     ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmNew"].Value.ToString())) +
+                    (ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmMRepaired"].Value.ToString()) *
+                     (ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmUnitPrice"].Value.ToString()) /
+                      ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["ClmRepairDevider"].Value.ToString())));
 
-                Sum += QuoteSwiftMainCode.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmPrice"].Value.ToString());
+                Sum += ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmPrice"].Value.ToString());
 
                 if (i == dgvMandatoryPartReplacement.Rows.Count - 1) dgvMandatoryPartReplacement.Rows.Add("-", "-", "-", "-", "-", "-", "-", "-", Sum, "-");
             }
@@ -545,27 +547,29 @@ namespace QuoteSwift
             {
                 if (b)
                 {
-                    DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMMissing_Scrap"].Value = QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[2].Value.ToString()) -
-                                                                                               QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepaired"].Value.ToString());
+                    DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMMissing_Scrap"].Value =
+                        ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[2].Value.ToString()) -
+                        ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepaired"].Value.ToString());
 
                     DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMNewPartQuantity"].Value = DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMMissing_Scrap"].Value;
                 }
-                DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMPrice"].Value = (QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMUnitPrice"].Value.ToString()) *
-                                                                                  QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMNewPartQuantity"].Value.ToString())) +
-                                                                                 (QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepaired"].Value.ToString()) *
-         (QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMUnitPrice"].Value.ToString()) /
-          QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepairDevider"].Value.ToString())));
+                DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMPrice"].Value =
+                    (ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMUnitPrice"].Value.ToString()) *
+                     ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMNewPartQuantity"].Value.ToString())) +
+                    (ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepaired"].Value.ToString()) *
+                     (ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMUnitPrice"].Value.ToString()) /
+                      ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepairDevider"].Value.ToString())));
 
-                Sum += QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMPrice"].Value.ToString());
+                Sum += ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMPrice"].Value.ToString());
 
                 if (i == DgvNonMandatoryPartReplacement.Rows.Count - 1)
-                    DgvNonMandatoryPartReplacement.Rows.Add("-", "-", "-", "-", "-", "-", "-", "-", Sum - QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[DgvNonMandatoryPartReplacement.Rows.Count - 1].Cells[8].Value.ToString()), "-");
+                    DgvNonMandatoryPartReplacement.Rows.Add("-", "-", "-", "-", "-", "-", "-", "-", Sum - ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[DgvNonMandatoryPartReplacement.Rows.Count - 1].Cells[8].Value.ToString()), "-");
             }
 
             // Display Sum of all totals:
 
-            P.Rebate = QuoteSwiftMainCode.ParseDecimal(mtxtRebate.Text);
-            P.SubTotal = (Sum -= QuoteSwiftMainCode.ParseDecimal(mtxtRebate.Text));
+            P.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
+            P.SubTotal = (Sum -= ParsingService.ParseDecimal(mtxtRebate.Text));
             P.VAT = (Sum * 0.15m);
             Sum *= 1.15m;
             P.TotalDue = Sum;
@@ -688,12 +692,12 @@ namespace QuoteSwift
                 {
                     Quote_Part quote_Part = new Quote_Part(GetPart(dgvMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(),
                                                                    GetPumpSelection().PartList),
-                                                           QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[5].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[6].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
+                                                           ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
+                                                           ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
+                                                           ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[5].Value.ToString()),
+                                                           ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[6].Value.ToString()),
+                                                           ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
+                                                           ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
 
                     MandatoryPartList.Add(quote_Part);
                 }
@@ -705,12 +709,12 @@ namespace QuoteSwift
                 if (DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString() != "-")
                 {
                     Quote_Part quote_Part = new Quote_Part(GetPart(DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(), GetPumpSelection().PartList),
-                                                           QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[5].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[6].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
-                                                           QuoteSwiftMainCode.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
+                                                           ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
+                                                           ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
+                                                           ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[5].Value.ToString()),
+                                                           ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[6].Value.ToString()),
+                                                           ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
+                                                           ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
 
                     NonMandatoryPartList.Add(quote_Part);
                 }
@@ -795,7 +799,7 @@ namespace QuoteSwift
                         string Number = QuoteNumber.Substring(pos, QuoteNumber.Length - pos);
                         pos = Number.IndexOf("_");
                         Number = Number.Remove(pos, Number.Length - pos);
-                        return QuoteSwiftMainCode.ParseInt(Number);
+                        return ParsingService.ParseInt(Number);
                     }
                 }
                 else
@@ -804,7 +808,7 @@ namespace QuoteSwift
                     {
                         int pos = QuoteNumber.IndexOf("TRR") + 3;
                         string Number = QuoteNumber.Substring(pos, QuoteNumber.Length - pos);
-                        return QuoteSwiftMainCode.ParseInt(Number);
+                        return ParsingService.ParseInt(Number);
                     }
                 }
             }

@@ -122,8 +122,10 @@ namespace QuoteSwift
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            var po = new Address(txtCustomerPODescription.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text),
-                                              "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
+            var po = new Address(txtCustomerPODescription.Text,
+                                 ParsingService.ParseInt(mtxtPOBoxStreetNumber.Text),
+                                 "", txtPOBoxSuburb.Text, txtPOBoxCity.Text,
+                                 ParsingService.ParseInt(mtxtPOBoxAreaCode.Text));
             if (viewModel.ValidateCustomerPOBoxAddress(po))
             {
                 if (viewModel.AddPOBoxAddress(po))

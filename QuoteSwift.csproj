@@ -215,7 +215,6 @@
     <Compile Include="FrmViewPump.Designer.cs">
       <DependentUpon>FrmViewPump.cs</DependentUpon>
     </Compile>
-    <Compile Include="QuoteSwiftMainCode.cs" />
     <Compile Include="Controls\NumericTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -235,6 +234,7 @@
     <Compile Include="Services\MessageBoxService.cs" />
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\NavigationService.cs" />
+    <Compile Include="Services\ParsingService.cs" />
     <Compile Include="ViewModels\QuotesViewModel.cs" />
     <Compile Include="ViewModels\AddCustomerViewModel.cs" />
     <Compile Include="ViewModels\ViewCustomersViewModel.cs" />

@@ -58,8 +58,10 @@ namespace QuoteSwift
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            Address address = new Address(txtBusinessPODescription.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxStreetNumber.Text),
-                                          "", txtPOBoxSuburb.Text, txtPOBoxCity.Text, QuoteSwiftMainCode.ParseInt(mtxtPOBoxAreaCode.Text));
+            Address address = new Address(txtBusinessPODescription.Text,
+                                          ParsingService.ParseInt(mtxtPOBoxStreetNumber.Text),
+                                          "", txtPOBoxSuburb.Text, txtPOBoxCity.Text,
+                                          ParsingService.ParseInt(mtxtPOBoxAreaCode.Text));
             if (viewModel.AddPOBoxAddress(address))
             {
                 messageService.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
@@ -69,8 +71,10 @@ namespace QuoteSwift
 
         private void BtnAddAddress_Click(object sender, EventArgs e)
         {
-            Address address = new Address(txtBusinessAddresssDescription.Text, QuoteSwiftMainCode.ParseInt(mtxtStreetnumber.Text),
-                                          txtStreetName.Text, txtSuburb.Text, txtCity.Text, QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text));
+            Address address = new Address(txtBusinessAddresssDescription.Text,
+                                          ParsingService.ParseInt(mtxtStreetnumber.Text),
+                                          txtStreetName.Text, txtSuburb.Text, txtCity.Text,
+                                          ParsingService.ParseInt(mtxtAreaCode.Text));
             if (viewModel.AddAddress(address))
             {
                 messageService.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");

@@ -39,11 +39,11 @@ namespace QuoteSwift
             Address updated = new Address
             {
                 AddressDescription = txtBusinessAddresssDescription.Text,
-                AddressStreetNumber = QuoteSwiftMainCode.ParseInt(mtxtStreetnumber.Text),
+                AddressStreetNumber = ParsingService.ParseInt(mtxtStreetnumber.Text),
                 AddressStreetName = txtStreetName.Text,
                 AddressSuburb = txtSuburb.Text,
                 AddressCity = txtCity.Text,
-                AddressAreaCode = QuoteSwiftMainCode.ParseInt(mtxtAreaCode.Text)
+                AddressAreaCode = ParsingService.ParseInt(mtxtAreaCode.Text)
             };
 
             if (viewModel.UpdateAddress(updated))
