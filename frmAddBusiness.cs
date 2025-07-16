@@ -191,12 +191,8 @@ namespace QuoteSwift
 
         private void ConvertToViewOnly()
         {
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxBusinessAddress.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxBusinessInformation.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxEmailRelated.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxLegalInformation.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxPhoneRelated.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxPOBoxAddress.Controls);
+            viewModel.ChangeSpecificObject = false;
+            ApplyControlState();
 
             btnViewAddresses.Enabled = true;
             btnViewAll.Enabled = true;
@@ -210,17 +206,24 @@ namespace QuoteSwift
 
         private void ConvertToEdit()
         {
-            QuoteSwiftMainCode.ReadWriteComponents(gbxBusinessAddress.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxBusinessInformation.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxEmailRelated.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxLegalInformation.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxPhoneRelated.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxPOBoxAddress.Controls);
+            viewModel.ChangeSpecificObject = true;
+            ApplyControlState();
 
             btnAddBusiness.Visible = true;
             btnAddBusiness.Text = "Update Business";
             Text = Text.Replace("Viewing " + viewModel.CurrentBusiness.BusinessName, "Updating " + viewModel.CurrentBusiness.BusinessName);
             updateBusinessInformationToolStripMenuItem.Enabled = false;
+        }
+
+        void ApplyControlState()
+        {
+            bool ro = viewModel.IsReadOnly;
+            ControlStateHelper.ApplyReadOnly(gbxBusinessAddress.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxBusinessInformation.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxEmailRelated.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxLegalInformation.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxPhoneRelated.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxPOBoxAddress.Controls, ro);
         }
 
         private void SetupBindings()

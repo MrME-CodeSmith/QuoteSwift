@@ -68,8 +68,18 @@ namespace QuoteSwift
         public bool ChangeSpecificObject
         {
             get => changeSpecificObject;
-            set => changeSpecificObject = value;
+            set
+            {
+                if (changeSpecificObject != value)
+                {
+                    changeSpecificObject = value;
+                    OnPropertyChanged(nameof(ChangeSpecificObject));
+                    OnPropertyChanged(nameof(IsReadOnly));
+                }
+            }
         }
+
+        public bool IsReadOnly => !changeSpecificObject;
 
         public BindingList<Part> Parts
         {

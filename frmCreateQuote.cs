@@ -904,7 +904,7 @@ namespace QuoteSwift
 
         private void ConvertToReadOnly()
         {
-            QuoteSwiftMainCode.ReadOnlyComponents(Controls);
+            ApplyControlState(true);
 
             dgvMandatoryPartReplacement.ReadOnly = true;
             DgvNonMandatoryPartReplacement.ReadOnly = true;
@@ -925,11 +925,17 @@ namespace QuoteSwift
 
         private void ConvertToReadWrite()
         {
-            QuoteSwiftMainCode.ReadWriteComponents(Controls);
+            ApplyControlState(false);
 
             Text = Text.Replace(quoteToChange.QuoteCompany.BusinessName, quoteToChange.QuoteCompany.BusinessName);
             Text = Text.Replace("Viewing", "Creating New");
 
+        }
+
+        void ApplyControlState(bool readOnly)
+        {
+            ControlStateHelper.ApplyReadOnly(Controls, readOnly);
+            cbxPumpSelection.Enabled = !readOnly;
         }
 
         private void CreateNewQuoteUsingThisQuoteToolStripMenuItem_Click(object sender, EventArgs e)

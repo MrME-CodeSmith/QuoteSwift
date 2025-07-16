@@ -282,12 +282,8 @@ namespace QuoteSwift
 
         private void ConvertToViewOnly()
         {
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxCustomerInformation.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxCustomerAddress.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxEmailRelated.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxLegalInformation.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxPhoneRelated.Controls);
-            QuoteSwiftMainCode.ReadOnlyComponents(gbxPOBoxAddress.Controls);
+            viewModel.ChangeSpecificObject = false;
+            ApplyControlState();
 
             btnViewAddresses.Enabled = true;
             btnViewAll.Enabled = true;
@@ -301,12 +297,8 @@ namespace QuoteSwift
 
         private void ConvertToEdit()
         {
-            QuoteSwiftMainCode.ReadWriteComponents(gbxCustomerInformation.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxCustomerAddress.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxEmailRelated.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxLegalInformation.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxPhoneRelated.Controls);
-            QuoteSwiftMainCode.ReadWriteComponents(gbxPOBoxAddress.Controls);
+            viewModel.ChangeSpecificObject = true;
+            ApplyControlState();
 
             btnAddCustomer.Visible = true;
             btnAddCustomer.Text = "Update Customer";
@@ -315,6 +307,17 @@ namespace QuoteSwift
             if (viewModel.CustomerToChange != null)
                 Text = Text.Replace("Viewing " + viewModel.CustomerToChange.CustomerName, "Updating " + viewModel.CustomerToChange.CustomerName);
             updatedCustomerInformationToolStripMenuItem.Enabled = false;
+        }
+
+        void ApplyControlState()
+        {
+            bool ro = viewModel.IsReadOnly;
+            ControlStateHelper.ApplyReadOnly(gbxCustomerInformation.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxCustomerAddress.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxEmailRelated.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxLegalInformation.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxPhoneRelated.Controls, ro);
+            ControlStateHelper.ApplyReadOnly(gbxPOBoxAddress.Controls, ro);
         }
 
         private Business GetSelectedBusiness()
