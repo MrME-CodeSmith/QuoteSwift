@@ -17,6 +17,15 @@ namespace QuoteSwift
         Pump selectedPump;
         BindingList<Quote_Part> mandatoryParts = new BindingList<Quote_Part>();
         BindingList<Quote_Part> nonMandatoryParts = new BindingList<Quote_Part>();
+
+        BindingList<string> businessTelephoneNumbers = new BindingList<string>();
+        BindingList<string> businessCellphoneNumbers = new BindingList<string>();
+        BindingList<string> businessEmailAddresses = new BindingList<string>();
+        BindingList<Address> businessPOBoxes = new BindingList<Address>();
+        BindingList<Customer> customers = new BindingList<Customer>();
+        BindingList<Address> customerDeliveryAddresses = new BindingList<Address>();
+        BindingList<Address> customerPOBoxes = new BindingList<Address>();
+
         Pricing pricing = new Pricing();
         float repairPercentage;
 
@@ -76,8 +85,37 @@ namespace QuoteSwift
             get => selectedBusiness;
             set
             {
-                selectedBusiness = value;
-                OnPropertyChanged(nameof(SelectedBusiness));
+                if (SetProperty(ref selectedBusiness, value))
+                {
+                    if (selectedBusiness != null)
+                    {
+                        BusinessTelephoneNumbers = selectedBusiness.BusinessTelephoneNumberList != null
+                            ? new BindingList<string>(new List<string>(selectedBusiness.BusinessTelephoneNumberList))
+                            : new BindingList<string>();
+                        BusinessCellphoneNumbers = selectedBusiness.BusinessCellphoneNumberList != null
+                            ? new BindingList<string>(new List<string>(selectedBusiness.BusinessCellphoneNumberList))
+                            : new BindingList<string>();
+                        BusinessEmailAddresses = selectedBusiness.BusinessEmailAddressList != null
+                            ? new BindingList<string>(new List<string>(selectedBusiness.BusinessEmailAddressList))
+                            : new BindingList<string>();
+                        BusinessPOBoxes = selectedBusiness.BusinessPOBoxAddressList != null
+                            ? new BindingList<Address>(new List<Address>(selectedBusiness.BusinessPOBoxAddressList))
+                            : new BindingList<Address>();
+                        Customers = selectedBusiness.BusinessCustomerList != null
+                            ? new BindingList<Customer>(new List<Customer>(selectedBusiness.BusinessCustomerList))
+                            : new BindingList<Customer>();
+                        SelectedCustomer = Customers.Count > 0 ? Customers[0] : null;
+                    }
+                    else
+                    {
+                        BusinessTelephoneNumbers = new BindingList<string>();
+                        BusinessCellphoneNumbers = new BindingList<string>();
+                        BusinessEmailAddresses = new BindingList<string>();
+                        BusinessPOBoxes = new BindingList<Address>();
+                        Customers = new BindingList<Customer>();
+                        SelectedCustomer = null;
+                    }
+                }
             }
         }
 
@@ -86,8 +124,23 @@ namespace QuoteSwift
             get => selectedCustomer;
             set
             {
-                selectedCustomer = value;
-                OnPropertyChanged(nameof(SelectedCustomer));
+                if (SetProperty(ref selectedCustomer, value))
+                {
+                    if (selectedCustomer != null)
+                    {
+                        CustomerDeliveryAddresses = selectedCustomer.CustomerDeliveryAddressList != null
+                            ? new BindingList<Address>(new List<Address>(selectedCustomer.CustomerDeliveryAddressList))
+                            : new BindingList<Address>();
+                        CustomerPOBoxes = selectedCustomer.CustomerPOBoxAddress != null
+                            ? new BindingList<Address>(new List<Address>(selectedCustomer.CustomerPOBoxAddress))
+                            : new BindingList<Address>();
+                    }
+                    else
+                    {
+                        CustomerDeliveryAddresses = new BindingList<Address>();
+                        CustomerPOBoxes = new BindingList<Address>();
+                    }
+                }
             }
         }
 
@@ -96,8 +149,10 @@ namespace QuoteSwift
             get => selectedPump;
             set
             {
-                selectedPump = value;
-                OnPropertyChanged(nameof(SelectedPump));
+                if (SetProperty(ref selectedPump, value))
+                {
+                    LoadPartlists();
+                }
             }
         }
 
@@ -118,6 +173,76 @@ namespace QuoteSwift
             {
                 nonMandatoryParts = value;
                 OnPropertyChanged(nameof(NonMandatoryParts));
+            }
+        }
+
+        public BindingList<string> BusinessTelephoneNumbers
+        {
+            get => businessTelephoneNumbers;
+            private set
+            {
+                businessTelephoneNumbers = value;
+                OnPropertyChanged(nameof(BusinessTelephoneNumbers));
+            }
+        }
+
+        public BindingList<string> BusinessCellphoneNumbers
+        {
+            get => businessCellphoneNumbers;
+            private set
+            {
+                businessCellphoneNumbers = value;
+                OnPropertyChanged(nameof(BusinessCellphoneNumbers));
+            }
+        }
+
+        public BindingList<string> BusinessEmailAddresses
+        {
+            get => businessEmailAddresses;
+            private set
+            {
+                businessEmailAddresses = value;
+                OnPropertyChanged(nameof(BusinessEmailAddresses));
+            }
+        }
+
+        public BindingList<Address> BusinessPOBoxes
+        {
+            get => businessPOBoxes;
+            private set
+            {
+                businessPOBoxes = value;
+                OnPropertyChanged(nameof(BusinessPOBoxes));
+            }
+        }
+
+        public BindingList<Customer> Customers
+        {
+            get => customers;
+            private set
+            {
+                customers = value;
+                OnPropertyChanged(nameof(Customers));
+            }
+        }
+
+        public BindingList<Address> CustomerDeliveryAddresses
+        {
+            get => customerDeliveryAddresses;
+            private set
+            {
+                customerDeliveryAddresses = value;
+                OnPropertyChanged(nameof(CustomerDeliveryAddresses));
+            }
+        }
+
+        public BindingList<Address> CustomerPOBoxes
+        {
+            get => customerPOBoxes;
+            private set
+            {
+                customerPOBoxes = value;
+                OnPropertyChanged(nameof(CustomerPOBoxes));
             }
         }
 

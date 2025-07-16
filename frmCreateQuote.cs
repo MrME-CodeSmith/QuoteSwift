@@ -88,7 +88,6 @@ namespace QuoteSwift
 
         private void CbxPumpSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            viewModel.LoadPartlists();
             mandatorySource.DataSource = viewModel.MandatoryParts;
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
             UpdatePricingDisplay();
@@ -111,7 +110,7 @@ namespace QuoteSwift
                 dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
                 dtpPaymentTerm.Value = DateTime.Today;
 
-                Text = Text.Replace("<< Business Name >>", GetBusinessSelection().BusinessName);
+                Text = Text.Replace("<< Business Name >>", viewModel.SelectedBusiness.BusinessName);
 
                 GetNewQuotenumber();
             }
@@ -132,7 +131,7 @@ namespace QuoteSwift
                 dtpQuoteExpiryDate.Value = dtpQuoteCreationDate.Value.AddMonths(2);
                 dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
 
-                Text = Text.Replace("<< Business Name >>", GetBusinessSelection().BusinessName);
+                Text = Text.Replace("<< Business Name >>", viewModel.SelectedBusiness.BusinessName);
                 if (viewModel.QuoteMap == null || viewModel.QuoteMap.Count == 0)
                 {
                     cbxUseAutomaticNumberingScheme.Checked = false;
@@ -151,20 +150,12 @@ namespace QuoteSwift
 
         private void CbxCustomerSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LinkCustomerDeliveryAddress(GetCustomerSelection(), ref cbxCustomerDeliveryAddress);
             LoadCustomerDetails();
-            LinkCustomerPOBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
             LoadCustomerPOBoxAddress();
         }
 
         private void CbxBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LinkBusinessTelephone(GetBusinessSelection(), ref cbxBusinessTelephoneNumberSelection);
-            LinkBusinessCellphone(GetBusinessSelection(), ref cbxBusinessCellphoneNumberSelection);
-            LinkBusinessEmail(GetBusinessSelection(), ref cbxBusinessEmailAddressSelection);
-            LinkCustomers(GetBusinessSelection(), ref cbxCustomerSelection);
-            LinkBusinesssPOBox(GetBusinessSelection(), ref CbxPOBoxSelection);
-
             LoadSelectedBusinessInformation();
             LoadBusinessPOBoxAddress();
             LoadBusinessLegalDatails();
@@ -193,44 +184,6 @@ namespace QuoteSwift
             UpdatePricingDisplay();
         }
 
-        private Business GetBusinessSelection()
-        {
-            Business business;
-            string SearchName = cbxBusinessSelection.Text;
-
-            if (viewModel.Businesses != null && SearchName.Length > 1)
-            {
-                business = viewModel.Businesses.SingleOrDefault(p => p.BusinessName == SearchName);
-                return business;
-            }
-
-            return null;
-        }
-
-        private Customer GetCustomerSelection()
-        {
-            string SearchName = cbxCustomerSelection.Text;
-
-            if (SearchName.Length > 1 && viewModel.Businesses != null)
-            {
-                Business selected = GetBusinessSelection();
-                if (selected != null && selected.BusinessCustomerList != null)
-                {
-                    return selected.BusinessCustomerList.SingleOrDefault(p => p.CustomerCompanyName == SearchName);
-                }
-            }
-
-            return null;
-        }
-
-        private Pump GetPumpSelection()
-        {
-            string SearchName = cbxPumpSelection.Text;
-
-            if (viewModel.Pumps != null) return viewModel.Pumps.SingleOrDefault(p => p.PumpName == SearchName);
-
-            return null;
-        }
 
         private Address GetBusinesssPOBoxAddressSelection(Business b)
         {
@@ -256,7 +209,7 @@ namespace QuoteSwift
         {
             string SearchName = cbxCustomerDeliveryAddress.Text;
 
-            if (GetCustomerSelection() != null && GetCustomerSelection().CustomerDeliveryAddressList != null) return GetCustomerSelection().CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
+            if (viewModel.SelectedCustomer != null && viewModel.SelectedCustomer.CustomerDeliveryAddressList != null) return viewModel.SelectedCustomer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
 
             return null;
         }
@@ -399,16 +352,31 @@ namespace QuoteSwift
                 cbxBusinessSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusiness), false, DataSourceUpdateMode.OnPropertyChanged);
             }
 
-            LinkBusinessTelephone(GetBusinessSelection(), ref cbxBusinessTelephoneNumberSelection);
-            LinkBusinessCellphone(GetBusinessSelection(), ref cbxBusinessCellphoneNumberSelection);
-            LinkBusinessEmail(GetBusinessSelection(), ref cbxBusinessEmailAddressSelection);
-            LinkCustomers(GetBusinessSelection(), ref cbxCustomerSelection);
+            cbxBusinessTelephoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessTelephoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxBusinessCellphoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessCellphoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxBusinessEmailAddressSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessEmailAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            cbxCustomerSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Customers), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxCustomerSelection.DisplayMember = "CustomerCompanyName";
+            cbxCustomerSelection.ValueMember = "CustomerCompanyName";
             cbxCustomerSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomer), false, DataSourceUpdateMode.OnPropertyChanged);
-            LinkCustomerDeliveryAddress(GetCustomerSelection(), ref cbxCustomerDeliveryAddress);
-            LinkPumpList(ref cbxPumpSelection);
+
+            cbxCustomerDeliveryAddress.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxCustomerDeliveryAddress.DisplayMember = "AddressDescription";
+            cbxCustomerDeliveryAddress.ValueMember = "AddressDescription";
+
+            cbxPumpSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Pumps), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxPumpSelection.DisplayMember = "PumpName";
+            cbxPumpSelection.ValueMember = "PumpName";
             cbxPumpSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
-            LinkBusinesssPOBox(GetBusinessSelection(), ref CbxPOBoxSelection);
-            LinkCustomerPOBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
+
+            CbxPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
+            CbxPOBoxSelection.DisplayMember = "AddressDescription";
+            CbxPOBoxSelection.ValueMember = "AddressDescription";
+
+            CbxCustomerPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
+            CbxCustomerPOBoxSelection.DisplayMember = "AddressDescription";
+            CbxCustomerPOBoxSelection.ValueMember = "AddressDescription";
         }
 
         private void SetupBindings()
@@ -475,7 +443,7 @@ namespace QuoteSwift
 
         private void LoadBusinessPOBoxAddress()
         {
-            Address Selection = GetBusinesssPOBoxAddressSelection(GetBusinessSelection());
+            Address Selection = GetBusinesssPOBoxAddressSelection(viewModel.SelectedBusiness);
             if (Selection != null)
             {
                 lblBusinessPOBoxNumber.Text = "Street Name: " + Selection.AddressStreetName;
@@ -487,7 +455,7 @@ namespace QuoteSwift
         }
         private void LoadCustomerPOBoxAddress()
         {
-            Address Selection = GetCustomerPOBoxAddressSelection(GetCustomerSelection());
+            Address Selection = GetCustomerPOBoxAddressSelection(viewModel.SelectedCustomer);
             if (Selection != null)
             {
                 lblCustomerPOBoxStreetName.Text = "P.O.Box Number " + Selection.AddressStreetNumber.ToString();
@@ -499,7 +467,7 @@ namespace QuoteSwift
 
         private void LoadBusinessLegalDatails()
         {
-            Business Selection = GetBusinessSelection();
+            Business Selection = viewModel.SelectedBusiness;
             lblBusinessRegistrationNumber.Text = "Registration Number: " + Selection.BusinessLegalDetails.RegistrationNumber;
             lblBusinessVATNumber.Text = "VAT Number: " + Selection.BusinessLegalDetails.VatNumber;
         }
@@ -519,8 +487,8 @@ namespace QuoteSwift
         private void LoadCustomerDetails()
         {
             LoadCustomerDeliveryAddress();
-            lblCustomerVendorNumber.Text = "Vendor Number: " + GetCustomerSelection().VendorNumber;
-            txtCustomerVATNumber.Text = GetCustomerSelection().CustomerLegalDetails.VatNumber;
+            lblCustomerVendorNumber.Text = "Vendor Number: " + viewModel.SelectedCustomer.VendorNumber;
+            txtCustomerVATNumber.Text = viewModel.SelectedCustomer.CustomerLegalDetails.VatNumber;
         }
 
         private void CbxCustomerPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
@@ -586,9 +554,6 @@ namespace QuoteSwift
         {
             if (!ValidInput()) return null;
 
-            viewModel.SelectedBusiness = GetBusinessSelection();
-            viewModel.SelectedCustomer = GetCustomerSelection();
-            viewModel.SelectedPump = GetPumpSelection();
             viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
             viewModel.Calculate();
 
