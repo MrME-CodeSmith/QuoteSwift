@@ -8,32 +8,48 @@ namespace QuoteSwift
         readonly Business business;
         readonly Customer customer;
         readonly Address address;
-        readonly IMessageService messageService;
+        OperationResult lastResult = OperationResult.Successful();
 
         public ICommand UpdateAddressCommand { get; }
 
+        public OperationResult LastResult
+        {
+            get => lastResult;
+            private set
+            {
+                if (lastResult != value)
+                {
+                    lastResult = value;
+                    OnPropertyChanged(nameof(LastResult));
+                }
+            }
+        }
 
-        public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null, IMessageService messageService = null)
+
+        public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null)
         {
             this.business = business;
             this.customer = customer;
             this.address = address;
-            this.messageService = messageService;
-            UpdateAddressCommand = new RelayCommand(a => UpdateAddress(a as Address));
+            UpdateAddressCommand = new RelayCommand(a =>
+            {
+                var r = UpdateAddress(a as Address);
+                LastResult = r;
+            });
         }
 
         public Business Business => business;
         public Customer Customer => customer;
         public Address Address => address;
 
-        public bool UpdateAddress(Address updated)
+        public OperationResult UpdateAddress(Address updated)
         {
-            if (!ValidateInput(updated))
-                return false;
+            var valid = ValidateInput(updated);
+            if (!valid.Success)
+                return valid;
             if (AddressExists(updated))
             {
-                messageService.ShowError("Address not updated since this address is already in the list of addresses.\nNOTE: Address Description should be unique.", "ERROR - Address Already Added");
-                return false;
+                return OperationResult.Failure("Address not updated since this address is already in the list of addresses.\nNOTE: Address Description should be unique.", "ERROR - Address Already Added");
             }
             if (address != null)
             {
@@ -44,44 +60,38 @@ namespace QuoteSwift
                 address.AddressCity = updated.AddressCity;
                 address.AddressAreaCode = updated.AddressAreaCode;
             }
-            return true;
+            return OperationResult.Successful();
         }
 
-        bool ValidateInput(Address a)
+        OperationResult ValidateInput(Address a)
         {
             if (a == null)
-                return false;
+                return OperationResult.Failure(null, null);
             if (string.IsNullOrWhiteSpace(a.AddressDescription) || a.AddressDescription.Length < 2)
             {
-                messageService.ShowError("The provided Business Address Description is invalid, please provide a valid description", "ERROR - Invalid Business Address Description");
-                return false;
+                return OperationResult.Failure("The provided Business Address Description is invalid, please provide a valid description", "ERROR - Invalid Business Address Description");
             }
             if (a.AddressStreetNumber == 0)
             {
-                messageService.ShowError("The provided Business Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business Address Street Number");
-                return false;
+                return OperationResult.Failure("The provided Business Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business Address Street Number");
             }
             if (string.IsNullOrWhiteSpace(a.AddressStreetName) || a.AddressStreetName.Length < 2)
             {
-                messageService.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
-                return false;
+                return OperationResult.Failure("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
             }
             if (string.IsNullOrWhiteSpace(a.AddressSuburb) || a.AddressSuburb.Length < 2)
             {
-                messageService.ShowError("The provided Business Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business Address Suburb");
-                return false;
+                return OperationResult.Failure("The provided Business Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business Address Suburb");
             }
             if (string.IsNullOrWhiteSpace(a.AddressCity) || a.AddressCity.Length < 2)
             {
-                messageService.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business Address City");
-                return false;
+                return OperationResult.Failure("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business Address City");
             }
             if (a.AddressAreaCode == 0)
             {
-                messageService.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business Address Area Code");
-                return false;
+                return OperationResult.Failure("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business Address Area Code");
             }
-            return true;
+            return OperationResult.Successful();
         }
 
         bool AddressExists(Address a)

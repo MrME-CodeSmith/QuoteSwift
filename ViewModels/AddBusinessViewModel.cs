@@ -8,7 +8,6 @@ namespace QuoteSwift
     public class AddBusinessViewModel : ViewModelBase
     {
         readonly IDataService dataService;
-        readonly IMessageService messageService;
         BindingList<Business> businessList;
         readonly Dictionary<string, Business> businessLookup = new Dictionary<string, Business>();
         readonly HashSet<string> businessVatNumbers = new HashSet<string>();
@@ -17,9 +16,23 @@ namespace QuoteSwift
         bool changeSpecificObject;
         Business currentBusiness;
         bool lastOperationSuccessful;
+        OperationResult lastResult = OperationResult.Successful();
         
         public ICommand AddBusinessCommand { get; }
         public ICommand UpdateBusinessCommand { get; }
+
+        public OperationResult LastResult
+        {
+            get => lastResult;
+            private set
+            {
+                if (lastResult != value)
+                {
+                    lastResult = value;
+                    OnPropertyChanged(nameof(LastResult));
+                }
+            }
+        }
 
         public bool LastOperationSuccessful
         {
@@ -49,12 +62,21 @@ namespace QuoteSwift
         }
 
 
-        public AddBusinessViewModel(IDataService service, IMessageService messageService)
+        public AddBusinessViewModel(IDataService service)
         {
             dataService = service;
-            this.messageService = messageService;
-            AddBusinessCommand = new RelayCommand(_ => LastOperationSuccessful = AddBusiness());
-            UpdateBusinessCommand = new RelayCommand(_ => LastOperationSuccessful = UpdateBusiness());
+            AddBusinessCommand = new RelayCommand(_ =>
+            {
+                var result = AddBusiness();
+                LastResult = result;
+                LastOperationSuccessful = result.Success;
+            });
+            UpdateBusinessCommand = new RelayCommand(_ =>
+            {
+                var result = UpdateBusiness();
+                LastResult = result;
+                LastOperationSuccessful = result.Success;
+            });
         }
 
         public IDataService DataService => dataService;
@@ -137,10 +159,11 @@ namespace QuoteSwift
             this.changeSpecificObject = changeSpecificObject;
         }
 
-        public bool AddBusiness()
+        public OperationResult AddBusiness()
         {
-            if (!ValidateBusiness())
-                return false;
+            var valid = ValidateBusiness();
+            if (!valid.Success)
+                return valid;
 
             if (businessList == null)
                 businessList = new BindingList<Business>();
@@ -149,8 +172,7 @@ namespace QuoteSwift
                 businessVatNumbers.Contains(CurrentBusiness.BusinessLegalDetails?.VatNumber) ||
                 businessRegNumbers.Contains(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber))
             {
-                messageService.ShowError("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
-                return false;
+                return OperationResult.Failure("This business has already been added previously.\nHINT: Business Name,VAT Number and Registration Number should be unique", "ERROR - Business Already Added");
             }
 
             businessList.Add(CurrentBusiness);
@@ -160,16 +182,17 @@ namespace QuoteSwift
 
             businessToChange = null;
             changeSpecificObject = false;
-            return true;
+            return OperationResult.Successful();
         }
 
-        public bool UpdateBusiness()
+        public OperationResult UpdateBusiness()
         {
-            if (!ValidateBusiness())
-                return false;
+            var valid = ValidateBusiness();
+            if (!valid.Success)
+                return valid;
 
             if (businessToChange == null)
-                return false;
+                return OperationResult.Failure(null, null);
 
             string oldName = businessToChange.BusinessName;
             string oldVat = businessToChange.BusinessLegalDetails?.VatNumber;
@@ -188,55 +211,54 @@ namespace QuoteSwift
             businessVatNumbers.Add(CurrentBusiness.BusinessLegalDetails?.VatNumber);
             businessRegNumbers.Add(CurrentBusiness.BusinessLegalDetails?.RegistrationNumber);
             
-            return true;
+            return OperationResult.Successful();
         }
 
-        public bool AddAddress(Address address)
+        public OperationResult AddAddress(Address address)
         {
-            if (!ValidateAddress(address))
-                return false;
+            var valid = ValidateAddress(address);
+            if (!valid.Success)
+                return valid;
 
             string key = StringUtil.NormalizeKey(address.AddressDescription);
             if (CurrentBusiness.AddressMap.ContainsKey(key))
             {
-                messageService.ShowError("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
-                return false;
+                return OperationResult.Failure("This address has already been added previously.\nHINT: Description should be unique", "ERROR - Address Already Added");
             }
 
             CurrentBusiness.AddAddress(address);
-            return true;
+            return OperationResult.Successful();
         }
 
-        public bool AddPOBoxAddress(Address address)
+        public OperationResult AddPOBoxAddress(Address address)
         {
-            if (!ValidatePOBoxAddress(address))
-                return false;
+            var valid = ValidatePOBoxAddress(address);
+            if (!valid.Success)
+                return valid;
 
             string key = StringUtil.NormalizeKey(address.AddressDescription);
             if (CurrentBusiness.POBoxMap.ContainsKey(key))
             {
-                messageService.ShowError("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
-                return false;
+                return OperationResult.Failure("This P.O.Box address has already been added previously.\nHINT: Description should be unique", "ERROR - P.O.Box Address Already Added");
             }
 
             CurrentBusiness.AddPOBoxAddress(address);
-            return true;
+            return OperationResult.Successful();
         }
 
-        public bool AddPhoneNumber(string telephone, string cellphone)
+        public OperationResult AddPhoneNumber(string telephone, string cellphone)
         {
             bool added = false;
             if ((telephone == null || telephone.Length < 10) && (cellphone == null || cellphone.Length < 10))
             {
-                messageService.ShowError("a Valid Phone Number/s were not provided, please provide at least one valid phone number.", "ERROR - Invalid Number/s Provided");
-                return false;
+                return OperationResult.Failure("a Valid Phone Number/s were not provided, please provide at least one valid phone number.", "ERROR - Invalid Number/s Provided");
             }
 
             if (!string.IsNullOrWhiteSpace(telephone) && telephone.Length >= 10)
             {
                 if (CurrentBusiness.TelephoneNumbers.Contains(telephone) || CurrentBusiness.CellphoneNumbers.Contains(telephone))
                 {
-                    messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
+                    LastResult = OperationResult.Failure("This number has already been added previously.", "ERROR - Number Already Added");
                 }
                 else
                 {
@@ -249,7 +271,7 @@ namespace QuoteSwift
             {
                 if (CurrentBusiness.TelephoneNumbers.Contains(cellphone) || CurrentBusiness.CellphoneNumbers.Contains(cellphone))
                 {
-                    messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
+                    LastResult = OperationResult.Failure("This number has already been added previously.", "ERROR - Number Already Added");
                 }
                 else
                 {
@@ -258,155 +280,135 @@ namespace QuoteSwift
                 }
             }
 
-            return added;
+            return added ? OperationResult.Successful() : LastResult;
         }
 
-        public bool AddEmailAddress(string email)
+        public OperationResult AddEmailAddress(string email)
         {
             if (string.IsNullOrWhiteSpace(email) || email.Length <= 3 || !email.Contains("@"))
             {
-                messageService.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
-                return false;
+                return OperationResult.Failure("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
             }
 
             if (CurrentBusiness.EmailAddresses.Contains(email))
             {
-                messageService.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
-                return false;
+                return OperationResult.Failure("This email address has already been added previously.", "ERROR - Email Address Already Added");
             }
 
             CurrentBusiness.AddEmailAddress(email);
-            return true;
+            return OperationResult.Successful();
         }
 
-        bool ValidateAddress(Address a)
+        OperationResult ValidateAddress(Address a)
         {
             if (a == null)
-                return false;
+                return OperationResult.Failure(null, null);
 
             if (string.IsNullOrWhiteSpace(a.AddressDescription) || a.AddressDescription.Length < 2)
             {
-                messageService.ShowError("The provided Business Address Description is invalid, please provide a valid description", "ERROR - Invalid Business Address Description");
-                return false;
+                return OperationResult.Failure("The provided Business Address Description is invalid, please provide a valid description", "ERROR - Invalid Business Address Description");
             }
 
             if (a.AddressStreetNumber == 0)
             {
-                messageService.ShowError("The provided Business Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business Address Street Number");
-                return false;
+                return OperationResult.Failure("The provided Business Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business Address Street Number");
             }
 
             if (string.IsNullOrWhiteSpace(a.AddressStreetName) || a.AddressStreetName.Length < 2)
             {
-                messageService.ShowError("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
-                return false;
+                return OperationResult.Failure("The provided Business Address Street Name is invalid, please provide a valid street name", "ERROR - Invalid Business Address Street Name");
             }
 
             if (string.IsNullOrWhiteSpace(a.AddressSuburb) || a.AddressSuburb.Length < 2)
             {
-                messageService.ShowError("The provided Business Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business Address Suburb");
-                return false;
+                return OperationResult.Failure("The provided Business Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business Address Suburb");
             }
 
             if (string.IsNullOrWhiteSpace(a.AddressCity) || a.AddressCity.Length < 2)
             {
-                messageService.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business Address City");
-                return false;
+                return OperationResult.Failure("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business Address City");
             }
 
             if (a.AddressAreaCode == 0)
             {
-                messageService.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business Address Area Code");
-                return false;
+                return OperationResult.Failure("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business Address Area Code");
             }
 
-            return true;
+            return OperationResult.Successful();
         }
 
-        bool ValidatePOBoxAddress(Address a)
+        OperationResult ValidatePOBoxAddress(Address a)
         {
             if (a == null)
-                return false;
+                return OperationResult.Failure(null, null);
 
             if (string.IsNullOrWhiteSpace(a.AddressDescription) || a.AddressDescription.Length < 2)
             {
-                messageService.ShowError("The provided Business P.O.Box Address Description is invalid, please provide a valid description", "ERROR - Invalid Business P.O.Box Address Description");
-                return false;
+                return OperationResult.Failure("The provided Business P.O.Box Address Description is invalid, please provide a valid description", "ERROR - Invalid Business P.O.Box Address Description");
             }
 
             if (a.AddressStreetNumber == 0)
             {
-                messageService.ShowError("The provided Business' P.O.Box Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business' P.O.Box Address Street Number");
-                return false;
+                return OperationResult.Failure("The provided Business' P.O.Box Address Street Number is invalid, please provide a valid street number", "ERROR - Invalid Business' P.O.Box Address Street Number");
             }
 
             if (string.IsNullOrWhiteSpace(a.AddressSuburb) || a.AddressSuburb.Length < 2)
             {
-                messageService.ShowError("The provided Business' P.O.Box Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business' P.O.Box Address Suburb");
-                return false;
+                return OperationResult.Failure("The provided Business' P.O.Box Address Suburb is invalid, please provide a valid suburb", "ERROR - Invalid Business' P.O.Box Address Suburb");
             }
 
             if (string.IsNullOrWhiteSpace(a.AddressCity) || a.AddressCity.Length < 2)
             {
-                messageService.ShowError("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business' P.O.Box Address City");
-                return false;
+                return OperationResult.Failure("The provided Business Address City is invalid, please provide a valid city", "ERROR - Invalid Business' P.O.Box Address City");
             }
 
             if (a.AddressAreaCode == 0)
             {
-                messageService.ShowError("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business' P.O.Box Address Area Code");
-                return false;
+                return OperationResult.Failure("The provided Business Address Area Code is invalid, please provide a valid area code", "ERROR - Invalid Business' P.O.Box Address Area Code");
             }
 
-            return true;
+            return OperationResult.Successful();
         }
 
-        bool ValidateBusiness()
+        OperationResult ValidateBusiness()
         {
             if (string.IsNullOrWhiteSpace(CurrentBusiness.BusinessName) || CurrentBusiness.BusinessName.Length < 3)
             {
-                messageService.ShowError("The provided business name is invalid, please provide a business name longer that 2 characters.", "ERROR - Invalid Business Name");
-                return false;
+                return OperationResult.Failure("The provided business name is invalid, please provide a business name longer that 2 characters.", "ERROR - Invalid Business Name");
             }
 
             if (CurrentBusiness.BusinessLegalDetails == null || string.IsNullOrWhiteSpace(CurrentBusiness.BusinessLegalDetails.VatNumber) || CurrentBusiness.BusinessLegalDetails.VatNumber.Length < 7)
             {
-                messageService.ShowError("The provided VAT number is invalid, please provide a valid VAT number.", "ERROR - Invalid Business VAT Number");
-                return false;
+                return OperationResult.Failure("The provided VAT number is invalid, please provide a valid VAT number.", "ERROR - Invalid Business VAT Number");
             }
 
             if (CurrentBusiness.BusinessLegalDetails == null || string.IsNullOrWhiteSpace(CurrentBusiness.BusinessLegalDetails.RegistrationNumber) || CurrentBusiness.BusinessLegalDetails.RegistrationNumber.Length < 7)
             {
-                messageService.ShowError("The provided registration number is invalid, please provide a valid registration number.", "ERROR - Invalid Business Registration Number");
-                return false;
+                return OperationResult.Failure("The provided registration number is invalid, please provide a valid registration number.", "ERROR - Invalid Business Registration Number");
             }
 
             if (CurrentBusiness.BusinessAddressList == null || CurrentBusiness.BusinessAddressList.Count == 0)
             {
-                messageService.ShowError("Please add a valid business address under the 'Business Address' section.", "ERROR - Current Business Invalid");
-                return false;
+                return OperationResult.Failure("Please add a valid business address under the 'Business Address' section.", "ERROR - Current Business Invalid");
             }
 
             if (CurrentBusiness.BusinessPOBoxAddressList == null || CurrentBusiness.BusinessPOBoxAddressList.Count == 0)
             {
-                messageService.ShowError("Please add a valid business P.O.Box address under the 'Business P.O.Box Address' section.", "ERROR - Current Business Invalid");
-                return false;
+                return OperationResult.Failure("Please add a valid business P.O.Box address under the 'Business P.O.Box Address' section.", "ERROR - Current Business Invalid");
             }
 
             if ((CurrentBusiness.BusinessTelephoneNumberList == null || CurrentBusiness.BusinessTelephoneNumberList.Count == 0) &&
                 (CurrentBusiness.BusinessCellphoneNumberList == null || CurrentBusiness.BusinessCellphoneNumberList.Count == 0))
             {
-                messageService.ShowError("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current Business Invalid");
-                return false;
+                return OperationResult.Failure("Please add a valid phone number under the 'Phone Related' section.", "ERROR - Current Business Invalid");
             }
 
             if (CurrentBusiness.BusinessEmailAddressList == null || CurrentBusiness.BusinessEmailAddressList.Count == 0)
             {
-                messageService.ShowError("Please add a valid business email address under the 'Email Related' section.", "ERROR - Current Business Invalid");
-                return false;
+                return OperationResult.Failure("Please add a valid business email address under the 'Email Related' section.", "ERROR - Current Business Invalid");
             }
 
-            return true;
+            return OperationResult.Successful();
         }
 
         void SyncLookup()

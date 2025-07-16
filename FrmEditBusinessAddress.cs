@@ -46,11 +46,14 @@ namespace QuoteSwift
                 AddressAreaCode = ParsingService.ParseInt(mtxtAreaCode.Text)
             };
 
-            if (viewModel.UpdateAddress(updated))
+            var result = viewModel.UpdateAddress(updated);
+            if (result.Success)
             {
                 messageService.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
                 Close();
             }
+            else if (result.Message != null)
+                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

@@ -57,6 +57,8 @@ namespace QuoteSwift
                     messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
                     ResetScreenInput();
                 }
+                else if (viewModel.LastResult?.Message != null)
+                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
             }
             else if (viewModel.ValidateBusiness() && viewModel.ChangeSpecificObject)
             {
@@ -72,6 +74,8 @@ namespace QuoteSwift
                     messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
                     ConvertToViewOnly();
                 }
+                else if (viewModel.LastResult?.Message != null)
+                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
             }
         }
 
@@ -113,11 +117,14 @@ namespace QuoteSwift
             var addr = new Address(txtCustomerAddresssDescription.Text, 0, txtAtt.Text, txtWorkArea.Text, txtWorkPlace.Text, 0);
             if (viewModel.ValidateCustomerAddress(addr))
             {
-                if (viewModel.AddDeliveryAddress(addr))
+                var r = viewModel.AddDeliveryAddress(addr);
+                if (r.Success)
                 {
                     messageService.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
                     ClearCustomerAddressInput();
                 }
+                else if (r.Message != null)
+                    messageService.ShowError(r.Message, r.Caption);
             }
         }
 
@@ -129,22 +136,28 @@ namespace QuoteSwift
                                  ParsingService.ParseInt(mtxtPOBoxAreaCode.Text));
             if (viewModel.ValidateCustomerPOBoxAddress(po))
             {
-                if (viewModel.AddPOBoxAddress(po))
+                var r = viewModel.AddPOBoxAddress(po);
+                if (r.Success)
                 {
                     messageService.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                     ClearPOBoxAddressInput();
                 }
+                else if (r.Message != null)
+                    messageService.ShowError(r.Message, r.Caption);
             }
         }
 
         private void BtnAddNumber_Click(object sender, EventArgs e)
         {
-            if (viewModel.AddPhoneNumbers(mtxtTelephoneNumber.Text, mtxtCellphoneNumber.Text))
+            var nr = viewModel.AddPhoneNumbers(mtxtTelephoneNumber.Text, mtxtCellphoneNumber.Text);
+            if (nr.Success)
             {
                 mtxtTelephoneNumber.ResetText();
                 mtxtCellphoneNumber.ResetText();
                 messageService.ShowInformation("Successfully added the customer phone number/s", "INFORMATION - Customer Phone Number/s Added Successfully");
             }
+            else if (nr.Message != null)
+                messageService.ShowError(nr.Message, nr.Caption);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

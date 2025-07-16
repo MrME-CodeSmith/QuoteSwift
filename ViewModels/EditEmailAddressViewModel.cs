@@ -7,20 +7,36 @@ namespace QuoteSwift
     {
         readonly Business business;
         readonly Customer customer;
-        readonly IMessageService messageService;
+        OperationResult lastResult = OperationResult.Successful();
         string originalEmail;
 
         public ICommand UpdateEmailCommand { get; }
 
 
-        public EditEmailAddressViewModel(Business business = null, Customer customer = null, string email = null, IMessageService messageService = null)
+        public EditEmailAddressViewModel(Business business = null, Customer customer = null, string email = null)
         {
             this.business = business;
             this.customer = customer;
             originalEmail = email ?? string.Empty;
-            this.messageService = messageService;
             CurrentEmail = originalEmail;
-            UpdateEmailCommand = new RelayCommand(_ => UpdateEmail());
+            UpdateEmailCommand = new RelayCommand(_ =>
+            {
+                var r = UpdateEmail();
+                LastResult = r;
+            });
+        }
+
+        public OperationResult LastResult
+        {
+            get => lastResult;
+            private set
+            {
+                if (lastResult != value)
+                {
+                    lastResult = value;
+                    OnPropertyChanged(nameof(LastResult));
+                }
+            }
         }
 
         public string CurrentEmail { get; set; }
@@ -28,16 +44,16 @@ namespace QuoteSwift
         public Customer Customer => customer;
         public string OriginalEmail => originalEmail;
 
-        public bool UpdateEmail()
+        public OperationResult UpdateEmail()
         {
-            if (!ValidateEmail(CurrentEmail))
-                return false;
+            var valid = ValidateEmail(CurrentEmail);
+            if (!valid.Success)
+                return valid;
             if (business != null)
             {
                 if (business.EmailAddresses.Contains(CurrentEmail) && CurrentEmail != originalEmail)
                 {
-                    messageService.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
-                    return false;
+                    return OperationResult.Failure("This email address has already been added previously.", "ERROR - Email Address Already Added");
                 }
                 business.UpdateEmailAddress(originalEmail, CurrentEmail);
             }
@@ -45,23 +61,21 @@ namespace QuoteSwift
             {
                 if (customer.EmailAddresses.Contains(CurrentEmail) && CurrentEmail != originalEmail)
                 {
-                    messageService.ShowError("This email address has already been added previously.", "ERROR - Email Address Already Added");
-                    return false;
+                    return OperationResult.Failure("This email address has already been added previously.", "ERROR - Email Address Already Added");
                 }
                 customer.UpdateEmailAddress(originalEmail, CurrentEmail);
             }
             originalEmail = CurrentEmail;
-            return true;
+            return OperationResult.Successful();
         }
 
-        bool ValidateEmail(string email)
+        OperationResult ValidateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email) || email.Length <= 3 || !email.Contains("@"))
             {
-                messageService.ShowError("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
-                return false;
+                return OperationResult.Failure("The provided Email Address is invalid. Please provide a valid Email Address", "ERROR - Invalid Email Address");
             }
-            return true;
+            return OperationResult.Successful();
         }
 
     }

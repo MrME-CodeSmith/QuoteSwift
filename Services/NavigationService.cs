@@ -93,7 +93,7 @@ namespace QuoteSwift
 
         public void AddCustomer(Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddCustomerViewModel(dataService, notificationService, messageService);
+            var vm = new AddCustomerViewModel(dataService, notificationService);
             vm.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
             using (var form = new FrmAddCustomer(vm, this, appData, businessToChange, messageService, serializationService))
             {
@@ -114,7 +114,7 @@ namespace QuoteSwift
 
         public void AddBusiness(Business businessToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddBusinessViewModel(dataService, messageService);
+            var vm = new AddBusinessViewModel(dataService);
             vm.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddBusiness(vm, this, appData, messageService, serializationService))
@@ -177,7 +177,7 @@ namespace QuoteSwift
 
         public void EditBusinessAddress(Business business = null, Customer customer = null, Address address = null)
         {
-            var vm = new EditBusinessAddressViewModel(business, customer, address, messageService);
+            var vm = new EditBusinessAddressViewModel(business, customer, address);
             using (var form = new FrmEditBusinessAddress(vm, messageService))
             {
                 form.ShowDialog();
@@ -186,7 +186,7 @@ namespace QuoteSwift
 
         public void EditBusinessEmailAddress(Business business = null, Customer customer = null, string email = "")
         {
-            var vm = new EditEmailAddressViewModel(business, customer, email, messageService);
+            var vm = new EditEmailAddressViewModel(business, customer, email);
             using (var form = new FrmEditEmailAddress(vm, messageService))
             {
                 form.ShowDialog();
@@ -195,7 +195,7 @@ namespace QuoteSwift
 
         public void EditPhoneNumber(Business business = null, Customer customer = null, string number = "")
         {
-            var vm = new EditPhoneNumberViewModel(business, customer, number, messageService);
+            var vm = new EditPhoneNumberViewModel(business, customer, number);
             using (var form = new FrmEditPhoneNumber(vm, messageService))
             {
                 form.ShowDialog();

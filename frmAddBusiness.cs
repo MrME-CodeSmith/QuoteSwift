@@ -49,6 +49,10 @@ namespace QuoteSwift
                     SetupBindings();
                     ResetScreenInput();
                 }
+                else if (viewModel.LastResult?.Message != null)
+                {
+                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
+                }
             }
             else
             {
@@ -57,6 +61,10 @@ namespace QuoteSwift
                 {
                     messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been successfully updated.", "INFORMATION - Business Successfully Updated");
                     viewModel.ChangeSpecificObject = false;
+                }
+                else if (viewModel.LastResult?.Message != null)
+                {
+                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
                 }
             }
         }
@@ -77,11 +85,14 @@ namespace QuoteSwift
                                           ParsingService.ParseInt(mtxtPOBoxStreetNumber.Text),
                                           "", txtPOBoxSuburb.Text, txtPOBoxCity.Text,
                                           ParsingService.ParseInt(mtxtPOBoxAreaCode.Text));
-            if (viewModel.AddPOBoxAddress(address))
+            var result = viewModel.AddPOBoxAddress(address);
+            if (result.Success)
             {
                 messageService.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
                 ClearPOBoxAddressInput();
             }
+            else if (result.Message != null)
+                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void BtnAddAddress_Click(object sender, EventArgs e)
@@ -90,21 +101,27 @@ namespace QuoteSwift
                                           ParsingService.ParseInt(mtxtStreetnumber.Text),
                                           txtStreetName.Text, txtSuburb.Text, txtCity.Text,
                                           ParsingService.ParseInt(mtxtAreaCode.Text));
-            if (viewModel.AddAddress(address))
+            result = viewModel.AddAddress(address);
+            if (result.Success)
             {
                 messageService.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
                 ClearBusinessAddressInput();
             }
+            else if (result.Message != null)
+                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void BtnAddNumber_Click(object sender, EventArgs e)
         {
-            if (viewModel.AddPhoneNumber(mtxtTelephoneNumber.Text, mtxtCellphoneNumber.Text))
+            result = viewModel.AddPhoneNumber(mtxtTelephoneNumber.Text, mtxtCellphoneNumber.Text);
+            if (result.Success)
             {
                 messageService.ShowInformation("Successfully added the business phone number/s", "INFORMATION - Business Phone Number/s Added Successfully");
                 mtxtTelephoneNumber.ResetText();
                 mtxtCellphoneNumber.ResetText();
             }
+            else if (result.Message != null)
+                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -114,11 +131,14 @@ namespace QuoteSwift
 
         private void BtnAddBusinessEmail_Click(object sender, EventArgs e)
         {
-            if (viewModel.AddEmailAddress(mtxtEmail.Text))
+            result = viewModel.AddEmailAddress(mtxtEmail.Text);
+            if (result.Success)
             {
                 messageService.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
                 mtxtEmail.ResetText();
             }
+            else if (result.Message != null)
+                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
