@@ -55,6 +55,7 @@ namespace QuoteSwift
                 if (viewModel.LastOperationSuccessful)
                 {
                     messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
+                    viewModel.ClearCurrentCustomer();
                     ResetScreenInput();
                 }
                 else if (viewModel.LastResult?.Message != null)
@@ -103,7 +104,7 @@ namespace QuoteSwift
             }
             else if (viewModel.CustomerToChange == null && !viewModel.ChangeSpecificObject) // Add New Business Info
             {
-                viewModel.CurrentCustomer = new Customer();
+                viewModel.ClearCurrentCustomer();
             }
             else // Undefined Use - Show ERROR
             {
@@ -114,7 +115,10 @@ namespace QuoteSwift
 
         private void BtnAddAddress_Click(object sender, EventArgs e)
         {
-            var addr = new Address(txtCustomerAddresssDescription.Text, 0, txtAtt.Text, txtWorkArea.Text, txtWorkPlace.Text, 0);
+            var addr = viewModel.BuildCustomerAddress(txtCustomerAddresssDescription.Text,
+                                                     txtAtt.Text,
+                                                     txtWorkArea.Text,
+                                                     txtWorkPlace.Text);
             if (viewModel.ValidateCustomerAddress(addr))
             {
                 var r = viewModel.AddDeliveryAddress(addr);
@@ -130,10 +134,11 @@ namespace QuoteSwift
 
         private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
         {
-            var po = new Address(txtCustomerPODescription.Text,
-                                 ParsingService.ParseInt(mtxtPOBoxStreetNumber.Text),
-                                 "", txtPOBoxSuburb.Text, txtPOBoxCity.Text,
-                                 ParsingService.ParseInt(mtxtPOBoxAreaCode.Text));
+            var po = viewModel.BuildPOBoxAddress(txtCustomerPODescription.Text,
+                                                mtxtPOBoxStreetNumber.Text,
+                                                txtPOBoxSuburb.Text,
+                                                txtPOBoxCity.Text,
+                                                mtxtPOBoxAreaCode.Text);
             if (viewModel.ValidateCustomerPOBoxAddress(po))
             {
                 var r = viewModel.AddPOBoxAddress(po);

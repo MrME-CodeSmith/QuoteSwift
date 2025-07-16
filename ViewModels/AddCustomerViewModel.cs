@@ -95,6 +95,33 @@ namespace QuoteSwift
             }
         }
 
+        public void ClearCurrentCustomer()
+        {
+            CurrentCustomer = new Customer();
+        }
+
+        public Address BuildCustomerAddress(string description,
+                                            string att,
+                                            string workArea,
+                                            string workPlace)
+        {
+            return new Address(description, 0, att, workArea, workPlace, 0);
+        }
+
+        public Address BuildPOBoxAddress(string description,
+                                         string streetNumber,
+                                         string suburb,
+                                         string city,
+                                         string areaCode)
+        {
+            return new Address(description,
+                               ParsingService.ParseInt(streetNumber),
+                               string.Empty,
+                               suburb,
+                               city,
+                               ParsingService.ParseInt(areaCode));
+        }
+
         public Customer CustomerToChange
         {
             get => customerToChange;

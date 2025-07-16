@@ -91,6 +91,40 @@ namespace QuoteSwift
             }
         }
 
+        public void ClearCurrentBusiness()
+        {
+            CurrentBusiness = new Business { BusinessLegalDetails = new Legal("", "") };
+        }
+
+        public Address BuildAddress(string description,
+                                    string streetNumber,
+                                    string streetName,
+                                    string suburb,
+                                    string city,
+                                    string areaCode)
+        {
+            return new Address(description,
+                               ParsingService.ParseInt(streetNumber),
+                               streetName,
+                               suburb,
+                               city,
+                               ParsingService.ParseInt(areaCode));
+        }
+
+        public Address BuildPOBoxAddress(string description,
+                                         string streetNumber,
+                                         string suburb,
+                                         string city,
+                                         string areaCode)
+        {
+            return new Address(description,
+                               ParsingService.ParseInt(streetNumber),
+                               string.Empty,
+                               suburb,
+                               city,
+                               ParsingService.ParseInt(areaCode));
+        }
+
         public Dictionary<string, Business> BusinessLookup => businessLookup;
         public HashSet<string> BusinessVatNumbers => businessVatNumbers;
         public HashSet<string> BusinessRegNumbers => businessRegNumbers;
