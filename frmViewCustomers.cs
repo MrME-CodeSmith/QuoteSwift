@@ -12,7 +12,6 @@ namespace QuoteSwift
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
         public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null, ISerializationService serializationService = null)
-        public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -30,6 +29,9 @@ namespace QuoteSwift
                     appData?.PumpList,
                     appData?.PartList,
                     appData?.QuoteMap);
+
+        }
+
 
         private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e)
         {
@@ -168,6 +170,7 @@ namespace QuoteSwift
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
+        }
 
         /**********************************************************************************/
     }
