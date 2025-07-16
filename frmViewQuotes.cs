@@ -12,12 +12,14 @@ namespace QuoteSwift
         readonly QuotesViewModel viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly ISerializationService serializationService;
 
-        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
+        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
+            this.serializationService = serializationService;
             this.messageService = messageService;
         }
 
@@ -50,12 +52,11 @@ namespace QuoteSwift
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                MainProgramCode.CloseApplication(true,
+                serializationService.CloseApplication(true,
                     viewModel.BusinessList,
                     viewModel.PumpList,
                     viewModel.PartMap,
                     viewModel.QuoteMap);
-            }
         }
 
         private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
