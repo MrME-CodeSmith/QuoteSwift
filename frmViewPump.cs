@@ -10,25 +10,21 @@ namespace QuoteSwift // Repair Quote Swift
 
         readonly ViewPumpViewModel viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
 
-        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
+        public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            appData = data;
             this.messageService = messageService;
-            if (appData != null)
-                viewModel.UpdateData(appData.PumpList);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                appData.SaveAll();
+                viewModel.SaveChanges();
                 Application.Exit();
             }
         }
@@ -137,7 +133,7 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void FrmViewPump_FormClosing(object sender, FormClosingEventArgs e)
         {
-            appData.SaveAll();
+            viewModel.SaveChanges();
         }
 
         /*********************************************************************************/

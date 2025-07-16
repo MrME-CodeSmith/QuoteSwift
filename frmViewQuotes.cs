@@ -11,15 +11,13 @@ namespace QuoteSwift
 
         readonly QuotesViewModel viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
 
-        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
+        public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            appData = data;
             this.messageService = messageService;
         }
 
@@ -29,7 +27,7 @@ namespace QuoteSwift
             {
                 Hide();
                 navigation.CreateNewQuote();
-                viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+                viewModel.LoadData();
                 try
                 {
                     Show();
@@ -64,7 +62,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.ViewAllPumps();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -79,7 +77,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.CreateNewPump();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -99,7 +97,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.AddCustomer();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -114,7 +112,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.ViewCustomers();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -134,7 +132,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.AddBusiness();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -149,7 +147,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.ViewBusinesses();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -186,7 +184,7 @@ namespace QuoteSwift
                 {
                     Hide();
                     navigation.CreateNewQuote(selected, false);
-                    viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+                    viewModel.LoadData();
                     Show();
                 }
             }
@@ -201,7 +199,7 @@ namespace QuoteSwift
                 {
                     this.Hide();
                     navigation.CreateNewQuote(selected, true);
-                    viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+                    viewModel.LoadData();
                     this.Show();
                 }
             }
@@ -211,7 +209,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.ViewAllParts();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -231,7 +229,7 @@ namespace QuoteSwift
         {
             Hide();
             navigation.AddNewPart();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            viewModel.LoadData();
             try
             {
                 Show();
@@ -252,11 +250,7 @@ namespace QuoteSwift
         readonly int count = 0;
         private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
-                viewModel.BusinessList,
-                viewModel.PumpList,
-                viewModel.PartMap,
-                viewModel.QuoteMap);
+            viewModel.SaveChanges();
         }
 
         void LoadDataGrid()

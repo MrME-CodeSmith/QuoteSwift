@@ -23,7 +23,7 @@ namespace QuoteSwift
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmViewQuotes(viewModel, navigation, appData, messenger));
+            Application.Run(new FrmViewQuotes(viewModel, navigation, messenger));
         }
     }
 }

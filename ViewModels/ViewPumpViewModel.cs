@@ -81,5 +81,11 @@ namespace QuoteSwift
             MainProgramCode.ExportInventory(Pumps, filePath);
         }
 
+        public void SaveChanges()
+        {
+            if (Pumps != null)
+                dataService.SavePumps(Pumps);
+        }
+
     }
 }
