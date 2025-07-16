@@ -31,6 +31,22 @@ After a successful build the main executable can be found in `QuoteSwift/bin/Deb
 
 Quotes are exported directly from the application using `QuoteTemplate.xlsx`. When you choose to export a quote you will be prompted for the location to save the generated workbook.
 
+## MVVM structure
+
+The WinForms UI follows an MVVM style approach. Each form has a corresponding
+view model class under the `ViewModels/` folder. View models expose properties
+that forms bind to, and commands implemented via the `RelayCommand` class. This
+binding is set up when the form is created so that controls automatically update
+as properties change.
+
+Navigation between forms is handled by the `NavigationService` which constructs
+view models, opens the appropriate form and persists updated data back into the
+`ApplicationData` object.
+
+When contributing new functionality please follow the existing MVVM pattern:
+add a view model for new forms, bind controls to view model properties and use
+`RelayCommand` for button logic.
+
 ## License
 
 This project is released under the MIT License. See [LICENSE](LICENSE) for details.
