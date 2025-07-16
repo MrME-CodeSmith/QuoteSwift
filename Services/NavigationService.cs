@@ -10,9 +10,9 @@ namespace QuoteSwift
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
 
-        public NavigationService(ApplicationData data, INotificationService notifier, IMessageService messenger, ISerializationService serializer)
+        public NavigationService(ApplicationData data, IDataService service, INotificationService notifier, IMessageService messenger, ISerializationService serializer)
         {
-            dataService = new FileDataService(messenger);
+            dataService = service;
             appData = data;
             serializationService = serializer;
             notificationService = notifier;
