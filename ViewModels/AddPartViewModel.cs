@@ -213,8 +213,8 @@ namespace QuoteSwift
                 {
                     string[] readFields = parser.ReadFields();
                     Part newPart = new Part(readFields[1], readFields[2], readFields[0], readFields[3],
-                        QuoteSwiftMainCode.ParseBoolean(readFields[6]),
-                        QuoteSwiftMainCode.ParseDecimal(readFields[4]));
+                        ParsingService.ParseBoolean(readFields[6]),
+                        ParsingService.ParseDecimal(readFields[4]));
 
                     Part old = PartToChange;
                     PartToChange = newPart;
@@ -254,7 +254,7 @@ namespace QuoteSwift
                     if (PumpList != null)
                     {
                         Pump newPump = new Pump(readFields[7], "",
-                            QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref newPumpPartList);
+                            ParsingService.ParseDecimal(readFields[8]), ref newPumpPartList);
                         Pump oldPump = null;
                         foreach (var pump in PumpList)
                         {
@@ -285,7 +285,7 @@ namespace QuoteSwift
                         newPumpPartList = new BindingList<Pump_Part> { new Pump_Part(partForPump, int.Parse(readFields[5])) };
                         PumpList = new BindingList<Pump>
                         {
-                            new Pump(readFields[7], "", QuoteSwiftMainCode.ParseDecimal(readFields[8]), ref newPumpPartList)
+                            new Pump(readFields[7], "", ParsingService.ParseDecimal(readFields[8]), ref newPumpPartList)
                         };
                         Pumps = PumpList;
                     }

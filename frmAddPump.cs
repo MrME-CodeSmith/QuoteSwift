@@ -49,7 +49,10 @@ namespace QuoteSwift
                 return;
             }
 
-            viewModel.CurrentPump = new Pump(mtxtPumpName.Text, mtxtPumpDescription.Text, QuoteSwiftMainCode.ParseDecimal(mtxtNewPumpPrice.Text), ref newPumpParts);
+            viewModel.CurrentPump = new Pump(mtxtPumpName.Text,
+                                            mtxtPumpDescription.Text,
+                                            ParsingService.ParseDecimal(mtxtNewPumpPrice.Text),
+                                            ref newPumpParts);
 
             bool result;
             if (viewModel.ChangeSpecificObject)
@@ -262,7 +265,7 @@ namespace QuoteSwift
                             string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
                             if (viewModel.PartMap != null && viewModel.PartMap.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
                                 newPart = new Pump_Part(part,
-                                    QuoteSwiftMainCode.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
+                                    ParsingService.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
                             else
                                 newPart = null;
                         }
@@ -296,7 +299,7 @@ namespace QuoteSwift
                             string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
                             if (viewModel.PartMap != null && viewModel.PartMap.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
                                 newPart = new Pump_Part(part,
-                                    QuoteSwiftMainCode.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
+                                    ParsingService.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
                             else
                                 newPart = null;
                         }
