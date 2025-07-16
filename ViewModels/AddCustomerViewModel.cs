@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -118,7 +119,12 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            BusinessList = dataService.LoadBusinessList();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            BusinessList = await dataService.LoadBusinessListAsync();
         }
 
         public void UpdateData(BindingList<Business> businessList,

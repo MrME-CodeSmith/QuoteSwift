@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -43,7 +44,12 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            Pumps = dataService.LoadPumpList();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            Pumps = await dataService.LoadPumpListAsync();
             if (Pumps != null)
             {
                 var set = new HashSet<string>();

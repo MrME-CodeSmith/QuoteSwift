@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -16,25 +17,45 @@ namespace QuoteSwift
 
         public Dictionary<string, Part> LoadPartList()
         {
-            byte[] bytes = RetrieveData("Parts.json");
+            return LoadPartListAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task<Dictionary<string, Part>> LoadPartListAsync()
+        {
+            byte[] bytes = await RetrieveDataAsync("Parts.json").ConfigureAwait(false);
             return bytes != null && bytes.Length > 0 ? MainProgramCode.DeserializePartList(bytes) : new Dictionary<string, Part>();
         }
 
         public BindingList<Pump> LoadPumpList()
         {
-            byte[] bytes = RetrieveData("PumpList.json");
+            return LoadPumpListAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task<BindingList<Pump>> LoadPumpListAsync()
+        {
+            byte[] bytes = await RetrieveDataAsync("PumpList.json").ConfigureAwait(false);
             return bytes != null && bytes.Length > 0 ? new BindingList<Pump>(MainProgramCode.DeserializePumpList(bytes)) : new BindingList<Pump>();
         }
 
         public BindingList<Business> LoadBusinessList()
         {
-            byte[] bytes = RetrieveData("BusinessList.json");
+            return LoadBusinessListAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task<BindingList<Business>> LoadBusinessListAsync()
+        {
+            byte[] bytes = await RetrieveDataAsync("BusinessList.json").ConfigureAwait(false);
             return bytes != null && bytes.Length > 0 ? new BindingList<Business>(MainProgramCode.DeserializeBusinessList(bytes)) : new BindingList<Business>();
         }
 
         public SortedDictionary<string, Quote> LoadQuoteMap()
         {
-            byte[] bytes = RetrieveData("QuoteList.json");
+            return LoadQuoteMapAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task<SortedDictionary<string, Quote>> LoadQuoteMapAsync()
+        {
+            byte[] bytes = await RetrieveDataAsync("QuoteList.json").ConfigureAwait(false);
             return bytes != null && bytes.Length > 0 ? MainProgramCode.DeserializeQuoteList(bytes) : new SortedDictionary<string, Quote>();
         }
 
@@ -65,6 +86,30 @@ namespace QuoteSwift
             try
             {
                 data = File.ReadAllBytes(storePath);
+                return data;
+            }
+            catch (FileNotFoundException)
+            {
+                if (fileName != "ExportQuote.json")
+                    if (messageService != null && messageService.RequestConfirmation(fileName + " could not be found.\nWould you like to continue the execution? (Recommended for first launch)", "REQUEST - Execution Continuation"))
+                        return data;
+
+                messageService?.ShowError(fileName + " Could not be found, please contact the developer to fix this issue.", "ERROR - " + fileName + " Not Found");
+            }
+            catch
+            {
+                throw;
+            }
+            return null;
+        }
+
+        async Task<byte[]> RetrieveDataAsync(string fileName)
+        {
+            string storePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\" + fileName;
+            byte[] data = null;
+            try
+            {
+                data = await File.ReadAllBytesAsync(storePath).ConfigureAwait(false);
                 return data;
             }
             catch (FileNotFoundException)

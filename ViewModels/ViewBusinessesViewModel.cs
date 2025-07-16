@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -27,7 +28,12 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            Businesses = dataService.LoadBusinessList();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            Businesses = await dataService.LoadBusinessListAsync();
         }
 
         public void UpdateData(BindingList<Business> list)

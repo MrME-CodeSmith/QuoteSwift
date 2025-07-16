@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -41,7 +42,12 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            PartList = dataService.LoadPartList();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            PartList = await dataService.LoadPartListAsync();
             RefreshLists();
         }
 
