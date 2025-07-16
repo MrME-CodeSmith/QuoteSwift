@@ -1,14 +1,9 @@
-using System.ComponentModel;
-
 namespace QuoteSwift
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    /// <summary>
+    /// Base class for all view models providing notification helpers.
+    /// </summary>
+    public class ViewModelBase : ObservableObject
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
