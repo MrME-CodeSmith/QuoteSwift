@@ -58,7 +58,22 @@ namespace QuoteSwift
         public HashSet<string> BusinessVatNumbers => businessVatNumbers;
         public HashSet<string> BusinessRegNumbers => businessRegNumbers;
         public Business BusinessToChange { get => businessToChange; set => businessToChange = value; }
-        public bool ChangeSpecificObject { get => changeSpecificObject; set => changeSpecificObject = value; }
+
+        public bool ChangeSpecificObject
+        {
+            get => changeSpecificObject;
+            set
+            {
+                if (changeSpecificObject != value)
+                {
+                    changeSpecificObject = value;
+                    OnPropertyChanged(nameof(ChangeSpecificObject));
+                    OnPropertyChanged(nameof(IsReadOnly));
+                }
+            }
+        }
+
+        public bool IsReadOnly => !changeSpecificObject;
 
         public Business CurrentBusiness
         {

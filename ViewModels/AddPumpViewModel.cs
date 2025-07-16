@@ -31,7 +31,23 @@ namespace QuoteSwift
         public Dictionary<string, Part> PartMap { get; private set; }
         public HashSet<string> RepairableItemNames { get; private set; }
         public Pump PumpToChange { get; set; }
-        public bool ChangeSpecificObject { get; set; }
+
+        bool changeSpecificObject;
+        public bool ChangeSpecificObject
+        {
+            get => changeSpecificObject;
+            set
+            {
+                if (changeSpecificObject != value)
+                {
+                    changeSpecificObject = value;
+                    OnPropertyChanged(nameof(ChangeSpecificObject));
+                    OnPropertyChanged(nameof(IsReadOnly));
+                }
+            }
+        }
+
+        public bool IsReadOnly => !changeSpecificObject;
 
 
         public AddPumpViewModel(IDataService service, INotificationService notifier)

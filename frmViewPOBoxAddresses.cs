@@ -86,15 +86,20 @@ namespace QuoteSwift
             LoadInformation();
         }
 
+        void ApplyControlState()
+        {
+            ControlStateHelper.ApplyReadOnly(Controls, true);
+        }
+
         private void FrmViewPOBoxAddresses_Load(object sender, EventArgs e)
         {
             if (business != null && business.BusinessPOBoxAddressList != null)
             {
                 Text = Text.Replace("<<Business name>>", business.BusinessName);
 
-                if (!viewModel.ChangeSpecificObject)
+                if (viewModel.IsReadOnly)
                 {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
+                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 
@@ -104,9 +109,9 @@ namespace QuoteSwift
             {
                 Text = Text.Replace("<<Business name>>", customer.CustomerName);
 
-                if (!viewModel.ChangeSpecificObject)
+                if (viewModel.IsReadOnly)
                 {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
+                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 

@@ -73,10 +73,16 @@ namespace QuoteSwift
             get => changeSpecificObject;
             set
             {
-                changeSpecificObject = value;
-                OnPropertyChanged(nameof(ChangeSpecificObject));
+                if (changeSpecificObject != value)
+                {
+                    changeSpecificObject = value;
+                    OnPropertyChanged(nameof(ChangeSpecificObject));
+                    OnPropertyChanged(nameof(IsReadOnly));
+                }
             }
         }
+
+        public bool IsReadOnly => !changeSpecificObject;
 
         public Customer CurrentCustomer
         {

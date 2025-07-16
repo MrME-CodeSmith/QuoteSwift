@@ -41,9 +41,9 @@ namespace QuoteSwift
             {
                 Text = Text.Replace("<<Business name>>", business.BusinessName);
 
-                if (!viewModel.ChangeSpecificObject)
+                if (viewModel.IsReadOnly)
                 {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
+                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 
@@ -53,9 +53,9 @@ namespace QuoteSwift
             {
                 Text = Text.Replace("<<Business name>>", customer.CustomerName);
 
-                if (!viewModel.ChangeSpecificObject)
+                if (viewModel.IsReadOnly)
                 {
-                    QuoteSwiftMainCode.ReadOnlyComponents(Controls);
+                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 
@@ -115,6 +115,11 @@ namespace QuoteSwift
             {
                 messageService.ShowError("The current selection is invalid.\nPlease choose a valid address from the list.", "ERROR - Invalid Selection");
             }
+        }
+
+        void ApplyControlState()
+        {
+            ControlStateHelper.ApplyReadOnly(Controls, true);
         }
 
         /** Form Specific Functions And Procedures: 

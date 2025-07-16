@@ -250,6 +250,7 @@
     <Compile Include="ViewModels\ViewPartsViewModel.cs" />
     <Compile Include="ViewModels\ViewPumpViewModel.cs" />
     <Compile Include="ExcelExporter.cs" />
+    <Compile Include="Infrastructure\ControlStateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmAddBusiness.resx">
       <DependentUpon>FrmAddBusiness.cs</DependentUpon>
