@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuoteSwift
 {
-    public class Business
+    public class Business : ObservableObject
     {
         private string mBusinessName;
         private string mBusinessExtraInformation;
@@ -176,11 +176,24 @@ namespace QuoteSwift
                     mCustomerMap[c.CustomerCompanyName] = c;
         }
 
-        public string BusinessName { get => mBusinessName; set => mBusinessName = value; }
-        public string BusinessExtraInformation { get => mBusinessExtraInformation; set => mBusinessExtraInformation = value; }
+        public string BusinessName
+        {
+            get => mBusinessName;
+            set => SetProperty(ref mBusinessName, value);
+        }
+
+        public string BusinessExtraInformation
+        {
+            get => mBusinessExtraInformation;
+            set => SetProperty(ref mBusinessExtraInformation, value);
+        }
         public IReadOnlyList<Address> BusinessAddressList => mBusinessAddressList;
         public IReadOnlyList<Address> BusinessPOBoxAddressList => mBusinessPOBoxAddressList;
-        public Legal BusinessLegalDetails { get => mBusinessLegalDetails; set => mBusinessLegalDetails = value; }
+        public Legal BusinessLegalDetails
+        {
+            get => mBusinessLegalDetails;
+            set => SetProperty(ref mBusinessLegalDetails, value);
+        }
         public IReadOnlyList<string> BusinessTelephoneNumberList => mBusinessTelephoneNumberList;
         public IReadOnlyList<string> BusinessCellphoneNumberList => mBusinessCellphoneNumberList;
         public IReadOnlyList<string> BusinessEmailAddressList => mBusinessEmailAddressList;

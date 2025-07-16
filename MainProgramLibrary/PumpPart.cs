@@ -1,7 +1,7 @@
 
 namespace QuoteSwift
 {
-    public class Pump_Part
+    public class Pump_Part : ObservableObject
     {
         private Part mPumpPart;
         private int mPumpPartQuantity;
@@ -12,7 +12,16 @@ namespace QuoteSwift
             PumpPartQuantity = mPumpPartQuantity;
         }
 
-        public Part PumpPart { get => mPumpPart; set => mPumpPart = value; }
-        public int PumpPartQuantity { get => mPumpPartQuantity; set => mPumpPartQuantity = value; }
+        public Part PumpPart
+        {
+            get => mPumpPart;
+            set => SetProperty(ref mPumpPart, value);
+        }
+
+        public int PumpPartQuantity
+        {
+            get => mPumpPartQuantity;
+            set => SetProperty(ref mPumpPartQuantity, value);
+        }
     }
 }

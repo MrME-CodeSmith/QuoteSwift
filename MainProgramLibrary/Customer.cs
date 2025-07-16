@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuoteSwift
 {
-    public class Customer
+    public class Customer : ObservableObject
     {
         private string mCustomerName;
         private string mCustomerCompanyName;
@@ -125,15 +125,32 @@ namespace QuoteSwift
         }
 
 
-        public string CustomerName { get => mCustomerName; set => mCustomerName = value; }
-        public string CustomerCompanyName { get => mCustomerCompanyName; set => mCustomerCompanyName = value; }
+        public string CustomerName
+        {
+            get => mCustomerName;
+            set => SetProperty(ref mCustomerName, value);
+        }
+
+        public string CustomerCompanyName
+        {
+            get => mCustomerCompanyName;
+            set => SetProperty(ref mCustomerCompanyName, value);
+        }
         public IReadOnlyList<Address> CustomerPOBoxAddress => mCustomerPOBoxAddress;
         public IReadOnlyList<Address> CustomerDeliveryAddressList => mCustomerDeliveryAddressList;
-        public Legal CustomerLegalDetails { get => mCustomerLegalDetails; set => mCustomerLegalDetails = value; }
+        public Legal CustomerLegalDetails
+        {
+            get => mCustomerLegalDetails;
+            set => SetProperty(ref mCustomerLegalDetails, value);
+        }
         public IReadOnlyList<string> CustomerTelephoneNumberList => mCustomerTelephoneNumberList;
         public IReadOnlyList<string> CustomerCellphoneNumberList => mCustomerCellphoneNumberList;
         public IReadOnlyList<string> CustomerEmailList => mCustomerEmailList;
-        public string VendorNumber { get => mVendorNumber; set => mVendorNumber = value; }
+        public string VendorNumber
+        {
+            get => mVendorNumber;
+            set => SetProperty(ref mVendorNumber, value);
+        }
         public Dictionary<string, Address> DeliveryAddressMap => mDeliveryAddressMap;
         public Dictionary<string, Address> POBoxMap => mPOBoxMap;
         public HashSet<string> TelephoneNumbers => mTelephoneNumbers;

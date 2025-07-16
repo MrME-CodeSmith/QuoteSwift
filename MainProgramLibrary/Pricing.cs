@@ -1,7 +1,7 @@
 
 namespace QuoteSwift
 {
-    public class Pricing
+    public class Pricing : ObservableObject
     {
         private decimal mMachining;
         private decimal mLabour;
@@ -36,13 +36,52 @@ namespace QuoteSwift
             PumpPrice = mPumpPrice;
         }
 
-        public decimal Machining { get => mMachining; set => mMachining = value; }
-        public decimal Labour { get => mLabour; set => mLabour = value; }
-        public decimal Consumables { get => mConsumables; set => mConsumables = value; }
-        public decimal Rebate { get => mRebate; set => mRebate = value; }
-        public decimal SubTotal { get => mSubTotal; set => mSubTotal = value; }
-        public decimal VAT { get => mVAT; set => mVAT = value; }
-        public decimal TotalDue { get => mTotalDue; set => mTotalDue = value; }
-        public decimal PumpPrice { get => mPumpPrice; set => mPumpPrice = value; }
+        public decimal Machining
+        {
+            get => mMachining;
+            set => SetProperty(ref mMachining, value);
+        }
+
+        public decimal Labour
+        {
+            get => mLabour;
+            set => SetProperty(ref mLabour, value);
+        }
+
+        public decimal Consumables
+        {
+            get => mConsumables;
+            set => SetProperty(ref mConsumables, value);
+        }
+
+        public decimal Rebate
+        {
+            get => mRebate;
+            set => SetProperty(ref mRebate, value);
+        }
+
+        public decimal SubTotal
+        {
+            get => mSubTotal;
+            set => SetProperty(ref mSubTotal, value);
+        }
+
+        public decimal VAT
+        {
+            get => mVAT;
+            set => SetProperty(ref mVAT, value);
+        }
+
+        public decimal TotalDue
+        {
+            get => mTotalDue;
+            set => SetProperty(ref mTotalDue, value);
+        }
+
+        public decimal PumpPrice
+        {
+            get => mPumpPrice;
+            set => SetProperty(ref mPumpPrice, value);
+        }
     }
 }
