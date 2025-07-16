@@ -409,6 +409,13 @@ namespace QuoteSwift
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
             DgvNonMandatoryPartReplacement.DataSource = nonMandatorySource;
 
+            txtCustomerVATNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerVATNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtJobNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.JobNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtReferenceNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.ReferenceNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtPRNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.PRNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtLineNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.LineNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtQuoteNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.QuoteNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+
             UpdatePricingDisplay();
         }
 
@@ -496,46 +503,6 @@ namespace QuoteSwift
             LoadCustomerPOBoxAddress();
         }
 
-        private bool ValidInput()
-        {
-            if (txtCustomerVATNumber.Text.Length < 3)
-            {
-                messageService.ShowError("Please provide a valid Customer VAT Number", "ERROR - Invalid Quote Input");
-                return false;
-            }
-
-            if (txtJobNumber.Text.Length < 3)
-            {
-                messageService.ShowError("Please provide a valid Job Number", "ERROR - Invalid Quote Input");
-                return false;
-            }
-
-            if (txtReferenceNumber.Text.Length < 3)
-            {
-                messageService.ShowError("Please provide a valid Reference Number", "ERROR - Invalid Quote Input");
-                return false;
-            }
-
-            if (txtPRNumber.Text.Length < 3)
-            {
-                messageService.ShowError("Please provide a valid PR Number", "ERROR - Invalid Quote Input");
-                return false;
-            }
-
-            if (txtLineNumber.Text.Length == 0)
-            {
-                messageService.ShowError("Please provide a valid Line Number", "ERROR - Invalid Quote Input");
-                return false;
-            }
-
-            if (txtQuoteNumber.Text.Length < 8)
-            {
-                messageService.ShowError("Please provide a valid Quote Number", "ERROR - Invalid Quote Input");
-                return false;
-            }
-
-            return true;
-        }
 
         private void CbxUseAutomaticNumberingScheme_CheckedChanged(object sender, EventArgs e)
         {
@@ -552,21 +519,21 @@ namespace QuoteSwift
 
         Quote CreateQuote()
         {
-            if (!ValidInput()) return null;
+            if (!viewModel.ValidateInput()) return null;
 
             viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
             viewModel.Calculate();
 
-            var quote = viewModel.CreateQuote(txtQuoteNumber.Text,
+            var quote = viewModel.CreateQuote(viewModel.QuoteNumber,
                                                dtpQuoteCreationDate.Value,
                                                dtpQuoteExpiryDate.Value,
-                                               txtReferenceNumber.Text,
-                                               txtJobNumber.Text,
-                                               txtPRNumber.Text,
+                                               viewModel.ReferenceNumber,
+                                               viewModel.JobNumber,
+                                               viewModel.PRNumber,
                                                dtpPaymentTerm.Value,
                                                GetBusinesssPOBoxAddressSelection(viewModel.SelectedBusiness),
                                                GetCustomerPOBoxAddressSelection(viewModel.SelectedCustomer),
-                                               txtLineNumber.Text,
+                                               viewModel.LineNumber,
                                                cbxBusinessTelephoneNumberSelection.Text,
                                                cbxBusinessCellphoneNumberSelection.Text,
                                                cbxBusinessEmailAddressSelection.Text,

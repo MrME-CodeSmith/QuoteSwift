@@ -8,6 +8,7 @@ namespace QuoteSwift
     public class CreateQuoteViewModel : ViewModelBase
     {
         readonly IDataService dataService;
+        readonly INotificationService notificationService;
         Dictionary<string, Part> partList;
         BindingList<Pump> pumps;
         BindingList<Business> businesses;
@@ -17,6 +18,13 @@ namespace QuoteSwift
         Pump selectedPump;
         BindingList<Quote_Part> mandatoryParts = new BindingList<Quote_Part>();
         BindingList<Quote_Part> nonMandatoryParts = new BindingList<Quote_Part>();
+
+        string customerVatNumber;
+        string jobNumber;
+        string referenceNumber;
+        string prNumber;
+        string lineNumber;
+        string quoteNumber;
 
         BindingList<string> businessTelephoneNumbers = new BindingList<string>();
         BindingList<string> businessCellphoneNumbers = new BindingList<string>();
@@ -32,9 +40,10 @@ namespace QuoteSwift
         public ICommand AddQuoteCommand { get; }
 
 
-        public CreateQuoteViewModel(IDataService service)
+        public CreateQuoteViewModel(IDataService service, INotificationService notifier)
         {
             dataService = service;
+            notificationService = notifier;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
         }
 
@@ -246,6 +255,42 @@ namespace QuoteSwift
             }
         }
 
+        public string CustomerVATNumber
+        {
+            get => customerVatNumber;
+            set => SetProperty(ref customerVatNumber, value);
+        }
+
+        public string JobNumber
+        {
+            get => jobNumber;
+            set => SetProperty(ref jobNumber, value);
+        }
+
+        public string ReferenceNumber
+        {
+            get => referenceNumber;
+            set => SetProperty(ref referenceNumber, value);
+        }
+
+        public string PRNumber
+        {
+            get => prNumber;
+            set => SetProperty(ref prNumber, value);
+        }
+
+        public string LineNumber
+        {
+            get => lineNumber;
+            set => SetProperty(ref lineNumber, value);
+        }
+
+        public string QuoteNumber
+        {
+            get => quoteNumber;
+            set => SetProperty(ref quoteNumber, value);
+        }
+
         public Pricing Pricing
         {
             get => pricing;
@@ -369,6 +414,47 @@ namespace QuoteSwift
                         return false;
                 }
             }
+            return true;
+        }
+
+        public bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(CustomerVATNumber) || CustomerVATNumber.Length < 3)
+            {
+                notificationService?.ShowError("Please provide a valid Customer VAT Number", "ERROR - Invalid Quote Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(JobNumber) || JobNumber.Length < 3)
+            {
+                notificationService?.ShowError("Please provide a valid Job Number", "ERROR - Invalid Quote Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(ReferenceNumber) || ReferenceNumber.Length < 3)
+            {
+                notificationService?.ShowError("Please provide a valid Reference Number", "ERROR - Invalid Quote Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(PRNumber) || PRNumber.Length < 3)
+            {
+                notificationService?.ShowError("Please provide a valid PR Number", "ERROR - Invalid Quote Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(LineNumber))
+            {
+                notificationService?.ShowError("Please provide a valid Line Number", "ERROR - Invalid Quote Input");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(QuoteNumber) || QuoteNumber.Length < 8)
+            {
+                notificationService?.ShowError("Please provide a valid Quote Number", "ERROR - Invalid Quote Input");
+                return false;
+            }
+
             return true;
         }
 
