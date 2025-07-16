@@ -21,7 +21,7 @@ namespace QuoteSwift
 
         public void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new CreateQuoteViewModel(dataService);
+            var vm = new CreateQuoteViewModel(dataService, notificationService);
             using (var form = new FrmCreateQuote(vm, appData, quoteToChange, changeSpecificObject, messageService, serializationService))
                 form.ShowDialog();
             }
