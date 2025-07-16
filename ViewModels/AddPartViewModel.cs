@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -159,8 +160,13 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            PartMap = dataService.LoadPartList();
-            PumpList = dataService.LoadPumpList();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            PartMap = await dataService.LoadPartListAsync();
+            PumpList = await dataService.LoadPumpListAsync();
             Parts = new BindingList<Part>(PartMap?.Values.ToList() ?? new List<Part>());
             Pumps = PumpList;
             CurrentPart = PartToChange ?? new Part();

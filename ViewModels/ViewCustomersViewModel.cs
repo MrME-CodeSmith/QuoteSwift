@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -61,8 +62,13 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            Businesses = dataService.LoadBusinessList();
-            QuoteMap = dataService.LoadQuoteMap();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            Businesses = await dataService.LoadBusinessListAsync();
+            QuoteMap = await dataService.LoadQuoteMapAsync();
             if (Businesses != null && Businesses.Count > 0)
                 SelectBusiness(Businesses[0]);
             else

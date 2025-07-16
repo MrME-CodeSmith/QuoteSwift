@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -309,10 +310,15 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            PartList = dataService.LoadPartList();
-            Pumps = dataService.LoadPumpList();
-            Businesses = dataService.LoadBusinessList();
-            QuoteMap = dataService.LoadQuoteMap();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            PartList = await dataService.LoadPartListAsync();
+            Pumps = await dataService.LoadPumpListAsync();
+            Businesses = await dataService.LoadBusinessListAsync();
+            QuoteMap = await dataService.LoadQuoteMapAsync();
             Pricing = new Pricing();
         }
 

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -110,8 +111,13 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            PumpList = dataService.LoadPumpList();
-            PartMap = dataService.LoadPartList();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            PumpList = await dataService.LoadPumpListAsync();
+            PartMap = await dataService.LoadPartListAsync();
             if (PumpList != null)
             {
                 RepairableItemNames = new HashSet<string>();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -85,10 +86,15 @@ namespace QuoteSwift
 
         public void LoadData()
         {
-            PartMap = dataService.LoadPartList();
-            PumpList = dataService.LoadPumpList();
-            BusinessList = dataService.LoadBusinessList();
-            QuoteMap = dataService.LoadQuoteMap();
+            LoadDataAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task LoadDataAsync()
+        {
+            PartMap = await dataService.LoadPartListAsync();
+            PumpList = await dataService.LoadPumpListAsync();
+            BusinessList = await dataService.LoadBusinessListAsync();
+            QuoteMap = await dataService.LoadQuoteMapAsync();
 
             Quotes = new BindingList<Quote>(QuoteMap.Values.ToList());
         }
