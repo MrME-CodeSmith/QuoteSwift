@@ -19,11 +19,14 @@ namespace QuoteSwift
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
         {
             viewModel.CurrentEmail = mtxtEmail.Text;
-            if (viewModel.UpdateEmail())
+            var result = viewModel.UpdateEmail();
+            if (result.Success)
             {
                 messageService.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
                 Close();
             }
+            else if (result.Message != null)
+                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void FrmEditEmailAddress_Load(object sender, EventArgs e)

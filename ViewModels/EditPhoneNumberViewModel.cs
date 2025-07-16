@@ -7,20 +7,36 @@ namespace QuoteSwift
     {
         readonly Business business;
         readonly Customer customer;
-        readonly IMessageService messageService;
+        OperationResult lastResult = OperationResult.Successful();
         string originalNumber;
 
         public ICommand UpdateNumberCommand { get; }
 
 
-        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null)
+        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "")
         {
             this.business = business;
             this.customer = customer;
             originalNumber = number ?? string.Empty;
-            this.messageService = messageService;
             CurrentNumber = originalNumber;
-            UpdateNumberCommand = new RelayCommand(_ => UpdateNumber());
+            UpdateNumberCommand = new RelayCommand(_ =>
+            {
+                var r = UpdateNumber();
+                LastResult = r;
+            });
+        }
+
+        public OperationResult LastResult
+        {
+            get => lastResult;
+            private set
+            {
+                if (lastResult != value)
+                {
+                    lastResult = value;
+                    OnPropertyChanged(nameof(LastResult));
+                }
+            }
         }
 
         public Business Business => business;
@@ -28,18 +44,18 @@ namespace QuoteSwift
         public string OriginalNumber => originalNumber;
         public string CurrentNumber { get; set; }
 
-        public bool UpdateNumber()
+        public OperationResult UpdateNumber()
         {
-            if (!ValidateNumber(CurrentNumber))
-                return false;
+            var valid = ValidateNumber(CurrentNumber);
+            if (!valid.Success)
+                return valid;
             if (business != null)
             {
                 bool isCell = business.CellphoneNumbers.Contains(originalNumber);
                 bool isTel = business.TelephoneNumbers.Contains(originalNumber);
                 if ((business.CellphoneNumbers.Contains(CurrentNumber) || business.TelephoneNumbers.Contains(CurrentNumber)) && CurrentNumber != originalNumber)
                 {
-                    messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
-                    return false;
+                    return OperationResult.Failure("This number has already been added previously.", "ERROR - Number Already Added");
                 }
                 if (isCell)
                     business.UpdateCellphoneNumber(originalNumber, CurrentNumber);
@@ -52,8 +68,7 @@ namespace QuoteSwift
                 bool isTel = customer.TelephoneNumbers.Contains(originalNumber);
                 if ((customer.CellphoneNumbers.Contains(CurrentNumber) || customer.TelephoneNumbers.Contains(CurrentNumber)) && CurrentNumber != originalNumber)
                 {
-                    messageService.ShowError("This number has already been added previously.", "ERROR - Number Already Added");
-                    return false;
+                    return OperationResult.Failure("This number has already been added previously.", "ERROR - Number Already Added");
                 }
                 if (isCell)
                     customer.UpdateCellphoneNumber(originalNumber, CurrentNumber);
@@ -61,17 +76,16 @@ namespace QuoteSwift
                     customer.UpdateTelephoneNumber(originalNumber, CurrentNumber);
             }
             originalNumber = CurrentNumber;
-            return true;
+            return OperationResult.Successful();
         }
 
-        bool ValidateNumber(string number)
+        OperationResult ValidateNumber(string number)
         {
             if (string.IsNullOrWhiteSpace(number) || number.Length < 10)
             {
-                messageService.ShowError("A valid phone number was not provided.", "ERROR - Invalid Number Provided");
-                return false;
+                return OperationResult.Failure("A valid phone number was not provided.", "ERROR - Invalid Number Provided");
             }
-            return true;
+            return OperationResult.Successful();
         }
 
     }

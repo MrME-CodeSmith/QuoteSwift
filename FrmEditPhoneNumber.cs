@@ -25,11 +25,14 @@ namespace QuoteSwift
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
             viewModel.CurrentNumber = txtPhoneNumber.Text;
-            if (viewModel.UpdateNumber())
+            var result = viewModel.UpdateNumber();
+            if (result.Success)
             {
                 messageService.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
                 Close();
             }
+            else if (result.Message != null)
+                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
