@@ -11,6 +11,7 @@ namespace QuoteSwift // Repair Quote Swift
         readonly ViewPumpViewModel viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly BindingSource pumpBindingSource = new BindingSource();
 
         public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
@@ -18,6 +19,8 @@ namespace QuoteSwift // Repair Quote Swift
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
+            pumpBindingSource.DataSource = viewModel.Pumps;
+            dgvPumpList.DataSource = pumpBindingSource;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -81,7 +84,6 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void FrmViewPump_Load(object sender, EventArgs e)
         {
-            RefreshBinding();
             dgvPumpList.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvPumpList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
@@ -93,10 +95,7 @@ namespace QuoteSwift // Repair Quote Swift
         *       and clutter free.                                                          
         */
 
-        void RefreshBinding()
-        {
-            dgvPumpList.DataSource = new BindingSource { DataSource = viewModel.Pumps };
-        }
+        // Binding handled automatically via pumpBindingSource
 
         Pump GetSelectedPump()
         {
