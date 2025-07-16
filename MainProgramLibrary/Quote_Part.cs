@@ -2,7 +2,7 @@
 
 namespace QuoteSwift
 {
-    public class Quote_Part
+    public class Quote_Part : ObservableObject
     {
         private Pump_Part mPumpPart;
         private int mMissingorScrap;
@@ -23,12 +23,46 @@ namespace QuoteSwift
             RepairDevider = mRepairDevider;
         }
 
-        public Pump_Part PumpPart { get => mPumpPart; set => mPumpPart = value; }
-        public int MissingorScrap { get => mMissingorScrap; set => mMissingorScrap = value; }
-        public int Repaired { get => mRepaired; set => mRepaired = value; }
-        public int New { get => mNew; set => mNew = value; }
-        public decimal Price { get => mPrice; set => mPrice = value; }
-        public decimal UnitPrice { get => mUnitPrice; set => mUnitPrice = value; }
-        public decimal RepairDevider { get => mRepairDevider; set => mRepairDevider = value; }
+        public Pump_Part PumpPart
+        {
+            get => mPumpPart;
+            set => SetProperty(ref mPumpPart, value);
+        }
+
+        public int MissingorScrap
+        {
+            get => mMissingorScrap;
+            set => SetProperty(ref mMissingorScrap, value);
+        }
+
+        public int Repaired
+        {
+            get => mRepaired;
+            set => SetProperty(ref mRepaired, value);
+        }
+
+        public int New
+        {
+            get => mNew;
+            set => SetProperty(ref mNew, value);
+        }
+
+        public decimal Price
+        {
+            get => mPrice;
+            set => SetProperty(ref mPrice, value);
+        }
+
+        public decimal UnitPrice
+        {
+            get => mUnitPrice;
+            set => SetProperty(ref mUnitPrice, value);
+        }
+
+        public decimal RepairDevider
+        {
+            get => mRepairDevider;
+            set => SetProperty(ref mRepairDevider, value);
+        }
     }
 }

@@ -1,7 +1,7 @@
 
 namespace QuoteSwift
 {
-    public class Legal
+    public class Legal : ObservableObject
     {
         /** Declaring variables needed to store a business' 
         //  Registration and VAT number */
@@ -16,7 +16,16 @@ namespace QuoteSwift
             VatNumber = vatNumber;
         }
 
-        public string RegistrationNumber { get => mRegistrationNumber; set => mRegistrationNumber = value; }
-        public string VatNumber { get => mVatNumber; set => mVatNumber = value; }
+        public string RegistrationNumber
+        {
+            get => mRegistrationNumber;
+            set => SetProperty(ref mRegistrationNumber, value);
+        }
+
+        public string VatNumber
+        {
+            get => mVatNumber;
+            set => SetProperty(ref mVatNumber, value);
+        }
     }
 }

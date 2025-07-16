@@ -1,7 +1,7 @@
 
 namespace QuoteSwift
 {
-    public class Part
+    public class Part : ObservableObject
     {
         private string mPartName;
         private string mPartDescription;
@@ -43,11 +43,40 @@ namespace QuoteSwift
             PartPrice = mPartPrice;
         }
 
-        public string PartName { get => mPartName; set => mPartName = value; }
-        public string PartDescription { get => mPartDescription; set => mPartDescription = value; }
-        public string OriginalItemPartNumber { get => mOriginalItemPartNumber; set => mOriginalItemPartNumber = value; }
-        public string NewPartNumber { get => mNewPartNumber; set => mNewPartNumber = value; }
-        public bool MandatoryPart { get => mMandatoryPart; set => mMandatoryPart = value; }
-        public decimal PartPrice { get => mPartPrice; set => mPartPrice = value; }
+        public string PartName
+        {
+            get => mPartName;
+            set => SetProperty(ref mPartName, value);
+        }
+
+        public string PartDescription
+        {
+            get => mPartDescription;
+            set => SetProperty(ref mPartDescription, value);
+        }
+
+        public string OriginalItemPartNumber
+        {
+            get => mOriginalItemPartNumber;
+            set => SetProperty(ref mOriginalItemPartNumber, value);
+        }
+
+        public string NewPartNumber
+        {
+            get => mNewPartNumber;
+            set => SetProperty(ref mNewPartNumber, value);
+        }
+
+        public bool MandatoryPart
+        {
+            get => mMandatoryPart;
+            set => SetProperty(ref mMandatoryPart, value);
+        }
+
+        public decimal PartPrice
+        {
+            get => mPartPrice;
+            set => SetProperty(ref mPartPrice, value);
+        }
     }
 }

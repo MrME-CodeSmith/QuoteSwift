@@ -2,7 +2,7 @@ using System;
 
 namespace QuoteSwift
 {
-    public class Address
+    public class Address : ObservableObject
     {
         /** Descriptive variable names used where possible
          * to avoid possible confusion*/
@@ -45,12 +45,41 @@ namespace QuoteSwift
             AddressAreaCode = mAddressAreaCode;
         }
 
-        public string AddressDescription { get => mAddressDescription; set => mAddressDescription = value; }
-        public int AddressStreetNumber { get => mAddressStreetNumber; set => mAddressStreetNumber = value; }
-        public string AddressStreetName { get => mAddressStreetName; set => mAddressStreetName = value; }
-        public string AddressSuburb { get => mAddressSuburb; set => mAddressSuburb = value; }
-        public string AddressCity { get => mAddressCity; set => mAddressCity = value; }
-        public int AddressAreaCode { get => mAddressAreaCode; set => mAddressAreaCode = value; }
+        public string AddressDescription
+        {
+            get => mAddressDescription;
+            set => SetProperty(ref mAddressDescription, value);
+        }
+
+        public int AddressStreetNumber
+        {
+            get => mAddressStreetNumber;
+            set => SetProperty(ref mAddressStreetNumber, value);
+        }
+
+        public string AddressStreetName
+        {
+            get => mAddressStreetName;
+            set => SetProperty(ref mAddressStreetName, value);
+        }
+
+        public string AddressSuburb
+        {
+            get => mAddressSuburb;
+            set => SetProperty(ref mAddressSuburb, value);
+        }
+
+        public string AddressCity
+        {
+            get => mAddressCity;
+            set => SetProperty(ref mAddressCity, value);
+        }
+
+        public int AddressAreaCode
+        {
+            get => mAddressAreaCode;
+            set => SetProperty(ref mAddressAreaCode, value);
+        }
 
     }
 }

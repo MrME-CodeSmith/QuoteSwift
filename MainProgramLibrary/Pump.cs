@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace QuoteSwift
 {
-    public class Pump
+    public class Pump : ObservableObject
     {
         private string mPumpName;
         private string mPumpDescription;
@@ -26,9 +26,28 @@ namespace QuoteSwift
             NewPumpPrice = mNewPumpPrice;
         }
 
-        public string PumpName { get => mPumpName; set => mPumpName = value; }
-        public string PumpDescription { get => mPumpDescription; set => mPumpDescription = value; }
-        public BindingList<Pump_Part> PartList { get => mPartList; set => mPartList = value; }
-        public decimal NewPumpPrice { get => mNewPumpPrice; set => mNewPumpPrice = value; }
+        public string PumpName
+        {
+            get => mPumpName;
+            set => SetProperty(ref mPumpName, value);
+        }
+
+        public string PumpDescription
+        {
+            get => mPumpDescription;
+            set => SetProperty(ref mPumpDescription, value);
+        }
+
+        public BindingList<Pump_Part> PartList
+        {
+            get => mPartList;
+            set => SetProperty(ref mPartList, value);
+        }
+
+        public decimal NewPumpPrice
+        {
+            get => mNewPumpPrice;
+            set => SetProperty(ref mNewPumpPrice, value);
+        }
     }
 }
