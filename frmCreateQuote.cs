@@ -19,7 +19,9 @@ namespace QuoteSwift
         bool changeSpecificObject;
         public Quote NewQuote;
 
-        readonly Pricing P = new Pricing();
+        readonly BindingSource mandatorySource = new BindingSource();
+        readonly BindingSource nonMandatorySource = new BindingSource();
+
 
         public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false, IMessageService messageService = null)
         {
@@ -30,6 +32,7 @@ namespace QuoteSwift
             this.quoteToChange = quoteToChange;
             this.changeSpecificObject = changeSpecificObject;
             this.viewModel.LoadData();
+            SetupBindings();
         }
 
         private void BtnComplete_Click(object sender, EventArgs e)
@@ -84,7 +87,10 @@ namespace QuoteSwift
 
         private void CbxPumpSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadPartlists();
+            viewModel.LoadPartlists();
+            mandatorySource.DataSource = viewModel.MandatoryParts;
+            nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
+            UpdatePricingDisplay();
         }
 
         private void FrmCreateQuote_Load(object sender, EventArgs e)
@@ -111,7 +117,10 @@ namespace QuoteSwift
             else //Create New
             {
                 LoadComboBoxes();
-                LoadPartlists();
+                viewModel.LoadPartlists();
+                mandatorySource.DataSource = viewModel.MandatoryParts;
+                nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
+                UpdatePricingDisplay();
                 LoadBusinessPOBoxAddress();
                 LoadBusinessLegalDatails();
                 LoadCustomerDeliveryAddress();
@@ -173,12 +182,14 @@ namespace QuoteSwift
 
         private void DgvMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            Calculate(true);
+            viewModel.Calculate();
+            UpdatePricingDisplay();
         }
 
         private void DgvNonMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            Calculate(true);
+            viewModel.Calculate();
+            UpdatePricingDisplay();
         }
 
         private Business GetBusinessSelection()
@@ -399,57 +410,66 @@ namespace QuoteSwift
             LinkCustomerPOBox(GetCustomerSelection(), ref CbxCustomerPOBoxSelection);
         }
 
-        private void LoadPartlists()
+        private void SetupBindings()
         {
-            dgvMandatoryPartReplacement.Rows.Clear();
-            DgvNonMandatoryPartReplacement.Rows.Clear();
+            dgvMandatoryPartReplacement.AutoGenerateColumns = false;
+            clmPartNumber.DataPropertyName = "PumpPart.PumpPart.NewPartNumber";
+            clmDescription.DataPropertyName = "PumpPart.PumpPart.PartDescription";
+            clmQuantity.DataPropertyName = "PumpPart.PumpPartQuantity";
+            clmMMissing_Scrap.DataPropertyName = nameof(Quote_Part.MissingorScrap);
+            clmMRepaired.DataPropertyName = nameof(Quote_Part.Repaired);
+            clmNew.DataPropertyName = nameof(Quote_Part.New);
+            clmPrice.DataPropertyName = nameof(Quote_Part.Price);
+            clmUnitPrice.DataPropertyName = nameof(Quote_Part.UnitPrice);
+            clmTotal.DataPropertyName = nameof(Quote_Part.Price);
+            ClmRepairDevider.DataPropertyName = nameof(Quote_Part.RepairDevider);
+            mandatorySource.DataSource = viewModel.MandatoryParts;
+            dgvMandatoryPartReplacement.DataSource = mandatorySource;
 
-            if (viewModel.Pumps != null && cbxPumpSelection.SelectedIndex > -1)
-            {
-                Pump display = GetPumpSelection();
+            DgvNonMandatoryPartReplacement.AutoGenerateColumns = false;
+            dataGridViewTextBoxColumn1.DataPropertyName = "PumpPart.PumpPart.NewPartNumber";
+            dataGridViewTextBoxColumn2.DataPropertyName = "PumpPart.PumpPart.PartDescription";
+            ClmNMQuantity.DataPropertyName = "PumpPart.PumpPartQuantity";
+            ClmNMMissing_Scrap.DataPropertyName = nameof(Quote_Part.MissingorScrap);
+            ClmNMRepaired.DataPropertyName = nameof(Quote_Part.Repaired);
+            ClmNMNewPartQuantity.DataPropertyName = nameof(Quote_Part.New);
+            ClmNMPrice.DataPropertyName = nameof(Quote_Part.Price);
+            ClmNMUnitPrice.DataPropertyName = nameof(Quote_Part.UnitPrice);
+            dataGridViewTextBoxColumn9.DataPropertyName = nameof(Quote_Part.Price);
+            ClmNMRepairDevider.DataPropertyName = nameof(Quote_Part.RepairDevider);
+            nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
+            DgvNonMandatoryPartReplacement.DataSource = nonMandatorySource;
 
-                if (display != null) LoadParts(display);
-            }
-            Calculate();
+            UpdatePricingDisplay();
         }
 
-        void LoadParts(Pump p)
+        void UpdatePricingDisplay()
         {
-            if (p.PartList != null)
-            {
-                dgvMandatoryPartReplacement.Rows.Clear();
-                DgvNonMandatoryPartReplacement.Rows.Clear();
+            lblNewPumpUnitPrice.Text = "New Pump Price: R " + viewModel.Pricing.PumpPrice.ToString();
+            lblRebateValue.Text = "R" + viewModel.Pricing.Rebate.ToString();
+            lblSubTotalValue.Text = "R" + viewModel.Pricing.SubTotal.ToString();
+            lblVATValue.Text = "R" + viewModel.Pricing.VAT.ToString();
+            lblTotalDueValue.Text = "R" + viewModel.Pricing.TotalDue.ToString();
+            lblRepairPercentage.Text = "Repair Percentage: " + viewModel.RepairPercentage + "%";
+        }
 
-                for (int i = 0; i < p.PartList.Count; i++)
-                {
-                    //Manually setting the data grid's rows' values:
-                    if (p.PartList[i].PumpPart.MandatoryPart)
-                        dgvMandatoryPartReplacement.Rows.Add(p.PartList[i].PumpPart.NewPartNumber,
-                                                             p.PartList[i].PumpPart.PartDescription,
-                                                             p.PartList[i].PumpPartQuantity,
-                                                             p.PartList[i].PumpPartQuantity,
-                                                             0,
-                                                             p.PartList[i].PumpPartQuantity,
-                                                             (p.PartList[i].PumpPartQuantity * p.PartList[i].PumpPart.PartPrice),
-                                                             p.PartList[i].PumpPart.PartPrice,
-                                                             0, 1);
-                    else DgvNonMandatoryPartReplacement.Rows.Add(p.PartList[i].PumpPart.NewPartNumber,
-                                                                 p.PartList[i].PumpPart.PartDescription,
-                                                                 p.PartList[i].PumpPartQuantity,
-                                                                 p.PartList[i].PumpPartQuantity,
-                                                                 0,
-                                                                 p.PartList[i].PumpPartQuantity,
-                                                                 0,
-                                                                 p.PartList[i].PumpPart.PartPrice,
-                                                                 0, 1);
+        private void BtnCalculateRebate_Click(object sender, EventArgs e)
+        {
+            viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
+            viewModel.Calculate();
+            UpdatePricingDisplay();
+        }
 
-                }
-                DgvNonMandatoryPartReplacement.Rows.Add("TS6MACH", "MACHINING", 1, 0, 0, 1, 0, 1000, 0, 1);
-                DgvNonMandatoryPartReplacement.Rows.Add("TS6LAB", "LABOUR", 1, 0, 0, 1, 0, 1000, 0, 1);
-                DgvNonMandatoryPartReplacement.Rows.Add("CON TS6", "CONSUMABLES incl COLLECTION & DELIVERY", 1, 0, 0, 1, 0, 1000, 0, 1);
+        private void DtpQuoteCreationDate_ValueChanged(object sender, EventArgs e)
+        {
+            dtpQuoteExpiryDate.Value = dtpQuoteCreationDate.Value.AddMonths(2);
+            dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
+        }
 
-                lblNewPumpUnitPrice.Text = "New Pump Price: R " + p.NewPumpPrice.ToString();
-            }
+        private void DtpQuoteExpiryDate_ValueChanged(object sender, EventArgs e)
+        {
+            dtpQuoteCreationDate.Value = dtpQuoteExpiryDate.Value.AddMonths(-2);
+            dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
         }
 
         private void LoadBusinessPOBoxAddress()
@@ -507,109 +527,6 @@ namespace QuoteSwift
             LoadCustomerPOBoxAddress();
         }
 
-        void Calculate(bool b = false)
-        {
-            // Calculate datagridviews' Price and Total columns
-
-            if (b)
-            {
-                dgvMandatoryPartReplacement.Rows.RemoveAt(dgvMandatoryPartReplacement.Rows.Count - 1);
-                DgvNonMandatoryPartReplacement.Rows.RemoveAt(DgvNonMandatoryPartReplacement.Rows.Count - 1);
-            }
-
-            decimal Sum = 0m;
-            int size = dgvMandatoryPartReplacement.Rows.Count;
-
-            for (int i = 0; i < size; i++)
-            {
-                if (b)
-                {
-                    dgvMandatoryPartReplacement.Rows[i].Cells["clmMMissing_Scrap"].Value =
-                        ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmQuantity"].Value.ToString()) -
-                        ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmMRepaired"].Value.ToString());
-
-                    dgvMandatoryPartReplacement.Rows[i].Cells["clmNew"].Value = dgvMandatoryPartReplacement.Rows[i].Cells["clmMMissing_Scrap"].Value;
-                }
-                dgvMandatoryPartReplacement.Rows[i].Cells["clmPrice"].Value =
-                    (ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmUnitPrice"].Value.ToString()) *
-                     ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmNew"].Value.ToString())) +
-                    (ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells["clmMRepaired"].Value.ToString()) *
-                     (ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmUnitPrice"].Value.ToString()) /
-                      ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["ClmRepairDevider"].Value.ToString())));
-
-                Sum += ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells["clmPrice"].Value.ToString());
-
-                if (i == dgvMandatoryPartReplacement.Rows.Count - 1) dgvMandatoryPartReplacement.Rows.Add("-", "-", "-", "-", "-", "-", "-", "-", Sum, "-");
-            }
-
-            size = DgvNonMandatoryPartReplacement.Rows.Count;
-            for (int i = 0; i < size; i++)
-            {
-                if (b)
-                {
-                    DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMMissing_Scrap"].Value =
-                        ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[2].Value.ToString()) -
-                        ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepaired"].Value.ToString());
-
-                    DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMNewPartQuantity"].Value = DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMMissing_Scrap"].Value;
-                }
-                DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMPrice"].Value =
-                    (ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMUnitPrice"].Value.ToString()) *
-                     ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMNewPartQuantity"].Value.ToString())) +
-                    (ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepaired"].Value.ToString()) *
-                     (ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMUnitPrice"].Value.ToString()) /
-                      ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMRepairDevider"].Value.ToString())));
-
-                Sum += ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells["ClmNMPrice"].Value.ToString());
-
-                if (i == DgvNonMandatoryPartReplacement.Rows.Count - 1)
-                    DgvNonMandatoryPartReplacement.Rows.Add("-", "-", "-", "-", "-", "-", "-", "-", Sum - ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[DgvNonMandatoryPartReplacement.Rows.Count - 1].Cells[8].Value.ToString()), "-");
-            }
-
-            // Display Sum of all totals:
-
-            P.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
-            P.SubTotal = (Sum -= ParsingService.ParseDecimal(mtxtRebate.Text));
-            P.VAT = (Sum * 0.15m);
-            Sum *= 1.15m;
-            P.TotalDue = Sum;
-
-            P.Machining = GetPriceForNMItem("MACHINING");
-            P.Labour = GetPriceForNMItem("LABOUR");
-            P.Consumables = GetPriceForNMItem("CONSUMABLES incl COLLECTION & DELIVERY");
-
-            lblRebateValue.Text = "R" + P.Rebate.ToString();
-            lblSubTotalValue.Text = "R" + P.SubTotal.ToString();
-            lblVATValue.Text = "R" + P.VAT.ToString();
-            lblTotalDueValue.Text = "R" + P.TotalDue.ToString();
-
-            lblRebateValue.Left = 107;
-            lblSubTotalValue.Left = 107;
-            lblVATValue.Left = 107;
-            lblTotalDueValue.Left = 107;
-
-
-
-            lblRepairPercentage.Text = "Repair Percentage: " + Convert.ToString((P.SubTotal / GetPumpSelection().NewPumpPrice) * 100) + "%";
-        }
-
-        private void BtnCalculateRebate_Click(object sender, EventArgs e)
-        {
-            Calculate(true);
-        }
-
-        private void DtpQuoteCreationDate_ValueChanged(object sender, EventArgs e)
-        {
-            dtpQuoteExpiryDate.Value = dtpQuoteCreationDate.Value.AddMonths(2);
-            dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
-        }
-
-        private void DtpQuoteExpiryDate_ValueChanged(object sender, EventArgs e)
-        {
-            dtpQuoteCreationDate.Value = dtpQuoteExpiryDate.Value.AddMonths(-2);
-            dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
-        }
-
         private bool ValidInput()
         {
             if (txtCustomerVATNumber.Text.Length < 3)
@@ -664,69 +581,15 @@ namespace QuoteSwift
             }
         }
 
-        Pump_Part GetPart(string s, BindingList<Pump_Part> bl)
-        {
-
-            if (bl != null && s != "")
-            {
-                for (int i = 0; i < bl.Count; i++)
-                {
-                    if (bl[i].PumpPart.NewPartNumber == s)
-                    {
-                        return bl[i];
-                    }
-                }
-            }
-
-            return null;
-        }
-
         Quote CreateQuote()
         {
             if (!ValidInput()) return null;
 
-            BindingList<Quote_Part> MandatoryPartList = new BindingList<Quote_Part>();
-            for (int i = 0; i < dgvMandatoryPartReplacement.Rows.Count; i++)
-            {
-                if (dgvMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString() != "-")
-                {
-                    Quote_Part quote_Part = new Quote_Part(GetPart(dgvMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(),
-                                                                   GetPumpSelection().PartList),
-                                                           ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
-                                                           ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
-                                                           ParsingService.ParseInt(dgvMandatoryPartReplacement.Rows[i].Cells[5].Value.ToString()),
-                                                           ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[6].Value.ToString()),
-                                                           ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
-                                                           ParsingService.ParseDecimal(dgvMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
-
-                    MandatoryPartList.Add(quote_Part);
-                }
-            }
-
-            BindingList<Quote_Part> NonMandatoryPartList = new BindingList<Quote_Part>();
-            for (int i = 0; i < DgvNonMandatoryPartReplacement.Rows.Count - 1; i++)
-            {
-                if (DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString() != "-")
-                {
-                    Quote_Part quote_Part = new Quote_Part(GetPart(DgvNonMandatoryPartReplacement.Rows[i].Cells[0].Value.ToString(), GetPumpSelection().PartList),
-                                                           ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[3].Value.ToString()),
-                                                           ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[4].Value.ToString()),
-                                                           ParsingService.ParseInt(DgvNonMandatoryPartReplacement.Rows[i].Cells[5].Value.ToString()),
-                                                           ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[6].Value.ToString()),
-                                                           ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString()),
-                                                           ParsingService.ParseDecimal(DgvNonMandatoryPartReplacement.Rows[i].Cells[9].Value.ToString()));
-
-                    NonMandatoryPartList.Add(quote_Part);
-                }
-            }
-
-            viewModel.MandatoryParts = MandatoryPartList;
-            viewModel.NonMandatoryParts = NonMandatoryPartList;
             viewModel.SelectedBusiness = GetBusinessSelection();
             viewModel.SelectedCustomer = GetCustomerSelection();
             viewModel.SelectedPump = GetPumpSelection();
-
-            Pricing pricing = P;
+            viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
+            viewModel.Calculate();
 
             var quote = viewModel.CreateQuote(txtQuoteNumber.Text,
                                                dtpQuoteCreationDate.Value,
@@ -742,7 +605,7 @@ namespace QuoteSwift
                                                cbxBusinessCellphoneNumberSelection.Text,
                                                cbxBusinessEmailAddressSelection.Text,
                                                (int)(dtpPaymentTerm.Value.Subtract(dtpQuoteCreationDate.Value)).TotalDays,
-                                               pricing);
+                                               viewModel.Pricing);
 
             return quote;
         }
@@ -753,22 +616,6 @@ namespace QuoteSwift
             viewModel.ExportQuoteToTemplate(q);
             UseWaitCursor = false;
         }
-
-        private decimal GetPriceForNMItem(string s)
-        {
-            if (s != "")
-            {
-                for (int i = 0; i < DgvNonMandatoryPartReplacement.Rows.Count; i++)
-                {
-                    if (DgvNonMandatoryPartReplacement.Rows[i].Cells[1].Value.ToString() == s)
-                    {
-                        return decimal.Parse(DgvNonMandatoryPartReplacement.Rows[i].Cells[7].Value.ToString(), NumberStyles.Currency);
-                    }
-                }
-            }
-            return 0m;
-        }
-
 
         private void GetNewQuotenumber()
         {
@@ -817,44 +664,16 @@ namespace QuoteSwift
 
         private void LoadFromPassedObject()
         {
-            dgvMandatoryPartReplacement.Rows.Clear();
-            DgvNonMandatoryPartReplacement.Rows.Clear();
-            //Manually setting the data grid's mandatory rows' values:
             cbxPumpSelection.Text = quoteToChange.PumpName;
 
-            for (int i = 0; i < quoteToChange.QuoteMandatoryPartList.Count; i++)
-            {
-                Quote_Part data = quoteToChange.QuoteMandatoryPartList[i];
-                if (data != null)
-                    dgvMandatoryPartReplacement.Rows.Add(data.PumpPart.PumpPart.NewPartNumber,
-                                                         data.PumpPart.PumpPart.PartDescription,
-                                                         data.PumpPart.PumpPartQuantity,
-                                                         data.MissingorScrap,
-                                                         data.Repaired,
-                                                         data.New,
-                                                         data.Price,
-                                                         data.UnitPrice,
-                                                         ((data.UnitPrice * data.New) + (data.Repaired * (data.UnitPrice / data.RepairDevider))),
-                                                         data.RepairDevider);
-            }
-            for (int i = 0; i < quoteToChange.QuoteNewList.Count; i++)
-            {
-                Quote_Part data = quoteToChange.QuoteNewList[i];
-                if (data != null)
-                    DgvNonMandatoryPartReplacement.Rows.Add(data.PumpPart.PumpPart.NewPartNumber,
-                                                         data.PumpPart.PumpPart.PartDescription,
-                                                         data.PumpPart.PumpPartQuantity,
-                                                         data.MissingorScrap,
-                                                         data.Repaired,
-                                                         data.New,
-                                                         data.Price,
-                                                         data.UnitPrice,
-                                                         ((data.UnitPrice * data.New) + (data.Repaired * (data.UnitPrice / data.RepairDevider))),
-                                                         data.RepairDevider);
-            }
-            DgvNonMandatoryPartReplacement.Rows.Add("TS6MACH", "MACHINING", 1, 0, 0, 1, 0, quoteToChange.QuoteCost.Machining, 0, 1);
-            DgvNonMandatoryPartReplacement.Rows.Add("TS6LAB", "LABOUR", 1, 0, 0, 1, 0, quoteToChange.QuoteCost.Labour, 0, 1);
-            DgvNonMandatoryPartReplacement.Rows.Add("CON TS6", "CONSUMABLES incl COLLECTION & DELIVERY", 1, 0, 0, 1, 0, quoteToChange.QuoteCost.Consumables, 0, 1);
+            viewModel.MandatoryParts = new BindingList<Quote_Part>(quoteToChange.QuoteMandatoryPartList.ToList());
+            viewModel.NonMandatoryParts = new BindingList<Quote_Part>(quoteToChange.QuoteNewList.ToList());
+            viewModel.NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6MACH", PartDescription = "MACHINING", PartPrice = quoteToChange.QuoteCost.Machining }, 1), 0, 0, 1, quoteToChange.QuoteCost.Machining, quoteToChange.QuoteCost.Machining, 1));
+            viewModel.NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6LAB", PartDescription = "LABOUR", PartPrice = quoteToChange.QuoteCost.Labour }, 1), 0, 0, 1, quoteToChange.QuoteCost.Labour, quoteToChange.QuoteCost.Labour, 1));
+            viewModel.NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "CON TS6", PartDescription = "CONSUMABLES incl COLLECTION & DELIVERY", PartPrice = quoteToChange.QuoteCost.Consumables }, 1), 0, 0, 1, quoteToChange.QuoteCost.Consumables, quoteToChange.QuoteCost.Consumables, 1));
+            mandatorySource.DataSource = viewModel.MandatoryParts;
+            nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
+            UpdatePricingDisplay();
 
             //Loading Business Information:
             Address add = quoteToChange.QuoteBusinessPOBox;

@@ -17,6 +17,8 @@ namespace QuoteSwift
         Pump selectedPump;
         BindingList<Quote_Part> mandatoryParts = new BindingList<Quote_Part>();
         BindingList<Quote_Part> nonMandatoryParts = new BindingList<Quote_Part>();
+        Pricing pricing = new Pricing();
+        float repairPercentage;
 
         public ICommand AddQuoteCommand { get; }
 
@@ -119,12 +121,116 @@ namespace QuoteSwift
             }
         }
 
+        public Pricing Pricing
+        {
+            get => pricing;
+            private set
+            {
+                pricing = value;
+                OnPropertyChanged(nameof(Pricing));
+            }
+        }
+
+        public float RepairPercentage
+        {
+            get => repairPercentage;
+            private set => SetProperty(ref repairPercentage, value);
+        }
+
         public void LoadData()
         {
             PartList = dataService.LoadPartList();
             Pumps = dataService.LoadPumpList();
             Businesses = dataService.LoadBusinessList();
             QuoteMap = dataService.LoadQuoteMap();
+            Pricing = new Pricing();
+        }
+
+        public void LoadPartlists()
+        {
+            if (SelectedPump == null)
+            {
+                MandatoryParts = new BindingList<Quote_Part>();
+                NonMandatoryParts = new BindingList<Quote_Part>();
+                Pricing = new Pricing();
+                return;
+            }
+
+            LoadParts(SelectedPump);
+            Calculate();
+        }
+
+        void LoadParts(Pump pump)
+        {
+            MandatoryParts = new BindingList<Quote_Part>();
+            NonMandatoryParts = new BindingList<Quote_Part>();
+
+            if (pump.PartList != null)
+            {
+                foreach (var pp in pump.PartList)
+                {
+                    var qp = new Quote_Part(pp,
+                                            pp.PumpPartQuantity,
+                                            0,
+                                            pp.PumpPartQuantity,
+                                            pp.PumpPartQuantity * pp.PumpPart.PartPrice,
+                                            pp.PumpPart.PartPrice,
+                                            1);
+
+                    if (pp.PumpPart.MandatoryPart)
+                        MandatoryParts.Add(qp);
+                    else
+                        NonMandatoryParts.Add(qp);
+                }
+
+                NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6MACH", PartDescription = "MACHINING", PartPrice = 1000m }, 1), 0, 0, 1, 0, 1000m, 1));
+                NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6LAB", PartDescription = "LABOUR", PartPrice = 1000m }, 1), 0, 0, 1, 0, 1000m, 1));
+                NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "CON TS6", PartDescription = "CONSUMABLES incl COLLECTION & DELIVERY", PartPrice = 1000m }, 1), 0, 0, 1, 0, 1000m, 1));
+
+                Pricing.PumpPrice = pump.NewPumpPrice;
+            }
+        }
+
+        public void Calculate()
+        {
+            decimal sum = 0m;
+
+            foreach (var qp in MandatoryParts)
+            {
+                qp.MissingorScrap = qp.PumpPart.PumpPartQuantity - qp.Repaired;
+                qp.New = qp.MissingorScrap;
+                qp.Price = (qp.UnitPrice * qp.New) + (qp.Repaired * (qp.UnitPrice / qp.RepairDevider));
+                sum += qp.Price;
+            }
+
+            foreach (var qp in NonMandatoryParts)
+            {
+                qp.MissingorScrap = qp.PumpPart.PumpPartQuantity - qp.Repaired;
+                qp.New = qp.MissingorScrap;
+                qp.Price = (qp.UnitPrice * qp.New) + (qp.Repaired * (qp.UnitPrice / qp.RepairDevider));
+                sum += qp.Price;
+            }
+
+            Pricing.SubTotal = sum - Pricing.Rebate;
+            Pricing.VAT = Pricing.SubTotal * 0.15m;
+            Pricing.TotalDue = Pricing.SubTotal + Pricing.VAT;
+            Pricing.Machining = GetPriceForNMItem("MACHINING");
+            Pricing.Labour = GetPriceForNMItem("LABOUR");
+            Pricing.Consumables = GetPriceForNMItem("CONSUMABLES incl COLLECTION & DELIVERY");
+
+            if (SelectedPump != null && SelectedPump.NewPumpPrice > 0)
+                RepairPercentage = (float)(Pricing.SubTotal / SelectedPump.NewPumpPrice * 100);
+            else
+                RepairPercentage = 0f;
+        }
+
+        decimal GetPriceForNMItem(string description)
+        {
+            if (string.IsNullOrEmpty(description))
+                return 0m;
+
+            var part = NonMandatoryParts?.FirstOrDefault(p => p.PumpPart.PumpPart.PartDescription == description);
+            return part?.Price ?? 0m;
         }
 
         bool DistinctQuote(Quote quote)
