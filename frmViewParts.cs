@@ -11,11 +11,12 @@ namespace QuoteSwift
         readonly ViewPartsViewModel viewModel;
         readonly INavigationService navigation;
 
+        readonly BindingSource partsBindingSource = new BindingSource();
+
         readonly ApplicationData appData;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
         public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
-        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -25,6 +26,8 @@ namespace QuoteSwift
             this.messageService = messageService;
             if (appData != null)
                 viewModel.UpdateData(appData.PartList);
+            partsBindingSource.DataSource = viewModel.AllParts;
+            dgvAllParts.DataSource = partsBindingSource;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -64,7 +67,6 @@ namespace QuoteSwift
             if (appData != null)
             {
                 viewModel.UpdateData(appData.PartList);
-                RefreshBinding();
             }
         }
 
@@ -77,7 +79,6 @@ namespace QuoteSwift
                 {
                     viewModel.RemovePart(selectedPart);
                     messageService.ShowInformation("Successfully deleted " + selectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
-                    RefreshBinding();
                 }
             }
             else
@@ -94,21 +95,7 @@ namespace QuoteSwift
         *       and clutter free.                                                          
         */
 
-        void RefreshBinding()
-        {
-            var list = new BindingList<Part>();
-            if (viewModel.MandatoryParts != null)
-            {
-                foreach (var p in viewModel.MandatoryParts)
-                    list.Add(p);
-            }
-            if (viewModel.NonMandatoryParts != null)
-            {
-                foreach (var p in viewModel.NonMandatoryParts)
-                    list.Add(p);
-            }
-            dgvAllParts.DataSource = new BindingSource { DataSource = list };
-        }
+        // Binding handled automatically via BindingSource
 
         Part GetSelectedPart()
         {
@@ -124,7 +111,6 @@ namespace QuoteSwift
         {
             dgvAllParts.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvAllParts.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
-            RefreshBinding();
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -133,9 +119,12 @@ namespace QuoteSwift
         }
 
         private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
+        {
             serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
+        }
+    }
 }

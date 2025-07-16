@@ -8,13 +8,17 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         Dictionary<string, Part> partList;
-        BindingList<Part> mandatoryParts;
-        BindingList<Part> nonMandatoryParts;
+        readonly BindingList<Part> mandatoryParts;
+        readonly BindingList<Part> nonMandatoryParts;
+        readonly BindingList<Part> allParts;
 
 
         public ViewPartsViewModel(IDataService service)
         {
             dataService = service;
+            mandatoryParts = new BindingList<Part>();
+            nonMandatoryParts = new BindingList<Part>();
+            allParts = new BindingList<Part>();
         }
 
         public IDataService DataService => dataService;
@@ -29,25 +33,11 @@ namespace QuoteSwift
             }
         }
 
-        public BindingList<Part> MandatoryParts
-        {
-            get => mandatoryParts;
-            private set
-            {
-                mandatoryParts = value;
-                OnPropertyChanged(nameof(MandatoryParts));
-            }
-        }
+        public BindingList<Part> MandatoryParts => mandatoryParts;
 
-        public BindingList<Part> NonMandatoryParts
-        {
-            get => nonMandatoryParts;
-            private set
-            {
-                nonMandatoryParts = value;
-                OnPropertyChanged(nameof(NonMandatoryParts));
-            }
-        }
+        public BindingList<Part> NonMandatoryParts => nonMandatoryParts;
+
+        public BindingList<Part> AllParts => allParts;
 
         public void LoadData()
         {
@@ -69,23 +59,33 @@ namespace QuoteSwift
             string key = StringUtil.NormalizeKey(part.OriginalItemPartNumber);
             PartList?.Remove(key);
             if (part.MandatoryPart)
-                MandatoryParts?.Remove(part);
+                mandatoryParts.Remove(part);
             else
-                NonMandatoryParts?.Remove(part);
+                nonMandatoryParts.Remove(part);
+            allParts.Remove(part);
         }
 
         void RefreshLists()
         {
+            mandatoryParts.Clear();
+            nonMandatoryParts.Clear();
+            allParts.Clear();
+
             if (PartList != null)
             {
-                MandatoryParts = new BindingList<Part>(PartList.Values.Where(p => p.MandatoryPart).ToList());
-                NonMandatoryParts = new BindingList<Part>(PartList.Values.Where(p => !p.MandatoryPart).ToList());
+                foreach (var p in PartList.Values)
+                {
+                    allParts.Add(p);
+                    if (p.MandatoryPart)
+                        mandatoryParts.Add(p);
+                    else
+                        nonMandatoryParts.Add(p);
+                }
             }
-            else
-            {
-                MandatoryParts = new BindingList<Part>();
-                NonMandatoryParts = new BindingList<Part>();
-            }
+
+            mandatoryParts.ResetBindings();
+            nonMandatoryParts.ResetBindings();
+            allParts.ResetBindings();
         }
 
     }
