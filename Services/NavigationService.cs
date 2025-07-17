@@ -9,19 +9,21 @@ namespace QuoteSwift
         readonly INotificationService notificationService;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
+        readonly IExcelExportService excelExportService;
 
-        public NavigationService(ApplicationData data, IDataService service, INotificationService notifier, IMessageService messenger, ISerializationService serializer)
+        public NavigationService(ApplicationData data, IDataService service, INotificationService notifier, IMessageService messenger, ISerializationService serializer, IExcelExportService excelExporter)
         {
             dataService = service;
             appData = data;
             serializationService = serializer;
             notificationService = notifier;
             messageService = messenger;
+            excelExportService = excelExporter;
         }
 
         public void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new CreateQuoteViewModel(dataService, notificationService);
+            var vm = new CreateQuoteViewModel(dataService, notificationService, excelExportService);
             using (var form = new FrmCreateQuote(vm, appData, quoteToChange, changeSpecificObject, messageService, serializationService))
                 form.ShowDialog();
             }

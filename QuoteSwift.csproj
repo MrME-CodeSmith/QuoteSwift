@@ -247,6 +247,8 @@
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ParsingService.cs" />
+    <Compile Include="Services\IExcelExportService.cs" />
+    <Compile Include="Services\FileExcelExportService.cs" />
     <Compile Include="ViewModels\QuotesViewModel.cs" />
     <Compile Include="ViewModels\AddCustomerViewModel.cs" />
     <Compile Include="ViewModels\ViewCustomersViewModel.cs" />
@@ -261,7 +263,6 @@
     <Compile Include="ViewModels\ViewPOBoxAddressesViewModel.cs" />
     <Compile Include="ViewModels\ViewPartsViewModel.cs" />
     <Compile Include="ViewModels\ViewPumpViewModel.cs" />
-    <Compile Include="ExcelExporter.cs" />
     <Compile Include="Infrastructure\ControlStateHelper.cs" />
     <Compile Include="Infrastructure\OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
