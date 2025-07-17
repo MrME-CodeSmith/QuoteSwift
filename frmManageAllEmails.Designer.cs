@@ -36,6 +36,8 @@ namespace QuoteSwift
             this.BtnCancel = new System.Windows.Forms.Button();
             this.btnRemoveAddress = new System.Windows.Forms.Button();
             this.BtnChangeAddressInfo = new System.Windows.Forms.Button();
+            this.txtNewEmail = new System.Windows.Forms.TextBox();
+            this.btnAddEmail = new System.Windows.Forms.Button();
             this.msManageEmailAddressesControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DgvEmails)).BeginInit();
             this.SuspendLayout();
@@ -107,22 +109,43 @@ namespace QuoteSwift
             this.btnRemoveAddress.Click += new System.EventHandler(this.BtnRemoveAddress_Click);
             // 
             // BtnChangeAddressInfo
-            // 
+            //
             this.BtnChangeAddressInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BtnChangeAddressInfo.Location = new System.Drawing.Point(370, 37);
             this.BtnChangeAddressInfo.Margin = new System.Windows.Forms.Padding(4);
             this.BtnChangeAddressInfo.Name = "BtnChangeAddressInfo";
             this.BtnChangeAddressInfo.Size = new System.Drawing.Size(234, 32);
-            this.BtnChangeAddressInfo.TabIndex = 6;
+            this.BtnChangeAddressInfo.TabIndex = 8;
             this.BtnChangeAddressInfo.Text = "Update Selected Email";
             this.BtnChangeAddressInfo.UseVisualStyleBackColor = true;
             this.BtnChangeAddressInfo.Click += new System.EventHandler(this.BtnChangeAddressInfo_Click);
+            //
+            // txtNewEmail
+            //
+            this.txtNewEmail.Location = new System.Drawing.Point(18, 37);
+            this.txtNewEmail.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNewEmail.Name = "txtNewEmail";
+            this.txtNewEmail.Size = new System.Drawing.Size(344, 24);
+            this.txtNewEmail.TabIndex = 6;
+            //
+            // btnAddEmail
+            //
+            this.btnAddEmail.Location = new System.Drawing.Point(370, 75);
+            this.btnAddEmail.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAddEmail.Name = "btnAddEmail";
+            this.btnAddEmail.Size = new System.Drawing.Size(234, 32);
+            this.btnAddEmail.TabIndex = 7;
+            this.btnAddEmail.Text = "Add Email";
+            this.btnAddEmail.UseVisualStyleBackColor = true;
+            this.btnAddEmail.Click += new System.EventHandler(this.BtnAddEmail_Click);
             // 
             // FrmManageAllEmails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(622, 359);
+            this.Controls.Add(this.btnAddEmail);
+            this.Controls.Add(this.txtNewEmail);
             this.Controls.Add(this.BtnChangeAddressInfo);
             this.Controls.Add(this.btnRemoveAddress);
             this.Controls.Add(this.BtnCancel);
@@ -151,6 +174,8 @@ namespace QuoteSwift
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.Button btnRemoveAddress;
         private System.Windows.Forms.Button BtnChangeAddressInfo;
+        private System.Windows.Forms.TextBox txtNewEmail;
+        private System.Windows.Forms.Button btnAddEmail;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmEmailAddresses;
     }
 }

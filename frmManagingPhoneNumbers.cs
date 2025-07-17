@@ -148,6 +148,34 @@ namespace QuoteSwift
             }
         }
 
+        private void BtnAddTelephone_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtNewTelephone.Text))
+            {
+                viewModel.AddTelephoneCommand.Execute(txtNewTelephone.Text);
+                txtNewTelephone.Clear();
+                LoadInformation();
+            }
+            else
+            {
+                messageService.ShowError("Please enter a valid phone number.", "ERROR - Invalid Number");
+            }
+        }
+
+        private void BtnAddCellphone_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtNewCellphone.Text))
+            {
+                viewModel.AddCellphoneCommand.Execute(txtNewCellphone.Text);
+                txtNewCellphone.Clear();
+                LoadInformation();
+            }
+            else
+            {
+                messageService.ShowError("Please enter a valid phone number.", "ERROR - Invalid Number");
+            }
+        }
+
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();

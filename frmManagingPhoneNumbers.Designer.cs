@@ -42,6 +42,10 @@ namespace QuoteSwift
             this.BtnCancel = new System.Windows.Forms.Button();
             this.BtnUpdateCellphoneNumber = new System.Windows.Forms.Button();
             this.BtnUpdateTelephoneNumber = new System.Windows.Forms.Button();
+            this.txtNewTelephone = new System.Windows.Forms.TextBox();
+            this.txtNewCellphone = new System.Windows.Forms.TextBox();
+            this.btnAddTelephone = new System.Windows.Forms.Button();
+            this.btnAddCellphone = new System.Windows.Forms.Button();
             this.msManagePhoneNumbersControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTelephoneNumbers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCellphoneNumbers)).BeginInit();
@@ -190,12 +194,54 @@ namespace QuoteSwift
             this.BtnUpdateTelephoneNumber.Text = "Update Selected Phone Number";
             this.BtnUpdateTelephoneNumber.UseVisualStyleBackColor = true;
             this.BtnUpdateTelephoneNumber.Click += new System.EventHandler(this.BtnUpdateTelephoneNumber_Click);
+            //
+            // txtNewTelephone
+            //
+            this.txtNewTelephone.Location = new System.Drawing.Point(18, 37);
+            this.txtNewTelephone.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNewTelephone.Name = "txtNewTelephone";
+            this.txtNewTelephone.Size = new System.Drawing.Size(250, 24);
+            this.txtNewTelephone.TabIndex = 0;
+            //
+            // txtNewCellphone
+            //
+            this.txtNewCellphone.Location = new System.Drawing.Point(609, 37);
+            this.txtNewCellphone.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNewCellphone.Name = "txtNewCellphone";
+            this.txtNewCellphone.Size = new System.Drawing.Size(250, 24);
+            this.txtNewCellphone.TabIndex = 2;
+            //
+            // btnAddTelephone
+            //
+            this.btnAddTelephone.Location = new System.Drawing.Point(18, 69);
+            this.btnAddTelephone.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAddTelephone.Name = "btnAddTelephone";
+            this.btnAddTelephone.Size = new System.Drawing.Size(250, 30);
+            this.btnAddTelephone.TabIndex = 1;
+            this.btnAddTelephone.Text = "Add Phone";
+            this.btnAddTelephone.UseVisualStyleBackColor = true;
+            this.btnAddTelephone.Click += new System.EventHandler(this.BtnAddTelephone_Click);
+            //
+            // btnAddCellphone
+            //
+            this.btnAddCellphone.Location = new System.Drawing.Point(609, 69);
+            this.btnAddCellphone.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAddCellphone.Name = "btnAddCellphone";
+            this.btnAddCellphone.Size = new System.Drawing.Size(250, 30);
+            this.btnAddCellphone.TabIndex = 3;
+            this.btnAddCellphone.Text = "Add Phone";
+            this.btnAddCellphone.UseVisualStyleBackColor = true;
+            this.btnAddCellphone.Click += new System.EventHandler(this.BtnAddCellphone_Click);
             // 
             // FrmManagingPhoneNumbers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1161, 381);
+            this.Controls.Add(this.btnAddCellphone);
+            this.Controls.Add(this.btnAddTelephone);
+            this.Controls.Add(this.txtNewCellphone);
+            this.Controls.Add(this.txtNewTelephone);
             this.Controls.Add(this.BtnUpdateTelephoneNumber);
             this.Controls.Add(this.BtnUpdateCellphoneNumber);
             this.Controls.Add(this.BtnCancel);
@@ -234,6 +280,10 @@ namespace QuoteSwift
         private System.Windows.Forms.Button btnRemoveCellNumber;
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.Button BtnUpdateCellphoneNumber;
+        private System.Windows.Forms.TextBox txtNewTelephone;
+        private System.Windows.Forms.TextBox txtNewCellphone;
+        private System.Windows.Forms.Button btnAddTelephone;
+        private System.Windows.Forms.Button btnAddCellphone;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmTelephoneNumbers;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmCellphoneNumbers;
         private System.Windows.Forms.Button BtnUpdateTelephoneNumber;
