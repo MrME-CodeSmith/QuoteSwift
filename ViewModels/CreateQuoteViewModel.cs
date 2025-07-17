@@ -256,6 +256,33 @@ namespace QuoteSwift
             }
         }
 
+        public Address GetBusinessPOBoxByDescription(string description)
+        {
+            if (SelectedBusiness != null && SelectedBusiness.BusinessPOBoxAddressList != null && !string.IsNullOrWhiteSpace(description))
+            {
+                return SelectedBusiness.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == description);
+            }
+            return null;
+        }
+
+        public Address GetCustomerPOBoxByDescription(string description)
+        {
+            if (SelectedCustomer != null && SelectedCustomer.CustomerPOBoxAddress != null && !string.IsNullOrWhiteSpace(description))
+            {
+                return SelectedCustomer.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == description);
+            }
+            return null;
+        }
+
+        public Address GetCustomerDeliveryAddressByDescription(string description)
+        {
+            if (SelectedCustomer != null && SelectedCustomer.CustomerDeliveryAddressList != null && !string.IsNullOrWhiteSpace(description))
+            {
+                return SelectedCustomer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == description);
+            }
+            return null;
+        }
+
         public string CustomerVATNumber
         {
             get => customerVatNumber;
