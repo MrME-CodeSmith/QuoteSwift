@@ -185,34 +185,7 @@ namespace QuoteSwift
         }
 
 
-        private Address GetBusinesssPOBoxAddressSelection(Business b)
-        {
-            string SearchName = CbxPOBoxSelection.Text;
 
-            if (b.BusinessPOBoxAddressList != null) return b.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-
-            return null;
-        }
-
-        private Address GetCustomerPOBoxAddressSelection(Customer c)
-        {
-            if (c != null)
-            {
-                string SearchName = CbxCustomerPOBoxSelection.Text;
-
-                if (c.CustomerPOBoxAddress != null) return c.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == SearchName);
-            }
-            return null;
-        }
-
-        private Address GetCustomerDeliveryAddress()
-        {
-            string SearchName = cbxCustomerDeliveryAddress.Text;
-
-            if (viewModel.SelectedCustomer != null && viewModel.SelectedCustomer.CustomerDeliveryAddressList != null) return viewModel.SelectedCustomer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-
-            return null;
-        }
 
         private void LinkBusinessTelephone(Business b, ref ComboBox cb)
         {
@@ -450,7 +423,7 @@ namespace QuoteSwift
 
         private void LoadBusinessPOBoxAddress()
         {
-            Address Selection = GetBusinesssPOBoxAddressSelection(viewModel.SelectedBusiness);
+            Address Selection = viewModel.GetBusinessPOBoxByDescription(CbxPOBoxSelection.Text);
             if (Selection != null)
             {
                 lblBusinessPOBoxNumber.Text = "Street Name: " + Selection.AddressStreetName;
@@ -462,7 +435,7 @@ namespace QuoteSwift
         }
         private void LoadCustomerPOBoxAddress()
         {
-            Address Selection = GetCustomerPOBoxAddressSelection(viewModel.SelectedCustomer);
+            Address Selection = viewModel.GetCustomerPOBoxByDescription(CbxCustomerPOBoxSelection.Text);
             if (Selection != null)
             {
                 lblCustomerPOBoxStreetName.Text = "P.O.Box Number " + Selection.AddressStreetNumber.ToString();
@@ -481,7 +454,7 @@ namespace QuoteSwift
 
         private void LoadCustomerDeliveryAddress()
         {
-            Address Selection = GetCustomerDeliveryAddress();
+            Address Selection = viewModel.GetCustomerDeliveryAddressByDescription(cbxCustomerDeliveryAddress.Text);
             if (Selection != null)
             {
                 rtxCustomerDeliveryDescripton.Clear();
@@ -531,8 +504,8 @@ namespace QuoteSwift
                                                viewModel.JobNumber,
                                                viewModel.PRNumber,
                                                dtpPaymentTerm.Value,
-                                               GetBusinesssPOBoxAddressSelection(viewModel.SelectedBusiness),
-                                               GetCustomerPOBoxAddressSelection(viewModel.SelectedCustomer),
+                                               viewModel.GetBusinessPOBoxByDescription(CbxPOBoxSelection.Text),
+                                               viewModel.GetCustomerPOBoxByDescription(CbxCustomerPOBoxSelection.Text),
                                                viewModel.LineNumber,
                                                cbxBusinessTelephoneNumberSelection.Text,
                                                cbxBusinessCellphoneNumberSelection.Text,

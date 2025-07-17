@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace QuoteSwift
 {
@@ -93,6 +94,16 @@ namespace QuoteSwift
                 businessList = value;
                 OnPropertyChanged(nameof(BusinessList));
             }
+        }
+
+        public Business GetBusinessByName(string name)
+        {
+            if (BusinessList != null && !string.IsNullOrWhiteSpace(name))
+            {
+                return BusinessList.FirstOrDefault(b => b.BusinessName == name);
+            }
+
+            return null;
         }
 
         public void ClearCurrentCustomer()

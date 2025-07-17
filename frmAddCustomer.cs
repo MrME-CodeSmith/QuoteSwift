@@ -46,7 +46,7 @@ namespace QuoteSwift
         {
             if (viewModel.ValidateBusiness() && !viewModel.ChangeSpecificObject)
             {
-                Business linkBusiness = GetSelectedBusiness();
+                Business linkBusiness = viewModel.GetBusinessByName(cbBusinessSelection.Text);
                 viewModel.CurrentCustomer.CustomerName = string.Empty;
                 viewModel.CurrentCustomer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
                 viewModel.CurrentCustomer.VendorNumber = mtxtVendorNumber.Text;
@@ -68,7 +68,7 @@ namespace QuoteSwift
                 viewModel.CurrentCustomer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
                 viewModel.CurrentCustomer.VendorNumber = mtxtVendorNumber.Text;
 
-                Business container = GetSelectedBusiness();
+                Business container = viewModel.GetBusinessByName(cbBusinessSelection.Text);
                 viewModel.UpdateCustomerCommand.Execute(new object[] { container, oldName });
                 if (viewModel.LastOperationSuccessful)
                 {
@@ -83,9 +83,9 @@ namespace QuoteSwift
         private void FrmAddCustomer_Load(object sender, EventArgs e)
         {
             viewModel.LoadData();
-            if (appData.BusinessList != null)
+            if (viewModel.BusinessList != null)
             {
-                BindingSource source = new BindingSource { DataSource = appData.BusinessList };
+                BindingSource source = new BindingSource { DataSource = viewModel.BusinessList };
                 cbBusinessSelection.DataSource = source.DataSource;
                 cbBusinessSelection.DisplayMember = "BusinessName";
                 cbBusinessSelection.ValueMember = "BusinessName";
@@ -340,15 +340,7 @@ namespace QuoteSwift
             ControlStateHelper.ApplyReadOnly(gbxPOBoxAddress.Controls, ro);
         }
 
-        private Business GetSelectedBusiness()
-        {
-            if (cbBusinessSelection.Text.Length > 0 && appData.BusinessList != null)
-            {
-                return appData.BusinessList.FirstOrDefault(b => b.BusinessName == cbBusinessSelection.Text);
-            }
 
-            return null;
-        }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
