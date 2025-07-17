@@ -6,10 +6,17 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace QuoteSwift
 {
-    public static class ExcelExporter
+    public class FileExcelExportService : IExcelExportService
     {
+        readonly IMessageService messageService;
+
+        public FileExcelExportService(IMessageService messenger = null)
+        {
+            messageService = messenger;
+        }
+
         [STAThread]
-        public static void ExportQuoteToExcel(Quote quote, IMessageService messageService)
+        public void ExportQuoteToExcel(Quote quote)
         {
             if (quote == null) return;
 
@@ -30,7 +37,7 @@ namespace QuoteSwift
 
                 if (excelApp == null)
                 {
-                    messageService.ShowError("Excel is not installed on this machine.", "ERROR - Excel Export Failed");
+                    messageService?.ShowError("Excel is not installed on this machine.", "ERROR - Excel Export Failed");
                     return;
                 }
 
@@ -91,16 +98,6 @@ namespace QuoteSwift
 
                 // Mandatory Parts
                 int currentRow = worksheet.Cells.Find("<<Mandatory Begin>>").Row + 1;
-                for (int i = 0; i < quote.QuoteMandatoryPartList.Count - 3; i++)
-                {
-                    Excel.Range range = worksheet.get_Range("A" + currentRow.ToString(), "L" + currentRow.ToString()).EntireRow;
-                    range.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
-                    worksheet.get_Range("B" + currentRow.ToString() + ":D" + currentRow.ToString()).Merge();
-                    worksheet.get_Range("J" + currentRow.ToString() + ":K" + currentRow.ToString()).Merge();
-                    currentRow++;
-                }
-
-                currentRow = worksheet.Cells.Find("<<Mandatory Begin>>").Row;
                 for (int i = 0; i < quote.QuoteMandatoryPartList.Count; i++)
                 {
                     worksheet.Cells[currentRow, 1].Value2 = quote.QuoteMandatoryPartList[i].PumpPart.PumpPart.NewPartNumber ?? "NPN";
@@ -157,11 +154,11 @@ namespace QuoteSwift
 
                             if (dr != DialogResult.OK)
                             {
-                                messageService.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
+                                messageService?.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
                                 return;
                             }
                         }
-                        messageService.ShowInformation("Excel file created and stored at selected location.", "INFORMATION - Quote Stored Successfully");
+                        messageService?.ShowInformation("Excel file created and stored at selected location.", "INFORMATION - Quote Stored Successfully");
                     }
                     else return;
                 }
@@ -183,7 +180,7 @@ namespace QuoteSwift
                 }
                 else
                 {
-                    messageService.ShowError("The template file needed to export the quote cannot be found.\nQuote was created successfully but the exportation of the quote was unsuccessful.", "ERROR - Template File Missing");
+                    messageService?.ShowError("The template file needed to export the quote cannot be found.\nQuote was created successfully but the exportation of the quote was unsuccessful.", "ERROR - Template File Missing");
                 }
             }
             finally

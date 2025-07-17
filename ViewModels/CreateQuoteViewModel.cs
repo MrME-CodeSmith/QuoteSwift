@@ -10,6 +10,7 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
+        readonly IExcelExportService excelExportService;
         Dictionary<string, Part> partList;
         BindingList<Pump> pumps;
         BindingList<Business> businesses;
@@ -41,10 +42,11 @@ namespace QuoteSwift
         public ICommand AddQuoteCommand { get; }
 
 
-        public CreateQuoteViewModel(IDataService service, INotificationService notifier)
+        public CreateQuoteViewModel(IDataService service, INotificationService notifier, IExcelExportService excelExporter)
         {
             dataService = service;
             notificationService = notifier;
+            excelExportService = excelExporter;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
         }
 
@@ -555,7 +557,7 @@ namespace QuoteSwift
 
         public void ExportQuoteToTemplate(Quote quote)
         {
-            ExcelExporter.ExportQuoteToExcel(quote, null);
+            excelExportService.ExportQuoteToExcel(quote);
         }
 
     }
