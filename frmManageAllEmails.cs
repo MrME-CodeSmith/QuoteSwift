@@ -85,6 +85,19 @@ namespace QuoteSwift
             LoadInformation();
         }
 
+        private void BtnAddEmail_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNewEmail.Text))
+            {
+                messageService.ShowError("The provided email address is invalid.", "ERROR - Invalid Email Address");
+                return;
+            }
+            viewModel.AddEmailCommand.Execute(txtNewEmail.Text);
+            messageService.ShowInformation($"Successfully added '{txtNewEmail.Text}' to the email address list", "CONFIRMATION - Addition Success");
+            txtNewEmail.Clear();
+            LoadInformation();
+        }
+
         string GetEmailSelection()
         {
             if (DgvEmails.CurrentCell == null || DgvEmails.CurrentRow == null)

@@ -15,6 +15,8 @@ namespace QuoteSwift
         public ICommand RemoveCellphoneCommand { get; }
         public ICommand UpdateTelephoneCommand { get; }
         public ICommand UpdateCellphoneCommand { get; }
+        public ICommand AddTelephoneCommand { get; }
+        public ICommand AddCellphoneCommand { get; }
 
 
         public ManagePhoneNumbersViewModel(IDataService service)
@@ -22,6 +24,8 @@ namespace QuoteSwift
             dataService = service;
             RemoveTelephoneCommand = new RelayCommand(n => RemoveTelephone(n as string));
             RemoveCellphoneCommand = new RelayCommand(n => RemoveCellphone(n as string));
+            AddTelephoneCommand = new RelayCommand(n => AddTelephone(n as string));
+            AddCellphoneCommand = new RelayCommand(n => AddCellphone(n as string));
             UpdateTelephoneCommand = new RelayCommand(p =>
             {
                 if (p is object[] arr && arr.Length == 2 && arr[0] is string oldN && arr[1] is string newN)
@@ -131,6 +135,24 @@ namespace QuoteSwift
                 Business.RemoveCellphoneNumber(number);
             else if (Customer != null)
                 Customer.RemoveCellphoneNumber(number);
+            RefreshNumbers();
+        }
+
+        public void AddTelephone(string number)
+        {
+            if (Business != null)
+                Business.AddTelephoneNumber(number);
+            else if (Customer != null)
+                Customer.AddTelephoneNumber(number);
+            RefreshNumbers();
+        }
+
+        public void AddCellphone(string number)
+        {
+            if (Business != null)
+                Business.AddCellphoneNumber(number);
+            else if (Customer != null)
+                Customer.AddCellphoneNumber(number);
             RefreshNumbers();
         }
 
