@@ -412,7 +412,6 @@ namespace QuoteSwift
 
         private void FrmAddPump_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
             serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,

@@ -218,12 +218,13 @@ namespace QuoteSwift
 
         private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MainProgramCode.CloseApplication(true,
             serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
+
+        }
 
         private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
