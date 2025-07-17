@@ -19,7 +19,8 @@ namespace QuoteSwift // Repair Quote Swift
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
-            pumpBindingSource.DataSource = viewModel.Pumps;
+            pumpBindingSource.DataSource = viewModel;
+            pumpBindingSource.DataMember = nameof(ViewPumpViewModel.Pumps);
             dgvPumpList.DataSource = pumpBindingSource;
         }
 
@@ -34,11 +35,9 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void BtnUpdateSelectedPump_Click(object sender, EventArgs e)
         {
-            if (dgvPumpList.SelectedCells.Count > 0)
+            Pump selected = GetSelectedPump();
+            if (selected != null)
             {
-                int iGridSelection = dgvPumpList.CurrentCell.RowIndex;
-
-                var pToChange = viewModel.Pumps.ElementAt(iGridSelection);
                 Hide();
                 navigation.CreateNewPump();
                 Show();

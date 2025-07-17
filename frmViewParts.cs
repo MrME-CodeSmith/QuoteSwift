@@ -26,7 +26,8 @@ namespace QuoteSwift
             this.messageService = messageService;
             if (appData != null)
                 viewModel.UpdateData(appData.PartList);
-            partsBindingSource.DataSource = viewModel.AllParts;
+            partsBindingSource.DataSource = viewModel;
+            partsBindingSource.DataMember = nameof(ViewPartsViewModel.AllParts);
             dgvAllParts.DataSource = partsBindingSource;
         }
 
