@@ -140,7 +140,7 @@ namespace QuoteSwift
         public void ViewBusinessesAddresses(Business business = null, Customer customer = null)
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
-            vm.LoadData();
+            vm.UpdateData(business, customer);
             using (var form = new FrmViewBusinessAddresses(vm, this, appData, business, customer, messageService))
             {
                 form.ShowDialog();
@@ -150,7 +150,7 @@ namespace QuoteSwift
         public void ViewBusinessesPOBoxAddresses(Business business = null, Customer customer = null)
         {
             var vm = new ViewPOBoxAddressesViewModel(dataService);
-            vm.LoadData();
+            vm.UpdateData(business, customer);
             using (var form = new FrmViewPOBoxAddresses(vm, this, appData, business, customer, messageService))
             {
                 form.ShowDialog();

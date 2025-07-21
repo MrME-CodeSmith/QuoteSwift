@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -15,6 +14,11 @@ namespace QuoteSwift
         readonly Business business;
         readonly Customer customer;
 
+        void SetupBindings()
+        {
+            DgvViewAllBusinessAddresses.DataSource = viewModel.Addresses;
+        }
+
         public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null, IMessageService messageService = null)
         {
             InitializeComponent();
@@ -24,6 +28,7 @@ namespace QuoteSwift
             this.messageService = messageService;
             this.business = business;
             this.customer = customer;
+            SetupBindings();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -47,7 +52,6 @@ namespace QuoteSwift
                     BtnCancel.Enabled = true;
                 }
 
-                LoadInformation();
             }
             else if (customer != null && customer.CustomerDeliveryAddressList != null) //View Customer Address
             {
@@ -59,8 +63,9 @@ namespace QuoteSwift
                     BtnCancel.Enabled = true;
                 }
 
-                LoadInformation();
             }
+
+            viewModel.UpdateData(business, customer);
 
             DgvViewAllBusinessAddresses.RowsDefaultCellStyle.BackColor = Color.Bisque;
             DgvViewAllBusinessAddresses.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
@@ -82,7 +87,7 @@ namespace QuoteSwift
                 form.ShowDialog();
             }
 
-            LoadInformation();
+            viewModel.UpdateData(business, customer);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -108,7 +113,7 @@ namespace QuoteSwift
                         messageService.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
                     }
 
-                    LoadInformation();
+                    viewModel.UpdateData(business, customer);
                 }
             }
             else
@@ -131,43 +136,7 @@ namespace QuoteSwift
 
         Address GetAddressSelection()
         {
-            if (DgvViewAllBusinessAddresses.CurrentCell == null || DgvViewAllBusinessAddresses.CurrentRow == null)
-                return null;
-
-            int iGridSelection = DgvViewAllBusinessAddresses.CurrentCell.RowIndex;
-            if (iGridSelection < 0 || iGridSelection >= DgvViewAllBusinessAddresses.Rows.Count)
-                return null;
-
-            string SearchName = DgvViewAllBusinessAddresses.Rows[iGridSelection].Cells[0].Value?.ToString();
-            if (string.IsNullOrEmpty(SearchName))
-                return null;
-
-            if (business != null && business.BusinessAddressList != null)
-            {
-                return business.BusinessAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-            }
-            else if (customer != null && customer.CustomerDeliveryAddressList != null)
-            {
-                return customer.CustomerDeliveryAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-            }
-
-            return null;
-        }
-
-        private void LoadInformation()
-        {
-            DgvViewAllBusinessAddresses.Rows.Clear();
-            if (business != null && business.BusinessAddressList != null)
-                for (int i = 0; i < business.BusinessAddressList.Count; i++)
-                    DgvViewAllBusinessAddresses.Rows.Add(business.BusinessAddressList[i].AddressDescription, business.BusinessAddressList[i].AddressStreetNumber,
-                                                         business.BusinessAddressList[i].AddressStreetName, business.BusinessAddressList[i].AddressSuburb,
-                                                         business.BusinessAddressList[i].AddressCity, business.BusinessAddressList[i].AddressAreaCode);
-
-            if (customer != null && customer.CustomerDeliveryAddressList != null)
-                for (int i = 0; i < customer.CustomerDeliveryAddressList.Count; i++)
-                    DgvViewAllBusinessAddresses.Rows.Add(customer.CustomerDeliveryAddressList[i].AddressDescription, customer.CustomerDeliveryAddressList[i].AddressStreetNumber,
-                                                         customer.CustomerDeliveryAddressList[i].AddressStreetName, customer.CustomerDeliveryAddressList[i].AddressSuburb,
-                                                         customer.CustomerDeliveryAddressList[i].AddressCity, customer.CustomerDeliveryAddressList[i].AddressAreaCode);
+            return DgvViewAllBusinessAddresses.CurrentRow?.DataBoundItem as Address;
         }
 
 
