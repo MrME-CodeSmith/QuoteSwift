@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -15,6 +14,11 @@ namespace QuoteSwift
         readonly Business business;
         readonly Customer customer;
 
+        void SetupBindings()
+        {
+            dgvPOBoxAddresses.DataSource = viewModel.Addresses;
+        }
+
         public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null, IMessageService messageService = null)
         {
             InitializeComponent();
@@ -24,6 +28,7 @@ namespace QuoteSwift
             this.messageService = messageService;
             this.business = business;
             this.customer = customer;
+            SetupBindings();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -53,7 +58,7 @@ namespace QuoteSwift
                         messageService.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
                     }
 
-                    LoadInformation();
+                    viewModel.UpdateData(business, customer);
                 }
             }
             else
@@ -83,7 +88,7 @@ namespace QuoteSwift
                 form.ShowDialog();
             }
 
-            LoadInformation();
+            viewModel.UpdateData(business, customer);
         }
 
         void ApplyControlState()
@@ -103,7 +108,6 @@ namespace QuoteSwift
                     BtnCancel.Enabled = true;
                 }
 
-                LoadInformation();
             }
             else if (customer != null && customer.CustomerPOBoxAddress != null)
             {
@@ -115,8 +119,9 @@ namespace QuoteSwift
                     BtnCancel.Enabled = true;
                 }
 
-                LoadInformation();
             }
+
+            viewModel.UpdateData(business, customer);
 
             dgvPOBoxAddresses.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvPOBoxAddresses.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
@@ -131,43 +136,7 @@ namespace QuoteSwift
 
         Address GetAddressSelection()
         {
-            if (dgvPOBoxAddresses.CurrentCell == null || dgvPOBoxAddresses.CurrentRow == null)
-                return null;
-
-            int iGridSelection = dgvPOBoxAddresses.CurrentCell.RowIndex;
-            if (iGridSelection < 0 || iGridSelection >= dgvPOBoxAddresses.Rows.Count)
-                return null;
-
-            string SearchName = dgvPOBoxAddresses.Rows[iGridSelection].Cells[0].Value?.ToString();
-            if (string.IsNullOrEmpty(SearchName))
-                return null;
-
-            if (business != null && business.BusinessPOBoxAddressList != null)
-            {
-                return business.BusinessPOBoxAddressList.SingleOrDefault(p => p.AddressDescription == SearchName);
-            }
-            else if (customer != null && customer.CustomerPOBoxAddress != null)
-            {
-                return customer.CustomerPOBoxAddress.SingleOrDefault(p => p.AddressDescription == SearchName);
-            }
-
-            return null;
-        }
-
-        void LoadInformation()
-        {
-            dgvPOBoxAddresses.Rows.Clear();
-            if (business != null && business.BusinessPOBoxAddressList != null)
-                for (int i = 0; i < business.BusinessPOBoxAddressList.Count; i++)
-                    dgvPOBoxAddresses.Rows.Add(business.BusinessPOBoxAddressList[i].AddressDescription, business.BusinessPOBoxAddressList[i].AddressStreetNumber,
-                                                         business.BusinessPOBoxAddressList[i].AddressSuburb, business.BusinessPOBoxAddressList[i].AddressCity,
-                                                         business.BusinessPOBoxAddressList[i].AddressAreaCode);
-
-            if (customer != null && customer.CustomerPOBoxAddress != null)
-                for (int i = 0; i < customer.CustomerPOBoxAddress.Count; i++)
-                    dgvPOBoxAddresses.Rows.Add(customer.CustomerPOBoxAddress[i].AddressDescription, customer.CustomerPOBoxAddress[i].AddressStreetNumber,
-                                                         customer.CustomerPOBoxAddress[i].AddressSuburb, customer.CustomerPOBoxAddress[i].AddressCity,
-                                                         customer.CustomerPOBoxAddress[i].AddressAreaCode);
+            return dgvPOBoxAddresses.CurrentRow?.DataBoundItem as Address;
         }
 
 
