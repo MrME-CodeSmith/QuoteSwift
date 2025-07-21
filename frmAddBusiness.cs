@@ -34,37 +34,6 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnAddBusiness_Click(object sender, EventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject)
-            {
-                viewModel.AddBusinessCommand.Execute(null);
-                if (viewModel.LastOperationSuccessful)
-                {
-                    messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been added.", "INFORMATION - Business Successfully Added");
-                    viewModel.ClearCurrentBusiness();
-                    SetupBindings();
-                    ResetScreenInput();
-                }
-                else if (viewModel.LastResult?.Message != null)
-                {
-                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
-                }
-            }
-            else
-            {
-                viewModel.UpdateBusinessCommand.Execute(null);
-                if (viewModel.LastOperationSuccessful)
-                {
-                    messageService.ShowInformation(viewModel.CurrentBusiness.BusinessName + " has been successfully updated.", "INFORMATION - Business Successfully Updated");
-                    viewModel.ChangeSpecificObject = false;
-                }
-                else if (viewModel.LastResult?.Message != null)
-                {
-                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
-                }
-            }
-        }
 
         void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -271,6 +240,7 @@ namespace QuoteSwift
             mtxtRegistrationNumber.DataBindings.Add("Text", viewModel.CurrentBusiness, "BusinessLegalDetails.RegistrationNumber", false, DataSourceUpdateMode.OnPropertyChanged);
 
             ApplyControlState();
+            CommandBindings.Bind(btnAddBusiness, viewModel.SaveBusinessCommand);
         }
 
         /**********************************************************************************/

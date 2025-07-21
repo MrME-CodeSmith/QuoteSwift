@@ -289,7 +289,6 @@ namespace QuoteSwift
             this.btnAddPump.TabIndex = 3;
             this.btnAddPump.Text = "Add Pump";
             this.btnAddPump.UseVisualStyleBackColor = true;
-            this.btnAddPump.Click += new System.EventHandler(this.BtnAddPump_Click);
             // 
             // gbxPartInformation
             // 

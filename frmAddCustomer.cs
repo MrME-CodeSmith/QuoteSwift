@@ -27,6 +27,8 @@ namespace QuoteSwift
 
             txtCustomerCompanyName.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName), false, DataSourceUpdateMode.OnPropertyChanged);
             mtxtVendorNumber.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.VendorNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            CommandBindings.Bind(btnAddCustomer, viewModel.SaveCustomerCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -37,43 +39,6 @@ namespace QuoteSwift
                 Application.Exit();
             }
 
-        private void BtnAddCustomer_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ValidateBusiness() && !viewModel.ChangeSpecificObject)
-            {
-                Business linkBusiness = viewModel.GetBusinessByName(cbBusinessSelection.Text);
-                viewModel.CurrentCustomer.CustomerName = string.Empty;
-                viewModel.CurrentCustomer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
-                viewModel.CurrentCustomer.VendorNumber = mtxtVendorNumber.Text;
-
-                viewModel.AddCustomerCommand.Execute(linkBusiness);
-                if (viewModel.LastOperationSuccessful)
-                {
-                    messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been added.", "INFORMATION - Business Successfully Added");
-                    viewModel.ClearCurrentCustomer();
-                    ResetScreenInput();
-                }
-                else if (viewModel.LastResult?.Message != null)
-                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
-            }
-            else if (viewModel.ValidateBusiness() && viewModel.ChangeSpecificObject)
-            {
-                string oldName = viewModel.CustomerToChange.CustomerCompanyName;
-                viewModel.CurrentCustomer.CustomerName = string.Empty;
-                viewModel.CurrentCustomer.CustomerLegalDetails = new Legal(mtxtRegistrationNumber.Text, mtxtVATNumber.Text);
-                viewModel.CurrentCustomer.VendorNumber = mtxtVendorNumber.Text;
-
-                Business container = viewModel.GetBusinessByName(cbBusinessSelection.Text);
-                viewModel.UpdateCustomerCommand.Execute(new object[] { container, oldName });
-                if (viewModel.LastOperationSuccessful)
-                {
-                    messageService.ShowInformation(viewModel.CurrentCustomer.CustomerCompanyName + " has been successfully updated.", "INFORMATION - Customer Successfully Updated");
-                    ConvertToViewOnly();
-                }
-                else if (viewModel.LastResult?.Message != null)
-                    messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
-            }
-        }
 
         private void FrmAddCustomer_Load(object sender, EventArgs e)
         {
