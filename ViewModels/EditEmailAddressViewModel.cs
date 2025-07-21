@@ -9,6 +9,7 @@ namespace QuoteSwift
         readonly Customer customer;
         OperationResult lastResult = OperationResult.Successful();
         string originalEmail;
+        string currentEmail;
 
         public ICommand UpdateEmailCommand { get; }
 
@@ -39,7 +40,11 @@ namespace QuoteSwift
             }
         }
 
-        public string CurrentEmail { get; set; }
+        public string CurrentEmail
+        {
+            get => currentEmail;
+            set => SetProperty(ref currentEmail, value);
+        }
         public Business Business => business;
         public Customer Customer => customer;
         public string OriginalEmail => originalEmail;

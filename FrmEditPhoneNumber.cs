@@ -14,18 +14,22 @@ namespace QuoteSwift
             InitializeComponent();
             this.viewModel = viewModel;
             this.messageService = messageService;
+            SetupBindings();
+        }
+
+        void SetupBindings()
+        {
+            txtPhoneNumber.DataBindings.Add("Text", viewModel, nameof(EditPhoneNumberViewModel.CurrentNumber), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(viewModel.CurrentNumber))
-                txtPhoneNumber.Text = viewModel.CurrentNumber;
         }
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
-            viewModel.CurrentNumber = txtPhoneNumber.Text;
-            var result = viewModel.UpdateNumber();
+            viewModel.UpdateNumberCommand.Execute(null);
+            var result = viewModel.LastResult;
             if (result.Success)
             {
                 messageService.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
