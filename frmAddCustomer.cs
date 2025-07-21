@@ -28,7 +28,27 @@ namespace QuoteSwift
             txtCustomerCompanyName.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName), false, DataSourceUpdateMode.OnPropertyChanged);
             mtxtVendorNumber.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.VendorNumber), false, DataSourceUpdateMode.OnPropertyChanged);
 
+            txtCustomerAddresssDescription.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.AddressDescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtAtt.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.Att), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtWorkArea.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.WorkArea), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtWorkPlace.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.WorkPlace), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            txtCustomerPODescription.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.PODescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPOBoxStreetNumber.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POStreetNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POSuburb), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtPOBoxCity.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POCity), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POAreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            mtxtTelephoneNumber.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.TelephoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtCellphoneNumber.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.CellphoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            mtxtEmailAddress.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.EmailInput), false, DataSourceUpdateMode.OnPropertyChanged);
+
             CommandBindings.Bind(btnAddCustomer, viewModel.SaveCustomerCommand);
+            CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
+            CommandBindings.Bind(btnAddPOBoxAddress, viewModel.AddPOBoxAddressCommand);
+            CommandBindings.Bind(btnAddNumber, viewModel.AddPhoneNumberCommand);
+            CommandBindings.Bind(BtnAddEmail, viewModel.AddEmailCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -73,57 +93,11 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnAddAddress_Click(object sender, EventArgs e)
-        {
-            var addr = viewModel.BuildCustomerAddress(txtCustomerAddresssDescription.Text,
-                                                     txtAtt.Text,
-                                                     txtWorkArea.Text,
-                                                     txtWorkPlace.Text);
-            if (addr != null)
-            {
-                var r = viewModel.AddDeliveryAddress(addr);
-                if (r.Success)
-                {
-                    messageService.ShowInformation("Successfully added the customer address", "INFORMATION - Customer Address Added Successfully");
-                    ClearCustomerAddressInput();
-                }
-                else if (r.Message != null)
-                    messageService.ShowError(r.Message, r.Caption);
-            }
-        }
+        
 
-        private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
-        {
-            var po = viewModel.BuildPOBoxAddress(txtCustomerPODescription.Text,
-                                                mtxtPOBoxStreetNumber.Text,
-                                                txtPOBoxSuburb.Text,
-                                                txtPOBoxCity.Text,
-                                                mtxtPOBoxAreaCode.Text);
-            if (po != null)
-            {
-                var r = viewModel.AddPOBoxAddress(po);
-                if (r.Success)
-                {
-                    messageService.ShowInformation("Successfully added the customer P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
-                    ClearPOBoxAddressInput();
-                }
-                else if (r.Message != null)
-                    messageService.ShowError(r.Message, r.Caption);
-            }
-        }
 
-        private void BtnAddNumber_Click(object sender, EventArgs e)
-        {
-            var nr = viewModel.AddPhoneNumbers(mtxtTelephoneNumber.Text, mtxtCellphoneNumber.Text);
-            if (nr.Success)
-            {
-                mtxtTelephoneNumber.ResetText();
-                mtxtCellphoneNumber.ResetText();
-                messageService.ShowInformation("Successfully added the customer phone number/s", "INFORMATION - Customer Phone Number/s Added Successfully");
-            }
-            else if (nr.Message != null)
-                messageService.ShowError(nr.Message, nr.Caption);
-        }
+
+
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
@@ -182,14 +156,7 @@ namespace QuoteSwift
             updatedCustomerInformationToolStripMenuItem.Enabled = false;
         }
 
-        private void BtnAddEmail_Click(object sender, EventArgs e)
-        {
-            if (viewModel.AddEmailAddress(mtxtEmailAddress.Text))
-            {
-                messageService.ShowInformation("Successfully added the customer Email address", "INFORMATION - Customer Email Address Added Successfully");
-                mtxtEmailAddress.ResetText();
-            }
-        }
+
 
         private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
         {

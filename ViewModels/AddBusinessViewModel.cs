@@ -17,6 +17,26 @@ namespace QuoteSwift
         Business currentBusiness;
         bool lastOperationSuccessful;
         OperationResult lastResult = OperationResult.Successful();
+
+        string addressDescription;
+        string streetNumber;
+        string streetName;
+        string suburb;
+        string city;
+        string areaCode;
+        string poDescription;
+        string poStreetNumber;
+        string poSuburb;
+        string poCity;
+        string poAreaCode;
+        string telephoneInput;
+        string cellphoneInput;
+        string emailInput;
+
+        public ICommand AddAddressCommand { get; }
+        public ICommand AddPOBoxAddressCommand { get; }
+        public ICommand AddPhoneNumberCommand { get; }
+        public ICommand AddEmailCommand { get; }
         
         public ICommand AddBusinessCommand { get; }
         public ICommand UpdateBusinessCommand { get; }
@@ -47,6 +67,90 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(LastOperationSuccessful));
                 }
             }
+        }
+
+        public string AddressDescription
+        {
+            get => addressDescription;
+            set => SetProperty(ref addressDescription, value);
+        }
+
+        public string StreetNumber
+        {
+            get => streetNumber;
+            set => SetProperty(ref streetNumber, value);
+        }
+
+        public string StreetName
+        {
+            get => streetName;
+            set => SetProperty(ref streetName, value);
+        }
+
+        public string Suburb
+        {
+            get => suburb;
+            set => SetProperty(ref suburb, value);
+        }
+
+        public string City
+        {
+            get => city;
+            set => SetProperty(ref city, value);
+        }
+
+        public string AreaCode
+        {
+            get => areaCode;
+            set => SetProperty(ref areaCode, value);
+        }
+
+        public string PODescription
+        {
+            get => poDescription;
+            set => SetProperty(ref poDescription, value);
+        }
+
+        public string POStreetNumber
+        {
+            get => poStreetNumber;
+            set => SetProperty(ref poStreetNumber, value);
+        }
+
+        public string POSuburb
+        {
+            get => poSuburb;
+            set => SetProperty(ref poSuburb, value);
+        }
+
+        public string POCity
+        {
+            get => poCity;
+            set => SetProperty(ref poCity, value);
+        }
+
+        public string POAreaCode
+        {
+            get => poAreaCode;
+            set => SetProperty(ref poAreaCode, value);
+        }
+
+        public string TelephoneInput
+        {
+            get => telephoneInput;
+            set => SetProperty(ref telephoneInput, value);
+        }
+
+        public string CellphoneInput
+        {
+            get => cellphoneInput;
+            set => SetProperty(ref cellphoneInput, value);
+        }
+
+        public string EmailInput
+        {
+            get => emailInput;
+            set => SetProperty(ref emailInput, value);
         }
 
         public bool IsEditing => changeSpecificObject;
@@ -92,6 +196,54 @@ namespace QuoteSwift
                     var result = AddBusiness();
                     LastResult = result;
                     LastOperationSuccessful = result.Success;
+                }
+            });
+            AddAddressCommand = new RelayCommand(_ =>
+            {
+                var a = BuildAddress(AddressDescription, StreetNumber, StreetName, Suburb, City, AreaCode);
+                if (a != null)
+                {
+                    var r = AddAddress(a);
+                    LastResult = r;
+                    LastOperationSuccessful = r.Success;
+                    if (r.Success)
+                    {
+                        AddressDescription = StreetNumber = StreetName = Suburb = City = AreaCode = string.Empty;
+                    }
+                }
+            });
+            AddPOBoxAddressCommand = new RelayCommand(_ =>
+            {
+                var a = BuildPOBoxAddress(PODescription, POStreetNumber, POSuburb, POCity, POAreaCode);
+                if (a != null)
+                {
+                    var r = AddPOBoxAddress(a);
+                    LastResult = r;
+                    LastOperationSuccessful = r.Success;
+                    if (r.Success)
+                    {
+                        PODescription = POStreetNumber = POSuburb = POCity = POAreaCode = string.Empty;
+                    }
+                }
+            });
+            AddPhoneNumberCommand = new RelayCommand(_ =>
+            {
+                var r = AddPhoneNumber(TelephoneInput, CellphoneInput);
+                LastResult = r;
+                LastOperationSuccessful = r.Success;
+                if (r.Success)
+                {
+                    TelephoneInput = CellphoneInput = string.Empty;
+                }
+            });
+            AddEmailCommand = new RelayCommand(_ =>
+            {
+                var r = AddEmailAddress(EmailInput);
+                LastResult = r;
+                LastOperationSuccessful = r.Success;
+                if (r.Success)
+                {
+                    EmailInput = string.Empty;
                 }
             });
             LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());

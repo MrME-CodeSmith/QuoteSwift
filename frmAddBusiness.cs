@@ -45,85 +45,9 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnAddPOBoxAddress_Click(object sender, EventArgs e)
-        {
-            var address = viewModel.BuildPOBoxAddress(txtBusinessPODescription.Text,
-                                                      mtxtPOBoxStreetNumber.Text,
-                                                      txtPOBoxSuburb.Text,
-                                                      txtPOBoxCity.Text,
-                                                      mtxtPOBoxAreaCode.Text);
-
-            if (address != null)
-            {
-                var result = viewModel.AddPOBoxAddress(address);
-                if (result.Success)
-                {
-                    messageService.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
-                    ClearPOBoxAddressInput();
-                }
-                else if (result.Message != null)
-                    messageService.ShowError(result.Message, result.Caption);
-            }
-            else if (viewModel.LastResult.Message != null)
-            {
-                messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
-            }
-        }
-
-        private void BtnAddAddress_Click(object sender, EventArgs e)
-        {
-            var address = viewModel.BuildAddress(txtBusinessAddresssDescription.Text,
-                                                mtxtStreetnumber.Text,
-                                                txtStreetName.Text,
-                                                txtSuburb.Text,
-                                                txtCity.Text,
-                                                mtxtAreaCode.Text);
-
-            if (address != null)
-            {
-                result = viewModel.AddAddress(address);
-                if (result.Success)
-                {
-                    messageService.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
-                    ClearBusinessAddressInput();
-                }
-                else if (result.Message != null)
-                    messageService.ShowError(result.Message, result.Caption);
-            }
-            else if (viewModel.LastResult.Message != null)
-            {
-                messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
-            }
-        }
-
-        private void BtnAddNumber_Click(object sender, EventArgs e)
-        {
-            result = viewModel.AddPhoneNumber(mtxtTelephoneNumber.Text, mtxtCellphoneNumber.Text);
-            if (result.Success)
-            {
-                messageService.ShowInformation("Successfully added the business phone number/s", "INFORMATION - Business Phone Number/s Added Successfully");
-                mtxtTelephoneNumber.ResetText();
-                mtxtCellphoneNumber.ResetText();
-            }
-            else if (result.Message != null)
-                messageService.ShowError(result.Message, result.Caption);
-        }
-
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
-        }
-
-        private void BtnAddBusinessEmail_Click(object sender, EventArgs e)
-        {
-            result = viewModel.AddEmailAddress(mtxtEmail.Text);
-            if (result.Success)
-            {
-                messageService.ShowInformation("Successfully added the business Email address", "INFORMATION - Business Email Address Added Successfully");
-                mtxtEmail.ResetText();
-            }
-            else if (result.Message != null)
-                messageService.ShowError(result.Message, result.Caption);
         }
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
@@ -239,8 +163,30 @@ namespace QuoteSwift
             mtxtRegistrationNumber.DataBindings.Clear();
             mtxtRegistrationNumber.DataBindings.Add("Text", viewModel.CurrentBusiness, "BusinessLegalDetails.RegistrationNumber", false, DataSourceUpdateMode.OnPropertyChanged);
 
+            txtBusinessAddresssDescription.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.AddressDescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtStreetnumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.StreetNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtStreetName.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.StreetName), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtSuburb.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.Suburb), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtCity.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.City), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtAreaCode.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.AreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            txtBusinessPODescription.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.PODescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPOBoxStreetNumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POStreetNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POSuburb), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtPOBoxCity.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POCity), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POAreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            mtxtTelephoneNumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.TelephoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtCellphoneNumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.CellphoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            mtxtEmail.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.EmailInput), false, DataSourceUpdateMode.OnPropertyChanged);
+
             ApplyControlState();
             CommandBindings.Bind(btnAddBusiness, viewModel.SaveBusinessCommand);
+            CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
+            CommandBindings.Bind(btnAddPOBoxAddress, viewModel.AddPOBoxAddressCommand);
+            CommandBindings.Bind(btnAddNumber, viewModel.AddPhoneNumberCommand);
+            CommandBindings.Bind(btnAddBusinessEmail, viewModel.AddEmailCommand);
         }
 
         /**********************************************************************************/
