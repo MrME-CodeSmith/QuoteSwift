@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -37,11 +36,12 @@ namespace QuoteSwift
 
         void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(AddBusinessViewModel.IsEditing) ||
-                e.PropertyName == nameof(AddBusinessViewModel.IsReadOnly) ||
-                e.PropertyName == nameof(AddBusinessViewModel.ChangeSpecificObject))
+            if (e.PropertyName == nameof(AddBusinessViewModel.ChangeSpecificObject) ||
+                e.PropertyName == nameof(AddBusinessViewModel.BusinessToChange))
             {
-                ApplyControlState();
+                btnAddBusiness.Visible = viewModel.ChangeSpecificObject || viewModel.BusinessToChange == null;
+                btnAddBusiness.Text = viewModel.ChangeSpecificObject ? "Update Business" : "Add Business";
+                updateBusinessInformationToolStripMenuItem.Enabled = !viewModel.ChangeSpecificObject && viewModel.BusinessToChange != null;
             }
         }
 
@@ -119,7 +119,6 @@ namespace QuoteSwift
             if (viewModel.CurrentBusiness.BusinessLegalDetails == null)
                 viewModel.CurrentBusiness.BusinessLegalDetails = new Legal("", "");
             SetupBindings();
-            ApplyControlState();
         }
 
         private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
@@ -134,20 +133,6 @@ namespace QuoteSwift
 
 
 
-        void ApplyControlState()
-        {
-            bool ro = viewModel.IsReadOnly;
-            ControlStateHelper.ApplyReadOnly(gbxBusinessAddress.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxBusinessInformation.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxEmailRelated.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxLegalInformation.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxPhoneRelated.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxPOBoxAddress.Controls, ro);
-
-            btnAddBusiness.Visible = viewModel.ChangeSpecificObject || viewModel.BusinessToChange == null;
-            btnAddBusiness.Text = viewModel.ChangeSpecificObject ? "Update Business" : "Add Business";
-            updateBusinessInformationToolStripMenuItem.Enabled = !viewModel.ChangeSpecificObject && viewModel.BusinessToChange != null;
-        }
 
         private void SetupBindings()
         {
@@ -181,7 +166,13 @@ namespace QuoteSwift
 
             mtxtEmail.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.EmailInput), false, DataSourceUpdateMode.OnPropertyChanged);
 
-            ApplyControlState();
+            gbxBusinessAddress.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
+            gbxBusinessInformation.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
+            gbxEmailRelated.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
+            gbxLegalInformation.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
+            gbxPhoneRelated.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
+            gbxPOBoxAddress.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
+
             CommandBindings.Bind(btnAddBusiness, viewModel.SaveBusinessCommand);
             CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
             CommandBindings.Bind(btnAddPOBoxAddress, viewModel.AddPOBoxAddressCommand);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -43,6 +42,13 @@ namespace QuoteSwift
             mtxtCellphoneNumber.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.CellphoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
 
             mtxtEmailAddress.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.EmailInput), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            gbxCustomerInformation.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxCustomerAddress.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxEmailRelated.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxLegalInformation.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxPhoneRelated.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxPOBoxAddress.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
 
             CommandBindings.Bind(btnAddCustomer, viewModel.SaveCustomerCommand);
             CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
@@ -227,7 +233,6 @@ namespace QuoteSwift
         private void ConvertToViewOnly()
         {
             viewModel.ChangeSpecificObject = false;
-            ApplyControlState();
 
             btnViewAddresses.Enabled = true;
             btnViewAll.Enabled = true;
@@ -242,7 +247,6 @@ namespace QuoteSwift
         private void ConvertToEdit()
         {
             viewModel.ChangeSpecificObject = true;
-            ApplyControlState();
 
             btnAddCustomer.Visible = true;
             btnAddCustomer.Text = "Update Customer";
@@ -253,16 +257,6 @@ namespace QuoteSwift
             updatedCustomerInformationToolStripMenuItem.Enabled = false;
         }
 
-        void ApplyControlState()
-        {
-            bool ro = viewModel.IsReadOnly;
-            ControlStateHelper.ApplyReadOnly(gbxCustomerInformation.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxCustomerAddress.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxEmailRelated.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxLegalInformation.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxPhoneRelated.Controls, ro);
-            ControlStateHelper.ApplyReadOnly(gbxPOBoxAddress.Controls, ro);
-        }
 
 
 
