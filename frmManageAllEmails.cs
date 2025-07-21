@@ -21,13 +21,7 @@ namespace QuoteSwift
         void SetupBindings()
         {
             DgvEmails.DataSource = viewModel.Emails;
-            DgvEmails.SelectionChanged += (s, e) =>
-            {
-                if (DgvEmails.CurrentRow?.DataBoundItem is ManageEmailsViewModel.EmailEntry entry)
-                    viewModel.SelectedEmail = entry;
-                else
-                    viewModel.SelectedEmail = null;
-            };
+            SelectionBindings.BindSelectedItem(DgvEmails, viewModel, nameof(ManageEmailsViewModel.SelectedEmail));
 
             txtNewEmail.DataBindings.Add("Text", viewModel, nameof(ManageEmailsViewModel.NewEmail), false, DataSourceUpdateMode.OnPropertyChanged);
 

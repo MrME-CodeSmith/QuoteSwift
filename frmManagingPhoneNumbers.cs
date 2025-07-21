@@ -21,22 +21,10 @@ namespace QuoteSwift
         void SetupBindings()
         {
             dgvTelephoneNumbers.DataSource = viewModel.TelephoneNumbers;
-            dgvTelephoneNumbers.SelectionChanged += (s, e) =>
-            {
-                if (dgvTelephoneNumbers.CurrentRow?.DataBoundItem is ManagePhoneNumbersViewModel.NumberEntry entry)
-                    viewModel.SelectedTelephoneNumber = entry;
-                else
-                    viewModel.SelectedTelephoneNumber = null;
-            };
+            SelectionBindings.BindSelectedItem(dgvTelephoneNumbers, viewModel, nameof(ManagePhoneNumbersViewModel.SelectedTelephoneNumber));
 
             dgvCellphoneNumbers.DataSource = viewModel.CellphoneNumbers;
-            dgvCellphoneNumbers.SelectionChanged += (s, e) =>
-            {
-                if (dgvCellphoneNumbers.CurrentRow?.DataBoundItem is ManagePhoneNumbersViewModel.NumberEntry entry)
-                    viewModel.SelectedCellphoneNumber = entry;
-                else
-                    viewModel.SelectedCellphoneNumber = null;
-            };
+            SelectionBindings.BindSelectedItem(dgvCellphoneNumbers, viewModel, nameof(ManagePhoneNumbersViewModel.SelectedCellphoneNumber));
 
             txtNewTelephone.DataBindings.Add("Text", viewModel, nameof(ManagePhoneNumbersViewModel.NewTelephoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
             txtNewCellphone.DataBindings.Add("Text", viewModel, nameof(ManagePhoneNumbersViewModel.NewCellphoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
