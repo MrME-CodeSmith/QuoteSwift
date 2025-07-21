@@ -24,6 +24,7 @@ namespace QuoteSwift
         string formTitle;
 
         public ICommand SavePartCommand { get; }
+        public ICommand LoadDataCommand { get; }
 
         public bool LastOperationSuccessful
         {
@@ -59,6 +60,7 @@ namespace QuoteSwift
             notificationService = notifier;
             CurrentPart = new Part();
             SavePartCommand = new RelayCommand(_ => LastOperationSuccessful = AddOrUpdatePart());
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;

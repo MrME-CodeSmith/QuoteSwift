@@ -12,6 +12,7 @@ namespace QuoteSwift
         readonly BindingList<Part> mandatoryParts;
         readonly BindingList<Part> nonMandatoryParts;
         readonly BindingList<Part> allParts;
+        public ICommand LoadDataCommand { get; }
 
 
         public ViewPartsViewModel(IDataService service)
@@ -20,6 +21,7 @@ namespace QuoteSwift
             mandatoryParts = new BindingList<Part>();
             nonMandatoryParts = new BindingList<Part>();
             allParts = new BindingList<Part>();
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;

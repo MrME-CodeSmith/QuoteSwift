@@ -8,10 +8,13 @@ namespace QuoteSwift
         readonly IDataService dataService;
         BindingList<Business> businesses;
 
+        public ICommand LoadDataCommand { get; }
+
 
         public ViewBusinessesViewModel(IDataService service)
         {
             dataService = service;
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;
