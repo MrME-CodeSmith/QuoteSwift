@@ -9,6 +9,7 @@ namespace QuoteSwift
         readonly Customer customer;
         OperationResult lastResult = OperationResult.Successful();
         string originalNumber;
+        string currentNumber;
 
         public ICommand UpdateNumberCommand { get; }
 
@@ -42,7 +43,11 @@ namespace QuoteSwift
         public Business Business => business;
         public Customer Customer => customer;
         public string OriginalNumber => originalNumber;
-        public string CurrentNumber { get; set; }
+        public string CurrentNumber
+        {
+            get => currentNumber;
+            set => SetProperty(ref currentNumber, value);
+        }
 
         public OperationResult UpdateNumber()
         {

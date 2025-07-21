@@ -14,12 +14,18 @@ namespace QuoteSwift
             InitializeComponent();
             this.viewModel = viewModel;
             this.messageService = messageService;
+            SetupBindings();
+        }
+
+        void SetupBindings()
+        {
+            mtxtEmail.DataBindings.Add("Text", viewModel, nameof(EditEmailAddressViewModel.CurrentEmail), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
         {
-            viewModel.CurrentEmail = mtxtEmail.Text;
-            var result = viewModel.UpdateEmail();
+            viewModel.UpdateEmailCommand.Execute(null);
+            var result = viewModel.LastResult;
             if (result.Success)
             {
                 messageService.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
@@ -31,8 +37,6 @@ namespace QuoteSwift
 
         private void FrmEditEmailAddress_Load(object sender, EventArgs e)
         {
-            mtxtEmail.Text = viewModel.CurrentEmail;
-
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

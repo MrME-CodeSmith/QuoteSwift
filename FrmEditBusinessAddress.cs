@@ -13,6 +13,17 @@ namespace QuoteSwift
             InitializeComponent();
             this.viewModel = viewModel;
             this.messageService = messageService;
+            SetupBindings();
+        }
+
+        void SetupBindings()
+        {
+            txtBusinessAddresssDescription.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.AddressDescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtStreetnumber.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.StreetNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtStreetName.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.StreetName), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtSuburb.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.Suburb), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtCity.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.City), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtAreaCode.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.AreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -24,29 +35,14 @@ namespace QuoteSwift
         {
             if (viewModel.Address != null)
             {
-                txtBusinessAddresssDescription.Text = viewModel.Address.AddressDescription;
-                mtxtStreetnumber.Text = viewModel.Address.AddressStreetNumber.ToString();
-                txtStreetName.Text = viewModel.Address.AddressStreetName;
-                txtSuburb.Text = viewModel.Address.AddressSuburb;
-                txtCity.Text = viewModel.Address.AddressCity;
-                mtxtAreaCode.Text = viewModel.Address.AddressAreaCode.ToString();
                 txtStreetName.Enabled = false;
             }
         }
 
         private void BtnUpdateAddress_Click(object sender, EventArgs e)
         {
-            Address updated = new Address
-            {
-                AddressDescription = txtBusinessAddresssDescription.Text,
-                AddressStreetNumber = ParsingService.ParseInt(mtxtStreetnumber.Text),
-                AddressStreetName = txtStreetName.Text,
-                AddressSuburb = txtSuburb.Text,
-                AddressCity = txtCity.Text,
-                AddressAreaCode = ParsingService.ParseInt(mtxtAreaCode.Text)
-            };
-
-            var result = viewModel.UpdateAddress(updated);
+            viewModel.UpdateAddressCommand.Execute(null);
+            var result = viewModel.LastResult;
             if (result.Success)
             {
                 messageService.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");

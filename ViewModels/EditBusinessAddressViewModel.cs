@@ -8,6 +8,13 @@ namespace QuoteSwift
         readonly Business business;
         readonly Customer customer;
         readonly Address address;
+
+        string addressDescription = string.Empty;
+        int streetNumber;
+        string streetName = string.Empty;
+        string suburb = string.Empty;
+        string city = string.Empty;
+        int areaCode;
         OperationResult lastResult = OperationResult.Successful();
 
         public ICommand UpdateAddressCommand { get; }
@@ -25,15 +32,72 @@ namespace QuoteSwift
             }
         }
 
+        public string AddressDescription
+        {
+            get => addressDescription;
+            set => SetProperty(ref addressDescription, value);
+        }
+
+        public int StreetNumber
+        {
+            get => streetNumber;
+            set => SetProperty(ref streetNumber, value);
+        }
+
+        public string StreetName
+        {
+            get => streetName;
+            set => SetProperty(ref streetName, value);
+        }
+
+        public string Suburb
+        {
+            get => suburb;
+            set => SetProperty(ref suburb, value);
+        }
+
+        public string City
+        {
+            get => city;
+            set => SetProperty(ref city, value);
+        }
+
+        public int AreaCode
+        {
+            get => areaCode;
+            set => SetProperty(ref areaCode, value);
+        }
+
 
         public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null)
         {
             this.business = business;
             this.customer = customer;
             this.address = address;
-            UpdateAddressCommand = new RelayCommand(a =>
+
+            if (address != null)
             {
-                var r = UpdateAddress(a as Address);
+                AddressDescription = address.AddressDescription;
+                StreetNumber = address.AddressStreetNumber;
+                StreetName = address.AddressStreetName;
+                Suburb = address.AddressSuburb;
+                City = address.AddressCity;
+                AreaCode = address.AddressAreaCode;
+            }
+
+            UpdateAddressCommand = new RelayCommand(_ =>
+            {
+                var updated = new Address
+                {
+                    AddressDescription = AddressDescription,
+                    AddressStreetNumber = StreetNumber,
+                    AddressStreetName = StreetName,
+                    AddressSuburb = Suburb,
+                    AddressCity = City,
+                    AddressAreaCode = AreaCode
+                };
+
+                var r = UpdateAddress(updated);
                 LastResult = r;
             });
         }
