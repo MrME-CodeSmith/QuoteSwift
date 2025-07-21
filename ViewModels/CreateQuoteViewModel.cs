@@ -39,6 +39,17 @@ namespace QuoteSwift
         Pricing pricing = new Pricing();
         float repairPercentage;
 
+        Address selectedBusinessPOBox;
+        Address selectedCustomerPOBox;
+        Address selectedCustomerDeliveryAddress;
+        string businessTelephone;
+        string businessCellphone;
+        string businessEmail;
+        string customerDeliveryDescription;
+        DateTime quoteCreationDate = DateTime.Today;
+        DateTime quoteExpiryDate = DateTime.Today;
+        DateTime paymentTerm = DateTime.Today;
+
         public ICommand AddQuoteCommand { get; }
         public ICommand LoadDataCommand { get; }
 
@@ -339,6 +350,66 @@ namespace QuoteSwift
             private set => SetProperty(ref repairPercentage, value);
         }
 
+        public Address SelectedBusinessPOBox
+        {
+            get => selectedBusinessPOBox;
+            set => SetProperty(ref selectedBusinessPOBox, value);
+        }
+
+        public Address SelectedCustomerPOBox
+        {
+            get => selectedCustomerPOBox;
+            set => SetProperty(ref selectedCustomerPOBox, value);
+        }
+
+        public Address SelectedCustomerDeliveryAddress
+        {
+            get => selectedCustomerDeliveryAddress;
+            set => SetProperty(ref selectedCustomerDeliveryAddress, value);
+        }
+
+        public string BusinessTelephone
+        {
+            get => businessTelephone;
+            set => SetProperty(ref businessTelephone, value);
+        }
+
+        public string BusinessCellphone
+        {
+            get => businessCellphone;
+            set => SetProperty(ref businessCellphone, value);
+        }
+
+        public string BusinessEmail
+        {
+            get => businessEmail;
+            set => SetProperty(ref businessEmail, value);
+        }
+
+        public string CustomerDeliveryDescription
+        {
+            get => customerDeliveryDescription;
+            set => SetProperty(ref customerDeliveryDescription, value);
+        }
+
+        public DateTime QuoteCreationDate
+        {
+            get => quoteCreationDate;
+            set => SetProperty(ref quoteCreationDate, value);
+        }
+
+        public DateTime QuoteExpiryDate
+        {
+            get => quoteExpiryDate;
+            set => SetProperty(ref quoteExpiryDate, value);
+        }
+
+        public DateTime PaymentTerm
+        {
+            get => paymentTerm;
+            set => SetProperty(ref paymentTerm, value);
+        }
+
         public void LoadData()
         {
             LoadDataAsync().GetAwaiter().GetResult();
@@ -351,6 +422,58 @@ namespace QuoteSwift
             Businesses = await dataService.LoadBusinessListAsync();
             QuoteMap = await dataService.LoadQuoteMapAsync();
             Pricing = new Pricing();
+        }
+
+        public void LoadQuote(Quote quote)
+        {
+            if (quote == null)
+                return;
+
+            QuoteNumber = quote.QuoteNumber;
+            ReferenceNumber = quote.QuoteReference;
+            JobNumber = quote.QuoteJobNumber;
+            PRNumber = quote.QuotePRNumber;
+            LineNumber = quote.QuoteLineNumber;
+            CustomerVATNumber = quote.QuoteCustomer.CustomerLegalDetails.VatNumber;
+
+            QuoteCreationDate = quote.QuoteCreationDate;
+            QuoteExpiryDate = quote.QuoteExpireyDate;
+            PaymentTerm = quote.QuotePaymentTerm;
+
+            BusinessTelephone = quote.Telefone;
+            BusinessCellphone = quote.Cellphone;
+            BusinessEmail = quote.Email;
+            CustomerDeliveryDescription = quote.QuoteDeliveryAddress;
+
+            SelectedCustomerDeliveryAddress = null;
+
+            Pricing = new Pricing(quote.QuoteCost.Machining,
+                                 quote.QuoteCost.Labour,
+                                 quote.QuoteCost.Consumables,
+                                 quote.QuoteCost.Rebate,
+                                 quote.QuoteCost.SubTotal,
+                                 quote.QuoteCost.VAT,
+                                 quote.QuoteCost.TotalDue,
+                                 quote.QuoteCost.PumpPrice);
+            RepairPercentage = quote.QuoteRepairPercentage;
+
+            SelectedBusiness = Businesses?.FirstOrDefault(b => b.BusinessName == quote.QuoteCompany.BusinessName);
+            if (SelectedBusiness != null)
+            {
+                SelectedBusinessPOBox = SelectedBusiness.BusinessPOBoxAddressList?.FirstOrDefault(a => a.AddressDescription == quote.QuoteBusinessPOBox.AddressDescription);
+                SelectedCustomer = SelectedBusiness.BusinessCustomerList?.FirstOrDefault(c => c.CustomerCompanyName == quote.QuoteCustomer.CustomerCompanyName);
+            }
+
+            if (SelectedCustomer != null)
+                SelectedCustomerPOBox = SelectedCustomer.CustomerPOBoxAddress?.FirstOrDefault(a => a.AddressDescription == quote.QuoteCustomerPOBox.AddressDescription);
+
+            SelectedPump = Pumps?.FirstOrDefault(p => p.PumpName == quote.PumpName);
+
+            MandatoryParts = new BindingList<Quote_Part>(quote.QuoteMandatoryPartList.ToList());
+            NonMandatoryParts = new BindingList<Quote_Part>(quote.QuoteNewList.ToList());
+            NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6MACH", PartDescription = "MACHINING", PartPrice = quote.QuoteCost.Machining }, 1), 0, 0, 1, quote.QuoteCost.Machining, quote.QuoteCost.Machining, 1));
+            NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6LAB", PartDescription = "LABOUR", PartPrice = quote.QuoteCost.Labour }, 1), 0, 0, 1, quote.QuoteCost.Labour, quote.QuoteCost.Labour, 1));
+            NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "CON TS6", PartDescription = "CONSUMABLES incl COLLECTION & DELIVERY", PartPrice = quote.QuoteCost.Consumables }, 1), 0, 0, 1, quote.QuoteCost.Consumables, quote.QuoteCost.Consumables, 1));
         }
 
         public void LoadPartlists()

@@ -105,10 +105,10 @@ namespace QuoteSwift
             {
                 LoadFromPassedObject();
 
-                dtpQuoteCreationDate.Value = DateTime.Today;
-                dtpQuoteExpiryDate.Value = dtpQuoteCreationDate.Value.AddMonths(2);
-                dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
-                dtpPaymentTerm.Value = DateTime.Today;
+                viewModel.QuoteCreationDate = DateTime.Today;
+                viewModel.QuoteExpiryDate = viewModel.QuoteCreationDate.AddMonths(2);
+                viewModel.PaymentTerm = viewModel.QuoteCreationDate.AddMonths(1);
+                viewModel.PaymentTerm = DateTime.Today;
 
                 Text = Text.Replace("<< Business Name >>", viewModel.SelectedBusiness.BusinessName);
 
@@ -127,9 +127,9 @@ namespace QuoteSwift
                 LoadCustomerPOBoxAddress();
                 GetNewQuotenumber();
 
-                dtpQuoteCreationDate.Value = DateTime.Today;
-                dtpQuoteExpiryDate.Value = dtpQuoteCreationDate.Value.AddMonths(2);
-                dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
+                viewModel.QuoteCreationDate = DateTime.Today;
+                viewModel.QuoteExpiryDate = viewModel.QuoteCreationDate.AddMonths(2);
+                viewModel.PaymentTerm = viewModel.QuoteCreationDate.AddMonths(1);
 
                 Text = Text.Replace("<< Business Name >>", viewModel.SelectedBusiness.BusinessName);
                 if (viewModel.QuoteMap == null || viewModel.QuoteMap.Count == 0)
@@ -389,6 +389,19 @@ namespace QuoteSwift
             txtLineNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.LineNumber), false, DataSourceUpdateMode.OnPropertyChanged);
             txtQuoteNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.QuoteNumber), false, DataSourceUpdateMode.OnPropertyChanged);
 
+            rtxCustomerDeliveryDescripton.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryDescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            dtpQuoteCreationDate.DataBindings.Add("Value", viewModel, nameof(CreateQuoteViewModel.QuoteCreationDate), false, DataSourceUpdateMode.OnPropertyChanged);
+            dtpQuoteExpiryDate.DataBindings.Add("Value", viewModel, nameof(CreateQuoteViewModel.QuoteExpiryDate), false, DataSourceUpdateMode.OnPropertyChanged);
+            dtpPaymentTerm.DataBindings.Add("Value", viewModel, nameof(CreateQuoteViewModel.PaymentTerm), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            cbxBusinessTelephoneNumberSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessTelephone), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxBusinessCellphoneNumberSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessCellphone), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxBusinessEmailAddressSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessEmail), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            CbxPOBoxSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusinessPOBox), false, DataSourceUpdateMode.OnPropertyChanged);
+            CbxCustomerPOBoxSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomerPOBox), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxCustomerDeliveryAddress.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomerDeliveryAddress), false, DataSourceUpdateMode.OnPropertyChanged);
+
             UpdatePricingDisplay();
         }
 
@@ -423,7 +436,7 @@ namespace QuoteSwift
 
         private void LoadBusinessPOBoxAddress()
         {
-            Address Selection = viewModel.GetBusinessPOBoxByDescription(CbxPOBoxSelection.Text);
+            Address Selection = viewModel.SelectedBusinessPOBox;
             if (Selection != null)
             {
                 lblBusinessPOBoxNumber.Text = "Street Name: " + Selection.AddressStreetName;
@@ -435,7 +448,7 @@ namespace QuoteSwift
         }
         private void LoadCustomerPOBoxAddress()
         {
-            Address Selection = viewModel.GetCustomerPOBoxByDescription(CbxCustomerPOBoxSelection.Text);
+            Address Selection = viewModel.SelectedCustomerPOBox;
             if (Selection != null)
             {
                 lblCustomerPOBoxStreetName.Text = "P.O.Box Number " + Selection.AddressStreetNumber.ToString();
@@ -454,7 +467,7 @@ namespace QuoteSwift
 
         private void LoadCustomerDeliveryAddress()
         {
-            Address Selection = viewModel.GetCustomerDeliveryAddressByDescription(cbxCustomerDeliveryAddress.Text);
+            Address Selection = viewModel.SelectedCustomerDeliveryAddress;
             if (Selection != null)
             {
                 rtxCustomerDeliveryDescripton.Clear();
@@ -498,19 +511,19 @@ namespace QuoteSwift
             viewModel.Calculate();
 
             var quote = viewModel.CreateQuote(viewModel.QuoteNumber,
-                                               dtpQuoteCreationDate.Value,
-                                               dtpQuoteExpiryDate.Value,
+                                               viewModel.QuoteCreationDate,
+                                               viewModel.QuoteExpiryDate,
                                                viewModel.ReferenceNumber,
                                                viewModel.JobNumber,
                                                viewModel.PRNumber,
-                                               dtpPaymentTerm.Value,
-                                               viewModel.GetBusinessPOBoxByDescription(CbxPOBoxSelection.Text),
-                                               viewModel.GetCustomerPOBoxByDescription(CbxCustomerPOBoxSelection.Text),
+                                               viewModel.PaymentTerm,
+                                               viewModel.SelectedBusinessPOBox,
+                                               viewModel.SelectedCustomerPOBox,
                                                viewModel.LineNumber,
-                                               cbxBusinessTelephoneNumberSelection.Text,
-                                               cbxBusinessCellphoneNumberSelection.Text,
-                                               cbxBusinessEmailAddressSelection.Text,
-                                               (int)(dtpPaymentTerm.Value.Subtract(dtpQuoteCreationDate.Value)).TotalDays,
+                                               viewModel.BusinessTelephone,
+                                               viewModel.BusinessCellphone,
+                                               viewModel.BusinessEmail,
+                                               (int)(viewModel.PaymentTerm.Subtract(viewModel.QuoteCreationDate).TotalDays),
                                                viewModel.Pricing);
 
             return quote;
@@ -535,7 +548,7 @@ namespace QuoteSwift
                     if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
                 }
                 LastQuoteNumber++;
-                txtQuoteNumber.Text = "TRR" + LastQuoteNumber.ToString();
+                viewModel.QuoteNumber = "TRR" + LastQuoteNumber.ToString();
             }
         }
 
@@ -570,65 +583,14 @@ namespace QuoteSwift
 
         private void LoadFromPassedObject()
         {
-            cbxPumpSelection.Text = quoteToChange.PumpName;
-
-            viewModel.MandatoryParts = new BindingList<Quote_Part>(quoteToChange.QuoteMandatoryPartList.ToList());
-            viewModel.NonMandatoryParts = new BindingList<Quote_Part>(quoteToChange.QuoteNewList.ToList());
-            viewModel.NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6MACH", PartDescription = "MACHINING", PartPrice = quoteToChange.QuoteCost.Machining }, 1), 0, 0, 1, quoteToChange.QuoteCost.Machining, quoteToChange.QuoteCost.Machining, 1));
-            viewModel.NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6LAB", PartDescription = "LABOUR", PartPrice = quoteToChange.QuoteCost.Labour }, 1), 0, 0, 1, quoteToChange.QuoteCost.Labour, quoteToChange.QuoteCost.Labour, 1));
-            viewModel.NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "CON TS6", PartDescription = "CONSUMABLES incl COLLECTION & DELIVERY", PartPrice = quoteToChange.QuoteCost.Consumables }, 1), 0, 0, 1, quoteToChange.QuoteCost.Consumables, quoteToChange.QuoteCost.Consumables, 1));
+            viewModel.LoadQuote(quoteToChange);
             mandatorySource.DataSource = viewModel.MandatoryParts;
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
             UpdatePricingDisplay();
-
-            //Loading Business Information:
-            Address add = quoteToChange.QuoteBusinessPOBox;
-            cbxBusinessSelection.Text = quoteToChange.QuoteCompany.BusinessName;
-            CbxPOBoxSelection.Text = add.AddressDescription;
-            lblBusinessPOBoxNumber.Text = "P.O.Box " + add.AddressStreetNumber;
-            lblBusinessPOBoxSuburb.Text = add.AddressSuburb;
-            lblBusinessPOBoxCity.Text = add.AddressCity;
-            lblBusinessPOBoxAreaCode.Text = add.AddressAreaCode.ToString();
-
-            lblBusinessRegistrationNumber.Text = quoteToChange.QuoteCompany.BusinessLegalDetails.RegistrationNumber;
-            lblBusinessVATNumber.Text = quoteToChange.QuoteCompany.BusinessLegalDetails.VatNumber;
-            cbxBusinessTelephoneNumberSelection.Text = quoteToChange.Telefone;
-            cbxBusinessCellphoneNumberSelection.Text = quoteToChange.Cellphone;
-            cbxBusinessEmailAddressSelection.Text = quoteToChange.Email;
-
-            //Loading Customer Section:
-            add = quoteToChange.QuoteCustomerPOBox;
-            cbxCustomerSelection.Text = quoteToChange.QuoteCustomer.CustomerCompanyName;
-            CbxCustomerPOBoxSelection.Text = add.AddressDescription;
-            lblCustomerPOBoxStreetName.Text = "Private Bag X" + add.AddressStreetNumber;
-            lblCustomerPOBoxSuburb.Text = add.AddressSuburb;
-            lblCustomerPOBoxCity.Text = add.AddressCity;
-            lblCustomerPOBoxAreaCode.Text = add.AddressAreaCode.ToString();
-
-            cbxCustomerDeliveryAddress.Text = quoteToChange.QuoteCustomer.CustomerName;
-            rtxCustomerDeliveryDescripton.Text = quoteToChange.QuoteDeliveryAddress;
-            txtCustomerVATNumber.Text = quoteToChange.QuoteCustomer.CustomerLegalDetails.VatNumber;
-
-            //Loading other Quote Details:
-            txtJobNumber.Text = quoteToChange.QuoteJobNumber;
-            txtReferenceNumber.Text = quoteToChange.QuoteReference;
-            txtPRNumber.Text = quoteToChange.QuotePRNumber;
-            txtLineNumber.Text = quoteToChange.QuoteLineNumber;
-            dtpPaymentTerm.Value = quoteToChange.QuotePaymentTerm;
-
-            txtQuoteNumber.Text = quoteToChange.QuoteNumber;
-
-            dtpQuoteCreationDate.Value = quoteToChange.QuoteCreationDate;
-            dtpQuoteExpiryDate.Value = quoteToChange.QuoteExpireyDate;
-
-            lblNewPumpUnitPrice.Text = "New Pump Price: R " + quoteToChange.QuoteCost.PumpPrice.ToString();
-            lblRepairPercentage.Text = quoteToChange.QuoteRepairPercentage + "%";
-            lblRebateValue.Text = "R" + quoteToChange.QuoteCost.Rebate.ToString();
-            lblSubTotalValue.Text = "R" + quoteToChange.QuoteCost.SubTotal.ToString();
-            lblVATValue.Text = "R" + quoteToChange.QuoteCost.VAT.ToString();
-            lblTotalDueValue.Text = "R" + quoteToChange.QuoteCost.TotalDue.ToString();
-
-            mtxtRebate.Text = quoteToChange.QuoteCost.Rebate.ToString();
+            LoadBusinessPOBoxAddress();
+            LoadBusinessLegalDatails();
+            LoadCustomerPOBoxAddress();
+            LoadCustomerDeliveryAddress();
         }
 
         private void ConvertToReadOnly()
