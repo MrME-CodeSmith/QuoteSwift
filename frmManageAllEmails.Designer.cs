@@ -106,7 +106,6 @@ namespace QuoteSwift
             this.btnRemoveAddress.TabIndex = 5;
             this.btnRemoveAddress.Text = "Remove Selected Email";
             this.btnRemoveAddress.UseVisualStyleBackColor = true;
-            this.btnRemoveAddress.Click += new System.EventHandler(this.BtnRemoveAddress_Click);
             // 
             // BtnChangeAddressInfo
             //
@@ -137,7 +136,6 @@ namespace QuoteSwift
             this.btnAddEmail.TabIndex = 7;
             this.btnAddEmail.Text = "Add Email";
             this.btnAddEmail.UseVisualStyleBackColor = true;
-            this.btnAddEmail.Click += new System.EventHandler(this.BtnAddEmail_Click);
             // 
             // FrmManageAllEmails
             // 

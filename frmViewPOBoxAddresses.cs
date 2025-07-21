@@ -17,6 +17,15 @@ namespace QuoteSwift
         void SetupBindings()
         {
             dgvPOBoxAddresses.DataSource = viewModel.Addresses;
+            dgvPOBoxAddresses.SelectionChanged += (s, e) =>
+            {
+                if (dgvPOBoxAddresses.CurrentRow?.DataBoundItem is Address a)
+                    viewModel.SelectedAddress = a;
+                else
+                    viewModel.SelectedAddress = null;
+            };
+
+            CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedAddressCommand);
         }
 
         public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null, IMessageService messageService = null)
@@ -40,32 +49,6 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnRemoveAddress_Click(object sender, EventArgs e)
-        {
-            Address SelectedAddress = GetAddressSelection();
-            if (SelectedAddress != null)
-            {
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedAddress.AddressDescription + "' address from the list?", "REQUEST - Deletion Request"))
-                {
-                    if (business != null && business.BusinessPOBoxAddressList != null)
-                    {
-                        business.RemovePOBoxAddress(SelectedAddress);
-                        messageService.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
-                    }
-                    else if (customer != null && customer.CustomerPOBoxAddress != null)
-                    {
-                        customer.RemovePOBoxAddress(SelectedAddress);
-                        messageService.ShowInformation("Successfully deleted '" + SelectedAddress.AddressDescription + "' from the address list", "CONFIRMATION - Deletion Success");
-                    }
-
-                    viewModel.UpdateData(business, customer);
-                }
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid P.O.Box address from the list.", "ERROR - Invalid Selection");
-            }
-        }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {

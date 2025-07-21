@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -9,11 +10,17 @@ namespace QuoteSwift
         Business business;
         Customer customer;
         bool changeSpecificObject;
+        Address selectedAddress;
+
+        public ICommand RemoveSelectedAddressCommand { get; }
 
 
         public ViewPOBoxAddressesViewModel(IDataService service)
         {
             dataService = service;
+            RemoveSelectedAddressCommand = new RelayCommand(
+                _ => RemoveAddress(SelectedAddress),
+                _ => SelectedAddress != null);
         }
 
         public IDataService DataService => dataService;
@@ -76,6 +83,27 @@ namespace QuoteSwift
                 foreach (var a in Customer.CustomerPOBoxAddress)
                     addresses.Add(a);
             }
+        }
+
+        public Address SelectedAddress
+        {
+            get => selectedAddress;
+            set
+            {
+                if (SetProperty(ref selectedAddress, value))
+                    ((RelayCommand)RemoveSelectedAddressCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        void RemoveAddress(Address address)
+        {
+            if (address == null)
+                return;
+            if (Business != null)
+                Business.RemovePOBoxAddress(address);
+            else if (Customer != null)
+                Customer.RemovePOBoxAddress(address);
+            addresses.Remove(address);
         }
 
     }

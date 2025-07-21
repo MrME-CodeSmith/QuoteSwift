@@ -145,7 +145,6 @@ namespace QuoteSwift
             this.btnRemoveTelNumber.TabIndex = 5;
             this.btnRemoveTelNumber.Text = "Remove Selected Phone Number";
             this.btnRemoveTelNumber.UseVisualStyleBackColor = true;
-            this.btnRemoveTelNumber.Click += new System.EventHandler(this.BtnRemoveTelNumber_Click);
             // 
             // btnRemoveCellNumber
             // 
@@ -157,7 +156,6 @@ namespace QuoteSwift
             this.btnRemoveCellNumber.TabIndex = 6;
             this.btnRemoveCellNumber.Text = "Remove Selected Phone Number";
             this.btnRemoveCellNumber.UseVisualStyleBackColor = true;
-            this.btnRemoveCellNumber.Click += new System.EventHandler(this.BtnRemoveCellNumber_Click);
             // 
             // BtnCancel
             // 
@@ -220,7 +218,6 @@ namespace QuoteSwift
             this.btnAddTelephone.TabIndex = 1;
             this.btnAddTelephone.Text = "Add Phone";
             this.btnAddTelephone.UseVisualStyleBackColor = true;
-            this.btnAddTelephone.Click += new System.EventHandler(this.BtnAddTelephone_Click);
             //
             // btnAddCellphone
             //
@@ -231,7 +228,6 @@ namespace QuoteSwift
             this.btnAddCellphone.TabIndex = 3;
             this.btnAddCellphone.Text = "Add Phone";
             this.btnAddCellphone.UseVisualStyleBackColor = true;
-            this.btnAddCellphone.Click += new System.EventHandler(this.BtnAddCellphone_Click);
             // 
             // FrmManagingPhoneNumbers
             // 

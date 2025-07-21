@@ -29,6 +29,10 @@ namespace QuoteSwift
                     viewModel.SelectedEmail = null;
             };
 
+            txtNewEmail.DataBindings.Add("Text", viewModel, nameof(ManageEmailsViewModel.NewEmail), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            CommandBindings.Bind(btnAddEmail, viewModel.AddEmailCommand);
+
             CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedEmailCommand);
         }
 
@@ -64,22 +68,6 @@ namespace QuoteSwift
             if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
-        private void BtnRemoveAddress_Click(object sender, EventArgs e)
-        {
-            string SelectedEmail = viewModel.SelectedEmail?.Address ?? string.Empty;
-            if (SelectedEmail != "")
-            {
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedEmail + "' email address from the list?", "REQUEST - Deletion Request"))
-                {
-                    viewModel.RemoveEmailCommand.Execute(SelectedEmail);
-                    messageService.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-                }
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid email address from the list.", "ERROR - Invalid Selection");
-            }
-        }
 
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
@@ -91,17 +79,6 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnAddEmail_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtNewEmail.Text))
-            {
-                messageService.ShowError("The provided email address is invalid.", "ERROR - Invalid Email Address");
-                return;
-            }
-            viewModel.AddEmailCommand.Execute(txtNewEmail.Text);
-            messageService.ShowInformation($"Successfully added '{txtNewEmail.Text}' to the email address list", "CONFIRMATION - Addition Success");
-            txtNewEmail.Clear();
-        }
 
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

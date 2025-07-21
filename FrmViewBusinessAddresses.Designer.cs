@@ -156,7 +156,6 @@ namespace QuoteSwift
             this.BtnRemoveSelected.TabIndex = 3;
             this.BtnRemoveSelected.Text = "Remove Selected Address";
             this.BtnRemoveSelected.UseVisualStyleBackColor = true;
-            this.BtnRemoveSelected.Click += new System.EventHandler(this.BtnRemoveSelected_Click);
             // 
             // BtnChangeAddressInfo
             // 
