@@ -89,6 +89,10 @@ namespace QuoteSwift
                 Customers = new BindingList<Customer>(new List<Customer>(SelectedBusiness.BusinessCustomerList));
             else
                 Customers = new BindingList<Customer>();
+
+            if (Customers != null)
+                foreach (var c in Customers)
+                    c.PreviousQuoteDate = GetPreviousQuoteDate(c);
         }
 
         public Customer GetCustomer(string companyName)

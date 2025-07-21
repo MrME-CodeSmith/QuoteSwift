@@ -14,6 +14,7 @@ namespace QuoteSwift
         private BindingList<string> mCustomerCellphoneNumberList;
         private BindingList<string> mCustomerEmailList;
         private string mVendorNumber;
+        private string mPreviousQuoteDate;
 
         // lookup collections for quick searches and duplicate checks
         private Dictionary<string, Address> mDeliveryAddressMap;
@@ -34,6 +35,7 @@ namespace QuoteSwift
             mCustomerCellphoneNumberList = new BindingList<string>();
             mCustomerEmailList = new BindingList<string>();
             VendorNumber = "";
+            PreviousQuoteDate = "";
 
             mDeliveryAddressMap = new Dictionary<string, Address>();
             mPOBoxMap = new Dictionary<string, Address>();
@@ -108,6 +110,7 @@ namespace QuoteSwift
             }
 
             VendorNumber = c.VendorNumber;
+            PreviousQuoteDate = c.PreviousQuoteDate;
 
             mDeliveryAddressMap = new Dictionary<string, Address>();
             if (mCustomerDeliveryAddressList != null)
@@ -156,6 +159,11 @@ namespace QuoteSwift
         public HashSet<string> TelephoneNumbers => mTelephoneNumbers;
         public HashSet<string> CellphoneNumbers => mCellphoneNumbers;
         public HashSet<string> EmailAddresses => mEmailAddresses;
+        public string PreviousQuoteDate
+        {
+            get => mPreviousQuoteDate;
+            set => SetProperty(ref mPreviousQuoteDate, value);
+        }
 
         // helper methods to manage addresses while keeping the lookup collections in sync
         public void AddDeliveryAddress(Address address)

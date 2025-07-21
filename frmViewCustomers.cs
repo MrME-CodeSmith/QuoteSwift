@@ -11,6 +11,7 @@ namespace QuoteSwift
         readonly ApplicationData appData;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
+        readonly BindingSource customersBindingSource = new BindingSource();
         public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
@@ -19,6 +20,9 @@ namespace QuoteSwift
             this.serializationService = serializationService;
             this.appData = appData;
             this.messageService = messageService;
+            customersBindingSource.DataSource = viewModel;
+            customersBindingSource.DataMember = nameof(ViewCustomersViewModel.Customers);
+            DgvCustomerList.DataSource = customersBindingSource;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -47,7 +51,6 @@ namespace QuoteSwift
             navigation.AddCustomer(container, customer, false);
 
             viewModel.RefreshCustomers();
-            RefreshBinding();
 
 
         }
@@ -59,16 +62,15 @@ namespace QuoteSwift
             Show();
 
             viewModel.RefreshCustomers();
-            RefreshBinding();
         }
 
         private void FrmViewCustomers_Load(object sender, EventArgs e)
         {
             viewModel.LoadData();
             LinkBusinessToSource(ref cbBusinessSelection);
-
-            RefreshBinding();
-
+            clmCustomerCompanyName.DataPropertyName = nameof(Customer.CustomerCompanyName);
+            clmPreviousQuoteDate.DataPropertyName = nameof(Customer.PreviousQuoteDate);
+            DgvCustomerList.AutoGenerateColumns = false;
             DgvCustomerList.RowsDefaultCellStyle.BackColor = Color.Bisque;
             DgvCustomerList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
@@ -82,8 +84,6 @@ namespace QuoteSwift
                 {
                     viewModel.RemoveCustomer(customer);
                     messageService.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
-
-                    RefreshBinding();
                 }
             }
         }
@@ -95,16 +95,7 @@ namespace QuoteSwift
         *       and clutter free.                                                          
         */
 
-        void RefreshBinding()
-        {
-            DgvCustomerList.AutoGenerateColumns = false;
-            DgvCustomerList.DataSource = new BindingSource { DataSource = viewModel.Customers };
-            for (int i = 0; i < DgvCustomerList.Rows.Count; i++)
-            {
-                var cust = DgvCustomerList.Rows[i].DataBoundItem as Customer;
-                DgvCustomerList.Rows[i].Cells[clmPreviousQuoteDate.Name].Value = viewModel.GetPreviousQuoteDate(cust);
-            }
-        }
+        // Binding handled automatically via customersBindingSource
 
 
         private bool ReplaceCustomer(Customer Original, Customer New, Business Container)
@@ -150,7 +141,6 @@ namespace QuoteSwift
         private void CbBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
             viewModel.SelectBusiness(GetSelectedBusiness());
-            RefreshBinding();
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
