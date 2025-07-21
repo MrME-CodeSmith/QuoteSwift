@@ -119,7 +119,7 @@ namespace QuoteSwift
                                                      txtAtt.Text,
                                                      txtWorkArea.Text,
                                                      txtWorkPlace.Text);
-            if (viewModel.ValidateCustomerAddress(addr))
+            if (addr != null)
             {
                 var r = viewModel.AddDeliveryAddress(addr);
                 if (r.Success)
@@ -139,7 +139,7 @@ namespace QuoteSwift
                                                 txtPOBoxSuburb.Text,
                                                 txtPOBoxCity.Text,
                                                 mtxtPOBoxAreaCode.Text);
-            if (viewModel.ValidateCustomerPOBoxAddress(po))
+            if (po != null)
             {
                 var r = viewModel.AddPOBoxAddress(po);
                 if (r.Success)

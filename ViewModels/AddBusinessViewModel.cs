@@ -103,12 +103,16 @@ namespace QuoteSwift
                                     string city,
                                     string areaCode)
         {
-            return new Address(description,
-                               ParsingService.ParseInt(streetNumber),
-                               streetName,
-                               suburb,
-                               city,
-                               ParsingService.ParseInt(areaCode));
+            var address = new Address(description,
+                                       ParsingService.ParseInt(streetNumber),
+                                       streetName,
+                                       suburb,
+                                       city,
+                                       ParsingService.ParseInt(areaCode));
+
+            var result = ValidateAddress(address);
+            LastResult = result;
+            return result.Success ? address : null;
         }
 
         public Address BuildPOBoxAddress(string description,
@@ -117,12 +121,16 @@ namespace QuoteSwift
                                          string city,
                                          string areaCode)
         {
-            return new Address(description,
-                               ParsingService.ParseInt(streetNumber),
-                               string.Empty,
-                               suburb,
-                               city,
-                               ParsingService.ParseInt(areaCode));
+            var address = new Address(description,
+                                       ParsingService.ParseInt(streetNumber),
+                                       string.Empty,
+                                       suburb,
+                                       city,
+                                       ParsingService.ParseInt(areaCode));
+
+            var result = ValidatePOBoxAddress(address);
+            LastResult = result;
+            return result.Success ? address : null;
         }
 
         public Dictionary<string, Business> BusinessLookup => businessLookup;
