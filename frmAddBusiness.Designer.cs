@@ -290,7 +290,7 @@ namespace QuoteSwift
             this.btnAddNumber.TabIndex = 15;
             this.btnAddNumber.Text = "Add Number/s";
             this.btnAddNumber.UseVisualStyleBackColor = true;
-            this.btnAddNumber.Click += new System.EventHandler(this.BtnAddNumber_Click);
+            // command bound
             // 
             // lblCellphoneNumber
             // 
@@ -387,7 +387,7 @@ namespace QuoteSwift
             this.btnAddAddress.TabIndex = 11;
             this.btnAddAddress.Text = "Add Address";
             this.btnAddAddress.UseVisualStyleBackColor = true;
-            this.btnAddAddress.Click += new System.EventHandler(this.BtnAddAddress_Click);
+            // command bound
             // 
             // mtxtAreaCode
             // 
@@ -517,7 +517,7 @@ namespace QuoteSwift
             this.btnAddBusinessEmail.TabIndex = 18;
             this.btnAddBusinessEmail.Text = "Add Email Address";
             this.btnAddBusinessEmail.UseVisualStyleBackColor = true;
-            this.btnAddBusinessEmail.Click += new System.EventHandler(this.BtnAddBusinessEmail_Click);
+            // command bound
             // 
             // lblEmailAddress
             // 
@@ -600,7 +600,7 @@ namespace QuoteSwift
             this.btnAddPOBoxAddress.TabIndex = 25;
             this.btnAddPOBoxAddress.Text = "Add Address";
             this.btnAddPOBoxAddress.UseVisualStyleBackColor = true;
-            this.btnAddPOBoxAddress.Click += new System.EventHandler(this.BtnAddPOBoxAddress_Click);
+            // command bound
             // 
             // mtxtPOBoxAreaCode
             // 
