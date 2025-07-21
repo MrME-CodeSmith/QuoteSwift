@@ -21,5 +21,6 @@ namespace QuoteSwift
         void EditBusinessAddress(Business business = null, Customer customer = null, Address address = null);
         void EditBusinessEmailAddress(Business business = null, Customer customer = null, string email = "");
         void EditPhoneNumber(Business business = null, Customer customer = null, string number = "");
+        void SaveAllData();
     }
 }
