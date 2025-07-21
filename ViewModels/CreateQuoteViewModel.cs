@@ -40,6 +40,7 @@ namespace QuoteSwift
         float repairPercentage;
 
         public ICommand AddQuoteCommand { get; }
+        public ICommand LoadDataCommand { get; }
 
 
         public CreateQuoteViewModel(IDataService service, INotificationService notifier, IExcelExportService excelExporter)
@@ -48,6 +49,7 @@ namespace QuoteSwift
             notificationService = notifier;
             excelExportService = excelExporter;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;

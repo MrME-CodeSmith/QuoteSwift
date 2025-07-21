@@ -13,11 +13,13 @@ namespace QuoteSwift
         SortedDictionary<string, Quote> quoteMap;
         Business selectedBusiness;
         BindingList<Customer> customers;
+        public ICommand LoadDataCommand { get; }
 
 
         public ViewCustomersViewModel(IDataService service)
         {
             dataService = service;
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public BindingList<Business> Businesses

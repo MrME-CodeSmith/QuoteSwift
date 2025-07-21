@@ -20,6 +20,7 @@ namespace QuoteSwift
         
         public ICommand AddBusinessCommand { get; }
         public ICommand UpdateBusinessCommand { get; }
+        public ICommand LoadDataCommand { get; }
 
         public OperationResult LastResult
         {
@@ -77,6 +78,7 @@ namespace QuoteSwift
                 LastResult = result;
                 LastOperationSuccessful = result.Success;
             });
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;

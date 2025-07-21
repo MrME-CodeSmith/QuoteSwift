@@ -13,11 +13,14 @@ namespace QuoteSwift
         readonly ISerializationService serializationService;
         HashSet<string> repairableItemNames;
 
+        public ICommand LoadDataCommand { get; }
+
 
         public ViewPumpViewModel(IDataService service, ISerializationService serializer)
         {
             dataService = service;
             serializationService = serializer;
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;

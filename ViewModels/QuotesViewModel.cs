@@ -17,10 +17,13 @@ namespace QuoteSwift
         BindingList<Pump> pumpList;
         Dictionary<string, Part> partMap;
 
+        public ICommand LoadDataCommand { get; }
+
 
         public QuotesViewModel(IDataService service)
         {
             dataService = service;
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
 

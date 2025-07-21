@@ -15,6 +15,7 @@ namespace QuoteSwift
 
         public ICommand AddPumpCommand { get; }
         public ICommand UpdatePumpCommand { get; }
+        public ICommand LoadDataCommand { get; }
 
         public bool LastOperationSuccessful
         {
@@ -90,6 +91,7 @@ namespace QuoteSwift
             RepairableItemNames = new HashSet<string>();
             AddPumpCommand = new RelayCommand(_ => LastOperationSuccessful = AddPump());
             UpdatePumpCommand = new RelayCommand(_ => LastOperationSuccessful = UpdatePump());
+            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;
