@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -16,6 +15,21 @@ namespace QuoteSwift
             InitializeComponent();
             this.viewModel = viewModel;
             this.messageService = messageService;
+            SetupBindings();
+        }
+
+        void SetupBindings()
+        {
+            DgvEmails.DataSource = viewModel.Emails;
+            DgvEmails.SelectionChanged += (s, e) =>
+            {
+                if (DgvEmails.CurrentRow?.DataBoundItem is ManageEmailsViewModel.EmailEntry entry)
+                    viewModel.SelectedEmail = entry;
+                else
+                    viewModel.SelectedEmail = null;
+            };
+
+            CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedEmailCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -33,16 +47,12 @@ namespace QuoteSwift
                 Text = Text.Replace("< Business Name >", viewModel.Business.BusinessName);
 
                 // components remain editable
-
-                LoadInformation();
             }
             else if (viewModel.Customer != null && viewModel.Customer.CustomerEmailList != null)
             {
                 Text = Text.Replace("< Business Name >", viewModel.Customer.CustomerName);
 
                 // components remain editable
-
-                LoadInformation();
             }
 
             DgvEmails.RowsDefaultCellStyle.BackColor = Color.Bisque;
@@ -56,16 +66,13 @@ namespace QuoteSwift
 
         private void BtnRemoveAddress_Click(object sender, EventArgs e)
         {
-            string SelectedEmail = GetEmailSelection();
+            string SelectedEmail = viewModel.SelectedEmail?.Address ?? string.Empty;
             if (SelectedEmail != "")
             {
                 if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + SelectedEmail + "' email address from the list?", "REQUEST - Deletion Request"))
                 {
                     viewModel.RemoveEmailCommand.Execute(SelectedEmail);
                     messageService.ShowInformation("Successfully deleted '" + SelectedEmail + "' from the email address list", "CONFIRMATION - Deletion Success");
-
-
-                    LoadInformation();
                 }
             }
             else
@@ -76,13 +83,12 @@ namespace QuoteSwift
 
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
-            string email = GetEmailSelection();
+            string email = viewModel.SelectedEmail?.Address ?? string.Empty;
             var vm = new EditEmailAddressViewModel(viewModel.Business, viewModel.Customer, email);
             using (var form = new FrmEditEmailAddress(vm, messageService))
             {
                 form.ShowDialog();
             }
-            LoadInformation();
         }
 
         private void BtnAddEmail_Click(object sender, EventArgs e)
@@ -95,38 +101,8 @@ namespace QuoteSwift
             viewModel.AddEmailCommand.Execute(txtNewEmail.Text);
             messageService.ShowInformation($"Successfully added '{txtNewEmail.Text}' to the email address list", "CONFIRMATION - Addition Success");
             txtNewEmail.Clear();
-            LoadInformation();
         }
 
-        string GetEmailSelection()
-        {
-            if (DgvEmails.CurrentCell == null || DgvEmails.CurrentRow == null)
-                return string.Empty;
-
-            int iGridSelection = DgvEmails.CurrentCell.RowIndex;
-            if (iGridSelection < 0 || iGridSelection >= DgvEmails.Rows.Count)
-                return string.Empty;
-
-            string SearchName = DgvEmails.Rows[iGridSelection].Cells[0].Value?.ToString();
-            if (string.IsNullOrEmpty(SearchName))
-                return string.Empty;
-
-            if (viewModel.Business != null && viewModel.Business.BusinessEmailAddressList != null)
-            {
-                return viewModel.Business.BusinessEmailAddressList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
-            }
-            else if (viewModel.Customer != null && viewModel.Customer.CustomerEmailList != null)
-            {
-                return viewModel.Customer.CustomerEmailList.SingleOrDefault(p => p == SearchName) ?? string.Empty;
-            }
-
-            return string.Empty;
-        }
-
-        private void LoadInformation()
-        {
-            DgvEmails.DataSource = new BindingSource { DataSource = viewModel.Emails };
-        }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
