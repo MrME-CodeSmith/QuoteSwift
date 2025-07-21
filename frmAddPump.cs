@@ -14,6 +14,8 @@ namespace QuoteSwift
         readonly ApplicationData appData;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
+        readonly BindingSource mandatorySource = new BindingSource();
+        readonly BindingSource nonMandatorySource = new BindingSource();
 
         public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
@@ -23,6 +25,12 @@ namespace QuoteSwift
             appData = data;
             this.serializationService = serializationService;
             this.messageService = messageService;
+            viewModel.CurrentPump = viewModel.PumpToChange ?? new Pump();
+            mtxtPumpName.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.PumpName), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPumpDescription.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.PumpDescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtNewPumpPrice.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.NewPumpPrice), true, DataSourceUpdateMode.OnPropertyChanged);
+            mandatorySource.DataSource = viewModel.SelectedMandatoryParts;
+            nonMandatorySource.DataSource = viewModel.SelectedNonMandatoryParts;
             if (data != null)
                 viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
                                      data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
@@ -42,18 +50,15 @@ namespace QuoteSwift
             if (!viewModel.ValidateInput())
                 return;
 
-            BindingList<Pump_Part> newPumpParts = RetreivePumpPartList();
+            var newPumpParts = new BindingList<Pump_Part>(viewModel.SelectedMandatoryParts.Concat(viewModel.SelectedNonMandatoryParts).ToList());
 
-            if (newPumpParts == null)
+            if (newPumpParts.Count == 0)
             {
                 messageService.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.", "ERROR - No Pump Part Selection");
                 return;
             }
 
-            viewModel.CurrentPump = new Pump(mtxtPumpName.Text,
-                                            mtxtPumpDescription.Text,
-                                            ParsingService.ParseDecimal(mtxtNewPumpPrice.Text),
-                                            ref newPumpParts);
+            viewModel.CurrentPump.PartList = newPumpParts;
 
             bool result;
             if (viewModel.ChangeSpecificObject)
@@ -120,20 +125,17 @@ namespace QuoteSwift
 
         private void FrmAddPump_Load(object sender, EventArgs e)
         {
-            LoadMandatoryParts();
-            LoadNonMandatoryParts();
+            SetupBindings();
 
             if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == true) //Determine if Edit
             {
                 ConvertToEditForm();
                 Read_OnlyMainComponents();
-                PopulateFormWithPassedPump();
             }
             else if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == false) //Determine if View
             {
                 ConvertToViewForm();
                 Read_OnlyMainComponents();
-                PopulateFormWithPassedPump();
             }
             else if (viewModel.PumpToChange == null && viewModel.ChangeSpecificObject == false) // Determine if Add New
             {
@@ -205,124 +207,27 @@ namespace QuoteSwift
             updatePumpToolStripMenuItem.Enabled = false;
         }
 
-        //Populates the form with the passed Pump object and checks the check boxes in the data grid view where parts are being used.
-
-        void PopulateFormWithPassedPump()
+        void SetupBindings()
         {
-            mtxtNewPumpPrice.Text = viewModel.PumpToChange.NewPumpPrice.ToString();
-            mtxtPumpDescription.Text = viewModel.PumpToChange.PumpDescription;
-            mtxtPumpName.Text = viewModel.PumpToChange.PumpName;
+            dgvMandatoryPartView.AutoGenerateColumns = false;
+            ClmPartName.DataPropertyName = "PumpPart.PartName";
+            clmDescription.DataPropertyName = "PumpPart.PartDescription";
+            clmOriginalPartNumber.DataPropertyName = "PumpPart.OriginalItemPartNumber";
+            clmNewPartNumber.DataPropertyName = "PumpPart.NewPartNumber";
+            clmPartPrice.DataPropertyName = "PumpPart.PartPrice";
+            clmMPartQuantity.DataPropertyName = nameof(Pump_Part.PumpPartQuantity);
+            dgvMandatoryPartView.DataSource = mandatorySource;
 
-            int mIndex = 0;
-            foreach (var part in viewModel.PartMap?.Values?.Where(p => p.MandatoryPart) ?? Enumerable.Empty<Part>())
-            {
-                foreach (var pumpPart in viewModel.PumpToChange.PartList)
-                {
-                    if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
-                    {
-                        DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvMandatoryPartView.Rows[mIndex].Cells["clmAddToPumpSelection"];
-                        cbx.Value = true;
-                        dgvMandatoryPartView.Rows[mIndex].Cells["clmMPartQuantity"].Value = pumpPart.PumpPartQuantity.ToString();
-                    }
-                }
-                mIndex++;
-            }
-
-            int nmIndex = 0;
-            foreach (var part in viewModel.PartMap?.Values?.Where(p => !p.MandatoryPart) ?? Enumerable.Empty<Part>())
-            {
-                foreach (var pumpPart in viewModel.PumpToChange.PartList)
-                {
-                    if (part.OriginalItemPartNumber == pumpPart.PumpPart.OriginalItemPartNumber)
-                    {
-                        DataGridViewCheckBoxCell cbx = (DataGridViewCheckBoxCell)dgvNonMandatoryPartView.Rows[nmIndex].Cells["ClmNonMandatoryPartSelection"];
-                        cbx.Value = true;
-                        dgvNonMandatoryPartView.Rows[nmIndex].Cells["clmNMPartQuantity"].Value = pumpPart.PumpPartQuantity.ToString();
-                    }
-                }
-                nmIndex++;
-            }
+            dgvNonMandatoryPartView.AutoGenerateColumns = false;
+            ClmNMPartName.DataPropertyName = "PumpPart.PartName";
+            dataGridViewTextBoxColumn1.DataPropertyName = "PumpPart.PartDescription";
+            dataGridViewTextBoxColumn2.DataPropertyName = "PumpPart.OriginalItemPartNumber";
+            dataGridViewTextBoxColumn3.DataPropertyName = "PumpPart.NewPartNumber";
+            dataGridViewTextBoxColumn4.DataPropertyName = "PumpPart.PartPrice";
+            clmNMPartQuantity.DataPropertyName = nameof(Pump_Part.PumpPartQuantity);
+            dgvNonMandatoryPartView.DataSource = nonMandatorySource;
         }
 
-
-        //Links the binding-lists with the corresponding datagridview components
-
-        BindingList<Pump_Part> RetreivePumpPartList()
-        {
-            //When done Editing / Adding a pump, all mandatory parts need to be added first to the part list
-            //This is for the for loop when the form gets activated to work correctly.
-
-            BindingList<Pump_Part> ReturnList = null;
-            Pump_Part newPart;
-            //Mandatory added first
-            int mPartIndex = 0;
-            foreach (DataGridViewRow row in dgvMandatoryPartView.Rows)
-                try
-                {
-                    if ((bool)(row.Cells["clmAddToPumpSelection"].Value) == true)
-                    {
-                        try
-                        {
-                            string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
-                            if (viewModel.PartMap != null && viewModel.PartMap.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
-                                newPart = new Pump_Part(part,
-                                    ParsingService.ParseInt(row.Cells["clmMPartQuantity"].Value.ToString()));
-                            else
-                                newPart = null;
-                        }
-                        catch
-                        {
-                            newPart = null;
-                        }
-
-                        if (newPart != null)
-                            if (ReturnList == null)
-                                ReturnList = new BindingList<Pump_Part> { newPart };
-                            else ReturnList.Add(newPart);
-                    }
-                    mPartIndex++;
-                }
-                catch
-                {
-                    //Do Nothing
-                }
-
-
-            //Non-Mandatory added second
-            int nmPartIndex = 0;
-            foreach (DataGridViewRow row in dgvNonMandatoryPartView.Rows)
-                try
-                {
-                    if ((bool)(row.Cells["ClmNonMandatoryPartSelection"].Value) == true)
-                    {
-                        try
-                        {
-                            string oKey = row.Cells["clmOriginalPartNumber"].Value?.ToString();
-                            if (viewModel.PartMap != null && viewModel.PartMap.TryGetValue(StringUtil.NormalizeKey(oKey), out var part))
-                                newPart = new Pump_Part(part,
-                                    ParsingService.ParseInt(row.Cells["clmNMPartQuantity"].Value.ToString()));
-                            else
-                                newPart = null;
-                        }
-                        catch
-                        {
-                            newPart = null;
-                        }
-
-                        if (newPart != null)
-                            if (ReturnList == null)
-                                ReturnList = new BindingList<Pump_Part> { newPart };
-                            else ReturnList.Add(newPart);
-                    }
-                    nmPartIndex++;
-                }
-                catch
-                {
-                    //Do Nothing
-                }
-
-            return ReturnList;
-        }
 
         void ChangeViewToEdit()
         {
@@ -342,7 +247,7 @@ namespace QuoteSwift
 
             if (NewPumpValueInput() != viewModel.PumpToChange.NewPumpPrice) viewModel.PumpToChange.NewPumpPrice = NewPumpValueInput();
 
-            viewModel.PumpToChange.PartList = RetreivePumpPartList();
+            viewModel.PumpToChange.PartList = new BindingList<Pump_Part>(viewModel.SelectedMandatoryParts.Concat(viewModel.SelectedNonMandatoryParts).ToList());
         }
 
         decimal NewPumpValueInput()
@@ -353,45 +258,6 @@ namespace QuoteSwift
 
 
 
-        void LoadMandatoryParts()
-        {
-            if (viewModel.PartMap != null)
-            {
-                dgvMandatoryPartView.Rows.Clear();
-
-                foreach (var part in viewModel.PartMap.Values.Where(p => p.MandatoryPart))
-                {
-                    //Manually setting the data grid's rows' values:
-                    dgvMandatoryPartView.Rows.Add(part.PartName,
-                                                   part.PartDescription,
-                                                   part.OriginalItemPartNumber,
-                                                   part.NewPartNumber,
-                                                   part.PartPrice,
-                                                   false,
-                                                   0);
-                }
-            }
-        }
-
-        void LoadNonMandatoryParts()
-        {
-            if (viewModel.PartMap != null)
-            {
-                dgvNonMandatoryPartView.Rows.Clear();
-
-                foreach (var part in viewModel.PartMap.Values.Where(p => !p.MandatoryPart))
-                {
-                    //Manually setting the data grid's rows' values:
-                    dgvNonMandatoryPartView.Rows.Add(part.PartName,
-                                                       part.PartDescription,
-                                                       part.OriginalItemPartNumber,
-                                                       part.NewPartNumber,
-                                                       part.PartPrice,
-                                                       false,
-                                                       0);
-                }
-            }
-        }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
