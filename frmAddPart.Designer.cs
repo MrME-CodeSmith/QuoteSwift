@@ -223,7 +223,6 @@ namespace QuoteSwift
             this.btnAddPart.TabIndex = 8;
             this.btnAddPart.Text = "Add Part";
             this.btnAddPart.UseVisualStyleBackColor = true;
-            this.btnAddPart.Click += new System.EventHandler(this.BtnAddPart_Click);
             // 
             // btnCancel
             // 

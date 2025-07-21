@@ -40,6 +40,8 @@ namespace QuoteSwift
             cbAddToPumpSelection.ValueMember = nameof(Pump.PumpName);
             cbAddToPumpSelection.DataBindings.Add("SelectedItem", viewModel, nameof(AddPartViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
             NudQuantity.DataBindings.Add("Value", viewModel, nameof(AddPartViewModel.Quantity), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            CommandBindings.Bind(btnAddPart, viewModel.SavePartCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -52,40 +54,6 @@ namespace QuoteSwift
                     appData?.QuoteMap);
         }
 
-        private void BtnAddPart_Click(object sender, EventArgs e)
-        {
-
-            if (!viewModel.ValidateInput())
-                return;
-
-            bool updating = viewModel.ChangeSpecificObject;
-
-            viewModel.SavePartCommand.Execute(null);
-            if (!viewModel.LastOperationSuccessful)
-            {
-                messageService.ShowInformation("The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.", "INFORMATION - Part Already Listed");
-                return;
-            }
-
-            if (updating)
-            {
-                messageService.ShowInformation("Successfully updated the part", "CONFIRMATION - Update Successful");
-                viewModel.ChangeSpecificObject = false;
-                Close();
-            }
-            else
-            {
-                string info = viewModel.CurrentPart.MandatoryPart ?
-                    " successfully added to the mandatory part list." :
-                    " successfully added to the non-mandatory part list.";
-                messageService.ShowInformation(viewModel.CurrentPart.PartName + info, "INFORMATION - Part Added Success");
-                if (viewModel.SelectedPump != null)
-                {
-                    messageService.ShowInformation(viewModel.CurrentPart.PartName + " successfully added to " + viewModel.SelectedPump.PumpName + " pump the part list.", "INFORMATION - Part Added  To Pump Success");
-                }
-                ClearInput();
-            }
-        }
 
         private void FrmAddPart_Activated(object sender, EventArgs e)
         {
@@ -135,9 +103,7 @@ namespace QuoteSwift
         {
             if (messageService.RequestConfirmation("Are you sure you want to reset the current screen to it's default values?", "REQUEST - Screen Defaults Reset"))
             {
-                ClearInput();
-                NudQuantity.Enabled = false;
-                cbxMandatoryPart.Checked = false;
+                viewModel.ResetInput();
             }
         }
 
@@ -172,16 +138,6 @@ namespace QuoteSwift
         */
 
 
-        private void ClearInput()
-        {
-            mtxtNewPartNumber.ResetText();
-            mtxtOriginalPartNumber.ResetText();
-            mtxtPartDescription.ResetText();
-            mtxtPartName.ResetText();
-            mtxtPartPrice.ResetText();
-            cbxMandatoryPart.Checked = false;
-            NudQuantity.ResetText();
-        }
 
         void ApplyControlState()
         {
