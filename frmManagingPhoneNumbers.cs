@@ -9,11 +9,13 @@ namespace QuoteSwift
 
         readonly ManagePhoneNumbersViewModel viewModel;
         readonly IMessageService messageService;
+        readonly INavigationService navigation;
 
-        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, IMessageService messageService = null)
+        public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
             this.messageService = messageService;
             SetupBindings();
         }
@@ -49,20 +51,12 @@ namespace QuoteSwift
             if (viewModel.Business != null && viewModel.Business.BusinessCellphoneNumberList != null)
             {
                 string oldNumber = viewModel.SelectedCellphoneNumber?.Number ?? string.Empty;
-                var vm = new EditPhoneNumberViewModel(viewModel.Business, null, oldNumber, messageService);
-                using (var form = new FrmEditPhoneNumber(vm, messageService))
-                {
-                    form.ShowDialog();
-                }
+                navigation?.EditPhoneNumber(viewModel.Business, null, oldNumber);
             }
             else if (viewModel.Customer != null && viewModel.Customer.CustomerCellphoneNumberList != null)
             {
                 string oldNumber = viewModel.SelectedCellphoneNumber?.Number ?? string.Empty;
-                var vm = new EditPhoneNumberViewModel(null, viewModel.Customer, oldNumber, messageService);
-                using (var form = new FrmEditPhoneNumber(vm, messageService))
-                {
-                    form.ShowDialog();
-                }
+                navigation?.EditPhoneNumber(null, viewModel.Customer, oldNumber);
             }
         }
 
@@ -71,20 +65,12 @@ namespace QuoteSwift
             if (viewModel.Business != null && viewModel.Business.BusinessTelephoneNumberList != null)
             {
                 string oldNumber = viewModel.SelectedTelephoneNumber?.Number ?? string.Empty;
-                var vm = new EditPhoneNumberViewModel(viewModel.Business, null, oldNumber, messageService);
-                using (var form = new FrmEditPhoneNumber(vm, messageService))
-                {
-                    form.ShowDialog();
-                }
+                navigation?.EditPhoneNumber(viewModel.Business, null, oldNumber);
             }
             else if (viewModel.Customer != null && viewModel.Customer.CustomerTelephoneNumberList != null)
             {
                 string oldNumber = viewModel.SelectedTelephoneNumber?.Number ?? string.Empty;
-                var vm = new EditPhoneNumberViewModel(null, viewModel.Customer, oldNumber, messageService);
-                using (var form = new FrmEditPhoneNumber(vm, messageService))
-                {
-                    form.ShowDialog();
-                }
+                navigation?.EditPhoneNumber(null, viewModel.Customer, oldNumber);
             }
         }
 

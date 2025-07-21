@@ -161,7 +161,7 @@ namespace QuoteSwift
         {
             var vm = new ManageEmailsViewModel(dataService);
             vm.UpdateData(business, customer);
-            using (var form = new FrmManageAllEmails(vm, messageService))
+            using (var form = new FrmManageAllEmails(vm, this, messageService))
             {
                 form.ShowDialog();
             }
@@ -171,7 +171,7 @@ namespace QuoteSwift
         {
             var vm = new ManagePhoneNumbersViewModel(dataService);
             vm.UpdateData(business, customer);
-            using (var form = new FrmManagingPhoneNumbers(vm, messageService))
+            using (var form = new FrmManagingPhoneNumbers(vm, this, messageService))
             {
                 form.ShowDialog();
             }

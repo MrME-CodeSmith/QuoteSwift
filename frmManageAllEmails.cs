@@ -9,11 +9,13 @@ namespace QuoteSwift
 
         readonly ManageEmailsViewModel viewModel;
         readonly IMessageService messageService;
+        readonly INavigationService navigation;
 
-        public FrmManageAllEmails(ManageEmailsViewModel viewModel, IMessageService messageService = null)
+        public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            this.navigation = navigation;
             this.messageService = messageService;
             SetupBindings();
         }
@@ -66,11 +68,7 @@ namespace QuoteSwift
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
             string email = viewModel.SelectedEmail?.Address ?? string.Empty;
-            var vm = new EditEmailAddressViewModel(viewModel.Business, viewModel.Customer, email);
-            using (var form = new FrmEditEmailAddress(vm, messageService))
-            {
-                form.ShowDialog();
-            }
+            navigation?.EditBusinessEmailAddress(viewModel.Business, viewModel.Customer, email);
         }
 
 
