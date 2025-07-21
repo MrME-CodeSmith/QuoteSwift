@@ -59,7 +59,45 @@ namespace QuoteSwift
             dataService = service;
             notificationService = notifier;
             CurrentPart = new Part();
-            SavePartCommand = new RelayCommand(_ => LastOperationSuccessful = AddOrUpdatePart());
+            SavePartCommand = new RelayCommand(_ =>
+            {
+                if (!ValidateInput())
+                    return;
+
+                bool updating = ChangeSpecificObject;
+                LastOperationSuccessful = AddOrUpdatePart();
+                if (!LastOperationSuccessful)
+                {
+                    notificationService.ShowInformation(
+                        "The provided new part information already has a part which has the same New Part Number or Original Part Number.\nPlease ensure that the provided Part Numbers' are distinct.",
+                        "INFORMATION - Part Already Listed");
+                    return;
+                }
+
+                if (updating)
+                {
+                    notificationService.ShowInformation(
+                        "Successfully updated the part",
+                        "CONFIRMATION - Update Successful");
+                    ChangeSpecificObject = false;
+                }
+                else
+                {
+                    string info = CurrentPart.MandatoryPart ?
+                        " successfully added to the mandatory part list." :
+                        " successfully added to the non-mandatory part list.";
+                    notificationService.ShowInformation(CurrentPart.PartName + info,
+                        "INFORMATION - Part Added Success");
+                    if (SelectedPump != null)
+                    {
+                        notificationService.ShowInformation(
+                            CurrentPart.PartName + " successfully added to " + SelectedPump.PumpName + " pump the part list.",
+                            "INFORMATION - Part Added  To Pump Success");
+                    }
+
+                    ResetInput();
+                }
+            });
             LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
@@ -191,6 +229,13 @@ namespace QuoteSwift
         public void Initialize()
         {
             CurrentPart = PartToChange ?? new Part();
+        }
+
+        public void ResetInput()
+        {
+            CurrentPart = new Part();
+            SelectedPump = null;
+            Quantity = 0;
         }
 
         public bool AddOrUpdatePart()
