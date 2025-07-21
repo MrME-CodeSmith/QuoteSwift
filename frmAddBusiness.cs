@@ -86,14 +86,22 @@ namespace QuoteSwift
                                                       txtPOBoxSuburb.Text,
                                                       txtPOBoxCity.Text,
                                                       mtxtPOBoxAreaCode.Text);
-            var result = viewModel.AddPOBoxAddress(address);
-            if (result.Success)
+
+            if (address != null)
             {
-                messageService.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
-                ClearPOBoxAddressInput();
+                var result = viewModel.AddPOBoxAddress(address);
+                if (result.Success)
+                {
+                    messageService.ShowInformation("Successfully added the business P.O.Box address", "INFORMATION - Business P.O.Box Address Added Successfully");
+                    ClearPOBoxAddressInput();
+                }
+                else if (result.Message != null)
+                    messageService.ShowError(result.Message, result.Caption);
             }
-            else if (result.Message != null)
-                messageService.ShowError(result.Message, result.Caption);
+            else if (viewModel.LastResult.Message != null)
+            {
+                messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
+            }
         }
 
         private void BtnAddAddress_Click(object sender, EventArgs e)
@@ -104,14 +112,22 @@ namespace QuoteSwift
                                                 txtSuburb.Text,
                                                 txtCity.Text,
                                                 mtxtAreaCode.Text);
-            result = viewModel.AddAddress(address);
-            if (result.Success)
+
+            if (address != null)
             {
-                messageService.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
-                ClearBusinessAddressInput();
+                result = viewModel.AddAddress(address);
+                if (result.Success)
+                {
+                    messageService.ShowInformation("Successfully added the business address", "INFORMATION - Business Address Added Successfully");
+                    ClearBusinessAddressInput();
+                }
+                else if (result.Message != null)
+                    messageService.ShowError(result.Message, result.Caption);
             }
-            else if (result.Message != null)
-                messageService.ShowError(result.Message, result.Caption);
+            else if (viewModel.LastResult.Message != null)
+            {
+                messageService.ShowError(viewModel.LastResult.Message, viewModel.LastResult.Caption);
+            }
         }
 
         private void BtnAddNumber_Click(object sender, EventArgs e)

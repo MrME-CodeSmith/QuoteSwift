@@ -116,7 +116,8 @@ namespace QuoteSwift
                                             string workArea,
                                             string workPlace)
         {
-            return new Address(description, 0, att, workArea, workPlace, 0);
+            var address = new Address(description, 0, att, workArea, workPlace, 0);
+            return ValidateCustomerAddress(address) ? address : null;
         }
 
         public Address BuildPOBoxAddress(string description,
@@ -125,12 +126,13 @@ namespace QuoteSwift
                                          string city,
                                          string areaCode)
         {
-            return new Address(description,
-                               ParsingService.ParseInt(streetNumber),
-                               string.Empty,
-                               suburb,
-                               city,
-                               ParsingService.ParseInt(areaCode));
+            var address = new Address(description,
+                                       ParsingService.ParseInt(streetNumber),
+                                       string.Empty,
+                                       suburb,
+                                       city,
+                                       ParsingService.ParseInt(areaCode));
+            return ValidateCustomerPOBoxAddress(address) ? address : null;
         }
 
         public Customer CustomerToChange
