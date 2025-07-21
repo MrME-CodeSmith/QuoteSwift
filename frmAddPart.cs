@@ -54,7 +54,6 @@ namespace QuoteSwift
                     appData?.QuoteMap);
         }
 
-
         private void FrmAddPart_Activated(object sender, EventArgs e)
         {
 
@@ -74,9 +73,9 @@ namespace QuoteSwift
                              "Ninth Column: Pump Price (Price when pump is bought new)\n" +
                              "Click the OK button to select the file or alternative choose cancel to abort this action.";
 
-            DialogResult result = MessageBox.Show(message, "INFORMATION - CSV Batch Part Import", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            bool proceed = messageService.RequestConfirmation(message, "INFORMATION - CSV Batch Part Import");
 
-            if (result == DialogResult.OK)
+            if (proceed)
             {
                 OfdOpenCSVFile.ShowDialog();
                 bool updateDup = messageService.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part");
@@ -171,13 +170,6 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-            serializationService.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
-                appData?.QuoteMap);
-        }
 
 
         /*********************************************************************************/
