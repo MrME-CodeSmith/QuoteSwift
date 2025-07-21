@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -8,18 +9,24 @@ namespace QuoteSwift
         readonly IDataService dataService;
         Business business;
         Customer customer;
-        BindingList<EmailEntry> emails;
+        readonly BindingList<EmailEntry> emails;
+        EmailEntry selectedEmail;
 
         public ICommand AddEmailCommand { get; }
         public ICommand RemoveEmailCommand { get; }
+        public ICommand RemoveSelectedEmailCommand { get; }
         public ICommand UpdateEmailCommand { get; }
 
 
         public ManageEmailsViewModel(IDataService service)
         {
             dataService = service;
+            emails = new BindingList<EmailEntry>();
             AddEmailCommand = new RelayCommand(e => AddEmail(e as string));
             RemoveEmailCommand = new RelayCommand(e => RemoveEmail(e as string));
+            RemoveSelectedEmailCommand = new RelayCommand(
+                _ => RemoveEmail(selectedEmail?.Address),
+                _ => selectedEmail != null);
             UpdateEmailCommand = new RelayCommand(p =>
             {
                 if (p is object[] arr && arr.Length == 2 && arr[0] is string oldE && arr[1] is string newE)
@@ -49,13 +56,15 @@ namespace QuoteSwift
             }
         }
 
-        public BindingList<EmailEntry> Emails
+        public BindingList<EmailEntry> Emails => emails;
+
+        public EmailEntry SelectedEmail
         {
-            get => emails;
-            private set
+            get => selectedEmail;
+            set
             {
-                emails = value;
-                OnPropertyChanged(nameof(Emails));
+                if (SetProperty(ref selectedEmail, value))
+                    ((RelayCommand)RemoveSelectedEmailCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -68,49 +77,54 @@ namespace QuoteSwift
 
         void RefreshEmails()
         {
+            emails.Clear();
             if (Business != null && Business.BusinessEmailAddressList != null)
             {
-                Emails = new BindingList<EmailEntry>();
                 foreach (var e in Business.BusinessEmailAddressList)
-                    Emails.Add(new EmailEntry { Address = e });
+                    emails.Add(new EmailEntry { Address = e });
             }
             else if (Customer != null && Customer.CustomerEmailList != null)
             {
-                Emails = new BindingList<EmailEntry>();
                 foreach (var e in Customer.CustomerEmailList)
-                    Emails.Add(new EmailEntry { Address = e });
-            }
-            else
-            {
-                Emails = new BindingList<EmailEntry>();
+                    emails.Add(new EmailEntry { Address = e });
             }
         }
 
         public void RemoveEmail(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+                return;
             if (Business != null)
                 Business.RemoveEmailAddress(email);
             else if (Customer != null)
                 Customer.RemoveEmailAddress(email);
-            RefreshEmails();
+            var entry = emails.FirstOrDefault(e => e.Address == email);
+            if (entry != null)
+                emails.Remove(entry);
         }
 
         public void AddEmail(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+                return;
             if (Business != null)
                 Business.AddEmailAddress(email);
             else if (Customer != null)
                 Customer.AddEmailAddress(email);
-            RefreshEmails();
+            emails.Add(new EmailEntry { Address = email });
         }
 
         public void UpdateEmail(string oldEmail, string newEmail)
         {
+            if (string.IsNullOrWhiteSpace(oldEmail) || string.IsNullOrWhiteSpace(newEmail))
+                return;
             if (Business != null)
                 Business.UpdateEmailAddress(oldEmail, newEmail);
             else if (Customer != null)
                 Customer.UpdateEmailAddress(oldEmail, newEmail);
-            RefreshEmails();
+            var entry = emails.FirstOrDefault(e => e.Address == oldEmail);
+            if (entry != null)
+                entry.Address = newEmail;
         }
 
 

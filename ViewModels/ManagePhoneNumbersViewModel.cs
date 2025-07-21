@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -8,11 +9,15 @@ namespace QuoteSwift
         readonly IDataService dataService;
         Business business;
         Customer customer;
-        BindingList<NumberEntry> telephoneNumbers;
-        BindingList<NumberEntry> cellphoneNumbers;
+        readonly BindingList<NumberEntry> telephoneNumbers;
+        readonly BindingList<NumberEntry> cellphoneNumbers;
+        NumberEntry selectedTelephoneNumber;
+        NumberEntry selectedCellphoneNumber;
 
         public ICommand RemoveTelephoneCommand { get; }
         public ICommand RemoveCellphoneCommand { get; }
+        public ICommand RemoveSelectedTelephoneCommand { get; }
+        public ICommand RemoveSelectedCellphoneCommand { get; }
         public ICommand UpdateTelephoneCommand { get; }
         public ICommand UpdateCellphoneCommand { get; }
         public ICommand AddTelephoneCommand { get; }
@@ -22,8 +27,16 @@ namespace QuoteSwift
         public ManagePhoneNumbersViewModel(IDataService service)
         {
             dataService = service;
+            telephoneNumbers = new BindingList<NumberEntry>();
+            cellphoneNumbers = new BindingList<NumberEntry>();
             RemoveTelephoneCommand = new RelayCommand(n => RemoveTelephone(n as string));
             RemoveCellphoneCommand = new RelayCommand(n => RemoveCellphone(n as string));
+            RemoveSelectedTelephoneCommand = new RelayCommand(
+                _ => RemoveTelephone(selectedTelephoneNumber?.Number),
+                _ => selectedTelephoneNumber != null);
+            RemoveSelectedCellphoneCommand = new RelayCommand(
+                _ => RemoveCellphone(selectedCellphoneNumber?.Number),
+                _ => selectedCellphoneNumber != null);
             AddTelephoneCommand = new RelayCommand(n => AddTelephone(n as string));
             AddCellphoneCommand = new RelayCommand(n => AddCellphone(n as string));
             UpdateTelephoneCommand = new RelayCommand(p =>
@@ -60,23 +73,27 @@ namespace QuoteSwift
             }
         }
 
-        public BindingList<NumberEntry> TelephoneNumbers
+        public BindingList<NumberEntry> TelephoneNumbers => telephoneNumbers;
+
+        public NumberEntry SelectedTelephoneNumber
         {
-            get => telephoneNumbers;
-            private set
+            get => selectedTelephoneNumber;
+            set
             {
-                telephoneNumbers = value;
-                OnPropertyChanged(nameof(TelephoneNumbers));
+                if (SetProperty(ref selectedTelephoneNumber, value))
+                    ((RelayCommand)RemoveSelectedTelephoneCommand).RaiseCanExecuteChanged();
             }
         }
 
-        public BindingList<NumberEntry> CellphoneNumbers
+        public BindingList<NumberEntry> CellphoneNumbers => cellphoneNumbers;
+
+        public NumberEntry SelectedCellphoneNumber
         {
-            get => cellphoneNumbers;
-            private set
+            get => selectedCellphoneNumber;
+            set
             {
-                cellphoneNumbers = value;
-                OnPropertyChanged(nameof(CellphoneNumbers));
+                if (SetProperty(ref selectedCellphoneNumber, value))
+                    ((RelayCommand)RemoveSelectedCellphoneCommand).RaiseCanExecuteChanged();
             }
         }
 
@@ -89,89 +106,102 @@ namespace QuoteSwift
 
         void RefreshNumbers()
         {
+            telephoneNumbers.Clear();
+            cellphoneNumbers.Clear();
             if (Business != null)
             {
-                TelephoneNumbers = new BindingList<NumberEntry>();
                 if (Business.BusinessTelephoneNumberList != null)
                     foreach (var n in Business.BusinessTelephoneNumberList)
-                        TelephoneNumbers.Add(new NumberEntry { Number = n });
+                        telephoneNumbers.Add(new NumberEntry { Number = n });
 
-                CellphoneNumbers = new BindingList<NumberEntry>();
                 if (Business.BusinessCellphoneNumberList != null)
                     foreach (var n in Business.BusinessCellphoneNumberList)
-                        CellphoneNumbers.Add(new NumberEntry { Number = n });
+                        cellphoneNumbers.Add(new NumberEntry { Number = n });
             }
             else if (Customer != null)
             {
-                TelephoneNumbers = new BindingList<NumberEntry>();
                 if (Customer.CustomerTelephoneNumberList != null)
                     foreach (var n in Customer.CustomerTelephoneNumberList)
-                        TelephoneNumbers.Add(new NumberEntry { Number = n });
+                        telephoneNumbers.Add(new NumberEntry { Number = n });
 
-                CellphoneNumbers = new BindingList<NumberEntry>();
                 if (Customer.CustomerCellphoneNumberList != null)
                     foreach (var n in Customer.CustomerCellphoneNumberList)
-                        CellphoneNumbers.Add(new NumberEntry { Number = n });
-            }
-            else
-            {
-                TelephoneNumbers = new BindingList<NumberEntry>();
-                CellphoneNumbers = new BindingList<NumberEntry>();
+                        cellphoneNumbers.Add(new NumberEntry { Number = n });
             }
         }
 
         public void RemoveTelephone(string number)
         {
+            if (string.IsNullOrWhiteSpace(number))
+                return;
             if (Business != null)
                 Business.RemoveTelephoneNumber(number);
             else if (Customer != null)
                 Customer.RemoveTelephoneNumber(number);
-            RefreshNumbers();
+            var entry = telephoneNumbers.FirstOrDefault(n => n.Number == number);
+            if (entry != null)
+                telephoneNumbers.Remove(entry);
         }
 
         public void RemoveCellphone(string number)
         {
+            if (string.IsNullOrWhiteSpace(number))
+                return;
             if (Business != null)
                 Business.RemoveCellphoneNumber(number);
             else if (Customer != null)
                 Customer.RemoveCellphoneNumber(number);
-            RefreshNumbers();
+            var entry = cellphoneNumbers.FirstOrDefault(n => n.Number == number);
+            if (entry != null)
+                cellphoneNumbers.Remove(entry);
         }
 
         public void AddTelephone(string number)
         {
+            if (string.IsNullOrWhiteSpace(number))
+                return;
             if (Business != null)
                 Business.AddTelephoneNumber(number);
             else if (Customer != null)
                 Customer.AddTelephoneNumber(number);
-            RefreshNumbers();
+            telephoneNumbers.Add(new NumberEntry { Number = number });
         }
 
         public void AddCellphone(string number)
         {
+            if (string.IsNullOrWhiteSpace(number))
+                return;
             if (Business != null)
                 Business.AddCellphoneNumber(number);
             else if (Customer != null)
                 Customer.AddCellphoneNumber(number);
-            RefreshNumbers();
+            cellphoneNumbers.Add(new NumberEntry { Number = number });
         }
 
         public void UpdateTelephone(string oldNumber, string newNumber)
         {
+            if (string.IsNullOrWhiteSpace(oldNumber) || string.IsNullOrWhiteSpace(newNumber))
+                return;
             if (Business != null)
                 Business.UpdateTelephoneNumber(oldNumber, newNumber);
             else if (Customer != null)
                 Customer.UpdateTelephoneNumber(oldNumber, newNumber);
-            RefreshNumbers();
+            var entry = telephoneNumbers.FirstOrDefault(n => n.Number == oldNumber);
+            if (entry != null)
+                entry.Number = newNumber;
         }
 
         public void UpdateCellphone(string oldNumber, string newNumber)
         {
+            if (string.IsNullOrWhiteSpace(oldNumber) || string.IsNullOrWhiteSpace(newNumber))
+                return;
             if (Business != null)
                 Business.UpdateCellphoneNumber(oldNumber, newNumber);
             else if (Customer != null)
                 Customer.UpdateCellphoneNumber(oldNumber, newNumber);
-            RefreshNumbers();
+            var entry = cellphoneNumbers.FirstOrDefault(n => n.Number == oldNumber);
+            if (entry != null)
+                entry.Number = newNumber;
         }
 
 
