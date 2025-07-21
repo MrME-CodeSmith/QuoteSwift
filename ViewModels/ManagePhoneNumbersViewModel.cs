@@ -13,6 +13,8 @@ namespace QuoteSwift
         readonly BindingList<NumberEntry> cellphoneNumbers;
         NumberEntry selectedTelephoneNumber;
         NumberEntry selectedCellphoneNumber;
+        string newTelephoneNumber;
+        string newCellphoneNumber;
 
         public ICommand RemoveTelephoneCommand { get; }
         public ICommand RemoveCellphoneCommand { get; }
@@ -37,8 +39,12 @@ namespace QuoteSwift
             RemoveSelectedCellphoneCommand = new RelayCommand(
                 _ => RemoveCellphone(selectedCellphoneNumber?.Number),
                 _ => selectedCellphoneNumber != null);
-            AddTelephoneCommand = new RelayCommand(n => AddTelephone(n as string));
-            AddCellphoneCommand = new RelayCommand(n => AddCellphone(n as string));
+            AddTelephoneCommand = new RelayCommand(
+                _ => { AddTelephone(NewTelephoneNumber); NewTelephoneNumber = string.Empty; },
+                _ => !string.IsNullOrWhiteSpace(NewTelephoneNumber));
+            AddCellphoneCommand = new RelayCommand(
+                _ => { AddCellphone(NewCellphoneNumber); NewCellphoneNumber = string.Empty; },
+                _ => !string.IsNullOrWhiteSpace(NewCellphoneNumber));
             UpdateTelephoneCommand = new RelayCommand(p =>
             {
                 if (p is object[] arr && arr.Length == 2 && arr[0] is string oldN && arr[1] is string newN)
@@ -94,6 +100,26 @@ namespace QuoteSwift
             {
                 if (SetProperty(ref selectedCellphoneNumber, value))
                     ((RelayCommand)RemoveSelectedCellphoneCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        public string NewTelephoneNumber
+        {
+            get => newTelephoneNumber;
+            set
+            {
+                if (SetProperty(ref newTelephoneNumber, value))
+                    ((RelayCommand)AddTelephoneCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        public string NewCellphoneNumber
+        {
+            get => newCellphoneNumber;
+            set
+            {
+                if (SetProperty(ref newCellphoneNumber, value))
+                    ((RelayCommand)AddCellphoneCommand).RaiseCanExecuteChanged();
             }
         }
 

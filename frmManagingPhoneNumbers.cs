@@ -38,6 +38,12 @@ namespace QuoteSwift
                     viewModel.SelectedCellphoneNumber = null;
             };
 
+            txtNewTelephone.DataBindings.Add("Text", viewModel, nameof(ManagePhoneNumbersViewModel.NewTelephoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtNewCellphone.DataBindings.Add("Text", viewModel, nameof(ManagePhoneNumbersViewModel.NewCellphoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            CommandBindings.Bind(btnAddTelephone, viewModel.AddTelephoneCommand);
+            CommandBindings.Bind(btnAddCellphone, viewModel.AddCellphoneCommand);
+
             CommandBindings.Bind(btnRemoveTelNumber, viewModel.RemoveSelectedTelephoneCommand);
             CommandBindings.Bind(btnRemoveCellNumber, viewModel.RemoveSelectedCellphoneCommand);
         }
@@ -116,63 +122,6 @@ namespace QuoteSwift
             dgvTelephoneNumbers.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
-        private void BtnRemoveTelNumber_Click(object sender, EventArgs e)
-        {
-            string SelectedNumber = viewModel.SelectedTelephoneNumber?.Number ?? string.Empty;
-
-            if (SelectedNumber != "")
-            {
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete this '" + SelectedNumber + "' number from the list?", "REQUEST - Deletion Request"))
-                {
-                    viewModel.RemoveTelephoneCommand.Execute(SelectedNumber);
-                    messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-                }
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid number from the list.", "ERROR - Invalid Selection");
-            }
-        }
-
-        private void BtnRemoveCellNumber_Click(object sender, EventArgs e)
-        {
-            string SelectedNumber = viewModel.SelectedCellphoneNumber?.Number ?? string.Empty;
-            if (SelectedNumber != "")
-            {
-                viewModel.RemoveCellphoneCommand.Execute(SelectedNumber);
-                messageService.ShowInformation("Successfully deleted this '" + SelectedNumber + "' number from the list", "CONFIRMATION - Deletion Success");
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid number from the list.", "ERROR - Invalid Selection");
-            }
-        }
-
-        private void BtnAddTelephone_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtNewTelephone.Text))
-            {
-                viewModel.AddTelephoneCommand.Execute(txtNewTelephone.Text);
-                txtNewTelephone.Clear();
-            }
-            else
-            {
-                messageService.ShowError("Please enter a valid phone number.", "ERROR - Invalid Number");
-            }
-        }
-
-        private void BtnAddCellphone_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtNewCellphone.Text))
-            {
-                viewModel.AddCellphoneCommand.Execute(txtNewCellphone.Text);
-                txtNewCellphone.Clear();
-            }
-            else
-            {
-                messageService.ShowError("Please enter a valid phone number.", "ERROR - Invalid Number");
-            }
-        }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {

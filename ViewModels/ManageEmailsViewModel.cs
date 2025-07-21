@@ -11,6 +11,7 @@ namespace QuoteSwift
         Customer customer;
         readonly BindingList<EmailEntry> emails;
         EmailEntry selectedEmail;
+        string newEmail;
 
         public ICommand AddEmailCommand { get; }
         public ICommand RemoveEmailCommand { get; }
@@ -22,7 +23,9 @@ namespace QuoteSwift
         {
             dataService = service;
             emails = new BindingList<EmailEntry>();
-            AddEmailCommand = new RelayCommand(e => AddEmail(e as string));
+            AddEmailCommand = new RelayCommand(
+                _ => { AddEmail(NewEmail); NewEmail = string.Empty; },
+                _ => !string.IsNullOrWhiteSpace(NewEmail));
             RemoveEmailCommand = new RelayCommand(e => RemoveEmail(e as string));
             RemoveSelectedEmailCommand = new RelayCommand(
                 _ => RemoveEmail(selectedEmail?.Address),
@@ -65,6 +68,16 @@ namespace QuoteSwift
             {
                 if (SetProperty(ref selectedEmail, value))
                     ((RelayCommand)RemoveSelectedEmailCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        public string NewEmail
+        {
+            get => newEmail;
+            set
+            {
+                if (SetProperty(ref newEmail, value))
+                    ((RelayCommand)AddEmailCommand).RaiseCanExecuteChanged();
             }
         }
 
