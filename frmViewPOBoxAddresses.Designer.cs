@@ -68,6 +68,7 @@ namespace QuoteSwift
             this.dgvPOBoxAddresses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvPOBoxAddresses.AutoGenerateColumns = false;
             this.dgvPOBoxAddresses.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvPOBoxAddresses.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvPOBoxAddresses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -121,6 +122,7 @@ namespace QuoteSwift
             // 
             // clmDescription
             // 
+            this.clmDescription.DataPropertyName = "AddressDescription";
             this.clmDescription.HeaderText = "Address Description";
             this.clmDescription.Name = "clmDescription";
             this.clmDescription.ReadOnly = true;
@@ -128,6 +130,7 @@ namespace QuoteSwift
             // 
             // clmNumber
             // 
+            this.clmNumber.DataPropertyName = "AddressStreetNumber";
             this.clmNumber.HeaderText = "Street Number";
             this.clmNumber.Name = "clmNumber";
             this.clmNumber.ReadOnly = true;
@@ -135,6 +138,7 @@ namespace QuoteSwift
             // 
             // clmSuburb
             // 
+            this.clmSuburb.DataPropertyName = "AddressSuburb";
             this.clmSuburb.HeaderText = "Suburb";
             this.clmSuburb.Name = "clmSuburb";
             this.clmSuburb.ReadOnly = true;
@@ -142,6 +146,7 @@ namespace QuoteSwift
             // 
             // clmCity
             // 
+            this.clmCity.DataPropertyName = "AddressCity";
             this.clmCity.HeaderText = "City";
             this.clmCity.Name = "clmCity";
             this.clmCity.ReadOnly = true;
@@ -149,6 +154,7 @@ namespace QuoteSwift
             // 
             // clmAreaCode
             // 
+            this.clmAreaCode.DataPropertyName = "AddressAreaCode";
             this.clmAreaCode.HeaderText = "Area Code";
             this.clmAreaCode.Name = "clmAreaCode";
             this.clmAreaCode.ReadOnly = true;

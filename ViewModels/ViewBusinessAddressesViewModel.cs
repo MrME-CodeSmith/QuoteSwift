@@ -1,31 +1,42 @@
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
     public class ViewBusinessAddressesViewModel : ViewModelBase
     {
         readonly IDataService dataService;
-        BindingList<Business> businesses;
+        readonly BindingList<Address> addresses = new BindingList<Address>();
+        Business business;
+        Customer customer;
         bool changeSpecificObject;
-        public ICommand LoadDataCommand { get; }
 
 
         public ViewBusinessAddressesViewModel(IDataService service)
         {
             dataService = service;
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
         }
 
         public IDataService DataService => dataService;
 
-        public BindingList<Business> Businesses
+        public BindingList<Address> Addresses => addresses;
+
+        public Business Business
         {
-            get => businesses;
+            get => business;
             private set
             {
-                businesses = value;
-                OnPropertyChanged(nameof(Businesses));
+                business = value;
+                OnPropertyChanged(nameof(Business));
+            }
+        }
+
+        public Customer Customer
+        {
+            get => customer;
+            private set
+            {
+                customer = value;
+                OnPropertyChanged(nameof(Customer));
             }
         }
 
@@ -45,14 +56,26 @@ namespace QuoteSwift
 
         public bool IsReadOnly => !changeSpecificObject;
 
-        public void LoadData()
+        public void UpdateData(Business business = null, Customer customer = null)
         {
-            LoadDataAsync().GetAwaiter().GetResult();
+            Business = business;
+            Customer = customer;
+            RefreshAddresses();
         }
 
-        public async Task LoadDataAsync()
+        void RefreshAddresses()
         {
-            Businesses = await dataService.LoadBusinessListAsync();
+            addresses.Clear();
+            if (Business != null && Business.BusinessAddressList != null)
+            {
+                foreach (var a in Business.BusinessAddressList)
+                    addresses.Add(a);
+            }
+            else if (Customer != null && Customer.CustomerDeliveryAddressList != null)
+            {
+                foreach (var a in Customer.CustomerDeliveryAddressList)
+                    addresses.Add(a);
+            }
         }
 
     }

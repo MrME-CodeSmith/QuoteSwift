@@ -50,6 +50,7 @@ namespace QuoteSwift
             this.DgvViewAllBusinessAddresses.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.DgvViewAllBusinessAddresses.AutoGenerateColumns = false;
             this.DgvViewAllBusinessAddresses.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.DgvViewAllBusinessAddresses.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.DgvViewAllBusinessAddresses.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -68,6 +69,7 @@ namespace QuoteSwift
             // 
             // ClmAddressDescription
             // 
+            this.ClmAddressDescription.DataPropertyName = "AddressDescription";
             this.ClmAddressDescription.HeaderText = "Address Description";
             this.ClmAddressDescription.Name = "ClmAddressDescription";
             this.ClmAddressDescription.ReadOnly = true;
@@ -75,6 +77,7 @@ namespace QuoteSwift
             // 
             // ClmStreetNumber
             // 
+            this.ClmStreetNumber.DataPropertyName = "AddressStreetNumber";
             this.ClmStreetNumber.HeaderText = "Street Number";
             this.ClmStreetNumber.Name = "ClmStreetNumber";
             this.ClmStreetNumber.ReadOnly = true;
@@ -82,6 +85,7 @@ namespace QuoteSwift
             // 
             // ClmStreetName
             // 
+            this.ClmStreetName.DataPropertyName = "AddressStreetName";
             this.ClmStreetName.HeaderText = "Street Name";
             this.ClmStreetName.Name = "ClmStreetName";
             this.ClmStreetName.ReadOnly = true;
@@ -89,6 +93,7 @@ namespace QuoteSwift
             // 
             // ClmSuburb
             // 
+            this.ClmSuburb.DataPropertyName = "AddressSuburb";
             this.ClmSuburb.HeaderText = "Suburb";
             this.ClmSuburb.Name = "ClmSuburb";
             this.ClmSuburb.ReadOnly = true;
@@ -96,6 +101,7 @@ namespace QuoteSwift
             // 
             // ClmCity
             // 
+            this.ClmCity.DataPropertyName = "AddressCity";
             this.ClmCity.HeaderText = "City";
             this.ClmCity.Name = "ClmCity";
             this.ClmCity.ReadOnly = true;
@@ -103,6 +109,7 @@ namespace QuoteSwift
             // 
             // ClmAreaCode
             // 
+            this.ClmAreaCode.DataPropertyName = "AddressAreaCode";
             this.ClmAreaCode.HeaderText = "Area Code";
             this.ClmAreaCode.Name = "ClmAreaCode";
             this.ClmAreaCode.ReadOnly = true;
