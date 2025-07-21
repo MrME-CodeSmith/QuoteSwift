@@ -147,12 +147,12 @@ namespace QuoteSwift
                         }
                         catch
                         {
-                            DialogResult dr = MessageBox.Show(
+                            bool proceed = messageService.RequestConfirmation(
                                 "The exported quote needs to be saved but the file it needs to save to seems to be already opened.\n" +
                                 "Please close the file then click the 'OK' button or alternatively click the 'Cancel' button to stop the quote from being exported.",
-                                "Quote Excel Workbook Already Open", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                                "Quote Excel Workbook Already Open");
 
-                            if (dr != DialogResult.OK)
+                            if (!proceed)
                             {
                                 messageService?.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
                                 return;
