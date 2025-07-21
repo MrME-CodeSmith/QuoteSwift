@@ -112,7 +112,6 @@ namespace QuoteSwift
             this.btnAddCustomer.TabIndex = 26;
             this.btnAddCustomer.Text = "Add Customer";
             this.btnAddCustomer.UseVisualStyleBackColor = true;
-            this.btnAddCustomer.Click += new System.EventHandler(this.BtnAddCustomer_Click);
             // 
             // gbxEmailRelated
             // 

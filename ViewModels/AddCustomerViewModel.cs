@@ -19,6 +19,7 @@ namespace QuoteSwift
 
         public ICommand AddCustomerCommand { get; }
         public ICommand UpdateCustomerCommand { get; }
+        public ICommand SaveCustomerCommand { get; }
         public ICommand LoadDataCommand { get; }
 
         public OperationResult LastResult
@@ -80,6 +81,24 @@ namespace QuoteSwift
                     var r = UpdateCustomer(b, name);
                     LastResult = r;
                     LastOperationSuccessful = r.Success;
+                }
+            });
+            SaveCustomerCommand = new RelayCommand(p =>
+            {
+                if (ChangeSpecificObject)
+                {
+                    if (p is object[] arr && arr.Length == 2 && arr[0] is Business b && arr[1] is string name)
+                    {
+                        var r = UpdateCustomer(b, name);
+                        LastResult = r;
+                        LastOperationSuccessful = r.Success;
+                    }
+                }
+                else
+                {
+                    var result = AddCustomer(p as Business);
+                    LastResult = result;
+                    LastOperationSuccessful = result.Success;
                 }
             });
             LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());

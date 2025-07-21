@@ -677,7 +677,6 @@ namespace QuoteSwift
             this.btnAddBusiness.TabIndex = 26;
             this.btnAddBusiness.Text = "Add Business";
             this.btnAddBusiness.UseVisualStyleBackColor = true;
-            this.btnAddBusiness.Click += new System.EventHandler(this.BtnAddBusiness_Click);
             // 
             // btnCancel
             // 

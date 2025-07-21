@@ -31,6 +31,7 @@ namespace QuoteSwift
             mtxtNewPumpPrice.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.NewPumpPrice), true, DataSourceUpdateMode.OnPropertyChanged);
             mandatorySource.DataSource = viewModel.SelectedMandatoryParts;
             nonMandatorySource.DataSource = viewModel.SelectedNonMandatoryParts;
+            CommandBindings.Bind(btnAddPump, viewModel.SavePumpCommand);
             if (data != null)
                 viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
                                      data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
@@ -45,52 +46,6 @@ namespace QuoteSwift
                     appData?.PartList,
                     appData?.QuoteMap);
 
-        private void BtnAddPump_Click(object sender, EventArgs e)
-        {
-            if (!viewModel.ValidateInput())
-                return;
-
-            var newPumpParts = new BindingList<Pump_Part>(viewModel.SelectedMandatoryParts.Concat(viewModel.SelectedNonMandatoryParts).ToList());
-
-            if (newPumpParts.Count == 0)
-            {
-                messageService.ShowError("There wasn't any parts chosen from any of the lists below\nPlease ensure that parts are selected and/or that there is parts available to select from.", "ERROR - No Pump Part Selection");
-                return;
-            }
-
-            viewModel.CurrentPump.PartList = newPumpParts;
-
-            bool result;
-            if (viewModel.ChangeSpecificObject)
-            {
-                viewModel.UpdatePumpCommand.Execute(null);
-                result = viewModel.LastOperationSuccessful;
-                if (result)
-                {
-                    messageService.ShowInformation(viewModel.PumpToChange.PumpName + " has been updated in the list of pumps", "INFORMATION - Pump Update Successfully");
-                    viewModel.ChangeSpecificObject = false;
-                    ConvertToViewForm();
-                    updatePumpToolStripMenuItem.Enabled = true;
-                }
-                else
-                {
-                    messageService.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
-                }
-            }
-            else
-            {
-                viewModel.AddPumpCommand.Execute(null);
-                result = viewModel.LastOperationSuccessful;
-                if (result)
-                {
-                    messageService.ShowInformation(viewModel.CurrentPump.PumpName + " has been added to the list of pumps", "INFORMATION - Pump Added Successfully");
-                }
-                else
-                {
-                    messageService.ShowError("This item name is already in use.", "ERROR - Duplicate Item Name");
-                }
-            }
-        }
 
 
         private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
