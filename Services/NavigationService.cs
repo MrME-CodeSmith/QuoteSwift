@@ -97,7 +97,7 @@ namespace QuoteSwift
         {
             var vm = new AddCustomerViewModel(dataService, notificationService);
             vm.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
-            using (var form = new FrmAddCustomer(vm, this, appData, businessToChange, messageService, serializationService))
+            using (var form = new FrmAddCustomer(vm, this, businessToChange, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -119,7 +119,7 @@ namespace QuoteSwift
             var vm = new AddBusinessViewModel(dataService);
             vm.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
             vm.LoadData();
-            using (var form = new FrmAddBusiness(vm, this, appData, messageService, serializationService))
+            using (var form = new FrmAddBusiness(vm, this, messageService, serializationService))
             {
                 form.ShowDialog();
             }
@@ -141,7 +141,7 @@ namespace QuoteSwift
         {
             var vm = new ViewBusinessAddressesViewModel(dataService);
             vm.UpdateData(business, customer);
-            using (var form = new FrmViewBusinessAddresses(vm, this, appData, business, customer, messageService))
+            using (var form = new FrmViewBusinessAddresses(vm, this, business, customer, messageService))
             {
                 form.ShowDialog();
             }
@@ -202,6 +202,11 @@ namespace QuoteSwift
             {
                 form.ShowDialog();
             }
+        }
+
+        public void SaveAllData()
+        {
+            appData.SaveAll();
         }
     }
 }

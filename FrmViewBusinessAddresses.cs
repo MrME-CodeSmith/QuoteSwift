@@ -9,7 +9,6 @@ namespace QuoteSwift
 
         readonly ViewBusinessAddressesViewModel viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
         readonly Business business;
         readonly Customer customer;
@@ -28,12 +27,11 @@ namespace QuoteSwift
             CommandBindings.Bind(BtnRemoveSelected, viewModel.RemoveSelectedAddressCommand);
         }
 
-        public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, Business business = null, Customer customer = null, IMessageService messageService = null)
+        public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, Business business = null, Customer customer = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            appData = data;
             this.messageService = messageService;
             this.business = business;
             this.customer = customer;
@@ -44,7 +42,7 @@ namespace QuoteSwift
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                appData.SaveAll();
+                navigation?.SaveAllData();
                 Application.Exit();
             }
         }
@@ -91,7 +89,7 @@ namespace QuoteSwift
             }
 
             var vm = new EditBusinessAddressViewModel(business, customer, address);
-            using (var form = new FrmEditBusinessAddress(vm, appData))
+            using (var form = new FrmEditBusinessAddress(vm, messageService))
             {
                 form.ShowDialog();
             }
@@ -130,7 +128,7 @@ namespace QuoteSwift
 
         private void FrmViewBusinessAddresses_FormClosing(object sender, FormClosingEventArgs e)
         {
-            appData.SaveAll();
+            navigation?.SaveAllData();
         }
 
 

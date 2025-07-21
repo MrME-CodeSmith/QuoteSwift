@@ -10,16 +10,14 @@ namespace QuoteSwift
 
         readonly AddBusinessViewModel viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
 
-        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            this.appData = appData;
             this.serializationService = serializationService;
             this.messageService = messageService;
 
@@ -30,11 +28,10 @@ namespace QuoteSwift
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                serializationService.CloseApplication(true,
-                    appData?.BusinessList,
-                    appData?.PumpList,
-                    appData?.PartList,
-                    appData?.QuoteMap);
+            {
+                navigation?.SaveAllData();
+                Application.Exit();
+            }
         }
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
@@ -234,12 +231,7 @@ namespace QuoteSwift
 
         private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
         {
-            serializationService.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
-
+            navigation?.SaveAllData();
         }
 
         private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)

@@ -10,18 +10,16 @@ namespace QuoteSwift
 
         readonly AddCustomerViewModel viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
 
         Business Container;
 
-        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, Business container = null, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, Business container = null, IMessageService messageService = null, ISerializationService serializationService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            this.appData = appData;
             this.serializationService = serializationService;
             this.messageService = messageService;
             this.Container = container;
@@ -35,12 +33,9 @@ namespace QuoteSwift
         {
             if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
             {
-                serializationService.CloseApplication(true,
-                    appData?.BusinessList,
-                    appData?.PumpList,
-                    appData?.PartList,
-                    appData?.QuoteMap);
-        }
+                navigation?.SaveAllData();
+                Application.Exit();
+            }
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
@@ -233,13 +228,10 @@ namespace QuoteSwift
 
         private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            serializationService.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
+            navigation?.SaveAllData();
+        }
 
-        /** Form Specific Functions And Procedures: 
+        /** Form Specific Functions And Procedures:
        *
        * Note: Not all Functions or Procedures below are used more than once
        *       Some of them are only to keep the above events readable 
