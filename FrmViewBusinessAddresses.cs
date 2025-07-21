@@ -88,11 +88,7 @@ namespace QuoteSwift
                 return;
             }
 
-            var vm = new EditBusinessAddressViewModel(business, customer, address);
-            using (var form = new FrmEditBusinessAddress(vm, messageService))
-            {
-                form.ShowDialog();
-            }
+            navigation?.EditBusinessAddress(business, customer, address);
 
             viewModel.UpdateData(business, customer);
         }
