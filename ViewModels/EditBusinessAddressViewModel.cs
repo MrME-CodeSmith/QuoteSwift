@@ -5,9 +5,9 @@ namespace QuoteSwift
 {
     public class EditBusinessAddressViewModel : ViewModelBase
     {
-        readonly Business business;
-        readonly Customer customer;
-        readonly Address address;
+        Business business;
+        Customer customer;
+        Address address;
 
         string addressDescription = string.Empty;
         int streetNumber;
@@ -71,19 +71,7 @@ namespace QuoteSwift
 
         public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null)
         {
-            this.business = business;
-            this.customer = customer;
-            this.address = address;
-
-            if (address != null)
-            {
-                AddressDescription = address.AddressDescription;
-                StreetNumber = address.AddressStreetNumber;
-                StreetName = address.AddressStreetName;
-                Suburb = address.AddressSuburb;
-                City = address.AddressCity;
-                AreaCode = address.AddressAreaCode;
-            }
+            Initialize(business, customer, address);
 
             UpdateAddressCommand = new RelayCommand(_ =>
             {
@@ -100,6 +88,23 @@ namespace QuoteSwift
                 var r = UpdateAddress(updated);
                 LastResult = r;
             });
+        }
+
+        public void Initialize(Business business = null, Customer customer = null, Address address = null)
+        {
+            this.business = business;
+            this.customer = customer;
+            this.address = address;
+
+            if (address != null)
+            {
+                AddressDescription = address.AddressDescription;
+                StreetNumber = address.AddressStreetNumber;
+                StreetName = address.AddressStreetName;
+                Suburb = address.AddressSuburb;
+                City = address.AddressCity;
+                AreaCode = address.AddressAreaCode;
+            }
         }
 
         public Business Business => business;
