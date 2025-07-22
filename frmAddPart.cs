@@ -8,6 +8,7 @@ namespace QuoteSwift
     {
 
         readonly AddPartViewModel viewModel;
+        public AddPartViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
 
         readonly ApplicationData appData;

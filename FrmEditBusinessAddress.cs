@@ -7,6 +7,7 @@ namespace QuoteSwift
     {
         readonly IMessageService messageService;
         readonly EditBusinessAddressViewModel viewModel;
+        public EditBusinessAddressViewModel ViewModel => viewModel;
 
         public FrmEditBusinessAddress(EditBusinessAddressViewModel viewModel, IMessageService messageService = null)
         {

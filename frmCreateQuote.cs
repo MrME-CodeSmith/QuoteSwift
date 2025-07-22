@@ -13,6 +13,7 @@ namespace QuoteSwift
     public partial class FrmCreateQuote : BaseForm
     {
         readonly CreateQuoteViewModel viewModel;
+        public CreateQuoteViewModel ViewModel => viewModel;
         readonly ApplicationData appData;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
@@ -24,7 +25,7 @@ namespace QuoteSwift
         readonly BindingSource nonMandatorySource = new BindingSource();
 
 
-        public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, IMessageService messageService = null, ISerializationService serializationService = null)
             : base(messageService)
         {
             InitializeComponent();
@@ -32,10 +33,14 @@ namespace QuoteSwift
             appData = data;
             this.messageService = messageService;
             this.serializationService = serializationService;
-            this.quoteToChange = quoteToChange;
-            this.changeSpecificObject = changeSpecificObject;
             SetupBindings();
             BindIsBusy(viewModel);
+        }
+
+        public void Initialize(Quote quoteToChange = null, bool changeSpecificObject = false)
+        {
+            this.quoteToChange = quoteToChange;
+            this.changeSpecificObject = changeSpecificObject;
         }
 
         private async void BtnComplete_Click(object sender, EventArgs e)

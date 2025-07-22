@@ -8,6 +8,7 @@ namespace QuoteSwift // Repair Quote Swift
     {
 
         readonly ViewPumpViewModel viewModel;
+        public ViewPumpViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly BindingSource pumpBindingSource = new BindingSource();

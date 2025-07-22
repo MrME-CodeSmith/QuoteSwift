@@ -8,6 +8,7 @@ namespace QuoteSwift
 
         readonly IMessageService messageService;
         readonly EditEmailAddressViewModel viewModel;
+        public EditEmailAddressViewModel ViewModel => viewModel;
 
         public FrmEditEmailAddress(EditEmailAddressViewModel viewModel, IMessageService messageService = null)
         {

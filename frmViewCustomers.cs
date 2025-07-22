@@ -7,6 +7,7 @@ namespace QuoteSwift
     public partial class FrmViewCustomers : BaseForm
     {
         readonly ViewCustomersViewModel viewModel;
+        public ViewCustomersViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
         readonly ISerializationService serializationService;
