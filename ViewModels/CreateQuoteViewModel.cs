@@ -502,11 +502,6 @@ namespace QuoteSwift
                 $"ATT: {SelectedCustomerDeliveryAddress.AddressStreetName}\n{SelectedCustomerDeliveryAddress.AddressSuburb}\n{SelectedCustomerDeliveryAddress.AddressCity}" :
                 string.Empty;
 
-        public void LoadData()
-        {
-            LoadDataAsync().GetAwaiter().GetResult();
-        }
-
         public async Task LoadDataAsync()
         {
             PartList = await dataService.LoadPartListAsync();

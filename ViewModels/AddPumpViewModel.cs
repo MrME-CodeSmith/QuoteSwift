@@ -119,11 +119,6 @@ namespace QuoteSwift
 
         public BindingList<Pump_Part> SelectedNonMandatoryParts { get; }
 
-        public void LoadData()
-        {
-            LoadDataAsync().GetAwaiter().GetResult();
-        }
-
         public async Task LoadDataAsync()
         {
             PumpList = await dataService.LoadPumpListAsync();

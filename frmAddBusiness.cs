@@ -70,9 +70,9 @@ namespace QuoteSwift
             viewModel.ViewPhoneNumbersCommand.Execute(null);
         }
 
-        private void FrmAddBusiness_Load(object sender, EventArgs e)
+        private async void FrmAddBusiness_Load(object sender, EventArgs e)
         {
-            viewModel.LoadData();
+            await viewModel.LoadDataAsync();
             if (viewModel.BusinessToChange != null && viewModel.ChangeSpecificObject) // Change Existing Business Info
             {
                 viewModel.CurrentBusiness = viewModel.BusinessToChange;

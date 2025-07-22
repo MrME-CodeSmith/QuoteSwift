@@ -70,9 +70,9 @@ namespace QuoteSwift
             }
 
 
-        private void FrmAddCustomer_Load(object sender, EventArgs e)
+        private async void FrmAddCustomer_Load(object sender, EventArgs e)
         {
-            viewModel.LoadData();
+            await viewModel.LoadDataAsync();
             if (viewModel.BusinessList != null)
             {
                 BindingSource source = new BindingSource { DataSource = viewModel.BusinessList };
