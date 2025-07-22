@@ -15,6 +15,7 @@ namespace QuoteSwift
         BindingList<Pump> pumps;
         BindingList<Business> businesses;
         SortedDictionary<string, Quote> quoteMap;
+        string nextQuoteNumber;
         Business selectedBusiness;
         Customer selectedCustomer;
         Pump selectedPump;
@@ -102,6 +103,7 @@ namespace QuoteSwift
             {
                 quoteMap = value;
                 OnPropertyChanged(nameof(QuoteMap));
+                UpdateNextQuoteNumber();
             }
         }
 
@@ -332,6 +334,12 @@ namespace QuoteSwift
         {
             get => quoteNumber;
             set => SetProperty(ref quoteNumber, value);
+        }
+
+        public string NextQuoteNumber
+        {
+            get => nextQuoteNumber;
+            private set => SetProperty(ref nextQuoteNumber, value);
         }
 
         public Pricing Pricing
@@ -607,6 +615,60 @@ namespace QuoteSwift
             return part?.Price ?? 0m;
         }
 
+        public void UpdateNextQuoteNumber()
+        {
+            NextQuoteNumber = ComputeNextQuoteNumber();
+        }
+
+        string ComputeNextQuoteNumber()
+        {
+            if (QuoteMap == null || QuoteMap.Count == 0)
+                return null;
+
+            int last = 0;
+            foreach (var q in QuoteMap.Values)
+            {
+                int num = ParseQuoteNumber(q);
+                if (num > last)
+                    last = num;
+            }
+            return $"TRR{last + 1}";
+        }
+
+        int ParseQuoteNumber(Quote quote)
+        {
+            if (quote == null)
+                return 0;
+
+            return ParseQuoteNumber(quote.QuoteNumber);
+        }
+
+        int ParseQuoteNumber(string quoteNumber)
+        {
+            if (string.IsNullOrWhiteSpace(quoteNumber))
+                return 0;
+
+            if (quoteNumber.Contains("_"))
+            {
+                if (quoteNumber.Contains("TRR"))
+                {
+                    int pos = quoteNumber.IndexOf("TRR") + 3;
+                    string number = quoteNumber.Substring(pos);
+                    int underscore = number.IndexOf("_");
+                    if (underscore >= 0)
+                        number = number.Remove(underscore);
+                    return ParsingService.ParseInt(number);
+                }
+            }
+            else if (quoteNumber.Contains("TRR"))
+            {
+                int pos = quoteNumber.IndexOf("TRR") + 3;
+                string number = quoteNumber.Substring(pos);
+                return ParsingService.ParseInt(number);
+            }
+            return 0;
+        }
+
         bool DistinctQuote(Quote quote)
         {
             if (QuoteMap != null)
@@ -721,6 +783,7 @@ namespace QuoteSwift
 
             QuoteMap[quote.QuoteNumber] = quote;
             dataService.SaveQuotes(QuoteMap);
+            UpdateNextQuoteNumber();
             return true;
         }
 

@@ -112,7 +112,8 @@ namespace QuoteSwift
 
                 Text = Text.Replace("<< Business Name >>", viewModel.SelectedBusiness.BusinessName);
 
-                GetNewQuotenumber();
+                if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
+                    viewModel.QuoteNumber = viewModel.NextQuoteNumber;
             }
             else //Create New
             {
@@ -125,7 +126,8 @@ namespace QuoteSwift
                 LoadBusinessLegalDatails();
                 LoadCustomerDeliveryAddress();
                 LoadCustomerPOBoxAddress();
-                GetNewQuotenumber();
+                if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
+                    viewModel.QuoteNumber = viewModel.NextQuoteNumber;
 
                 viewModel.QuoteCreationDate = DateTime.Today;
                 viewModel.QuoteExpiryDate = viewModel.QuoteCreationDate.AddMonths(2);
@@ -368,7 +370,8 @@ namespace QuoteSwift
             if (cbxUseAutomaticNumberingScheme.Checked)
             {
                 txtQuoteNumber.ReadOnly = true;
-                GetNewQuotenumber();
+                if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
+                    viewModel.QuoteNumber = viewModel.NextQuoteNumber;
             }
             else
             {
@@ -409,50 +412,6 @@ namespace QuoteSwift
             UseWaitCursor = false;
         }
 
-        private void GetNewQuotenumber()
-        {
-            if (viewModel.QuoteMap != null && viewModel.QuoteMap.Count > 0)
-            {
-                Quote temp = viewModel.QuoteMap.First().Value;
-                int LastQuoteNumber = GetQuoteNumber(ref temp);
-                foreach (var q in viewModel.QuoteMap.Values.Skip(1))
-                {
-                    temp = q;
-                    if (LastQuoteNumber < GetQuoteNumber(ref temp)) LastQuoteNumber = GetQuoteNumber(ref temp);
-                }
-                LastQuoteNumber++;
-                viewModel.QuoteNumber = "TRR" + LastQuoteNumber.ToString();
-            }
-        }
-
-        int GetQuoteNumber(ref Quote q)
-        {
-            if (q != null)
-            {
-                string QuoteNumber = q.QuoteNumber;
-                if (QuoteNumber.Contains("_"))
-                {
-                    if (QuoteNumber.Contains("TRR")) //23612
-                    {
-                        int pos = QuoteNumber.IndexOf("TRR") + 3;
-                        string Number = QuoteNumber.Substring(pos, QuoteNumber.Length - pos);
-                        pos = Number.IndexOf("_");
-                        Number = Number.Remove(pos, Number.Length - pos);
-                        return ParsingService.ParseInt(Number);
-                    }
-                }
-                else
-                {
-                    if (QuoteNumber.Contains("TRR"))
-                    {
-                        int pos = QuoteNumber.IndexOf("TRR") + 3;
-                        string Number = QuoteNumber.Substring(pos, QuoteNumber.Length - pos);
-                        return ParsingService.ParseInt(Number);
-                    }
-                }
-            }
-            return 0;
-        }
 
         private void LoadFromPassedObject()
         {
@@ -507,7 +466,8 @@ namespace QuoteSwift
             if (quoteToChange == null) quoteToChange = NewQuote;
             changeSpecificObject = true;
             ConvertToReadWrite();
-            GetNewQuotenumber();
+            if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
+                viewModel.QuoteNumber = viewModel.NextQuoteNumber;
             btnComplete.Text = "Complete";
         }
 
