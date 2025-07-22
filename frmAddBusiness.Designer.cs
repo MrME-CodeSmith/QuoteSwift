@@ -128,7 +128,6 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // gbxBusinessInformation
             // 
@@ -261,7 +260,6 @@ namespace QuoteSwift
             this.btnViewAll.TabIndex = 14;
             this.btnViewAll.Text = "View All Numbers";
             this.btnViewAll.UseVisualStyleBackColor = true;
-            this.btnViewAll.Click += new System.EventHandler(this.BtnViewAll_Click);
             // 
             // mtxtCellphoneNumber
             // 
@@ -366,7 +364,6 @@ namespace QuoteSwift
             this.btnViewAddresses.TabIndex = 10;
             this.btnViewAddresses.Text = "View All Addresses";
             this.btnViewAddresses.UseVisualStyleBackColor = true;
-            this.btnViewAddresses.Click += new System.EventHandler(this.BtnViewAddresses_Click);
             // 
             // lblAreaCode
             // 
@@ -498,7 +495,6 @@ namespace QuoteSwift
             this.btnViewEmailAddresses.TabIndex = 17;
             this.btnViewEmailAddresses.Text = "View All Email Addresses";
             this.btnViewEmailAddresses.UseVisualStyleBackColor = true;
-            this.btnViewEmailAddresses.Click += new System.EventHandler(this.BtnViewEmailAddresses_Click);
             // 
             // mtxtEmail
             // 
@@ -571,7 +567,6 @@ namespace QuoteSwift
             this.btnViewAllPOBoxAddresses.TabIndex = 24;
             this.btnViewAllPOBoxAddresses.Text = "View All Addresses";
             this.btnViewAllPOBoxAddresses.UseVisualStyleBackColor = true;
-            this.btnViewAllPOBoxAddresses.Click += new System.EventHandler(this.BtnViewAllPOBoxAddresses_Click);
             // 
             // txtBusinessPODescription
             // 
@@ -687,7 +682,6 @@ namespace QuoteSwift
             this.btnCancel.TabIndex = 27;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // FrmAddBusiness
             // 
