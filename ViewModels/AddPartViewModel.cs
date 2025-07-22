@@ -105,7 +105,7 @@ namespace QuoteSwift
                 }
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            ImportPartsCommand = new RelayCommand(_ => ImportParts());
+            ImportPartsCommand = new AsyncRelayCommand(_ => ImportPartsAsync());
         }
 
         public IDataService DataService => dataService;
@@ -286,7 +286,7 @@ namespace QuoteSwift
             }
         }
 
-        void ImportParts()
+        async Task ImportPartsAsync()
         {
             if (messageService == null)
                 return;
@@ -318,7 +318,7 @@ namespace QuoteSwift
 
             try
             {
-                ImportPartsFromCsv(file, updateDup);
+                await ImportPartsFromCsvAsync(file, updateDup);
                 messageService.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
             }
             catch
@@ -327,12 +327,15 @@ namespace QuoteSwift
             }
         }
 
-        public void ImportPartsFromCsv(string file, bool updateDuplicates)
+        public async Task ImportPartsFromCsvAsync(string file, bool updateDuplicates)
         {
-            using (var parser = new TextFieldParser(file))
+            IsBusy = true;
+            try
             {
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
+                using (var parser = new TextFieldParser(file))
+                {
+                    parser.TextFieldType = FieldType.Delimited;
+                    parser.SetDelimiters(",");
 
                 while (!parser.EndOfData)
                 {
@@ -415,6 +418,10 @@ namespace QuoteSwift
                         Pumps = PumpList;
                     }
                 }
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

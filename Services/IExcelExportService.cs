@@ -2,6 +2,6 @@ namespace QuoteSwift
 {
     public interface IExcelExportService
     {
-        void ExportQuoteToExcel(Quote quote);
+        System.Threading.Tasks.Task ExportQuoteToExcelAsync(Quote quote);
     }
 }

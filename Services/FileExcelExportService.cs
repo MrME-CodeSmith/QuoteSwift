@@ -18,7 +18,7 @@ namespace QuoteSwift
         }
 
         [STAThread]
-        public void ExportQuoteToExcel(Quote quote)
+        public System.Threading.Tasks.Task ExportQuoteToExcelAsync(Quote quote)
         {
             if (quote == null) return;
 
@@ -190,6 +190,8 @@ namespace QuoteSwift
                 if (workbook != null) Marshal.ReleaseComObject(workbook);
                 if (excelApp != null) Marshal.ReleaseComObject(excelApp);
             }
+
+            return System.Threading.Tasks.Task.CompletedTask;
         }
     }
 }
