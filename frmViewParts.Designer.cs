@@ -138,7 +138,6 @@ namespace QuoteSwift
             this.btnAddPart.TabIndex = 2;
             this.btnAddPart.Text = "Add Part";
             this.btnAddPart.UseVisualStyleBackColor = true;
-            this.btnAddPart.Click += new System.EventHandler(this.BtnAddPart_Click);
             // 
             // btnRemovePart
             // 
@@ -150,7 +149,6 @@ namespace QuoteSwift
             this.btnRemovePart.TabIndex = 3;
             this.btnRemovePart.Text = "Remove Selected Part";
             this.btnRemovePart.UseVisualStyleBackColor = true;
-            this.btnRemovePart.Click += new System.EventHandler(this.BtnRemovePart_Click);
             // 
             // btnViewSelectedPart
             // 
@@ -162,7 +160,6 @@ namespace QuoteSwift
             this.btnViewSelectedPart.TabIndex = 4;
             this.btnViewSelectedPart.Text = "View Selected Part";
             this.btnViewSelectedPart.UseVisualStyleBackColor = true;
-            this.btnViewSelectedPart.Click += new System.EventHandler(this.BtnUpdateSelectedPart_Click);
             // 
             // BtnCancel
             // 
