@@ -23,6 +23,7 @@ namespace QuoteSwift
 
             DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.FormTitle));
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            BindIsBusy(viewModel);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

@@ -35,6 +35,7 @@ namespace QuoteSwift
             this.quoteToChange = quoteToChange;
             this.changeSpecificObject = changeSpecificObject;
             SetupBindings();
+            BindIsBusy(viewModel);
         }
 
         private void BtnComplete_Click(object sender, EventArgs e)

@@ -23,6 +23,7 @@ namespace QuoteSwift
             quotesBindingSource.DataSource = viewModel.Quotes;
             dgvPreviousQuotes.DataSource = quotesBindingSource;
             SetupBindings();
+            BindIsBusy(viewModel);
         }
 
         void SetupBindings()
