@@ -21,7 +21,7 @@ namespace QuoteSwift
             mandatoryParts = new BindingList<Part>();
             nonMandatoryParts = new BindingList<Part>();
             allParts = new BindingList<Part>();
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
+            LoadDataCommand = CreateLoadCommand(LoadDataAsync);
         }
 
         public IDataService DataService => dataService;

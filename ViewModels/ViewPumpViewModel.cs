@@ -20,7 +20,7 @@ namespace QuoteSwift
         {
             dataService = service;
             serializationService = serializer;
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
+            LoadDataCommand = CreateLoadCommand(LoadDataAsync);
         }
 
         public IDataService DataService => dataService;

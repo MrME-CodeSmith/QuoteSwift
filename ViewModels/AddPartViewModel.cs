@@ -98,7 +98,7 @@ namespace QuoteSwift
                     ResetInput();
                 }
             });
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
+            LoadDataCommand = CreateLoadCommand(LoadDataAsync);
         }
 
         public IDataService DataService => dataService;

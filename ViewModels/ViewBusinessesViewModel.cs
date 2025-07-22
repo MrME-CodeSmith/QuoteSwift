@@ -14,7 +14,7 @@ namespace QuoteSwift
         public ViewBusinessesViewModel(IDataService service)
         {
             dataService = service;
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
+            LoadDataCommand = CreateLoadCommand(LoadDataAsync);
         }
 
         public IDataService DataService => dataService;

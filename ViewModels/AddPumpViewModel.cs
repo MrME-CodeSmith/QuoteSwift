@@ -99,7 +99,7 @@ namespace QuoteSwift
                 else
                     LastOperationSuccessful = AddPump();
             });
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
+            LoadDataCommand = CreateLoadCommand(LoadDataAsync);
         }
 
         public IDataService DataService => dataService;
