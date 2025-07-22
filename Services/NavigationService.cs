@@ -95,7 +95,7 @@ namespace QuoteSwift
 
         public void AddCustomer(Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddCustomerViewModel(dataService, notificationService);
+            var vm = new AddCustomerViewModel(dataService, notificationService, this, messageService);
             vm.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
             using (var form = new FrmAddCustomer(vm, this, businessToChange, messageService, serializationService))
             {
@@ -116,7 +116,7 @@ namespace QuoteSwift
 
         public void AddBusiness(Business businessToChange = null, bool changeSpecificObject = false)
         {
-            var vm = new AddBusinessViewModel(dataService);
+            var vm = new AddBusinessViewModel(dataService, this, messageService);
             vm.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
             vm.LoadData();
             using (var form = new FrmAddBusiness(vm, this, messageService, serializationService))
@@ -139,7 +139,7 @@ namespace QuoteSwift
 
         public void ViewBusinessesAddresses(Business business = null, Customer customer = null)
         {
-            var vm = new ViewBusinessAddressesViewModel(dataService);
+            var vm = new ViewBusinessAddressesViewModel(dataService, this, messageService);
             vm.UpdateData(business, customer);
             using (var form = new FrmViewBusinessAddresses(vm, this, business, customer, messageService))
             {
