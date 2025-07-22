@@ -34,6 +34,7 @@ namespace QuoteSwift
             mandatorySource.DataSource = viewModel.SelectedMandatoryParts;
             nonMandatorySource.DataSource = viewModel.SelectedNonMandatoryParts;
             CommandBindings.Bind(btnAddPump, viewModel.SavePumpCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
             if (data != null)
                 viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
                                      data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
@@ -41,13 +42,9 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                serializationService.CloseApplication(true,
-                    appData?.BusinessList,
-                    appData?.PumpList,
-                    appData?.PartList,
-                    appData?.QuoteMap);
-
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
+        }
 
 
         private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
@@ -224,11 +221,8 @@ namespace QuoteSwift
 
         protected override void OnClose()
         {
-            serializationService.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace QuoteSwift
         readonly INotificationService notificationService;
         readonly IMessageService messageService;
         readonly IFileDialogService fileDialogService;
+        readonly INavigationService navigation;
         Dictionary<string, Part> partMap;
         BindingList<Pump> pumpList;
         Part partToChange;
@@ -28,6 +29,7 @@ namespace QuoteSwift
         public ICommand SavePartCommand { get; }
         public ICommand LoadDataCommand { get; }
         public ICommand ImportPartsCommand { get; }
+        public ICommand ExitCommand { get; }
 
         public bool LastOperationSuccessful
         {
@@ -58,12 +60,14 @@ namespace QuoteSwift
 
 
         public AddPartViewModel(IDataService service, INotificationService notifier,
-                                IMessageService messenger = null, IFileDialogService dialogService = null)
+                                IMessageService messenger = null, IFileDialogService dialogService = null,
+                                INavigationService navigation = null)
         {
             dataService = service;
             notificationService = notifier;
             messageService = messenger;
             fileDialogService = dialogService;
+            this.navigation = navigation;
             CurrentPart = new Part();
             SavePartCommand = new RelayCommand(_ =>
             {
@@ -106,6 +110,11 @@ namespace QuoteSwift
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ImportPartsCommand = new AsyncRelayCommand(_ => ImportPartsAsync());
+            ExitCommand = new RelayCommand(_ =>
+            {
+                navigation?.SaveAllData();
+                System.Windows.Forms.Application.Exit();
+            });
         }
 
         public IDataService DataService => dataService;

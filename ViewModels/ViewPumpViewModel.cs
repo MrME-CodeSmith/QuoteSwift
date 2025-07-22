@@ -24,6 +24,7 @@ namespace QuoteSwift
         public ICommand UpdatePumpCommand { get; }
         public ICommand RemovePumpCommand { get; }
         public ICommand ExportInventoryCommand { get; }
+        public ICommand ExitCommand { get; }
 
 
         public ViewPumpViewModel(IDataService service, ISerializationService serializer,
@@ -40,6 +41,11 @@ namespace QuoteSwift
             UpdatePumpCommand = new RelayCommand(_ => UpdatePump(), _ => SelectedPump != null);
             RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
             ExportInventoryCommand = new AsyncRelayCommand(_ => ExportInventoryActionAsync());
+            ExitCommand = new RelayCommand(_ =>
+            {
+                navigation?.SaveAllData();
+                System.Windows.Forms.Application.Exit();
+            });
         }
 
         public IDataService DataService => dataService;

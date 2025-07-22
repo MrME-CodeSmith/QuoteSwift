@@ -10,6 +10,7 @@ namespace QuoteSwift
         Business business;
         Customer customer;
         readonly BindingList<EmailEntry> emails;
+        readonly INavigationService navigation;
         EmailEntry selectedEmail;
         string newEmail;
 
@@ -17,11 +18,13 @@ namespace QuoteSwift
         public ICommand RemoveEmailCommand { get; }
         public ICommand RemoveSelectedEmailCommand { get; }
         public ICommand UpdateEmailCommand { get; }
+        public ICommand ExitCommand { get; }
 
 
-        public ManageEmailsViewModel(IDataService service)
+        public ManageEmailsViewModel(IDataService service, INavigationService navigation = null)
         {
             dataService = service;
+            this.navigation = navigation;
             emails = new BindingList<EmailEntry>();
             AddEmailCommand = new RelayCommand(
                 _ => { AddEmail(NewEmail); NewEmail = string.Empty; },
@@ -34,6 +37,11 @@ namespace QuoteSwift
             {
                 if (p is object[] arr && arr.Length == 2 && arr[0] is string oldE && arr[1] is string newE)
                     UpdateEmail(oldE, newE);
+            });
+            ExitCommand = new RelayCommand(_ =>
+            {
+                navigation?.SaveAllData();
+                System.Windows.Forms.Application.Exit();
             });
         }
 

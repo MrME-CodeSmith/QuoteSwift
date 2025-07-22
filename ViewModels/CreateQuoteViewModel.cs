@@ -11,6 +11,7 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INotificationService notificationService;
         readonly IExcelExportService excelExportService;
+        readonly INavigationService navigation;
         Dictionary<string, Part> partList;
         BindingList<Pump> pumps;
         BindingList<Business> businesses;
@@ -55,6 +56,7 @@ namespace QuoteSwift
         public ICommand SaveQuoteCommand { get; }
         public ICommand LoadDataCommand { get; }
         public ICommand ExportQuoteCommand { get; }
+        public ICommand ExitCommand { get; }
 
         Quote lastCreatedQuote;
         public Quote LastCreatedQuote
@@ -71,15 +73,24 @@ namespace QuoteSwift
         }
 
 
-        public CreateQuoteViewModel(IDataService service, INotificationService notifier, IExcelExportService excelExporter)
+        public CreateQuoteViewModel(IDataService service,
+                                    INotificationService notifier,
+                                    IExcelExportService excelExporter,
+                                    INavigationService navigation = null)
         {
             dataService = service;
             notificationService = notifier;
             excelExportService = excelExporter;
+            this.navigation = navigation;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
             SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ExportQuoteCommand = new AsyncRelayCommand(q => ExportQuoteToTemplateAsync(q as Quote));
+            ExitCommand = new RelayCommand(_ =>
+            {
+                navigation?.SaveAllData();
+                System.Windows.Forms.Application.Exit();
+            });
         }
 
         public IDataService DataService => dataService;
