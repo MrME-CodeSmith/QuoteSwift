@@ -11,6 +11,7 @@ namespace QuoteSwift
         readonly ViewBusinessesViewModel viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly BindingSource businessBindingSource = new BindingSource();
 
         public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
@@ -18,6 +19,14 @@ namespace QuoteSwift
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
+            SetupBindings();
+        }
+
+        void SetupBindings()
+        {
+            businessBindingSource.DataSource = viewModel;
+            businessBindingSource.DataMember = nameof(ViewBusinessesViewModel.Businesses);
+            DgvBusinessList.DataSource = businessBindingSource;
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -39,8 +48,6 @@ namespace QuoteSwift
 
             navigation.AddBusiness(Business, false);
 
-            LoadInformation();
-
         }
 
         private void BtnAddBusiness_Click(object sender, EventArgs e)
@@ -48,18 +55,10 @@ namespace QuoteSwift
             Hide();
             navigation.AddBusiness();
             Show();
-
-            LoadInformation();
         }
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {
-            if (viewModel.Businesses != null)
-            {
-                foreach (var business in viewModel.Businesses)
-                    DgvBusinessList.Rows.Add(business.BusinessName);
-            }
-
             DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
             DgvBusinessList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
@@ -74,8 +73,6 @@ namespace QuoteSwift
                 {
                     viewModel.RemoveBusiness(business);
                     messageService.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
-
-                    LoadInformation();
                 }
             }
         }
@@ -89,34 +86,12 @@ namespace QuoteSwift
 
         private Business GetBusinessSelection()
         {
-            if (DgvBusinessList.CurrentCell == null || DgvBusinessList.CurrentRow == null)
-                return null;
-
-            int iGridSelection = DgvBusinessList.CurrentCell.RowIndex;
-            if (iGridSelection < 0 || iGridSelection >= DgvBusinessList.Rows.Count)
-                return null;
-
-            string searchName = DgvBusinessList.Rows[iGridSelection].Cells[0].Value?.ToString();
-            if (string.IsNullOrEmpty(searchName))
-                return null;
-
-            if (viewModel.Businesses != null)
-            {
-                return viewModel.Businesses.FirstOrDefault(b => b.BusinessName == searchName);
-            }
-
-            return null;
+            return DgvBusinessList.CurrentRow?.DataBoundItem as Business;
         }
 
         private void LoadInformation()
         {
-            DgvBusinessList.Rows.Clear();
-
-            if (viewModel.Businesses != null)
-                foreach (var business in viewModel.Businesses)
-                {
-                    DgvBusinessList.Rows.Add(business.BusinessName);
-                }
+            // Binding handled automatically via businessBindingSource
         }
 
 
