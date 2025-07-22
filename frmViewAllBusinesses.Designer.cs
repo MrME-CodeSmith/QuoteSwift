@@ -84,6 +84,7 @@ namespace QuoteSwift
             // 
             // clmBusinessName
             // 
+            this.clmBusinessName.DataPropertyName = "BusinessName";
             this.clmBusinessName.HeaderText = "Business Name";
             this.clmBusinessName.Name = "clmBusinessName";
             this.clmBusinessName.ReadOnly = true;
