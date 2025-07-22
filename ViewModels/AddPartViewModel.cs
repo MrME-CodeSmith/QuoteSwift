@@ -46,6 +46,14 @@ namespace QuoteSwift
 
         public bool IsEditing => changeSpecificObject;
 
+        public bool IsViewing => partToChange != null && !changeSpecificObject;
+
+        public bool IsAdding => partToChange == null && !changeSpecificObject;
+
+        public bool ShowSaveButton => !IsViewing;
+
+        public string SaveButtonText => changeSpecificObject ? "Update Part" : "Add Part";
+
         public string FormTitle
         {
             get
@@ -141,6 +149,10 @@ namespace QuoteSwift
                     partToChange = value;
                     OnPropertyChanged(nameof(PartToChange));
                     OnPropertyChanged(nameof(FormTitle));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                 }
             }
         }
@@ -156,8 +168,12 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
                     OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
                     OnPropertyChanged(nameof(CanEdit));
                     OnPropertyChanged(nameof(FormTitle));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                 }
             }
         }

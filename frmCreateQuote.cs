@@ -45,7 +45,7 @@ namespace QuoteSwift
 
         private async void BtnComplete_Click(object sender, EventArgs e)
         {
-            if (!changeSpecificObject && quoteToChange != null)
+            if (!viewModel.ChangeSpecificObject && viewModel.QuoteToChange != null)
             {
                 NewQuote = quoteToChange;
                 await ExportQuoteToTemplateAsync(NewQuote);
@@ -69,7 +69,8 @@ namespace QuoteSwift
                     }
 
                     quoteToChange = NewQuote;
-                    ConvertToReadOnly();
+                    viewModel.QuoteToChange = NewQuote;
+                    viewModel.ChangeSpecificObject = false;
                     createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
                 }
                 else
@@ -100,13 +101,14 @@ namespace QuoteSwift
         private async void FrmCreateQuote_Load(object sender, EventArgs e)
         {
             await viewModel.LoadDataAsync();
-            if (!changeSpecificObject && quoteToChange != null) // View Quote
+            viewModel.QuoteToChange = quoteToChange;
+            viewModel.ChangeSpecificObject = changeSpecificObject;
+            if (viewModel.IsViewing)
             {
                 LoadFromPassedObject();
-                ConvertToReadOnly();
                 createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
             }
-            else if (changeSpecificObject && quoteToChange != null)//Create New Quote Using Passed Quote
+            else if (viewModel.IsEditing && viewModel.QuoteToChange != null)
             {
                 LoadFromPassedObject();
 
@@ -260,6 +262,17 @@ namespace QuoteSwift
             BindingHelpers.BindText(lblCustomerPOBoxAreaCode, viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxAreaCodeDisplay));
             BindingHelpers.BindText(lblCustomerVendorNumber, viewModel, nameof(CreateQuoteViewModel.CustomerVendorNumberDisplay));
 
+            gbxBusinessInformation.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
+            gbxBusinessPOBoxDetails.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
+            gbxQuoteNumberManagement.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
+            gbxCustomerDeliveryAddressInformation.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
+            gbxPumpRestorationDetails.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
+            BindingHelpers.BindReadOnly(dgvMandatoryPartReplacement, viewModel, nameof(CreateQuoteViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(DgvNonMandatoryPartReplacement, viewModel, nameof(CreateQuoteViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(cbxPumpSelection, viewModel, nameof(CreateQuoteViewModel.IsEditing));
+            BindingHelpers.BindVisible(btnComplete, viewModel, nameof(CreateQuoteViewModel.ShowSaveButton));
+            btnComplete.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.SaveButtonText));
+
             UpdatePricingDisplay();
             CommandBindings.Bind(btnComplete, viewModel.SaveQuoteCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
@@ -328,47 +341,16 @@ namespace QuoteSwift
             UpdatePricingDisplay();
         }
 
-        private void ConvertToReadOnly()
-        {
-            ControlStateHelper.ApplyReadOnly(Controls, true);
-            cbxPumpSelection.Enabled = false;
-
-            dgvMandatoryPartReplacement.ReadOnly = true;
-            DgvNonMandatoryPartReplacement.ReadOnly = true;
-
-            dgvMandatoryPartReplacement.Enabled = true;
-            DgvNonMandatoryPartReplacement.Enabled = true;
-
-            pnlPumpDetails.Enabled = true;
-            cbxPumpSelection.Enabled = false;
-
-            btnComplete.Text = "Export";
-            btnComplete.Enabled = true;
-            btnCancel.Enabled = true;
-
-            Text = Text.Replace("<< Business Name >>", quoteToChange.QuoteCompany.BusinessName);
-            Text = Text.Replace("Creating New", "Viewing");
-        }
-
-        private void ConvertToReadWrite()
-        {
-            ControlStateHelper.ApplyReadOnly(Controls, false);
-            cbxPumpSelection.Enabled = true;
-
-            Text = Text.Replace(quoteToChange.QuoteCompany.BusinessName, quoteToChange.QuoteCompany.BusinessName);
-            Text = Text.Replace("Viewing", "Creating New");
-
-        }
+        // View-model bindings manage read-only state
 
 
         private void CreateNewQuoteUsingThisQuoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (quoteToChange == null) quoteToChange = NewQuote;
-            changeSpecificObject = true;
-            ConvertToReadWrite();
+            viewModel.QuoteToChange = quoteToChange;
+            viewModel.ChangeSpecificObject = true;
             if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
                 viewModel.QuoteNumber = viewModel.NextQuoteNumber;
-            btnComplete.Text = "Complete";
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

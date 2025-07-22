@@ -50,57 +50,39 @@ namespace QuoteSwift
         private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
             if (!viewModel.ChangeSpecificObject)
-                ChangeViewToEdit();
+                viewModel.ChangeSpecificObject = true;
         }
 
         private void MtxtPumpDescription_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
             if (!viewModel.ChangeSpecificObject)
-                ChangeViewToEdit();
+                viewModel.ChangeSpecificObject = true;
         }
 
         private void MtxtNewPumpPrice_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
             if (!viewModel.ChangeSpecificObject)
-                ChangeViewToEdit();
+                viewModel.ChangeSpecificObject = true;
         }
 
         private void DgvMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (!viewModel.ChangeSpecificObject)
-                ChangeViewToEdit();
+                viewModel.ChangeSpecificObject = true;
         }
 
         private void DgvNonMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (!viewModel.ChangeSpecificObject)
-                ChangeViewToEdit();
+                viewModel.ChangeSpecificObject = true;
         }
 
         private void FrmAddPump_Load(object sender, EventArgs e)
         {
             SetupBindings();
 
-            if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == true) //Determine if Edit
-            {
-                ConvertToEditForm();
-                Read_OnlyMainComponents();
-            }
-            else if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == false) //Determine if View
-            {
-                ConvertToViewForm();
-                Read_OnlyMainComponents();
-            }
-            else if (viewModel.PumpToChange == null && viewModel.ChangeSpecificObject == false) // Determine if Add New
-            {
+            if (viewModel.PumpToChange == null)
                 mtxtPumpName.Focus();
-            }
-            else //This should never happen. Error message displayed and application will not allow input
-            {
-                messageService.ShowError("An error occurred that was not suppose to ever happen.\nAll input will now be disabled for this current screen", "ERROR - Undefined Action Called");
-
-                Read_OnlyMainComponents();
-            }
 
             dgvMandatoryPartView.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvMandatoryPartView.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
@@ -116,50 +98,6 @@ namespace QuoteSwift
         *       and clutter free.                                                          
         */
 
-        //Disable Main Components On This Form:
-
-        void Read_OnlyMainComponents()
-        {
-            dgvMandatoryPartView.ReadOnly = true;
-            dgvNonMandatoryPartView.ReadOnly = true;
-            mtxtNewPumpPrice.ReadOnly = true;
-            mtxtPumpDescription.ReadOnly = true;
-            mtxtPumpName.ReadOnly = true;
-            btnAddPump.Enabled = false;
-        }
-
-        //Enable Main Components On This Form:
-
-        void ReadWriteMainComponents()
-        {
-            dgvMandatoryPartView.ReadOnly = false;
-            dgvNonMandatoryPartView.ReadOnly = false;
-            mtxtNewPumpPrice.ReadOnly = false;
-            mtxtPumpDescription.ReadOnly = false;
-            mtxtPumpName.ReadOnly = false;
-            btnAddPump.Enabled = true;
-        }
-
-        //Convert Form To Edit:
-
-        void ConvertToEditForm()
-        {
-            ReadWriteMainComponents();
-            Text = "Updating " + viewModel.PumpToChange.PumpName + " Pump";
-            btnAddPump.Text = "Update Pump";
-            btnAddPump.Visible = true;
-            updatePumpToolStripMenuItem.Enabled = true;
-        }
-
-        //Convert Form To View:
-
-        void ConvertToViewForm()
-        {
-            Text = "Viewing " + viewModel.PumpToChange.PumpName + " Pump";
-            btnAddPump.Visible = false;
-            Read_OnlyMainComponents();
-            updatePumpToolStripMenuItem.Enabled = false;
-        }
 
         void SetupBindings()
         {
@@ -180,24 +118,19 @@ namespace QuoteSwift
             dataGridViewTextBoxColumn4.DataPropertyName = "PumpPart.PartPrice";
             clmNMPartQuantity.DataPropertyName = nameof(Pump_Part.PumpPartQuantity);
             dgvNonMandatoryPartView.DataSource = nonMandatorySource;
+
+            BindingHelpers.BindReadOnly(mtxtPumpName, viewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtPumpDescription, viewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtNewPumpPrice, viewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(dgvMandatoryPartView, viewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(dgvNonMandatoryPartView, viewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(btnAddPump, viewModel, nameof(AddPumpViewModel.CanEdit));
+            BindingHelpers.BindVisible(btnAddPump, viewModel, nameof(AddPumpViewModel.ShowSaveButton));
+            btnAddPump.DataBindings.Add("Text", viewModel, nameof(AddPumpViewModel.SaveButtonText));
         }
 
 
-        void ChangeViewToEdit()
-        {
-            if (viewModel.PumpToChange != null && viewModel.ChangeSpecificObject == false)
-                if (messageService.RequestConfirmation("You are currently viewing " + viewModel.PumpToChange.PumpName + " pump, would you like to edit it instead?", "REQUEST - View To Edit REQUEST"))
-                {
-                    ConvertToEditForm();
-                    viewModel.ChangeSpecificObject = true;
-                }
-        }
-
-        decimal NewPumpValueInput()
-        {
-            decimal.TryParse(mtxtNewPumpPrice.Text, out decimal TempNewPumpPrice);
-            return TempNewPumpPrice;
-        }
+        // No additional logic required - bindings handle state changes
 
 
 
@@ -210,7 +143,7 @@ namespace QuoteSwift
         private void UpdatePumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!viewModel.ChangeSpecificObject)
-                ChangeViewToEdit();
+                viewModel.ChangeSpecificObject = true;
             updatePumpToolStripMenuItem.Enabled = false;
         }
 
