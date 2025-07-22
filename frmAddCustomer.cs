@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmAddCustomer : Form
+    public partial class FrmAddCustomer : BaseForm
     {
 
         readonly AddCustomerViewModel viewModel;
@@ -15,6 +15,7 @@ namespace QuoteSwift
         Business Container;
 
         public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, Business container = null, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -143,10 +144,6 @@ namespace QuoteSwift
 
 
 
-        private void FrmAddCustomer_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            navigation?.SaveAllData();
-        }
 
         /** Form Specific Functions And Procedures:
        *

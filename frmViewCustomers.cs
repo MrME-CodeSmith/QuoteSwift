@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmViewCustomers : Form
+    public partial class FrmViewCustomers : BaseForm
     {
         readonly ViewCustomersViewModel viewModel;
         readonly INavigationService navigation;
@@ -13,6 +13,7 @@ namespace QuoteSwift
         readonly IMessageService messageService;
         readonly BindingSource customersBindingSource = new BindingSource();
         public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -138,7 +139,7 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmViewCustomers_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnClose()
         {
             serializationService.CloseApplication(true,
                 appData?.BusinessList,

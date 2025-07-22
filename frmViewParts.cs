@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmViewParts : Form
+    public partial class FrmViewParts : BaseForm
     {
 
         readonly ViewPartsViewModel viewModel;
@@ -16,6 +16,7 @@ namespace QuoteSwift
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
         public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -87,7 +88,7 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnClose()
         {
             if (viewModel.SaveChangesCommand.CanExecute(null))
                 viewModel.SaveChangesCommand.Execute(null);
