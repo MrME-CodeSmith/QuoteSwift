@@ -42,7 +42,8 @@ namespace QuoteSwift
             BindingHelpers.BindReadOnly(mtxtNewPartNumber, viewModel, nameof(AddPartViewModel.IsReadOnly));
             BindingHelpers.BindReadOnly(mtxtPartPrice, viewModel, nameof(AddPartViewModel.IsReadOnly));
             BindingHelpers.BindEnabled(cbxMandatoryPart, viewModel, nameof(AddPartViewModel.CanEdit));
-            BindingHelpers.BindVisible(btnAddPart, viewModel, nameof(AddPartViewModel.CanEdit));
+            BindingHelpers.BindVisible(btnAddPart, viewModel, nameof(AddPartViewModel.ShowSaveButton));
+            btnAddPart.DataBindings.Add("Text", viewModel, nameof(AddPartViewModel.SaveButtonText));
 
             cbAddToPumpSelection.DataSource = viewModel.Pumps;
             cbAddToPumpSelection.DisplayMember = nameof(Pump.PumpName);
@@ -87,18 +88,12 @@ namespace QuoteSwift
 
         private void FrmAddPart_Load(object sender, EventArgs e)
         {
-            if (viewModel.ChangeSpecificObject && viewModel.PartToChange != null)
+            if (viewModel.PartToChange == null)
             {
                 viewModel.ChangeSpecificObject = true;
-                btnAddPart.Text = "Update";
-                updatePartToolStripMenuItem.Enabled = false;
             }
-            else if (!viewModel.ChangeSpecificObject && viewModel.PartToChange != null)
-            {
-                viewModel.ChangeSpecificObject = false;
-                btnAddPart.Visible = false;
-                updatePartToolStripMenuItem.Enabled = true;
-            }
+
+            updatePartToolStripMenuItem.Enabled = viewModel.IsViewing;
         }
 
         /** Form Specific Functions And Procedures: 

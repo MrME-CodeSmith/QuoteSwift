@@ -52,6 +52,9 @@ namespace QuoteSwift
         DateTime quoteExpiryDate = DateTime.Today;
         DateTime paymentTerm = DateTime.Today;
 
+        Quote quoteToChange;
+        bool changeSpecificObject;
+
         public ICommand AddQuoteCommand { get; }
         public ICommand SaveQuoteCommand { get; }
         public ICommand LoadDataCommand { get; }
@@ -71,6 +74,53 @@ namespace QuoteSwift
                 }
             }
         }
+
+        public Quote QuoteToChange
+        {
+            get => quoteToChange;
+            set
+            {
+                if (SetProperty(ref quoteToChange, value))
+                {
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
+                }
+            }
+        }
+
+        public bool ChangeSpecificObject
+        {
+            get => changeSpecificObject;
+            set
+            {
+                if (SetProperty(ref changeSpecificObject, value))
+                {
+                    OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
+                    OnPropertyChanged(nameof(CanEdit));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
+                }
+            }
+        }
+
+        public bool IsEditing => changeSpecificObject;
+
+        public bool IsViewing => quoteToChange != null && !changeSpecificObject;
+
+        public bool IsAdding => quoteToChange == null && !changeSpecificObject;
+
+        public bool IsReadOnly => !changeSpecificObject;
+
+        public bool CanEdit => changeSpecificObject;
+
+        public bool ShowSaveButton => true;
+
+        public string SaveButtonText => IsViewing ? "Export" : "Complete";
 
 
         public CreateQuoteViewModel(IDataService service,

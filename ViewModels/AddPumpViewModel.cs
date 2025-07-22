@@ -35,6 +35,14 @@ namespace QuoteSwift
 
         public bool IsEditing => changeSpecificObject;
 
+        public bool IsViewing => pumpToChange != null && !changeSpecificObject;
+
+        public bool IsAdding => pumpToChange == null && !changeSpecificObject;
+
+        public bool ShowSaveButton => !IsViewing;
+
+        public string SaveButtonText => changeSpecificObject ? "Update Pump" : "Add Pump";
+
         public string FormTitle
         {
             get
@@ -61,6 +69,10 @@ namespace QuoteSwift
                     pumpToChange = value;
                     OnPropertyChanged(nameof(PumpToChange));
                     OnPropertyChanged(nameof(FormTitle));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                 }
             }
         }
@@ -77,8 +89,12 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
                     OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
                     OnPropertyChanged(nameof(CanEdit));
                     OnPropertyChanged(nameof(FormTitle));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                 }
             }
         }
