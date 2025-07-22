@@ -9,7 +9,6 @@ namespace QuoteSwift
     {
 
         readonly ViewPartsViewModel viewModel;
-        readonly INavigationService navigation;
 
         readonly BindingSource partsBindingSource = new BindingSource();
 
@@ -20,15 +19,25 @@ namespace QuoteSwift
         {
             InitializeComponent();
             this.viewModel = viewModel;
-            this.navigation = navigation;
             this.serializationService = serializationService;
             appData = data;
             this.messageService = messageService;
             if (appData != null)
                 viewModel.UpdateData(appData.PartList);
+            SetupBindings();
+        }
+
+        void SetupBindings()
+        {
             partsBindingSource.DataSource = viewModel;
             partsBindingSource.DataMember = nameof(ViewPartsViewModel.AllParts);
             dgvAllParts.DataSource = partsBindingSource;
+
+            SelectionBindings.BindSelectedItem(dgvAllParts, viewModel, nameof(ViewPartsViewModel.SelectedPart));
+
+            CommandBindings.Bind(btnAddPart, viewModel.AddPartCommand);
+            CommandBindings.Bind(btnViewSelectedPart, viewModel.UpdatePartCommand);
+            CommandBindings.Bind(btnRemovePart, viewModel.RemovePartCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,53 +49,12 @@ namespace QuoteSwift
                     appData?.PartList,
                     appData?.QuoteMap);
 
-        private void BtnAddPart_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.AddNewPart();
-            Show();
-        }
-
-        private void BtnUpdateSelectedPart_Click(object sender, EventArgs e)
-        {
-            Part objPartSelection = GetSelectedPart();
-
-            if (objPartSelection != null)
-            {
-                Hide();
-                navigation.AddNewPart(objPartSelection, false);
-                Show();
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid Part from the list.", "ERROR - Invalid Selection");
-            }
-        }
-
         private void FrmViewParts_Activated(object sender, EventArgs e)
         {
             if (appData != null)
             {
                 viewModel.UpdateData(appData.PartList);
             }
-        }
-
-        private void BtnRemovePart_Click(object sender, EventArgs e)
-        {
-            Part selectedPart = GetSelectedPart();
-            if (selectedPart != null)
-            {
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + selectedPart.PartName + " part from the list of parts?", "REQUEST - Deletion Request"))
-                {
-                    viewModel.RemovePart(selectedPart);
-                    messageService.ShowInformation("Successfully deleted " + selectedPart.PartName + " from the pump list", "CONFIRMATION - Deletion Success");
-                }
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid Part from the list.", "ERROR - Invalid Selection");
-            }
-
         }
 
         /** Form Specific Functions And Procedures: 
@@ -121,11 +89,8 @@ namespace QuoteSwift
 
         private void FrmViewParts_FormClosing(object sender, FormClosingEventArgs e)
         {
-            serializationService.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
+            if (viewModel.SaveChangesCommand.CanExecute(null))
+                viewModel.SaveChangesCommand.Execute(null);
         }
     }
 }
