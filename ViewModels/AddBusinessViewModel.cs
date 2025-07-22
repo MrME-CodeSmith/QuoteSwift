@@ -162,6 +162,14 @@ namespace QuoteSwift
 
         public bool IsEditing => changeSpecificObject;
 
+        public bool IsViewing => businessToChange != null && !changeSpecificObject;
+
+        public bool IsAdding => businessToChange == null && !changeSpecificObject;
+
+        public bool ShowSaveButton => !IsViewing;
+
+        public string SaveButtonText => changeSpecificObject ? "Update Business" : "Add Business";
+
         public string FormTitle
         {
             get
@@ -371,6 +379,10 @@ namespace QuoteSwift
                     businessToChange = value;
                     OnPropertyChanged(nameof(BusinessToChange));
                     OnPropertyChanged(nameof(FormTitle));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                 }
             }
         }
@@ -386,6 +398,10 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
                     OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                     OnPropertyChanged(nameof(FormTitle));
                 }
             }
@@ -417,8 +433,37 @@ namespace QuoteSwift
                                bool changeSpecificObject = false)
         {
             BusinessList = businessList;
-            this.businessToChange = businessToChange;
-            this.changeSpecificObject = changeSpecificObject;
+            BusinessToChange = businessToChange;
+            ChangeSpecificObject = changeSpecificObject;
+        }
+
+        public bool InitializeCurrentBusiness()
+        {
+            if (IsEditing && BusinessToChange != null)
+            {
+                CurrentBusiness = BusinessToChange;
+                return true;
+            }
+
+            if (IsViewing && BusinessToChange != null)
+            {
+                CurrentBusiness = BusinessToChange;
+                return true;
+            }
+
+            if (IsAdding)
+            {
+                ClearCurrentBusiness();
+                return true;
+            }
+
+            return false;
+        }
+
+        public void EnsureLegalDetails()
+        {
+            if (CurrentBusiness != null && CurrentBusiness.BusinessLegalDetails == null)
+                CurrentBusiness.BusinessLegalDetails = new Legal("", "");
         }
 
         public OperationResult AddBusiness()
