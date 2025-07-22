@@ -194,17 +194,6 @@ namespace QuoteSwift
                 }
         }
 
-        void RecordNewInformation()
-        {
-            if (mtxtPumpName.Text != viewModel.PumpToChange.PumpName) viewModel.PumpToChange.PumpName = mtxtPumpName.Text;
-
-            if (mtxtPumpDescription.Text != viewModel.PumpToChange.PumpDescription) viewModel.PumpToChange.PumpDescription = mtxtPumpDescription.Text;
-
-            if (NewPumpValueInput() != viewModel.PumpToChange.NewPumpPrice) viewModel.PumpToChange.NewPumpPrice = NewPumpValueInput();
-
-            viewModel.PumpToChange.PartList = new BindingList<Pump_Part>(viewModel.SelectedMandatoryParts.Concat(viewModel.SelectedNonMandatoryParts).ToList());
-        }
-
         decimal NewPumpValueInput()
         {
             decimal.TryParse(mtxtNewPumpPrice.Text, out decimal TempNewPumpPrice);
