@@ -14,5 +14,15 @@ namespace QuoteSwift
                 return sfd.ShowDialog() == DialogResult.OK ? sfd.FileName : null;
             }
         }
+
+        public string ShowOpenFileDialog(string filter, string defaultExt)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = filter;
+                ofd.DefaultExt = defaultExt;
+                return ofd.ShowDialog() == DialogResult.OK ? ofd.FileName : null;
+            }
+        }
     }
 }

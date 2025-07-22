@@ -42,6 +42,7 @@ namespace QuoteSwift
             NudQuantity.DataBindings.Add("Value", viewModel, nameof(AddPartViewModel.Quantity), false, DataSourceUpdateMode.OnPropertyChanged);
 
             CommandBindings.Bind(btnAddPart, viewModel.SavePartCommand);
+            CommandBindings.Bind(loadPartBatchToolStripMenuItem, viewModel.ImportPartsCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -59,39 +60,6 @@ namespace QuoteSwift
 
         }
 
-        private void LoadPartBatchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string message = "Please ensure that the selected CSV file has the following items in this exact order:\n\n" +
-                             "First Column: Original Part Number\n" +
-                             "Second Column: Part Name\n" +
-                             "Third Column: Part Description\n" +
-                             "Fourth Column: New Part Number\n" +
-                             "Fifth Column: Part Price\n" +
-                             "Sixth Column: Part Quantity (To add this amount of parts to the pump specified) \n" +
-                             "Seventh Column: TRUE / FALSE value (Mandatory part)\n" +
-                             "Eighth Column: Pump Name(To add a part to a specific pump)\n" +
-                             "Ninth Column: Pump Price (Price when pump is bought new)\n" +
-                             "Click the OK button to select the file or alternative choose cancel to abort this action.";
-
-            bool proceed = messageService.RequestConfirmation(message, "INFORMATION - CSV Batch Part Import");
-
-            if (proceed)
-            {
-                OfdOpenCSVFile.ShowDialog();
-                bool updateDup = messageService.RequestConfirmation("In the case that a duplicate part is being added would you like to update the parts that has already been added before?", "REQUEST - Update Duplicate Part");
-                try
-                {
-                    viewModel.ImportPartsFromCsv(OfdOpenCSVFile.FileName, updateDup);
-                    messageService.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
-                }
-                catch
-                {
-                    messageService.ShowError("The provided CSV File's format is incorrect, please try again once the format has been corrected.", "ERROR - CSV File Format Incorrect");
-                }
-            }
-            else return;
-            Close();
-        }
 
         private void CbAddToPumpSelection_ContextMenuStripChanged(object sender, EventArgs e)
         {
