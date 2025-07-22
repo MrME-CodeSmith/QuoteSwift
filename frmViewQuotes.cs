@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmViewQuotes : Form
+    public partial class FrmViewQuotes : BaseForm
     {
 
         readonly QuotesViewModel viewModel;
@@ -13,6 +13,7 @@ namespace QuoteSwift
         readonly BindingSource quotesBindingSource = new BindingSource();
 
         public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -70,7 +71,7 @@ namespace QuoteSwift
         }
 
         readonly int count = 0;
-        private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnClose()
         {
             viewModel.SaveChanges();
         }

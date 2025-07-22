@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmAddBusiness : Form
+    public partial class FrmAddBusiness : BaseForm
     {
 
         readonly AddBusinessViewModel viewModel;
@@ -13,6 +13,7 @@ namespace QuoteSwift
         readonly ISerializationService serializationService;
 
         public FrmAddBusiness(AddBusinessViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -96,10 +97,6 @@ namespace QuoteSwift
             SetupBindings();
         }
 
-        private void FrmAddBusiness_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            navigation?.SaveAllData();
-        }
 
         private void UpdateBusinessInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {

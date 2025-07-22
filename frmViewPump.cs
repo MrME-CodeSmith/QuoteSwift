@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift // Repair Quote Swift
 {
-    public partial class FrmViewPump : Form
+    public partial class FrmViewPump : BaseForm
     {
 
         readonly ViewPumpViewModel viewModel;
@@ -32,6 +32,7 @@ namespace QuoteSwift // Repair Quote Swift
         }
 
         public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -76,7 +77,7 @@ namespace QuoteSwift // Repair Quote Swift
             //Still Needs Implementation.
         }
 
-        private void FrmViewPump_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnClose()
         {
             viewModel.SaveChanges();
         }

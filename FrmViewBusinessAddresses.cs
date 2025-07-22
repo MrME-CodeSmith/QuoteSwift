@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmViewBusinessAddresses : Form
+    public partial class FrmViewBusinessAddresses : BaseForm
     {
 
         readonly ViewBusinessAddressesViewModel viewModel;
@@ -29,6 +29,7 @@ namespace QuoteSwift
         }
 
         public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, Business business = null, Customer customer = null, IMessageService messageService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -113,10 +114,6 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmViewBusinessAddresses_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            navigation?.SaveAllData();
-        }
 
 
         /**********************************************************************************/

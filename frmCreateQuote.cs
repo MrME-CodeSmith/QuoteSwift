@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmCreateQuote : Form
+    public partial class FrmCreateQuote : BaseForm
     {
         readonly CreateQuoteViewModel viewModel;
         readonly ApplicationData appData;
@@ -25,6 +25,7 @@ namespace QuoteSwift
 
 
         public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, Quote quoteToChange = null, bool changeSpecificObject = false, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -393,13 +394,13 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmCreateQuote_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnClose()
         {
             serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
-    }
+        }
 
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace QuoteSwift
 {
-    public partial class FrmAddPump : Form
+    public partial class FrmAddPump : BaseForm
     {
         readonly AddPumpViewModel viewModel;
         readonly INavigationService navigation;
@@ -18,6 +18,7 @@ namespace QuoteSwift
         readonly BindingSource nonMandatorySource = new BindingSource();
 
         public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -220,13 +221,13 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmAddPump_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnClose()
         {
             serializationService.CloseApplication(true,
                 appData?.BusinessList,
                 appData?.PumpList,
                 appData?.PartList,
                 appData?.QuoteMap);
-
+        }
     }
 }
