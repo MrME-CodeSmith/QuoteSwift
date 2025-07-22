@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace QuoteSwift
 {
@@ -24,31 +21,32 @@ namespace QuoteSwift
             this.messageService = messageService;
             quotesBindingSource.DataSource = viewModel.Quotes;
             dgvPreviousQuotes.DataSource = quotesBindingSource;
+            SetupBindings();
         }
 
-        private void BtnCreateNewQuote_Click(object sender, EventArgs e)
+        void SetupBindings()
         {
-            if (viewModel.BusinessList != null && viewModel.BusinessList.Count > 0 && viewModel.PumpList != null && viewModel.BusinessList[0].BusinessCustomerList != null)
-            {
-                Hide();
-                navigation.CreateNewQuote();
-                viewModel.LoadData();
-                try
-                {
-                    Show();
-                }
-                catch (Exception)
-                {
-                    // Do Nothing - Since this only happens when Application.Exit() is called.
-                }
-            }
-            else
-            {
-                messageService.ShowError("Please ensure that the following information is provided before creating a quote:\n" +
-                                          ">  Business Information.\n" +
-                                          ">  Business' Customer's Information.\n" +
-                                          ">  Pump Information.", "ERROR - Prerequisites Not Met");
-            }
+            SelectionBindings.BindSelectedItem(dgvPreviousQuotes, viewModel, nameof(QuotesViewModel.SelectedQuote));
+
+            CommandBindings.Bind(btnCreateNewQuote, viewModel.CreateQuoteCommand);
+            CommandBindings.Bind(btnViewSelectedQuote, viewModel.ViewQuoteCommand);
+            CommandBindings.Bind(btnCreateNewQuoteOnSelection, viewModel.CreateQuoteFromSelectionCommand);
+
+            CommandBindings.Bind(manageBusinessesToolStripMenuItem, viewModel.ViewBusinessesCommand);
+            CommandBindings.Bind(addNewBusinessToolStripMenuItem, viewModel.AddBusinessCommand);
+            CommandBindings.Bind(ViewAllBusinessesToolStripMenuItem, viewModel.ViewBusinessesCommand);
+
+            CommandBindings.Bind(manageCustomersToolStripMenuItem, viewModel.ViewCustomersCommand);
+            CommandBindings.Bind(addNewCustomerToolStripMenuItem, viewModel.AddCustomerCommand);
+            CommandBindings.Bind(viewAllCustomersToolStripMenuItem, viewModel.ViewCustomersCommand);
+
+            CommandBindings.Bind(managePumpsToolStripMenuItem, viewModel.ViewPumpsCommand);
+            CommandBindings.Bind(createNewPumpToolStripMenuItem, viewModel.CreatePumpCommand);
+            CommandBindings.Bind(viewAllPumpsToolStripMenuItem, viewModel.ViewPumpsCommand);
+
+            CommandBindings.Bind(managePumpPartsToolStripMenuItem, viewModel.ViewPartsCommand);
+            CommandBindings.Bind(addNewPartToolStripMenuItem, viewModel.AddPartCommand);
+            CommandBindings.Bind(viewAllPartsToolStripMenuItem, viewModel.ViewPartsCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -60,187 +58,6 @@ namespace QuoteSwift
                     viewModel.PumpList,
                     viewModel.PartMap,
                     viewModel.QuoteMap);
-        }
-
-        private void ManagePumpsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.ViewAllPumps();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
-            }
-        }
-
-        private void CreateNewPumpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.CreateNewPump();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
-            }
-        }
-
-        private void ViewAllPumpsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            managePumpsToolStripMenuItem.PerformClick();
-        }
-
-        private void AddNewCustomerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.AddCustomer();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
-            }
-        }
-
-        private void ViewAllCustomersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.ViewCustomers();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
-            }
-        }
-
-        private void ManageCustomersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            viewAllCustomersToolStripMenuItem.PerformClick();
-        }
-
-        private void AddNewBusinessToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.AddBusiness();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
-            }
-        }
-
-        private void ViewAllBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.ViewBusinesses();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
-            }
-        }
-
-        private void ManageBusinessesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ViewAllBusinessesToolStripMenuItem.PerformClick();
-        }
-
-        Quote GetSelectedQuote()
-        {
-            if (dgvPreviousQuotes.CurrentCell == null || dgvPreviousQuotes.CurrentRow == null)
-                return null;
-
-            int idx = dgvPreviousQuotes.CurrentCell.RowIndex;
-            if (idx < 0 || idx >= dgvPreviousQuotes.Rows.Count)
-                return null;
-
-            return dgvPreviousQuotes.Rows[idx].DataBoundItem as Quote;
-        }
-
-        private void BtnViewSelectedQuote_Click(object sender, EventArgs e)
-        {
-            if (viewModel.QuoteMap != null)
-            {
-                Quote selected = GetSelectedQuote();
-                if (selected != null)
-                {
-                    Hide();
-                    navigation.CreateNewQuote(selected, false);
-                    viewModel.LoadData();
-                    Show();
-                }
-            }
-        }
-
-        private void BtnCreateNewQuoteOnSelection_Click(object sender, EventArgs e)
-        {
-            if (viewModel.QuoteMap != null)
-            {
-                Quote selected = GetSelectedQuote();
-                if (selected != null)
-                {
-                    this.Hide();
-                    navigation.CreateNewQuote(selected, true);
-                    viewModel.LoadData();
-                    this.Show();
-                }
-            }
-        }
-
-        private void ViewAllPartsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.ViewAllParts();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
-            }
-        }
-
-        private void ManagePumpPartsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            viewAllPartsToolStripMenuItem.PerformClick();
-        }
-
-        private void AddNewPartToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.AddNewPart();
-            viewModel.LoadData();
-            try
-            {
-                Show();
-            }
-            catch (Exception)
-            {
-                // Do Nothing - Since this only happens when Application.Exit() is called.
             }
         }
 

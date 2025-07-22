@@ -17,5 +17,18 @@ namespace QuoteSwift
                     command.Execute(null);
             };
         }
+
+        public static void Bind(ToolStripMenuItem item, ICommand command)
+        {
+            if (item == null || command == null)
+                return;
+            item.Enabled = command.CanExecute(null);
+            command.CanExecuteChanged += (s, e) => item.Enabled = command.CanExecute(null);
+            item.Click += (s, e) =>
+            {
+                if (command.CanExecute(null))
+                    command.Execute(null);
+            };
+        }
     }
 }

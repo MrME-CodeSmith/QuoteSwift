@@ -83,21 +83,18 @@ namespace QuoteSwift
             this.manageBusinessesToolStripMenuItem.Name = "manageBusinessesToolStripMenuItem";
             this.manageBusinessesToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.manageBusinessesToolStripMenuItem.Text = "Manage Businesses";
-            this.manageBusinessesToolStripMenuItem.Click += new System.EventHandler(this.ManageBusinessesToolStripMenuItem_Click);
             // 
             // addNewBusinessToolStripMenuItem
             // 
             this.addNewBusinessToolStripMenuItem.Name = "addNewBusinessToolStripMenuItem";
             this.addNewBusinessToolStripMenuItem.Size = new System.Drawing.Size(205, 24);
             this.addNewBusinessToolStripMenuItem.Text = "Add New Business";
-            this.addNewBusinessToolStripMenuItem.Click += new System.EventHandler(this.AddNewBusinessToolStripMenuItem_Click);
             // 
             // ViewAllBusinessesToolStripMenuItem
             // 
             this.ViewAllBusinessesToolStripMenuItem.Name = "ViewAllBusinessesToolStripMenuItem";
             this.ViewAllBusinessesToolStripMenuItem.Size = new System.Drawing.Size(205, 24);
             this.ViewAllBusinessesToolStripMenuItem.Text = "View All Businesses";
-            this.ViewAllBusinessesToolStripMenuItem.Click += new System.EventHandler(this.ViewAllBusinessesToolStripMenuItem_Click);
             // 
             // manageCustomersToolStripMenuItem
             // 
@@ -107,21 +104,18 @@ namespace QuoteSwift
             this.manageCustomersToolStripMenuItem.Name = "manageCustomersToolStripMenuItem";
             this.manageCustomersToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.manageCustomersToolStripMenuItem.Text = "Manage Customers";
-            this.manageCustomersToolStripMenuItem.Click += new System.EventHandler(this.ManageCustomersToolStripMenuItem_Click);
             // 
             // addNewCustomerToolStripMenuItem
             // 
             this.addNewCustomerToolStripMenuItem.Name = "addNewCustomerToolStripMenuItem";
             this.addNewCustomerToolStripMenuItem.Size = new System.Drawing.Size(207, 24);
             this.addNewCustomerToolStripMenuItem.Text = "Add New Customer";
-            this.addNewCustomerToolStripMenuItem.Click += new System.EventHandler(this.AddNewCustomerToolStripMenuItem_Click);
             // 
             // viewAllCustomersToolStripMenuItem
             // 
             this.viewAllCustomersToolStripMenuItem.Name = "viewAllCustomersToolStripMenuItem";
             this.viewAllCustomersToolStripMenuItem.Size = new System.Drawing.Size(207, 24);
             this.viewAllCustomersToolStripMenuItem.Text = "View All Customers";
-            this.viewAllCustomersToolStripMenuItem.Click += new System.EventHandler(this.ViewAllCustomersToolStripMenuItem_Click);
             // 
             // managePumpsToolStripMenuItem
             // 
@@ -131,21 +125,18 @@ namespace QuoteSwift
             this.managePumpsToolStripMenuItem.Name = "managePumpsToolStripMenuItem";
             this.managePumpsToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.managePumpsToolStripMenuItem.Text = "Manage Pumps";
-            this.managePumpsToolStripMenuItem.Click += new System.EventHandler(this.ManagePumpsToolStripMenuItem_Click);
             // 
             // createNewPumpToolStripMenuItem
             // 
             this.createNewPumpToolStripMenuItem.Name = "createNewPumpToolStripMenuItem";
             this.createNewPumpToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
             this.createNewPumpToolStripMenuItem.Text = "Create New Pump";
-            this.createNewPumpToolStripMenuItem.Click += new System.EventHandler(this.CreateNewPumpToolStripMenuItem_Click);
             // 
             // viewAllPumpsToolStripMenuItem
             // 
             this.viewAllPumpsToolStripMenuItem.Name = "viewAllPumpsToolStripMenuItem";
             this.viewAllPumpsToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
             this.viewAllPumpsToolStripMenuItem.Text = "View All Pumps";
-            this.viewAllPumpsToolStripMenuItem.Click += new System.EventHandler(this.ViewAllPumpsToolStripMenuItem_Click);
             // 
             // managePumpPartsToolStripMenuItem
             // 
@@ -155,21 +146,18 @@ namespace QuoteSwift
             this.managePumpPartsToolStripMenuItem.Name = "managePumpPartsToolStripMenuItem";
             this.managePumpPartsToolStripMenuItem.Size = new System.Drawing.Size(209, 24);
             this.managePumpPartsToolStripMenuItem.Text = "Manage Pump Parts";
-            this.managePumpPartsToolStripMenuItem.Click += new System.EventHandler(this.ManagePumpPartsToolStripMenuItem_Click);
             // 
             // addNewPartToolStripMenuItem
             // 
             this.addNewPartToolStripMenuItem.Name = "addNewPartToolStripMenuItem";
             this.addNewPartToolStripMenuItem.Size = new System.Drawing.Size(169, 24);
             this.addNewPartToolStripMenuItem.Text = "Add New Part";
-            this.addNewPartToolStripMenuItem.Click += new System.EventHandler(this.AddNewPartToolStripMenuItem_Click);
             // 
             // viewAllPartsToolStripMenuItem
             // 
             this.viewAllPartsToolStripMenuItem.Name = "viewAllPartsToolStripMenuItem";
             this.viewAllPartsToolStripMenuItem.Size = new System.Drawing.Size(169, 24);
             this.viewAllPartsToolStripMenuItem.Text = "View All Parts";
-            this.viewAllPartsToolStripMenuItem.Click += new System.EventHandler(this.ViewAllPartsToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
@@ -187,7 +175,6 @@ namespace QuoteSwift
             this.btnCreateNewQuote.TabIndex = 2;
             this.btnCreateNewQuote.Text = "Create New Quote";
             this.btnCreateNewQuote.UseVisualStyleBackColor = true;
-            this.btnCreateNewQuote.Click += new System.EventHandler(this.BtnCreateNewQuote_Click);
             // 
             // btnViewSelectedQuote
             // 
@@ -199,7 +186,6 @@ namespace QuoteSwift
             this.btnViewSelectedQuote.TabIndex = 4;
             this.btnViewSelectedQuote.Text = "View Selected Quote";
             this.btnViewSelectedQuote.UseVisualStyleBackColor = true;
-            this.btnViewSelectedQuote.Click += new System.EventHandler(this.BtnViewSelectedQuote_Click);
             // 
             // btnCreateNewQuoteOnSelection
             // 
@@ -211,7 +197,6 @@ namespace QuoteSwift
             this.btnCreateNewQuoteOnSelection.TabIndex = 5;
             this.btnCreateNewQuoteOnSelection.Text = "Create New Quote On Selection";
             this.btnCreateNewQuoteOnSelection.UseVisualStyleBackColor = true;
-            this.btnCreateNewQuoteOnSelection.Click += new System.EventHandler(this.BtnCreateNewQuoteOnSelection_Click);
             // 
             // dgvPreviousQuotes
             // 

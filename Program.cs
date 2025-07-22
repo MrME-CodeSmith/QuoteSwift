@@ -33,7 +33,7 @@ namespace QuoteSwift
             var navigation = serviceProvider.GetRequiredService<INavigationService>();
             var messenger = serviceProvider.GetRequiredService<IMessageService>();
             var serializationService = serviceProvider.GetRequiredService<ISerializationService>();
-            QuotesViewModel viewModel = new QuotesViewModel(dataService);
+            QuotesViewModel viewModel = new QuotesViewModel(dataService, navigation, messenger);
             viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
 
             Application.EnableVisualStyles();
