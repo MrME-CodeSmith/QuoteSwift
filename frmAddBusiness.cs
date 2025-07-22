@@ -37,12 +37,9 @@ namespace QuoteSwift
 
         void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(AddBusinessViewModel.ChangeSpecificObject) ||
-                e.PropertyName == nameof(AddBusinessViewModel.BusinessToChange))
+            if (e.PropertyName == nameof(AddBusinessViewModel.IsViewing))
             {
-                btnAddBusiness.Visible = viewModel.ChangeSpecificObject || viewModel.BusinessToChange == null;
-                btnAddBusiness.Text = viewModel.ChangeSpecificObject ? "Update Business" : "Add Business";
-                updateBusinessInformationToolStripMenuItem.Enabled = !viewModel.ChangeSpecificObject && viewModel.BusinessToChange != null;
+                updateBusinessInformationToolStripMenuItem.Enabled = viewModel.IsViewing;
             }
         }
 
@@ -74,27 +71,15 @@ namespace QuoteSwift
         private async void FrmAddBusiness_Load(object sender, EventArgs e)
         {
             await viewModel.LoadDataAsync();
-            if (viewModel.BusinessToChange != null && viewModel.ChangeSpecificObject) // Change Existing Business Info
-            {
-                viewModel.CurrentBusiness = viewModel.BusinessToChange;
-            }
-            else if (viewModel.BusinessToChange != null && !viewModel.ChangeSpecificObject) // View Existing Business Info
-            {
-                viewModel.CurrentBusiness = viewModel.BusinessToChange;
-            }
-            else if (viewModel.BusinessToChange == null && !viewModel.ChangeSpecificObject) // Add New Business Info
-            {
-                viewModel.ClearCurrentBusiness();
-            }
-            else // Undefined Use - Show ERROR
+            if (!viewModel.InitializeCurrentBusiness())
             {
                 messageService.ShowError("The form was activated without the correct parameters to have an achievable goal.\nThe Form's input parameters will be disabled to avoid possible data corruption.", "ERROR - Undefined Form Use Called");
                 DisableMainComponents();
             }
 
-            if (viewModel.CurrentBusiness.BusinessLegalDetails == null)
-                viewModel.CurrentBusiness.BusinessLegalDetails = new Legal("", "");
+            viewModel.EnsureLegalDetails();
             SetupBindings();
+            updateBusinessInformationToolStripMenuItem.Enabled = viewModel.IsViewing;
         }
 
 
@@ -144,6 +129,9 @@ namespace QuoteSwift
             gbxLegalInformation.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
             gbxPhoneRelated.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
             gbxPOBoxAddress.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
+
+            btnAddBusiness.DataBindings.Add("Visible", viewModel, nameof(AddBusinessViewModel.ShowSaveButton));
+            btnAddBusiness.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.SaveButtonText));
 
             CommandBindings.Bind(btnAddBusiness, viewModel.SaveBusinessCommand);
             CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
