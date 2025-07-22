@@ -20,20 +20,14 @@ namespace QuoteSwift
             this.navigation = navigation;
             this.serializationService = serializationService;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
 
             DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.FormTitle));
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
             BindIsBusy(viewModel);
         }
 
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-            {
-                navigation?.SaveAllData();
-                Application.Exit();
-            }
-        }
+
 
 
         void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -44,30 +38,7 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
-        }
 
-        private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
-        {
-            viewModel.ViewEmailAddressesCommand.Execute(null);
-        }
-
-        private void BtnViewAddresses_Click(object sender, EventArgs e)
-        {
-            viewModel.ViewAddressesCommand.Execute(null);
-        }
-
-        private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
-        {
-            viewModel.ViewPOBoxAddressesCommand.Execute(null);
-        }
-
-        private void BtnViewAll_Click(object sender, EventArgs e)
-        {
-            viewModel.ViewPhoneNumbersCommand.Execute(null);
-        }
 
         private async void FrmAddBusiness_Load(object sender, EventArgs e)
         {
@@ -136,6 +107,8 @@ namespace QuoteSwift
             CommandBindings.Bind(btnViewAddresses, viewModel.ViewAddressesCommand);
             CommandBindings.Bind(btnViewAllPOBoxAddresses, viewModel.ViewPOBoxAddressesCommand);
             CommandBindings.Bind(btnViewAll, viewModel.ViewPhoneNumbersCommand);
+            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         /**********************************************************************************/

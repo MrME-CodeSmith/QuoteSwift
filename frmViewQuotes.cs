@@ -49,19 +49,9 @@ namespace QuoteSwift
             CommandBindings.Bind(managePumpPartsToolStripMenuItem, viewModel.ViewPartsCommand);
             CommandBindings.Bind(addNewPartToolStripMenuItem, viewModel.AddPartCommand);
             CommandBindings.Bind(viewAllPartsToolStripMenuItem, viewModel.ViewPartsCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-            {
-                serializationService.CloseApplication(true,
-                    viewModel.BusinessList,
-                    viewModel.PumpList,
-                    viewModel.PartMap,
-                    viewModel.QuoteMap);
-            }
-        }
 
         bool columnsConfigured = false;
         private async void FrmViewQuotes_Load(object sender, EventArgs e)

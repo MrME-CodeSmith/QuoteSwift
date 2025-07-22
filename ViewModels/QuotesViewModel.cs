@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Forms;
+
 
 namespace QuoteSwift
 {
@@ -12,6 +14,7 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly ISerializationService serializationService;
         BindingList<Quote> quotes;
         Quote selectedQuote;
 
@@ -32,15 +35,18 @@ namespace QuoteSwift
         public ICommand ViewPumpsCommand { get; }
         public ICommand AddPartCommand { get; }
         public ICommand ViewPartsCommand { get; }
+        public ICommand ExitCommand { get; }
 
 
         public QuotesViewModel(IDataService service,
                                INavigationService navigation = null,
-                               IMessageService messageService = null)
+                               IMessageService messageService = null,
+                               ISerializationService serializationService = null)
         {
             dataService = service;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.serializationService = serializationService;
 
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
 
@@ -55,6 +61,20 @@ namespace QuoteSwift
             ViewPumpsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllPumps(); await LoadDataAsync(); });
             AddPartCommand = new AsyncRelayCommand(async _ => { navigation?.AddNewPart(); await LoadDataAsync(); });
             ViewPartsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllParts(); await LoadDataAsync(); });
+
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination"))
+                {
+                    serializationService?.CloseApplication(true,
+                        BusinessList,
+                        PumpList,
+                        PartMap,
+                        QuoteMap);
+                }
+            });
         }
 
 
