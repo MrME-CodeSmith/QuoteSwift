@@ -61,11 +61,14 @@ namespace QuoteSwift
                     changeSpecificObject = value;
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(CanEdit));
                 }
             }
         }
 
         public bool IsReadOnly => !changeSpecificObject;
+
+        public bool CanEdit => changeSpecificObject;
 
         public void UpdateData(Business business = null, Customer customer = null)
         {

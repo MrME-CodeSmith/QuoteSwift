@@ -24,6 +24,9 @@ namespace QuoteSwift
                     viewModel.SelectedAddress = null;
             };
 
+            BindingHelpers.BindReadOnly(dgvPOBoxAddresses, viewModel, nameof(ViewPOBoxAddressesViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(btnRemoveAddress, viewModel, nameof(ViewPOBoxAddressesViewModel.CanEdit));
+
             CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedAddressCommand);
         }
 
@@ -69,11 +72,6 @@ namespace QuoteSwift
             viewModel.UpdateData(business, customer);
         }
 
-        void ApplyControlState()
-        {
-            ControlStateHelper.ApplyReadOnly(Controls, true);
-        }
-
         private void FrmViewPOBoxAddresses_Load(object sender, EventArgs e)
         {
             if (business != null && business.BusinessPOBoxAddressList != null)
@@ -82,7 +80,6 @@ namespace QuoteSwift
 
                 if (viewModel.IsReadOnly)
                 {
-                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 
@@ -93,7 +90,6 @@ namespace QuoteSwift
 
                 if (viewModel.IsReadOnly)
                 {
-                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 

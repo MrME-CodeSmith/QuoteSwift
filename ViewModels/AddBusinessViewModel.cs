@@ -402,12 +402,15 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(IsAdding));
                     OnPropertyChanged(nameof(ShowSaveButton));
                     OnPropertyChanged(nameof(SaveButtonText));
+                    OnPropertyChanged(nameof(CanEdit));
                     OnPropertyChanged(nameof(FormTitle));
                 }
             }
         }
 
         public bool IsReadOnly => !changeSpecificObject;
+
+        public bool CanEdit => changeSpecificObject;
 
         public Business CurrentBusiness
         {

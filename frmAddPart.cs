@@ -35,6 +35,14 @@ namespace QuoteSwift
             mtxtPartPrice.DataBindings.Add("Value", viewModel.CurrentPart, nameof(Part.PartPrice), false, DataSourceUpdateMode.OnPropertyChanged);
             cbxMandatoryPart.DataBindings.Add("Checked", viewModel.CurrentPart, nameof(Part.MandatoryPart), false, DataSourceUpdateMode.OnPropertyChanged);
 
+            BindingHelpers.BindReadOnly(mtxtPartName, viewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtPartDescription, viewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtOriginalPartNumber, viewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtNewPartNumber, viewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtPartPrice, viewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(cbxMandatoryPart, viewModel, nameof(AddPartViewModel.CanEdit));
+            BindingHelpers.BindVisible(btnAddPart, viewModel, nameof(AddPartViewModel.CanEdit));
+
             cbAddToPumpSelection.DataSource = viewModel.Pumps;
             cbAddToPumpSelection.DisplayMember = nameof(Pump.PumpName);
             cbAddToPumpSelection.ValueMember = nameof(Pump.PumpName);
@@ -84,7 +92,6 @@ namespace QuoteSwift
             if (viewModel.ChangeSpecificObject && viewModel.PartToChange != null)
             {
                 viewModel.ChangeSpecificObject = true;
-                ApplyControlState();
                 btnAddPart.Text = "Update";
                 updatePartToolStripMenuItem.Enabled = false;
             }
@@ -92,7 +99,6 @@ namespace QuoteSwift
             {
                 viewModel.ChangeSpecificObject = false;
                 btnAddPart.Visible = false;
-                ApplyControlState();
                 updatePartToolStripMenuItem.Enabled = true;
             }
         }
@@ -106,21 +112,6 @@ namespace QuoteSwift
 
 
 
-        void ApplyControlState()
-        {
-            bool ro = viewModel.IsReadOnly;
-            mtxtNewPartNumber.ReadOnly = ro;
-            mtxtOriginalPartNumber.ReadOnly = ro;
-            mtxtPartDescription.ReadOnly = ro;
-            mtxtPartName.ReadOnly = ro;
-            mtxtPartPrice.ReadOnly = ro;
-            cbAddToPumpSelection.Enabled = false;
-            NudQuantity.Enabled = false;
-            cbxMandatoryPart.Enabled = !ro;
-            btnAddPart.Visible = !ro;
-            if (!ro)
-                btnAddPart.Text = "Update Part";
-        }
 
         private void UpdatePartToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -128,7 +119,6 @@ namespace QuoteSwift
                 if (messageService.RequestConfirmation("You are currently only viewing " + viewModel.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
                 {
                     viewModel.ChangeSpecificObject = true;
-                    ApplyControlState();
                     updatePartToolStripMenuItem.Enabled = false;
                 }
         }

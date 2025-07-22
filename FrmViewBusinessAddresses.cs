@@ -24,6 +24,10 @@ namespace QuoteSwift
                     viewModel.SelectedAddress = null;
             };
 
+            BindingHelpers.BindReadOnly(DgvViewAllBusinessAddresses, viewModel, nameof(ViewBusinessAddressesViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(BtnRemoveSelected, viewModel, nameof(ViewBusinessAddressesViewModel.CanEdit));
+            BindingHelpers.BindEnabled(BtnChangeAddressInfo, viewModel, nameof(ViewBusinessAddressesViewModel.CanEdit));
+
             CommandBindings.Bind(BtnRemoveSelected, viewModel.RemoveSelectedAddressCommand);
             CommandBindings.Bind(BtnChangeAddressInfo, viewModel.EditAddressCommand);
         }
@@ -57,7 +61,6 @@ namespace QuoteSwift
 
                 if (viewModel.IsReadOnly)
                 {
-                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 
@@ -68,7 +71,6 @@ namespace QuoteSwift
 
                 if (viewModel.IsReadOnly)
                 {
-                    ApplyControlState();
                     BtnCancel.Enabled = true;
                 }
 
@@ -90,11 +92,6 @@ namespace QuoteSwift
             if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
         }
 
-
-        void ApplyControlState()
-        {
-            ControlStateHelper.ApplyReadOnly(Controls, true);
-        }
 
         /** Form Specific Functions And Procedures: 
         *

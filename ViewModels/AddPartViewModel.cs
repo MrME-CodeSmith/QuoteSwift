@@ -147,12 +147,15 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
                     OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(CanEdit));
                     OnPropertyChanged(nameof(FormTitle));
                 }
             }
         }
 
         public bool IsReadOnly => !changeSpecificObject;
+
+        public bool CanEdit => changeSpecificObject;
 
         public BindingList<Part> Parts
         {
