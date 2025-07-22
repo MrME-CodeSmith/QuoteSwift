@@ -32,7 +32,7 @@ namespace QuoteSwift
 
         public void ViewAllQuotes()
         {
-            var vm = new QuotesViewModel(dataService);
+            var vm = new QuotesViewModel(dataService, this, messageService);
             vm.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
             using (var form = new FrmViewQuotes(vm, this, messageService, serializationService))
             {

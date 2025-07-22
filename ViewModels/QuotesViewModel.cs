@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
     public class QuotesViewModel : ViewModelBase
     {
         readonly IDataService dataService;
+        readonly INavigationService navigation;
+        readonly IMessageService messageService;
         BindingList<Quote> quotes;
         Quote selectedQuote;
 
@@ -18,12 +21,40 @@ namespace QuoteSwift
         Dictionary<string, Part> partMap;
 
         public ICommand LoadDataCommand { get; }
+        public ICommand CreateQuoteCommand { get; }
+        public ICommand ViewQuoteCommand { get; }
+        public ICommand CreateQuoteFromSelectionCommand { get; }
+        public ICommand AddBusinessCommand { get; }
+        public ICommand ViewBusinessesCommand { get; }
+        public ICommand AddCustomerCommand { get; }
+        public ICommand ViewCustomersCommand { get; }
+        public ICommand CreatePumpCommand { get; }
+        public ICommand ViewPumpsCommand { get; }
+        public ICommand AddPartCommand { get; }
+        public ICommand ViewPartsCommand { get; }
 
 
-        public QuotesViewModel(IDataService service)
+        public QuotesViewModel(IDataService service,
+                               INavigationService navigation = null,
+                               IMessageService messageService = null)
         {
             dataService = service;
+            this.navigation = navigation;
+            this.messageService = messageService;
+
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
+
+            CreateQuoteCommand = new RelayCommand(_ => CreateQuote());
+            ViewQuoteCommand = new RelayCommand(_ => ViewQuote(), _ => SelectedQuote != null);
+            CreateQuoteFromSelectionCommand = new RelayCommand(_ => CreateQuoteFromSelection(), _ => SelectedQuote != null);
+            AddBusinessCommand = new RelayCommand(_ => { navigation?.AddBusiness(); LoadData(); });
+            ViewBusinessesCommand = new RelayCommand(_ => { navigation?.ViewBusinesses(); LoadData(); });
+            AddCustomerCommand = new RelayCommand(_ => { navigation?.AddCustomer(); LoadData(); });
+            ViewCustomersCommand = new RelayCommand(_ => { navigation?.ViewCustomers(); LoadData(); });
+            CreatePumpCommand = new RelayCommand(_ => { navigation?.CreateNewPump(); LoadData(); });
+            ViewPumpsCommand = new RelayCommand(_ => { navigation?.ViewAllPumps(); LoadData(); });
+            AddPartCommand = new RelayCommand(_ => { navigation?.AddNewPart(); LoadData(); });
+            ViewPartsCommand = new RelayCommand(_ => { navigation?.ViewAllParts(); LoadData(); });
         }
 
 
@@ -42,8 +73,11 @@ namespace QuoteSwift
             get => selectedQuote;
             set
             {
-                selectedQuote = value;
-                OnPropertyChanged(nameof(SelectedQuote));
+                if (SetProperty(ref selectedQuote, value))
+                {
+                    ((RelayCommand)ViewQuoteCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)CreateQuoteFromSelectionCommand).RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -124,6 +158,42 @@ namespace QuoteSwift
                 dataService.SavePumps(PumpList);
             if (PartMap != null)
                 dataService.SaveParts(PartMap);
+        }
+
+        void CreateQuote()
+        {
+            if (BusinessList != null && BusinessList.Count > 0 && PumpList != null && BusinessList[0].BusinessCustomerList != null)
+            {
+                navigation?.CreateNewQuote();
+                LoadData();
+            }
+            else
+            {
+                messageService?.ShowError(
+                    "Please ensure that the following information is provided before creating a quote:\n" +
+                    ">  Business Information.\n" +
+                    ">  Business' Customer's Information.\n" +
+                    ">  Pump Information.",
+                    "ERROR - Prerequisites Not Met");
+            }
+        }
+
+        void ViewQuote()
+        {
+            if (SelectedQuote != null)
+            {
+                navigation?.CreateNewQuote(SelectedQuote, false);
+                LoadData();
+            }
+        }
+
+        void CreateQuoteFromSelection()
+        {
+            if (SelectedQuote != null)
+            {
+                navigation?.CreateNewQuote(SelectedQuote, true);
+                LoadData();
+            }
         }
 
     }
