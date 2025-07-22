@@ -47,6 +47,34 @@ When contributing new functionality please follow the existing MVVM pattern:
 add a view model for new forms, bind controls to view model properties and use
 `RelayCommand` for button logic.
 
+## Binding forms to view models
+
+Forms should bind directly to their view model properties using WinForms
+`DataBindings`. This ensures the UI stays in sync with the view model without
+manual updates. The `FrmAddBusiness` form provides a typical example:
+
+```csharp
+txtBusinessName.DataBindings.Add("Text", viewModel.CurrentBusiness,
+    nameof(Business.BusinessName), false, DataSourceUpdateMode.OnPropertyChanged);
+mtxtVATNumber.DataBindings.Add("Text", viewModel.CurrentBusiness,
+    "BusinessLegalDetails.VatNumber", false, DataSourceUpdateMode.OnPropertyChanged);
+```
+
+Commands are exposed on the view model as `ICommand` instances (usually via
+`RelayCommand` or `AsyncRelayCommand`). Buttons are connected to these commands
+through `CommandBindings`:
+
+```csharp
+CommandBindings.Bind(btnAddBusiness, viewModel.SaveBusinessCommand);
+CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
+```
+
+Business logic—validation, data manipulation and persistence—should live inside
+the view model or the domain classes under `MainProgramLibrary`. Forms are kept
+lightweight and primarily handle user interaction and navigation. For instance,
+`AddBusinessViewModel` contains the `AddBusiness` and `UpdateBusiness` methods
+while `FrmAddBusiness` simply invokes these commands.
+
 ## License
 
 This project is released under the MIT License. See [LICENSE](LICENSE) for details.
