@@ -24,10 +24,10 @@ namespace QuoteSwift // Repair Quote Swift
             CommandBindings.Bind(btnAddPump, viewModel.AddPumpCommand);
             CommandBindings.Bind(btnRemovePumpSelection, viewModel.RemovePumpCommand);
 
-            exportInventoryToolStripMenuItem.Click += (s, e) =>
+            exportInventoryToolStripMenuItem.Click += async (s, e) =>
             {
                 if (viewModel.ExportInventoryCommand.CanExecute(null))
-                    viewModel.ExportInventoryCommand.Execute(null);
+                    await ((AsyncRelayCommand)viewModel.ExportInventoryCommand).ExecuteAsync(null);
             };
         }
 

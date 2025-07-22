@@ -79,7 +79,7 @@ namespace QuoteSwift
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
             SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            ExportQuoteCommand = new RelayCommand(q => ExportQuoteToTemplate(q as Quote));
+            ExportQuoteCommand = new AsyncRelayCommand(q => ExportQuoteToTemplateAsync(q as Quote));
         }
 
         public IDataService DataService => dataService;
@@ -921,9 +921,17 @@ namespace QuoteSwift
             return quote;
         }
 
-        public void ExportQuoteToTemplate(Quote quote)
+        public async Task ExportQuoteToTemplateAsync(Quote quote)
         {
-            excelExportService.ExportQuoteToExcel(quote);
+            IsBusy = true;
+            try
+            {
+                await excelExportService.ExportQuoteToExcelAsync(quote);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
     }

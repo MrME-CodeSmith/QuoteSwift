@@ -38,12 +38,12 @@ namespace QuoteSwift
             BindIsBusy(viewModel);
         }
 
-        private void BtnComplete_Click(object sender, EventArgs e)
+        private async void BtnComplete_Click(object sender, EventArgs e)
         {
             if (!changeSpecificObject && quoteToChange != null)
             {
                 NewQuote = quoteToChange;
-                ExportQuoteToTemplate(NewQuote);
+                await ExportQuoteToTemplateAsync(NewQuote);
                 NewQuote = null;
             }
             else
@@ -56,7 +56,7 @@ namespace QuoteSwift
                 {
                     if (messageService.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
-                        ExportQuoteToTemplate(NewQuote);
+                        await ExportQuoteToTemplateAsync(NewQuote);
                     }
                     else
                     {
@@ -311,11 +311,9 @@ namespace QuoteSwift
         }
 
 
-        private void ExportQuoteToTemplate(Quote q)
+        private async System.Threading.Tasks.Task ExportQuoteToTemplateAsync(Quote q)
         {
-            UseWaitCursor = true;
-            viewModel.ExportQuoteCommand.Execute(q);
-            UseWaitCursor = false;
+            await ((AsyncRelayCommand)viewModel.ExportQuoteCommand).ExecuteAsync(q);
         }
 
 

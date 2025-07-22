@@ -39,7 +39,7 @@ namespace QuoteSwift
             AddPumpCommand = new RelayCommand(_ => AddPump());
             UpdatePumpCommand = new RelayCommand(_ => UpdatePump(), _ => SelectedPump != null);
             RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
-            ExportInventoryCommand = new RelayCommand(_ => ExportInventoryAction());
+            ExportInventoryCommand = new AsyncRelayCommand(_ => ExportInventoryActionAsync());
         }
 
         public IDataService DataService => dataService;
@@ -145,7 +145,7 @@ namespace QuoteSwift
             }
         }
 
-        void ExportInventoryAction()
+        async Task ExportInventoryActionAsync()
         {
             string filePath = fileDialogService?.ShowSaveFileDialog(
                 "CSV files (*.csv)|*.csv|All Files (*.*)|*.*",
@@ -156,7 +156,7 @@ namespace QuoteSwift
             {
                 try
                 {
-                    ExportInventory(filePath);
+                    await ExportInventoryAsync(filePath);
                     messageService?.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
                 }
                 catch (Exception ex)
@@ -175,12 +175,13 @@ namespace QuoteSwift
             RepairableItemNames?.Remove(StringUtil.NormalizeKey(pump.PumpName));
         }
 
-        public void ExportInventory(string filePath)
+        public Task ExportInventoryAsync(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentNullException(nameof(filePath));
 
             serializationService.ExportInventory(Pumps, filePath);
+            return Task.CompletedTask;
         }
 
         public void SaveChanges()
