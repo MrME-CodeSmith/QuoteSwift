@@ -10,8 +10,9 @@ namespace QuoteSwift
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
         readonly IExcelExportService excelExportService;
+        readonly IFileDialogService fileDialogService;
 
-        public NavigationService(ApplicationData data, IDataService service, INotificationService notifier, IMessageService messenger, ISerializationService serializer, IExcelExportService excelExporter)
+        public NavigationService(ApplicationData data, IDataService service, INotificationService notifier, IMessageService messenger, ISerializationService serializer, IExcelExportService excelExporter, IFileDialogService dialogService)
         {
             dataService = service;
             appData = data;
@@ -19,6 +20,7 @@ namespace QuoteSwift
             notificationService = notifier;
             messageService = messenger;
             excelExportService = excelExporter;
+            fileDialogService = dialogService;
         }
 
         public void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
@@ -47,7 +49,7 @@ namespace QuoteSwift
 
         public void ViewAllPumps()
         {
-            var vm = new ViewPumpViewModel(dataService, serializationService, this, messageService);
+            var vm = new ViewPumpViewModel(dataService, serializationService, this, messageService, fileDialogService);
             vm.UpdateData(appData.PumpList);
             using (var form = new FrmViewPump(vm, this, messageService))
             {

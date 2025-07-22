@@ -9,10 +9,12 @@ namespace QuoteSwift
     public class FileExcelExportService : IExcelExportService
     {
         readonly IMessageService messageService;
+        readonly IFileDialogService fileDialogService;
 
-        public FileExcelExportService(IMessageService messenger = null)
+        public FileExcelExportService(IMessageService messenger = null, IFileDialogService dialogService = null)
         {
             messageService = messenger;
+            fileDialogService = dialogService;
         }
 
         [STAThread]
@@ -136,32 +138,29 @@ namespace QuoteSwift
                     currentRow++;
                 }
 
-                using (SaveFileDialog saveDialog = new SaveFileDialog())
+                string filePath = fileDialogService?.ShowSaveFileDialog("Excel files (*.xlsx)|*.xlsx|All Files (*.*)|*.*", "xlsx", quote.QuoteNumber);
+                if (!string.IsNullOrEmpty(filePath))
                 {
-                    saveDialog.FileName = quote.QuoteNumber;
-                    if (saveDialog.ShowDialog() == DialogResult.OK)
+                    try
                     {
-                        try
-                        {
-                            workbook.SaveAs(saveDialog.FileName);
-                        }
-                        catch
-                        {
-                            bool proceed = messageService.RequestConfirmation(
-                                "The exported quote needs to be saved but the file it needs to save to seems to be already opened.\n" +
-                                "Please close the file then click the 'OK' button or alternatively click the 'Cancel' button to stop the quote from being exported.",
-                                "Quote Excel Workbook Already Open");
-
-                            if (!proceed)
-                            {
-                                messageService?.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
-                                return;
-                            }
-                        }
-                        messageService?.ShowInformation("Excel file created and stored at selected location.", "INFORMATION - Quote Stored Successfully");
+                        workbook.SaveAs(filePath);
                     }
-                    else return;
+                    catch
+                    {
+                        bool proceed = messageService.RequestConfirmation(
+                            "The exported quote needs to be saved but the file it needs to save to seems to be already opened.\n" +
+                            "Please close the file then click the 'OK' button or alternatively click the 'Cancel' button to stop the quote from being exported.",
+                            "Quote Excel Workbook Already Open");
+
+                        if (!proceed)
+                        {
+                            messageService?.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
+                            return;
+                        }
+                    }
+                    messageService?.ShowInformation("Excel file created and stored at selected location.", "INFORMATION - Quote Stored Successfully");
                 }
+                else return;
             }
             catch
             {

@@ -17,6 +17,7 @@ namespace QuoteSwift
             services.AddSingleton<ISerializationService, FileSerializationService>();
             services.AddSingleton<IDataService, FileDataService>();
             services.AddSingleton<INotificationService, MessageBoxNotificationService>();
+            services.AddSingleton<IFileDialogService, FileDialogService>();
             services.AddSingleton<ApplicationData>();
             services.AddSingleton<IExcelExportService, FileExcelExportService>();
             services.AddSingleton<INavigationService, NavigationService>();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -15,6 +14,7 @@ namespace QuoteSwift
         readonly ISerializationService serializationService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IFileDialogService fileDialogService;
         HashSet<string> repairableItemNames;
 
         Pump selectedPump;
@@ -27,12 +27,14 @@ namespace QuoteSwift
 
 
         public ViewPumpViewModel(IDataService service, ISerializationService serializer,
-                                 INavigationService navigation = null, IMessageService messageService = null)
+                                 INavigationService navigation = null, IMessageService messageService = null,
+                                 IFileDialogService dialogService = null)
         {
             dataService = service;
             serializationService = serializer;
             this.navigation = navigation;
             this.messageService = messageService;
+            fileDialogService = dialogService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             AddPumpCommand = new RelayCommand(_ => AddPump());
             UpdatePumpCommand = new RelayCommand(_ => UpdatePump(), _ => SelectedPump != null);
@@ -150,23 +152,21 @@ namespace QuoteSwift
 
         void ExportInventoryAction()
         {
-            using (SaveFileDialog sfd = new SaveFileDialog())
-            {
-                sfd.Filter = "CSV files (*.csv)|*.csv|All Files (*.*)|*.*";
-                sfd.DefaultExt = "csv";
-                sfd.FileName = "Inventory.csv";
+            string filePath = fileDialogService?.ShowSaveFileDialog(
+                "CSV files (*.csv)|*.csv|All Files (*.*)|*.*",
+                "csv",
+                "Inventory.csv");
 
-                if (sfd.ShowDialog() == DialogResult.OK)
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                try
                 {
-                    try
-                    {
-                        ExportInventory(sfd.FileName);
-                        messageService?.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
-                    }
-                    catch (Exception ex)
-                    {
-                        messageService?.ShowError("Inventory export failed.\n" + ex.Message, "ERROR - Export Failed");
-                    }
+                    ExportInventory(filePath);
+                    messageService?.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
+                }
+                catch (Exception ex)
+                {
+                    messageService?.ShowError("Inventory export failed.\n" + ex.Message, "ERROR - Export Failed");
                 }
             }
         }
