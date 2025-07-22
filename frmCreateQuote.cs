@@ -122,10 +122,6 @@ namespace QuoteSwift
                 mandatorySource.DataSource = viewModel.MandatoryParts;
                 nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
                 UpdatePricingDisplay();
-                LoadBusinessPOBoxAddress();
-                LoadBusinessLegalDatails();
-                LoadCustomerDeliveryAddress();
-                LoadCustomerPOBoxAddress();
                 if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
                     viewModel.QuoteNumber = viewModel.NextQuoteNumber;
 
@@ -152,26 +148,18 @@ namespace QuoteSwift
 
         private void CbxCustomerSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadCustomerDetails();
-            LoadCustomerPOBoxAddress();
         }
 
         private void CbxBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadSelectedBusinessInformation();
-            LoadBusinessPOBoxAddress();
-            LoadBusinessLegalDatails();
-            LoadCustomerPOBoxAddress();
         }
 
         private void CbxPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadBusinessPOBoxAddress();
         }
 
         private void CbxCustomerDeliveryAddress_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadCustomerDeliveryAddress();
         }
 
         private void DgvMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -190,11 +178,7 @@ namespace QuoteSwift
 
 
 
-        void LoadSelectedBusinessInformation()
-        {
-            LoadBusinessPOBoxAddress();
-            LoadBusinessLegalDatails();
-        }
+
 
         private void SetupBindings()
         {
@@ -273,6 +257,19 @@ namespace QuoteSwift
             cbxBusinessCellphoneNumberSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessCellphone), false, DataSourceUpdateMode.OnPropertyChanged);
             cbxBusinessEmailAddressSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessEmail), false, DataSourceUpdateMode.OnPropertyChanged);
 
+            lblBusinessPOBoxNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblBusinessPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxSuburbDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblBusinessPOBoxCity.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxCityDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblBusinessPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxAreaCodeDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblBusinessRegistrationNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessRegistrationNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblBusinessVATNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessVATNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            lblCustomerPOBoxStreetName.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxStreetNameDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblCustomerPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxSuburbDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblCustomerPOBoxCity.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxCityDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblCustomerPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxAreaCodeDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            lblCustomerVendorNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerVendorNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+
             CbxPOBoxSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusinessPOBox), false, DataSourceUpdateMode.OnPropertyChanged);
             CbxCustomerPOBoxSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomerPOBox), false, DataSourceUpdateMode.OnPropertyChanged);
             cbxCustomerDeliveryAddress.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomerDeliveryAddress), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -309,59 +306,8 @@ namespace QuoteSwift
             dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
         }
 
-        private void LoadBusinessPOBoxAddress()
-        {
-            Address Selection = viewModel.SelectedBusinessPOBox;
-            if (Selection != null)
-            {
-                lblBusinessPOBoxNumber.Text = "Street Name: " + Selection.AddressStreetName;
-                lblBusinessPOBoxNumber.Text = "P.O.Box Number " + Selection.AddressStreetNumber.ToString();
-                lblBusinessPOBoxSuburb.Text = "Suburb: " + Selection.AddressSuburb;
-                lblBusinessPOBoxCity.Text = "City: " + Selection.AddressCity;
-                lblBusinessPOBoxAreaCode.Text = "Area Code: " + Selection.AddressAreaCode.ToString();
-            }
-        }
-        private void LoadCustomerPOBoxAddress()
-        {
-            Address Selection = viewModel.SelectedCustomerPOBox;
-            if (Selection != null)
-            {
-                lblCustomerPOBoxStreetName.Text = "P.O.Box Number " + Selection.AddressStreetNumber.ToString();
-                lblCustomerPOBoxSuburb.Text = "Suburb: " + Selection.AddressSuburb;
-                lblCustomerPOBoxCity.Text = "City: " + Selection.AddressCity;
-                lblCustomerPOBoxAreaCode.Text = "Area Code: " + Selection.AddressAreaCode.ToString();
-            }
-        }
-
-        private void LoadBusinessLegalDatails()
-        {
-            Business Selection = viewModel.SelectedBusiness;
-            lblBusinessRegistrationNumber.Text = "Registration Number: " + Selection.BusinessLegalDetails.RegistrationNumber;
-            lblBusinessVATNumber.Text = "VAT Number: " + Selection.BusinessLegalDetails.VatNumber;
-        }
-
-        private void LoadCustomerDeliveryAddress()
-        {
-            Address Selection = viewModel.SelectedCustomerDeliveryAddress;
-            if (Selection != null)
-            {
-                rtxCustomerDeliveryDescripton.Clear();
-                rtxCustomerDeliveryDescripton.Text = "ATT: " + Selection.AddressStreetName.ToString() +
-                                                     "\n" + Selection.AddressSuburb +
-                                                     "\n" + Selection.AddressCity;
-            }
-        }
-
-        private void LoadCustomerDetails()
-        {
-            LoadCustomerDeliveryAddress();
-            lblCustomerVendorNumber.Text = "Vendor Number: " + viewModel.SelectedCustomer.VendorNumber;
-            txtCustomerVATNumber.Text = viewModel.SelectedCustomer.CustomerLegalDetails.VatNumber;
-        }
-
         private void CbxCustomerPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadCustomerPOBoxAddress();
         }
 
 
@@ -419,10 +365,6 @@ namespace QuoteSwift
             mandatorySource.DataSource = viewModel.MandatoryParts;
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
             UpdatePricingDisplay();
-            LoadBusinessPOBoxAddress();
-            LoadBusinessLegalDatails();
-            LoadCustomerPOBoxAddress();
-            LoadCustomerDeliveryAddress();
         }
 
         private void ConvertToReadOnly()

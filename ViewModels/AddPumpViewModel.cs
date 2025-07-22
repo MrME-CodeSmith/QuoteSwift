@@ -194,6 +194,24 @@ namespace QuoteSwift
             return true;
         }
 
+        public void RecordNewInformation()
+        {
+            if (PumpToChange == null || CurrentPump == null)
+                return;
+
+            if (PumpToChange.PumpName != CurrentPump.PumpName)
+                PumpToChange.PumpName = CurrentPump.PumpName;
+
+            if (PumpToChange.PumpDescription != CurrentPump.PumpDescription)
+                PumpToChange.PumpDescription = CurrentPump.PumpDescription;
+
+            if (PumpToChange.NewPumpPrice != CurrentPump.NewPumpPrice)
+                PumpToChange.NewPumpPrice = CurrentPump.NewPumpPrice;
+
+            PumpToChange.PartList = new BindingList<Pump_Part>(
+                SelectedMandatoryParts.Concat(SelectedNonMandatoryParts).ToList());
+        }
+
         public bool ValidateInput()
         {
             if (string.IsNullOrWhiteSpace(CurrentPump?.PumpName) || CurrentPump.PumpName.Length < 3)

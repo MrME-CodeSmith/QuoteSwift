@@ -132,18 +132,22 @@ namespace QuoteSwift
                             ? new BindingList<Customer>(new List<Customer>(selectedBusiness.BusinessCustomerList))
                             : new BindingList<Customer>();
                         SelectedCustomer = Customers.Count > 0 ? Customers[0] : null;
-                    }
-                    else
-                    {
-                        BusinessTelephoneNumbers = new BindingList<string>();
-                        BusinessCellphoneNumbers = new BindingList<string>();
+                        OnPropertyChanged(nameof(BusinessRegistrationNumberDisplay));
+                        OnPropertyChanged(nameof(BusinessVATNumberDisplay));
+                }
+                else
+                {
+                    BusinessTelephoneNumbers = new BindingList<string>();
+                    BusinessCellphoneNumbers = new BindingList<string>();
                         BusinessEmailAddresses = new BindingList<string>();
                         BusinessPOBoxes = new BindingList<Address>();
                         Customers = new BindingList<Customer>();
                         SelectedCustomer = null;
-                    }
+                        OnPropertyChanged(nameof(BusinessRegistrationNumberDisplay));
+                        OnPropertyChanged(nameof(BusinessVATNumberDisplay));
                 }
             }
+        }
         }
 
         public Customer SelectedCustomer
@@ -161,11 +165,15 @@ namespace QuoteSwift
                         CustomerPOBoxes = selectedCustomer.CustomerPOBoxAddress != null
                             ? new BindingList<Address>(new List<Address>(selectedCustomer.CustomerPOBoxAddress))
                             : new BindingList<Address>();
+                        CustomerVATNumber = selectedCustomer.CustomerLegalDetails?.VatNumber;
+                        OnPropertyChanged(nameof(CustomerVendorNumberDisplay));
                     }
                     else
                     {
                         CustomerDeliveryAddresses = new BindingList<Address>();
                         CustomerPOBoxes = new BindingList<Address>();
+                        CustomerVATNumber = string.Empty;
+                        OnPropertyChanged(nameof(CustomerVendorNumberDisplay));
                     }
                 }
             }
@@ -361,19 +369,46 @@ namespace QuoteSwift
         public Address SelectedBusinessPOBox
         {
             get => selectedBusinessPOBox;
-            set => SetProperty(ref selectedBusinessPOBox, value);
+            set
+            {
+                if (SetProperty(ref selectedBusinessPOBox, value))
+                {
+                    OnPropertyChanged(nameof(BusinessPOBoxNumberDisplay));
+                    OnPropertyChanged(nameof(BusinessPOBoxSuburbDisplay));
+                    OnPropertyChanged(nameof(BusinessPOBoxCityDisplay));
+                    OnPropertyChanged(nameof(BusinessPOBoxAreaCodeDisplay));
+                }
+            }
         }
 
         public Address SelectedCustomerPOBox
         {
             get => selectedCustomerPOBox;
-            set => SetProperty(ref selectedCustomerPOBox, value);
+            set
+            {
+                if (SetProperty(ref selectedCustomerPOBox, value))
+                {
+                    OnPropertyChanged(nameof(CustomerPOBoxStreetNameDisplay));
+                    OnPropertyChanged(nameof(CustomerPOBoxSuburbDisplay));
+                    OnPropertyChanged(nameof(CustomerPOBoxCityDisplay));
+                    OnPropertyChanged(nameof(CustomerPOBoxAreaCodeDisplay));
+                }
+            }
         }
 
         public Address SelectedCustomerDeliveryAddress
         {
             get => selectedCustomerDeliveryAddress;
-            set => SetProperty(ref selectedCustomerDeliveryAddress, value);
+            set
+            {
+                if (SetProperty(ref selectedCustomerDeliveryAddress, value))
+                {
+                    CustomerDeliveryDescription = value != null ?
+                        $"ATT: {value.AddressStreetName}\n{value.AddressSuburb}\n{value.AddressCity}" :
+                        string.Empty;
+                    OnPropertyChanged(nameof(CustomerDeliveryAddressDisplay));
+                }
+            }
         }
 
         public string BusinessTelephone
@@ -417,6 +452,55 @@ namespace QuoteSwift
             get => paymentTerm;
             set => SetProperty(ref paymentTerm, value);
         }
+
+        public string BusinessPOBoxNumberDisplay =>
+            SelectedBusinessPOBox != null ?
+                $"P.O.Box Number {SelectedBusinessPOBox.AddressStreetNumber}" : string.Empty;
+
+        public string BusinessPOBoxSuburbDisplay =>
+            SelectedBusinessPOBox != null ?
+                $"Suburb: {SelectedBusinessPOBox.AddressSuburb}" : string.Empty;
+
+        public string BusinessPOBoxCityDisplay =>
+            SelectedBusinessPOBox != null ?
+                $"City: {SelectedBusinessPOBox.AddressCity}" : string.Empty;
+
+        public string BusinessPOBoxAreaCodeDisplay =>
+            SelectedBusinessPOBox != null ?
+                $"Area Code: {SelectedBusinessPOBox.AddressAreaCode}" : string.Empty;
+
+        public string CustomerPOBoxStreetNameDisplay =>
+            SelectedCustomerPOBox != null ?
+                $"P.O.Box Number {SelectedCustomerPOBox.AddressStreetNumber}" : string.Empty;
+
+        public string CustomerPOBoxSuburbDisplay =>
+            SelectedCustomerPOBox != null ?
+                $"Suburb: {SelectedCustomerPOBox.AddressSuburb}" : string.Empty;
+
+        public string CustomerPOBoxCityDisplay =>
+            SelectedCustomerPOBox != null ?
+                $"City: {SelectedCustomerPOBox.AddressCity}" : string.Empty;
+
+        public string CustomerPOBoxAreaCodeDisplay =>
+            SelectedCustomerPOBox != null ?
+                $"Area Code: {SelectedCustomerPOBox.AddressAreaCode}" : string.Empty;
+
+        public string BusinessRegistrationNumberDisplay =>
+            SelectedBusiness != null ?
+                $"Registration Number: {SelectedBusiness.BusinessLegalDetails.RegistrationNumber}" : string.Empty;
+
+        public string BusinessVATNumberDisplay =>
+            SelectedBusiness != null ?
+                $"VAT Number: {SelectedBusiness.BusinessLegalDetails.VatNumber}" : string.Empty;
+
+        public string CustomerVendorNumberDisplay =>
+            SelectedCustomer != null ?
+                $"Vendor Number: {SelectedCustomer.VendorNumber}" : string.Empty;
+
+        public string CustomerDeliveryAddressDisplay =>
+            SelectedCustomerDeliveryAddress != null ?
+                $"ATT: {SelectedCustomerDeliveryAddress.AddressStreetName}\n{SelectedCustomerDeliveryAddress.AddressSuburb}\n{SelectedCustomerDeliveryAddress.AddressCity}" :
+                string.Empty;
 
         public void LoadData()
         {
