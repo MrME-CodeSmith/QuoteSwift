@@ -871,6 +871,43 @@ namespace QuoteSwift
             return true;
         }
 
+        public Quote CreateAndSaveQuote()
+        {
+            if (!ValidateInput())
+                return null;
+
+            Calculate();
+
+            var quote = CreateQuote(QuoteNumber,
+                                     QuoteCreationDate,
+                                     QuoteExpiryDate,
+                                     ReferenceNumber,
+                                     JobNumber,
+                                     PRNumber,
+                                     PaymentTerm,
+                                     SelectedBusinessPOBox,
+                                     SelectedCustomerPOBox,
+                                     LineNumber,
+                                     BusinessTelephone,
+                                     BusinessCellphone,
+                                     BusinessEmail,
+                                     (int)(PaymentTerm.Subtract(QuoteCreationDate).TotalDays),
+                                     Pricing);
+
+            if (quote == null)
+                return null;
+
+            if (!AddQuote(quote))
+            {
+                notificationService?.ShowError(
+                    "The provided quote number or Job number has been used in a previous quote.\nPlease ensure that the provided details are indeed correct.",
+                    "ERROR - Quote Number or Job Number Already Exists.");
+                return null;
+            }
+
+            return quote;
+        }
+
         public void ExportQuoteToTemplate(Quote quote)
         {
             excelExportService.ExportQuoteToExcel(quote);
