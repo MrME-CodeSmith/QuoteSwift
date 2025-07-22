@@ -25,24 +25,24 @@ namespace QuoteSwift
             this.Container = container;
             viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
 
-            txtCustomerCompanyName.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtVendorNumber.DataBindings.Add("Text", viewModel.CurrentCustomer, nameof(Customer.VendorNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(txtCustomerCompanyName, viewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName));
+            BindingHelpers.BindText(mtxtVendorNumber, viewModel.CurrentCustomer, nameof(Customer.VendorNumber));
 
-            txtCustomerAddresssDescription.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.AddressDescription), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtAtt.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.Att), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtWorkArea.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.WorkArea), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtWorkPlace.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.WorkPlace), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(txtCustomerAddresssDescription, viewModel, nameof(AddCustomerViewModel.AddressDescription));
+            BindingHelpers.BindText(txtAtt, viewModel, nameof(AddCustomerViewModel.Att));
+            BindingHelpers.BindText(txtWorkArea, viewModel, nameof(AddCustomerViewModel.WorkArea));
+            BindingHelpers.BindText(txtWorkPlace, viewModel, nameof(AddCustomerViewModel.WorkPlace));
 
-            txtCustomerPODescription.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.PODescription), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtPOBoxStreetNumber.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POStreetNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POSuburb), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtPOBoxCity.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POCity), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.POAreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(txtCustomerPODescription, viewModel, nameof(AddCustomerViewModel.PODescription));
+            BindingHelpers.BindText(mtxtPOBoxStreetNumber, viewModel, nameof(AddCustomerViewModel.POStreetNumber));
+            BindingHelpers.BindText(txtPOBoxSuburb, viewModel, nameof(AddCustomerViewModel.POSuburb));
+            BindingHelpers.BindText(txtPOBoxCity, viewModel, nameof(AddCustomerViewModel.POCity));
+            BindingHelpers.BindText(mtxtPOBoxAreaCode, viewModel, nameof(AddCustomerViewModel.POAreaCode));
 
-            mtxtTelephoneNumber.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.TelephoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtCellphoneNumber.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.CellphoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(mtxtTelephoneNumber, viewModel, nameof(AddCustomerViewModel.TelephoneInput));
+            BindingHelpers.BindText(mtxtCellphoneNumber, viewModel, nameof(AddCustomerViewModel.CellphoneInput));
 
-            mtxtEmailAddress.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.EmailInput), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(mtxtEmailAddress, viewModel, nameof(AddCustomerViewModel.EmailInput));
 
             gbxCustomerInformation.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
             gbxCustomerAddress.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
