@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace QuoteSwift // Repair Quote Swift
@@ -13,15 +12,32 @@ namespace QuoteSwift // Repair Quote Swift
         readonly IMessageService messageService;
         readonly BindingSource pumpBindingSource = new BindingSource();
 
+        void SetupBindings()
+        {
+            pumpBindingSource.DataSource = viewModel;
+            pumpBindingSource.DataMember = nameof(ViewPumpViewModel.Pumps);
+            dgvPumpList.DataSource = pumpBindingSource;
+
+            SelectionBindings.BindSelectedItem(dgvPumpList, viewModel, nameof(ViewPumpViewModel.SelectedPump));
+
+            CommandBindings.Bind(btnViewSelectedPump, viewModel.UpdatePumpCommand);
+            CommandBindings.Bind(btnAddPump, viewModel.AddPumpCommand);
+            CommandBindings.Bind(btnRemovePumpSelection, viewModel.RemovePumpCommand);
+
+            exportInventoryToolStripMenuItem.Click += (s, e) =>
+            {
+                if (viewModel.ExportInventoryCommand.CanExecute(null))
+                    viewModel.ExportInventoryCommand.Execute(null);
+            };
+        }
+
         public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
-            pumpBindingSource.DataSource = viewModel;
-            pumpBindingSource.DataMember = nameof(ViewPumpViewModel.Pumps);
-            dgvPumpList.DataSource = pumpBindingSource;
+            SetupBindings();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -33,47 +49,6 @@ namespace QuoteSwift // Repair Quote Swift
             }
         }
 
-        private void BtnUpdateSelectedPump_Click(object sender, EventArgs e)
-        {
-            Pump selected = GetSelectedPump();
-            if (selected != null)
-            {
-                Hide();
-                navigation.CreateNewPump();
-                Show();
-
-                viewModel.RepairableItemNames = new HashSet<string>(viewModel.Pumps.Select(p => StringUtil.NormalizeKey(p.PumpName)));
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
-            }
-        }
-
-        private void BtnAddPump_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.CreateNewPump();
-            viewModel.RepairableItemNames = new HashSet<string>(viewModel.Pumps.Select(pu => StringUtil.NormalizeKey(pu.PumpName)));
-            Show();
-        }
-
-        private void BtnRemovePumpSelection_Click(object sender, EventArgs e)
-        {
-            Pump objPumpSelection = GetSelectedPump();
-            if (objPumpSelection != null)
-            {
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete " + objPumpSelection.PumpName + " pump from the list of pumps?", "REQUEST - Deletion Request"))
-                {
-                    viewModel.RemovePump(objPumpSelection);
-                    messageService.ShowInformation("Successfully deleted " + objPumpSelection.PumpName + " from the pump list", "INFORMATION - Deletion Success");
-                }
-            }
-            else
-            {
-                messageService.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
-            }
-        }
 
         private void MainScreenViewQuotesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -96,37 +71,9 @@ namespace QuoteSwift // Repair Quote Swift
 
         // Binding handled automatically via pumpBindingSource
 
-        Pump GetSelectedPump()
-        {
-            return dgvPumpList.CurrentRow?.DataBoundItem as Pump;
-        }
-
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Still Needs Implementation.
-        }
-
-        private void ExportInventoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (SaveFileDialog sfd = new SaveFileDialog())
-            {
-                sfd.Filter = "CSV files (*.csv)|*.csv|All Files (*.*)|*.*";
-                sfd.DefaultExt = "csv";
-                sfd.FileName = "Inventory.csv";
-
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        viewModel.ExportInventory(sfd.FileName);
-                        messageService.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
-                    }
-                    catch (Exception ex)
-                    {
-                        messageService.ShowError("Inventory export failed.\n" + ex.Message, "ERROR - Export Failed");
-                    }
-                }
-            }
         }
 
         private void FrmViewPump_FormClosing(object sender, FormClosingEventArgs e)
