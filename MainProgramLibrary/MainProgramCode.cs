@@ -28,38 +28,5 @@ namespace QuoteSwift
 
             return null;
         }
-
-        /** Parse String Inputs: */
-
-        // Parse Float:
-        public static float ParseFloat(string t)
-        {
-            float.TryParse(t, out float temp);
-            return temp;
-        }
-
-        // Parse Decimal:
-        public static decimal ParseDecimal(string t)
-        {
-            decimal.TryParse(t, out decimal temp);
-            return temp;
-        }
-
-        // Parse Boole:
-        public static bool ParseBoolean(string t)
-        {
-            bool.TryParse(t, out bool temp);
-            return temp;
-        }
-
-        // Parse Int:
-        public static int ParseInt(string t)
-        {
-            int.TryParse(t, out int temp);
-            return temp;
-        }
-
-        /*************************/
-
     }
 }
