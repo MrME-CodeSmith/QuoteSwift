@@ -47,7 +47,7 @@ namespace QuoteSwift
 
         public void ViewAllPumps()
         {
-            var vm = new ViewPumpViewModel(dataService, serializationService);
+            var vm = new ViewPumpViewModel(dataService, serializationService, this, messageService);
             vm.UpdateData(appData.PumpList);
             using (var form = new FrmViewPump(vm, this, messageService))
             {

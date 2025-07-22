@@ -68,7 +68,6 @@ namespace QuoteSwift
             this.exportInventoryToolStripMenuItem.Name = "exportInventoryToolStripMenuItem";
             this.exportInventoryToolStripMenuItem.Size = new System.Drawing.Size(128, 24);
             this.exportInventoryToolStripMenuItem.Text = "Export Inventory";
-            this.exportInventoryToolStripMenuItem.Click += new System.EventHandler(this.ExportInventoryToolStripMenuItem_Click);
             //
             // btnAddPump
             // 
@@ -79,7 +78,6 @@ namespace QuoteSwift
             this.btnAddPump.TabIndex = 1;
             this.btnAddPump.Text = "Add Pump";
             this.btnAddPump.UseVisualStyleBackColor = true;
-            this.btnAddPump.Click += new System.EventHandler(this.BtnAddPump_Click);
             // 
             // btnRemovePumpSelection
             // 
@@ -91,7 +89,6 @@ namespace QuoteSwift
             this.btnRemovePumpSelection.TabIndex = 2;
             this.btnRemovePumpSelection.Text = "Remove Selected Pump";
             this.btnRemovePumpSelection.UseVisualStyleBackColor = true;
-            this.btnRemovePumpSelection.Click += new System.EventHandler(this.BtnRemovePumpSelection_Click);
             // 
             // dgvPumpList
             // 
@@ -145,7 +142,6 @@ namespace QuoteSwift
             this.btnViewSelectedPump.TabIndex = 4;
             this.btnViewSelectedPump.Text = "View Selected Pump";
             this.btnViewSelectedPump.UseVisualStyleBackColor = true;
-            this.btnViewSelectedPump.Click += new System.EventHandler(this.BtnUpdateSelectedPump_Click);
             // 
             // FrmViewPump
             // 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace QuoteSwift
 {
@@ -11,16 +13,31 @@ namespace QuoteSwift
         readonly IDataService dataService;
         BindingList<Pump> pumps;
         readonly ISerializationService serializationService;
+        readonly INavigationService navigation;
+        readonly IMessageService messageService;
         HashSet<string> repairableItemNames;
 
+        Pump selectedPump;
+
         public ICommand LoadDataCommand { get; }
+        public ICommand AddPumpCommand { get; }
+        public ICommand UpdatePumpCommand { get; }
+        public ICommand RemovePumpCommand { get; }
+        public ICommand ExportInventoryCommand { get; }
 
 
-        public ViewPumpViewModel(IDataService service, ISerializationService serializer)
+        public ViewPumpViewModel(IDataService service, ISerializationService serializer,
+                                 INavigationService navigation = null, IMessageService messageService = null)
         {
             dataService = service;
             serializationService = serializer;
+            this.navigation = navigation;
+            this.messageService = messageService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
+            AddPumpCommand = new RelayCommand(_ => AddPump());
+            UpdatePumpCommand = new RelayCommand(_ => UpdatePump(), _ => SelectedPump != null);
+            RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
+            ExportInventoryCommand = new RelayCommand(_ => ExportInventoryAction());
         }
 
         public IDataService DataService => dataService;
@@ -42,6 +59,19 @@ namespace QuoteSwift
             {
                 repairableItemNames = value;
                 OnPropertyChanged(nameof(RepairableItemNames));
+            }
+        }
+
+        public Pump SelectedPump
+        {
+            get => selectedPump;
+            set
+            {
+                if (SetProperty(ref selectedPump, value))
+                {
+                    ((RelayCommand)UpdatePumpCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)RemovePumpCommand).RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -73,6 +103,72 @@ namespace QuoteSwift
                 RepairableItemNames = new HashSet<string>(Pumps.Select(p => StringUtil.NormalizeKey(p.PumpName)));
             else
                 RepairableItemNames = new HashSet<string>();
+        }
+
+        void RefreshRepairableNames()
+        {
+            if (Pumps != null)
+                RepairableItemNames = new HashSet<string>(Pumps.Select(p => StringUtil.NormalizeKey(p.PumpName)));
+            else
+                RepairableItemNames = new HashSet<string>();
+        }
+
+        void AddPump()
+        {
+            navigation?.CreateNewPump();
+            RefreshRepairableNames();
+        }
+
+        void UpdatePump()
+        {
+            if (SelectedPump != null)
+            {
+                navigation?.CreateNewPump();
+                RefreshRepairableNames();
+            }
+            else
+            {
+                messageService?.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
+            }
+        }
+
+        void RemoveSelectedPump()
+        {
+            if (SelectedPump != null)
+            {
+                if (messageService?.RequestConfirmation($"Are you sure you want to permanently delete {SelectedPump.PumpName} pump from the list of pumps?", "REQUEST - Deletion Request") == true)
+                {
+                    RemovePump(SelectedPump);
+                    messageService?.ShowInformation($"Successfully deleted {SelectedPump.PumpName} from the pump list", "INFORMATION - Deletion Success");
+                }
+            }
+            else
+            {
+                messageService?.ShowError("The current selection is invalid.\nPlease choose a valid Pump from the list.", "ERROR - Invalid Selection");
+            }
+        }
+
+        void ExportInventoryAction()
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "CSV files (*.csv)|*.csv|All Files (*.*)|*.*";
+                sfd.DefaultExt = "csv";
+                sfd.FileName = "Inventory.csv";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        ExportInventory(sfd.FileName);
+                        messageService?.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
+                    }
+                    catch (Exception ex)
+                    {
+                        messageService?.ShowError("Inventory export failed.\n" + ex.Message, "ERROR - Export Failed");
+                    }
+                }
+            }
         }
 
         public void RemovePump(Pump pump)
