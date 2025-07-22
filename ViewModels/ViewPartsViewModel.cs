@@ -30,8 +30,8 @@ namespace QuoteSwift
             nonMandatoryParts = new BindingList<Part>();
             allParts = new BindingList<Part>();
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            AddPartCommand = new RelayCommand(_ => AddPart());
-            UpdatePartCommand = new RelayCommand(_ => UpdatePart(), _ => SelectedPart != null);
+            AddPartCommand = new AsyncRelayCommand(_ => AddPartAsync());
+            UpdatePartCommand = new AsyncRelayCommand(_ => UpdatePartAsync(), _ => Task.FromResult(SelectedPart != null));
             RemovePartCommand = new RelayCommand(_ => RemoveSelectedPart(), _ => SelectedPart != null);
             SaveChangesCommand = new RelayCommand(_ => SaveChanges());
         }
@@ -67,11 +67,6 @@ namespace QuoteSwift
             }
         }
 
-        public void LoadData()
-        {
-            LoadDataAsync().GetAwaiter().GetResult();
-        }
-
         public async Task LoadDataAsync()
         {
             PartList = await dataService.LoadPartListAsync();
@@ -98,18 +93,18 @@ namespace QuoteSwift
             allParts.Remove(part);
         }
 
-        void AddPart()
+        async Task AddPartAsync()
         {
             navigation?.AddNewPart();
-            LoadData();
+            await LoadDataAsync();
         }
 
-        void UpdatePart()
+        async Task UpdatePartAsync()
         {
             if (SelectedPart != null)
             {
                 navigation?.AddNewPart(SelectedPart, false);
-                LoadData();
+                await LoadDataAsync();
             }
         }
 

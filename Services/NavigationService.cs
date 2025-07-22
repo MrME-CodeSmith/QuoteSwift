@@ -64,7 +64,7 @@ namespace QuoteSwift
         {
             var vm = serviceProvider.GetRequiredService<AddPumpViewModel>();
             vm.UpdateData(appData.PumpList, appData.PartList);
-            vm.LoadData();
+            vm.LoadDataAsync().GetAwaiter().GetResult();
             using (var form = new FrmAddPump(vm, this, appData, messageService, serializationService))
             {
                 form.ShowDialog();
@@ -112,7 +112,7 @@ namespace QuoteSwift
         public void ViewCustomers()
         {
             var vm = serviceProvider.GetRequiredService<ViewCustomersViewModel>();
-            vm.LoadData();
+            vm.LoadDataAsync().GetAwaiter().GetResult();
             using (var form = new FrmViewCustomers(vm, this, appData, messageService, serializationService))
             {
                 form.ShowDialog();
@@ -123,7 +123,7 @@ namespace QuoteSwift
         {
             var vm = serviceProvider.GetRequiredService<AddBusinessViewModel>();
             vm.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
-            vm.LoadData();
+            vm.LoadDataAsync().GetAwaiter().GetResult();
             using (var form = new FrmAddBusiness(vm, this, messageService, serializationService))
             {
                 form.ShowDialog();

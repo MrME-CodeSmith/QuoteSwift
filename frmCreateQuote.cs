@@ -33,7 +33,6 @@ namespace QuoteSwift
             this.serializationService = serializationService;
             this.quoteToChange = quoteToChange;
             this.changeSpecificObject = changeSpecificObject;
-            this.viewModel.LoadData();
             SetupBindings();
         }
 
@@ -93,8 +92,9 @@ namespace QuoteSwift
             UpdatePricingDisplay();
         }
 
-        private void FrmCreateQuote_Load(object sender, EventArgs e)
+        private async void FrmCreateQuote_Load(object sender, EventArgs e)
         {
+            await viewModel.LoadDataAsync();
             if (!changeSpecificObject && quoteToChange != null) // View Quote
             {
                 LoadFromPassedObject();

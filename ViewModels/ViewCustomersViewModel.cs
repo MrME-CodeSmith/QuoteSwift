@@ -62,11 +62,6 @@ namespace QuoteSwift
             }
         }
 
-        public void LoadData()
-        {
-            LoadDataAsync().GetAwaiter().GetResult();
-        }
-
         public async Task LoadDataAsync()
         {
             Businesses = await dataService.LoadBusinessListAsync();

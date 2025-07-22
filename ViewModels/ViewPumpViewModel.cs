@@ -77,11 +77,6 @@ namespace QuoteSwift
             }
         }
 
-        public void LoadData()
-        {
-            LoadDataAsync().GetAwaiter().GetResult();
-        }
-
         public async Task LoadDataAsync()
         {
             Pumps = await dataService.LoadPumpListAsync();

@@ -44,17 +44,17 @@ namespace QuoteSwift
 
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
 
-            CreateQuoteCommand = new RelayCommand(_ => CreateQuote());
-            ViewQuoteCommand = new RelayCommand(_ => ViewQuote(), _ => SelectedQuote != null);
-            CreateQuoteFromSelectionCommand = new RelayCommand(_ => CreateQuoteFromSelection(), _ => SelectedQuote != null);
-            AddBusinessCommand = new RelayCommand(_ => { navigation?.AddBusiness(); LoadData(); });
-            ViewBusinessesCommand = new RelayCommand(_ => { navigation?.ViewBusinesses(); LoadData(); });
-            AddCustomerCommand = new RelayCommand(_ => { navigation?.AddCustomer(); LoadData(); });
-            ViewCustomersCommand = new RelayCommand(_ => { navigation?.ViewCustomers(); LoadData(); });
-            CreatePumpCommand = new RelayCommand(_ => { navigation?.CreateNewPump(); LoadData(); });
-            ViewPumpsCommand = new RelayCommand(_ => { navigation?.ViewAllPumps(); LoadData(); });
-            AddPartCommand = new RelayCommand(_ => { navigation?.AddNewPart(); LoadData(); });
-            ViewPartsCommand = new RelayCommand(_ => { navigation?.ViewAllParts(); LoadData(); });
+            CreateQuoteCommand = new AsyncRelayCommand(_ => CreateQuoteAsync());
+            ViewQuoteCommand = new AsyncRelayCommand(_ => ViewQuoteAsync(), _ => Task.FromResult(SelectedQuote != null));
+            CreateQuoteFromSelectionCommand = new AsyncRelayCommand(_ => CreateQuoteFromSelectionAsync(), _ => Task.FromResult(SelectedQuote != null));
+            AddBusinessCommand = new AsyncRelayCommand(async _ => { navigation?.AddBusiness(); await LoadDataAsync(); });
+            ViewBusinessesCommand = new AsyncRelayCommand(async _ => { navigation?.ViewBusinesses(); await LoadDataAsync(); });
+            AddCustomerCommand = new AsyncRelayCommand(async _ => { navigation?.AddCustomer(); await LoadDataAsync(); });
+            ViewCustomersCommand = new AsyncRelayCommand(async _ => { navigation?.ViewCustomers(); await LoadDataAsync(); });
+            CreatePumpCommand = new AsyncRelayCommand(async _ => { navigation?.CreateNewPump(); await LoadDataAsync(); });
+            ViewPumpsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllPumps(); await LoadDataAsync(); });
+            AddPartCommand = new AsyncRelayCommand(async _ => { navigation?.AddNewPart(); await LoadDataAsync(); });
+            ViewPartsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllParts(); await LoadDataAsync(); });
         }
 
 
@@ -121,11 +121,6 @@ namespace QuoteSwift
             }
         }
 
-        public void LoadData()
-        {
-            LoadDataAsync().GetAwaiter().GetResult();
-        }
-
         public async Task LoadDataAsync()
         {
             PartMap = await dataService.LoadPartListAsync();
@@ -160,12 +155,12 @@ namespace QuoteSwift
                 dataService.SaveParts(PartMap);
         }
 
-        void CreateQuote()
+        async Task CreateQuoteAsync()
         {
             if (BusinessList != null && BusinessList.Count > 0 && PumpList != null && BusinessList[0].BusinessCustomerList != null)
             {
                 navigation?.CreateNewQuote();
-                LoadData();
+                await LoadDataAsync();
             }
             else
             {
@@ -178,21 +173,21 @@ namespace QuoteSwift
             }
         }
 
-        void ViewQuote()
+        async Task ViewQuoteAsync()
         {
             if (SelectedQuote != null)
             {
                 navigation?.CreateNewQuote(SelectedQuote, false);
-                LoadData();
+                await LoadDataAsync();
             }
         }
 
-        void CreateQuoteFromSelection()
+        async Task CreateQuoteFromSelectionAsync()
         {
             if (SelectedQuote != null)
             {
                 navigation?.CreateNewQuote(SelectedQuote, true);
-                LoadData();
+                await LoadDataAsync();
             }
         }
 

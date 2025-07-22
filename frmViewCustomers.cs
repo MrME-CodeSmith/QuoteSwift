@@ -64,9 +64,9 @@ namespace QuoteSwift
             viewModel.RefreshCustomers();
         }
 
-        private void FrmViewCustomers_Load(object sender, EventArgs e)
+        private async void FrmViewCustomers_Load(object sender, EventArgs e)
         {
-            viewModel.LoadData();
+            await viewModel.LoadDataAsync();
             LinkBusinessToSource(ref cbBusinessSelection);
             clmCustomerCompanyName.DataPropertyName = nameof(Customer.CustomerCompanyName);
             clmPreviousQuoteDate.DataPropertyName = nameof(Customer.PreviousQuoteDate);
