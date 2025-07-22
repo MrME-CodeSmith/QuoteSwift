@@ -48,7 +48,8 @@ namespace QuoteSwift
             else
             {
                 viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
-                NewQuote = viewModel.CreateAndSaveQuote();
+                viewModel.SaveQuoteCommand.Execute(null);
+                NewQuote = viewModel.LastCreatedQuote;
 
                 if (NewQuote != null)
                 {
@@ -276,6 +277,7 @@ namespace QuoteSwift
             cbxCustomerDeliveryAddress.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomerDeliveryAddress), false, DataSourceUpdateMode.OnPropertyChanged);
 
             UpdatePricingDisplay();
+            CommandBindings.Bind(btnComplete, viewModel.SaveQuoteCommand);
         }
 
         void UpdatePricingDisplay()

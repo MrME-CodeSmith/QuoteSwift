@@ -52,8 +52,23 @@ namespace QuoteSwift
         DateTime paymentTerm = DateTime.Today;
 
         public ICommand AddQuoteCommand { get; }
+        public ICommand SaveQuoteCommand { get; }
         public ICommand LoadDataCommand { get; }
         public ICommand ExportQuoteCommand { get; }
+
+        Quote lastCreatedQuote;
+        public Quote LastCreatedQuote
+        {
+            get => lastCreatedQuote;
+            private set
+            {
+                if (lastCreatedQuote != value)
+                {
+                    lastCreatedQuote = value;
+                    OnPropertyChanged(nameof(LastCreatedQuote));
+                }
+            }
+        }
 
 
         public CreateQuoteViewModel(IDataService service, INotificationService notifier, IExcelExportService excelExporter)
@@ -62,6 +77,7 @@ namespace QuoteSwift
             notificationService = notifier;
             excelExportService = excelExporter;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
+            SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ExportQuoteCommand = new RelayCommand(q => ExportQuoteToTemplate(q as Quote));
         }
