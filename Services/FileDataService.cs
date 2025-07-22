@@ -9,9 +9,11 @@ namespace QuoteSwift
     public class FileDataService : IDataService
     {
         readonly IMessageService messageService;
+        readonly ISerializationService serializationService;
 
-        public FileDataService(IMessageService messenger = null)
+        public FileDataService(ISerializationService serializer, IMessageService messenger = null)
         {
+            serializationService = serializer;
             messageService = messenger;
         }
 
@@ -23,7 +25,7 @@ namespace QuoteSwift
         public async Task<Dictionary<string, Part>> LoadPartListAsync()
         {
             byte[] bytes = await RetrieveDataAsync("Parts.json").ConfigureAwait(false);
-            return bytes != null && bytes.Length > 0 ? MainProgramCode.DeserializePartList(bytes) : new Dictionary<string, Part>();
+            return bytes != null && bytes.Length > 0 ? FileSerializationService.DeserializePartList(bytes) : new Dictionary<string, Part>();
         }
 
         public BindingList<Pump> LoadPumpList()
@@ -34,7 +36,7 @@ namespace QuoteSwift
         public async Task<BindingList<Pump>> LoadPumpListAsync()
         {
             byte[] bytes = await RetrieveDataAsync("PumpList.json").ConfigureAwait(false);
-            return bytes != null && bytes.Length > 0 ? new BindingList<Pump>(MainProgramCode.DeserializePumpList(bytes)) : new BindingList<Pump>();
+            return bytes != null && bytes.Length > 0 ? new BindingList<Pump>(FileSerializationService.DeserializePumpList(bytes)) : new BindingList<Pump>();
         }
 
         public BindingList<Business> LoadBusinessList()
@@ -45,7 +47,7 @@ namespace QuoteSwift
         public async Task<BindingList<Business>> LoadBusinessListAsync()
         {
             byte[] bytes = await RetrieveDataAsync("BusinessList.json").ConfigureAwait(false);
-            return bytes != null && bytes.Length > 0 ? new BindingList<Business>(MainProgramCode.DeserializeBusinessList(bytes)) : new BindingList<Business>();
+            return bytes != null && bytes.Length > 0 ? new BindingList<Business>(FileSerializationService.DeserializeBusinessList(bytes)) : new BindingList<Business>();
         }
 
         public SortedDictionary<string, Quote> LoadQuoteMap()
@@ -56,27 +58,27 @@ namespace QuoteSwift
         public async Task<SortedDictionary<string, Quote>> LoadQuoteMapAsync()
         {
             byte[] bytes = await RetrieveDataAsync("QuoteList.json").ConfigureAwait(false);
-            return bytes != null && bytes.Length > 0 ? MainProgramCode.DeserializeQuoteList(bytes) : new SortedDictionary<string, Quote>();
+            return bytes != null && bytes.Length > 0 ? FileSerializationService.DeserializeQuoteList(bytes) : new SortedDictionary<string, Quote>();
         }
 
         public void SaveParts(Dictionary<string, Part> parts)
         {
-            MainProgramCode.SerializePartList(parts);
+            serializationService.SerializePartList(parts);
         }
 
         public void SavePumps(BindingList<Pump> pumps)
         {
-            MainProgramCode.SerializePumpList(pumps);
+            serializationService.SerializePumpList(pumps);
         }
 
         public void SaveBusinesses(BindingList<Business> businesses)
         {
-            MainProgramCode.SerializeBusinessList(businesses);
+            serializationService.SerializeBusinessList(businesses);
         }
 
         public void SaveQuotes(SortedDictionary<string, Quote> quotes)
         {
-            MainProgramCode.SerializeQuoteList(quotes);
+            serializationService.SerializeQuoteList(quotes);
         }
 
         byte[] RetrieveData(string fileName)
