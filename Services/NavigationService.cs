@@ -156,7 +156,7 @@ namespace QuoteSwift
         {
             var vm = serviceProvider.GetRequiredService<ViewPOBoxAddressesViewModel>();
             vm.UpdateData(business, customer);
-            using (var form = new FrmViewPOBoxAddresses(vm, this, appData, business, customer, messageService))
+            using (var form = new FrmViewPOBoxAddresses(vm, this, business, customer, messageService))
             {
                 form.ShowDialog();
             }
