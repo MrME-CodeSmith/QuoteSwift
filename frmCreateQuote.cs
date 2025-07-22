@@ -116,7 +116,7 @@ namespace QuoteSwift
             }
             else //Create New
             {
-                LoadComboBoxes();
+                viewModel.PrepareComboBoxLists();
                 viewModel.LoadPartlists();
                 mandatorySource.DataSource = viewModel.MandatoryParts;
                 nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
@@ -187,169 +187,11 @@ namespace QuoteSwift
 
 
 
-        private void LinkBusinessTelephone(Business b, ref ComboBox cb)
-        {
-            if (viewModel.Businesses != null && b != null)
-            {
-                //Created a Binding Source for the Business' Telephone list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessTelephoneNumberList };
-
-                cb.DataSource = ComboBoxBusinessSource.DataSource;
-            }
-        }
-
-        private void LinkBusinessCellphone(Business b, ref ComboBox cb)
-        {
-            if (viewModel.Businesses != null && b != null)
-            {
-                //Created a Binding Source for the Business' Cellphone list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessCellphoneNumberList };
-
-                cb.DataSource = ComboBoxBusinessSource.DataSource;
-            }
-        }
-
-        private void LinkBusinessEmail(Business b, ref ComboBox cb)
-        {
-            if (viewModel.Businesses != null && b != null)
-            {
-                //Created a Binding Source for the Business' Email list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessEmailAddressList };
-
-                cb.DataSource = ComboBoxBusinessSource.DataSource;
-            }
-        }
-
-        private void LinkBusinesssPOBox(Business b, ref ComboBox cb)
-        {
-            if (b != null && b.BusinessPOBoxAddressList != null)
-            {
-                //Created a Binding Source for the Business' P.O.Box list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessPOBoxAddressList };
-
-                cb.DataSource = ComboBoxBusinessSource.DataSource;
-
-                cb.DisplayMember = "AddressDescription";
-                cb.ValueMember = "AddressDescription";
-            }
-        }
-
-        private void LinkCustomers(Business b, ref ComboBox cb)
-        {
-            if (b != null && b.BusinessCustomerList != null)
-            {
-                //Created a Binding Source for the Business' Customers list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = b.BusinessCustomerList };
-
-                cb.DataSource = ComboBoxBusinessSource.DataSource;
-
-                //Linking the specific item from the Business class to display in the combo-box:
-
-                cb.DisplayMember = "CustomerCompanyName";
-                cb.ValueMember = "CustomerCompanyName";
-            }
-        }
-
-        private void LinkCustomerDeliveryAddress(Customer c, ref ComboBox cb)
-        {
-            if (c != null && c.CustomerDeliveryAddressList != null)
-            {
-                //Created a Binding Source for the Customer's Delivery Address list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxSource = new BindingSource { DataSource = c.CustomerDeliveryAddressList };
-
-                cb.DataSource = ComboBoxSource.DataSource;
-
-                cb.DisplayMember = "AddressDescription";
-                cb.ValueMember = "AddressDescription";
-            }
-        }
-
-        private void LinkPumpList(ref ComboBox cb)
-        {
-            if (viewModel.Pumps != null)
-            {
-                //Created a Binding Source for the Pumps list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxSource = new BindingSource { DataSource = viewModel.Pumps };
-
-                cb.DataSource = ComboBoxSource.DataSource;
-
-                cb.DisplayMember = "PumpName";
-                cb.ValueMember = "PumpName";
-            }
-        }
-
-        private void LinkCustomerPOBox(Customer c, ref ComboBox cb)
-        {
-            if (c != null && c.CustomerPOBoxAddress != null)
-            {
-                //Created a Binding Source for the Customer's P.O.Box list to link the source
-                //directly to the combo-box's data-source:
-
-                BindingSource ComboBoxBusinessSource = new BindingSource { DataSource = c.CustomerPOBoxAddress };
-
-                cb.DataSource = ComboBoxBusinessSource.DataSource;
-
-                cb.DisplayMember = "AddressDescription";
-                cb.ValueMember = "AddressDescription";
-            }
-        }
 
         void LoadSelectedBusinessInformation()
         {
             LoadBusinessPOBoxAddress();
             LoadBusinessLegalDatails();
-        }
-
-        private void LoadComboBoxes()
-        {
-            if (viewModel.Businesses != null)
-            {
-                BindingSource bs = new BindingSource { DataSource = viewModel.Businesses };
-                cbxBusinessSelection.DataSource = bs.DataSource;
-                cbxBusinessSelection.DisplayMember = "BusinessName";
-                cbxBusinessSelection.ValueMember = "BusinessName";
-                cbxBusinessSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusiness), false, DataSourceUpdateMode.OnPropertyChanged);
-            }
-
-            cbxBusinessTelephoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessTelephoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxBusinessCellphoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessCellphoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxBusinessEmailAddressSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessEmailAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            cbxCustomerSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Customers), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxCustomerSelection.DisplayMember = "CustomerCompanyName";
-            cbxCustomerSelection.ValueMember = "CustomerCompanyName";
-            cbxCustomerSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomer), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            cbxCustomerDeliveryAddress.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxCustomerDeliveryAddress.DisplayMember = "AddressDescription";
-            cbxCustomerDeliveryAddress.ValueMember = "AddressDescription";
-
-            cbxPumpSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Pumps), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxPumpSelection.DisplayMember = "PumpName";
-            cbxPumpSelection.ValueMember = "PumpName";
-            cbxPumpSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            CbxPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
-            CbxPOBoxSelection.DisplayMember = "AddressDescription";
-            CbxPOBoxSelection.ValueMember = "AddressDescription";
-
-            CbxCustomerPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
-            CbxCustomerPOBoxSelection.DisplayMember = "AddressDescription";
-            CbxCustomerPOBoxSelection.ValueMember = "AddressDescription";
         }
 
         private void SetupBindings()
@@ -381,6 +223,37 @@ namespace QuoteSwift
             ClmNMRepairDevider.DataPropertyName = nameof(Quote_Part.RepairDevider);
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
             DgvNonMandatoryPartReplacement.DataSource = nonMandatorySource;
+
+            cbxBusinessSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Businesses), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxBusinessSelection.DisplayMember = "BusinessName";
+            cbxBusinessSelection.ValueMember = "BusinessName";
+            cbxBusinessSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusiness), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            cbxPumpSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Pumps), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxPumpSelection.DisplayMember = "PumpName";
+            cbxPumpSelection.ValueMember = "PumpName";
+            cbxPumpSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            cbxBusinessTelephoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessTelephoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxBusinessCellphoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessCellphoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxBusinessEmailAddressSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessEmailAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            cbxCustomerSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Customers), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxCustomerSelection.DisplayMember = "CustomerCompanyName";
+            cbxCustomerSelection.ValueMember = "CustomerCompanyName";
+            cbxCustomerSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomer), false, DataSourceUpdateMode.OnPropertyChanged);
+
+            cbxCustomerDeliveryAddress.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxCustomerDeliveryAddress.DisplayMember = "AddressDescription";
+            cbxCustomerDeliveryAddress.ValueMember = "AddressDescription";
+
+            CbxPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
+            CbxPOBoxSelection.DisplayMember = "AddressDescription";
+            CbxPOBoxSelection.ValueMember = "AddressDescription";
+
+            CbxCustomerPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
+            CbxCustomerPOBoxSelection.DisplayMember = "AddressDescription";
+            CbxCustomerPOBoxSelection.ValueMember = "AddressDescription";
 
             txtCustomerVATNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerVATNumber), false, DataSourceUpdateMode.OnPropertyChanged);
             txtJobNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.JobNumber), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -583,7 +456,7 @@ namespace QuoteSwift
 
         private void LoadFromPassedObject()
         {
-            viewModel.LoadQuote(quoteToChange);
+            viewModel.LoadFromQuote(quoteToChange);
             mandatorySource.DataSource = viewModel.MandatoryParts;
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
             UpdatePricingDisplay();

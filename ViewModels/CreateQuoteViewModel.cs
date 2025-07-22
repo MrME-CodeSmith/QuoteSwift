@@ -422,6 +422,7 @@ namespace QuoteSwift
             Businesses = await dataService.LoadBusinessListAsync();
             QuoteMap = await dataService.LoadQuoteMapAsync();
             Pricing = new Pricing();
+            PrepareComboBoxLists();
         }
 
         public void LoadQuote(Quote quote)
@@ -474,6 +475,49 @@ namespace QuoteSwift
             NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6MACH", PartDescription = "MACHINING", PartPrice = quote.QuoteCost.Machining }, 1), 0, 0, 1, quote.QuoteCost.Machining, quote.QuoteCost.Machining, 1));
             NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "TS6LAB", PartDescription = "LABOUR", PartPrice = quote.QuoteCost.Labour }, 1), 0, 0, 1, quote.QuoteCost.Labour, quote.QuoteCost.Labour, 1));
             NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "CON TS6", PartDescription = "CONSUMABLES incl COLLECTION & DELIVERY", PartPrice = quote.QuoteCost.Consumables }, 1), 0, 0, 1, quote.QuoteCost.Consumables, quote.QuoteCost.Consumables, 1));
+        }
+
+        public void LoadFromQuote(Quote quote)
+        {
+            LoadQuote(quote);
+            PrepareComboBoxLists();
+        }
+
+        public void PrepareComboBoxLists()
+        {
+            if (Businesses != null && Businesses.Count > 0)
+                SelectedBusiness = Businesses[0];
+            else
+                SelectedBusiness = null;
+
+            if (Pumps != null && Pumps.Count > 0)
+                SelectedPump = Pumps[0];
+            else
+                SelectedPump = null;
+
+            if (Customers != null && Customers.Count > 0)
+                SelectedCustomer = Customers[0];
+            else
+                SelectedCustomer = null;
+
+            if (BusinessPOBoxes != null && BusinessPOBoxes.Count > 0)
+                SelectedBusinessPOBox = BusinessPOBoxes[0];
+            else
+                SelectedBusinessPOBox = null;
+
+            if (CustomerPOBoxes != null && CustomerPOBoxes.Count > 0)
+                SelectedCustomerPOBox = CustomerPOBoxes[0];
+            else
+                SelectedCustomerPOBox = null;
+
+            if (CustomerDeliveryAddresses != null && CustomerDeliveryAddresses.Count > 0)
+                SelectedCustomerDeliveryAddress = CustomerDeliveryAddresses[0];
+            else
+                SelectedCustomerDeliveryAddress = null;
+
+            BusinessTelephone = BusinessTelephoneNumbers?.FirstOrDefault();
+            BusinessCellphone = BusinessCellphoneNumbers?.FirstOrDefault();
+            BusinessEmail = BusinessEmailAddresses?.FirstOrDefault();
         }
 
         public void LoadPartlists()
