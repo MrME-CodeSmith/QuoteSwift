@@ -5,8 +5,8 @@ namespace QuoteSwift
 {
     public class EditEmailAddressViewModel : ViewModelBase
     {
-        readonly Business business;
-        readonly Customer customer;
+        Business business;
+        Customer customer;
         OperationResult lastResult = OperationResult.Successful();
         string originalEmail;
         string currentEmail;
@@ -16,15 +16,20 @@ namespace QuoteSwift
 
         public EditEmailAddressViewModel(Business business = null, Customer customer = null, string email = null)
         {
-            this.business = business;
-            this.customer = customer;
-            originalEmail = email ?? string.Empty;
-            CurrentEmail = originalEmail;
+            Initialize(business, customer, email);
             UpdateEmailCommand = new RelayCommand(_ =>
             {
                 var r = UpdateEmail();
                 LastResult = r;
             });
+        }
+
+        public void Initialize(Business business = null, Customer customer = null, string email = null)
+        {
+            this.business = business;
+            this.customer = customer;
+            originalEmail = email ?? string.Empty;
+            CurrentEmail = originalEmail;
         }
 
         public OperationResult LastResult

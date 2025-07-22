@@ -5,8 +5,8 @@ namespace QuoteSwift
 {
     public class EditPhoneNumberViewModel : ViewModelBase
     {
-        readonly Business business;
-        readonly Customer customer;
+        Business business;
+        Customer customer;
         OperationResult lastResult = OperationResult.Successful();
         string originalNumber;
         string currentNumber;
@@ -16,15 +16,20 @@ namespace QuoteSwift
 
         public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "")
         {
-            this.business = business;
-            this.customer = customer;
-            originalNumber = number ?? string.Empty;
-            CurrentNumber = originalNumber;
+            Initialize(business, customer, number);
             UpdateNumberCommand = new RelayCommand(_ =>
             {
                 var r = UpdateNumber();
                 LastResult = r;
             });
+        }
+
+        public void Initialize(Business business = null, Customer customer = null, string number = "")
+        {
+            this.business = business;
+            this.customer = customer;
+            originalNumber = number ?? string.Empty;
+            CurrentNumber = originalNumber;
         }
 
         public OperationResult LastResult
