@@ -22,14 +22,21 @@ namespace QuoteSwift
             this.navigation = navigation;
             this.messageService = messageService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            AddBusinessCommand = new RelayCommand(_ => navigation?.AddBusiness());
-            UpdateBusinessCommand = new RelayCommand(_ =>
+            AddBusinessCommand = new AsyncRelayCommand(async _ =>
+            {
+                if (navigation != null) await navigation.AddBusiness();
+            });
+            UpdateBusinessCommand = new AsyncRelayCommand(async _ =>
             {
                 if (SelectedBusiness != null)
-                    navigation?.AddBusiness(SelectedBusiness, false);
+                {
+                    if (navigation != null) await navigation.AddBusiness(SelectedBusiness, false);
+                }
                 else
+                {
                     messageService?.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
-            }, _ => SelectedBusiness != null);
+                }
+            }, _ => Task.FromResult(SelectedBusiness != null));
         }
 
         public IDataService DataService => dataService;
@@ -51,7 +58,7 @@ namespace QuoteSwift
             {
                 if (SetProperty(ref selectedBusiness, value))
                 {
-                    ((RelayCommand)UpdateBusinessCommand).RaiseCanExecuteChanged();
+                    ((AsyncRelayCommand)UpdateBusinessCommand).RaiseCanExecuteChanged();
                 }
             }
         }

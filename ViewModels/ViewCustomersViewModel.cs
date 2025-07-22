@@ -27,14 +27,21 @@ namespace QuoteSwift
             this.navigation = navigation;
             this.messageService = messageService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            AddCustomerCommand = new RelayCommand(_ => navigation?.AddCustomer());
-            UpdateCustomerCommand = new RelayCommand(_ =>
+            AddCustomerCommand = new AsyncRelayCommand(async _ =>
+            {
+                if (navigation != null) await navigation.AddCustomer();
+            });
+            UpdateCustomerCommand = new AsyncRelayCommand(async _ =>
             {
                 if (SelectedCustomer != null)
-                    navigation?.AddCustomer(SelectedBusiness, SelectedCustomer, false);
+                {
+                    if (navigation != null) await navigation.AddCustomer(SelectedBusiness, SelectedCustomer, false);
+                }
                 else
+                {
                     messageService?.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
-            }, _ => SelectedCustomer != null);
+                }
+            }, _ => Task.FromResult(SelectedCustomer != null));
         }
 
         public BindingList<Business> Businesses
@@ -84,7 +91,7 @@ namespace QuoteSwift
             {
                 if (SetProperty(ref selectedCustomer, value))
                 {
-                    ((RelayCommand)UpdateCustomerCommand).RaiseCanExecuteChanged();
+                    ((AsyncRelayCommand)UpdateCustomerCommand).RaiseCanExecuteChanged();
                 }
             }
         }

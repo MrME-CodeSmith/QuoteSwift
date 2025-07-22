@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace QuoteSwift
@@ -59,12 +60,12 @@ namespace QuoteSwift
             }
         }
 
-        public void CreateNewPump()
+        public async Task CreateNewPump()
         {
             using (var form = serviceProvider.GetRequiredService<FrmAddPump>())
             {
                 form.ViewModel.UpdateData(appData.PumpList, appData.PartList);
-                form.ViewModel.LoadDataAsync().GetAwaiter().GetResult();
+                await form.ViewModel.LoadDataAsync();
                 form.ShowDialog();
                 appData.PumpList = form.ViewModel.PumpList;
                 appData.PartList = form.ViewModel.PartMap;
@@ -94,7 +95,7 @@ namespace QuoteSwift
         }
 
 
-        public void AddCustomer(Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
+        public async Task AddCustomer(Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false)
         {
             using (var form = serviceProvider.GetRequiredService<FrmAddCustomer>())
             {
@@ -103,23 +104,24 @@ namespace QuoteSwift
                 form.ShowDialog();
             }
             appData.SaveAll();
+            await Task.CompletedTask;
         }
 
-        public void ViewCustomers()
+        public async Task ViewCustomers()
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewCustomers>())
             {
-                form.ViewModel.LoadDataAsync().GetAwaiter().GetResult();
+                await form.ViewModel.LoadDataAsync();
                 form.ShowDialog();
             }
         }
 
-        public void AddBusiness(Business businessToChange = null, bool changeSpecificObject = false)
+        public async Task AddBusiness(Business businessToChange = null, bool changeSpecificObject = false)
         {
             using (var form = serviceProvider.GetRequiredService<FrmAddBusiness>())
             {
                 form.ViewModel.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
-                form.ViewModel.LoadDataAsync().GetAwaiter().GetResult();
+                await form.ViewModel.LoadDataAsync();
                 form.ShowDialog();
                 appData.BusinessList = form.ViewModel.BusinessList;
             }
