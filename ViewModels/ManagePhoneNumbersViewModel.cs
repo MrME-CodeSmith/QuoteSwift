@@ -15,6 +15,7 @@ namespace QuoteSwift
         NumberEntry selectedCellphoneNumber;
         string newTelephoneNumber;
         string newCellphoneNumber;
+        readonly INavigationService navigation;
 
         public ICommand RemoveTelephoneCommand { get; }
         public ICommand RemoveCellphoneCommand { get; }
@@ -24,11 +25,13 @@ namespace QuoteSwift
         public ICommand UpdateCellphoneCommand { get; }
         public ICommand AddTelephoneCommand { get; }
         public ICommand AddCellphoneCommand { get; }
+        public ICommand ExitCommand { get; }
 
 
-        public ManagePhoneNumbersViewModel(IDataService service)
+        public ManagePhoneNumbersViewModel(IDataService service, INavigationService navigation = null)
         {
             dataService = service;
+            this.navigation = navigation;
             telephoneNumbers = new BindingList<NumberEntry>();
             cellphoneNumbers = new BindingList<NumberEntry>();
             RemoveTelephoneCommand = new RelayCommand(n => RemoveTelephone(n as string));
@@ -54,6 +57,11 @@ namespace QuoteSwift
             {
                 if (p is object[] arr && arr.Length == 2 && arr[0] is string oldN && arr[1] is string newN)
                     UpdateCellphone(oldN, newN);
+            });
+            ExitCommand = new RelayCommand(_ =>
+            {
+                navigation?.SaveAllData();
+                System.Windows.Forms.Application.Exit();
             });
         }
 

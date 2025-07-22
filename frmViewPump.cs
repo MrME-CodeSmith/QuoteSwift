@@ -25,6 +25,8 @@ namespace QuoteSwift // Repair Quote Swift
             CommandBindings.Bind(btnAddPump, viewModel.AddPumpCommand);
             CommandBindings.Bind(btnRemovePumpSelection, viewModel.RemovePumpCommand);
 
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+
             exportInventoryToolStripMenuItem.Click += async (s, e) =>
             {
                 if (viewModel.ExportInventoryCommand.CanExecute(null))
@@ -44,11 +46,8 @@ namespace QuoteSwift // Repair Quote Swift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-            {
-                viewModel.SaveChanges();
-                Application.Exit();
-            }
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
 

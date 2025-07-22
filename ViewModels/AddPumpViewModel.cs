@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
+        readonly INavigationService navigation;
         Pump currentPump;
         bool lastOperationSuccessful;
         string formTitle;
@@ -17,6 +18,7 @@ namespace QuoteSwift
         public ICommand UpdatePumpCommand { get; }
         public ICommand SavePumpCommand { get; }
         public ICommand LoadDataCommand { get; }
+        public ICommand ExitCommand { get; }
 
         public bool LastOperationSuccessful
         {
@@ -86,10 +88,13 @@ namespace QuoteSwift
         public bool CanEdit => changeSpecificObject;
 
 
-        public AddPumpViewModel(IDataService service, INotificationService notifier)
+        public AddPumpViewModel(IDataService service,
+                                INotificationService notifier,
+                                INavigationService navigation = null)
         {
             dataService = service;
             notificationService = notifier;
+            this.navigation = navigation;
             SelectedMandatoryParts = new BindingList<Pump_Part>();
             SelectedNonMandatoryParts = new BindingList<Pump_Part>();
             RepairableItemNames = new HashSet<string>();
@@ -103,6 +108,11 @@ namespace QuoteSwift
                     LastOperationSuccessful = AddPump();
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
+            ExitCommand = new RelayCommand(_ =>
+            {
+                navigation?.SaveAllData();
+                System.Windows.Forms.Application.Exit();
+            });
         }
 
         public IDataService DataService => dataService;

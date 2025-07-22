@@ -31,14 +31,13 @@ namespace QuoteSwift
             CommandBindings.Bind(btnAddEmail, viewModel.AddEmailCommand);
 
             CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedEmailCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-            {
-                Application.Exit();
-            }
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
         private void FrmManageAllEmails_Load(object sender, EventArgs e)

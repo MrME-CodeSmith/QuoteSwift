@@ -52,16 +52,13 @@ namespace QuoteSwift
 
             CommandBindings.Bind(btnAddPart, viewModel.SavePartCommand);
             CommandBindings.Bind(loadPartBatchToolStripMenuItem, viewModel.ImportPartsCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                serializationService.CloseApplication(true,
-                    appData?.BusinessList,
-                    appData?.PumpList,
-                    appData?.PartList,
-                    appData?.QuoteMap);
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
         private void FrmAddPart_Activated(object sender, EventArgs e)

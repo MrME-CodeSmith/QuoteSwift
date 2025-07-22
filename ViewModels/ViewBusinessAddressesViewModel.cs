@@ -14,6 +14,8 @@ namespace QuoteSwift
         bool changeSpecificObject;
         Address selectedAddress;
 
+        public ICommand ExitCommand { get; }
+
         public ICommand RemoveSelectedAddressCommand { get; }
         public ICommand EditAddressCommand { get; }
 
@@ -31,6 +33,11 @@ namespace QuoteSwift
             EditAddressCommand = new RelayCommand(
                 _ => EditSelectedAddress(),
                 _ => SelectedAddress != null);
+            ExitCommand = new RelayCommand(_ =>
+            {
+                navigation?.SaveAllData();
+                System.Windows.Forms.Application.Exit();
+            });
         }
 
         public IDataService DataService => dataService;

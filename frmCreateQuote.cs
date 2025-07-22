@@ -86,12 +86,9 @@ namespace QuoteSwift
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                serializationService.CloseApplication(true,
-                    appData?.BusinessList,
-                    appData?.PumpList,
-                    appData?.PartList,
-                    appData?.QuoteMap);
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
+        }
 
         private void CbxPumpSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -265,6 +262,7 @@ namespace QuoteSwift
 
             UpdatePricingDisplay();
             CommandBindings.Bind(btnComplete, viewModel.SaveQuoteCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         void UpdatePricingDisplay()
@@ -380,11 +378,8 @@ namespace QuoteSwift
 
         protected override void OnClose()
         {
-            serializationService.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
 }
