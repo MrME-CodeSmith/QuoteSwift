@@ -39,6 +39,24 @@ namespace QuoteSwift
             services.AddTransient<ViewPOBoxAddressesViewModel>();
             services.AddTransient<ViewPartsViewModel>();
             services.AddTransient<ViewPumpViewModel>();
+            // register forms
+            services.AddTransient<FrmAddPump>();
+            services.AddTransient<FrmAddPart>();
+            services.AddTransient<FrmViewParts>();
+            services.AddTransient<FrmViewPump>();
+            services.AddTransient<FrmCreateQuote>();
+            services.AddTransient<FrmViewQuotes>();
+            services.AddTransient<FrmAddCustomer>();
+            services.AddTransient<FrmViewCustomers>();
+            services.AddTransient<FrmAddBusiness>();
+            services.AddTransient<FrmViewAllBusinesses>();
+            services.AddTransient<FrmViewBusinessAddresses>();
+            services.AddTransient<FrmViewPOBoxAddresses>();
+            services.AddTransient<FrmManageAllEmails>();
+            services.AddTransient<FrmManagingPhoneNumbers>();
+            services.AddTransient<FrmEditBusinessAddress>();
+            services.AddTransient<FrmEditEmailAddress>();
+            services.AddTransient<FrmEditPhoneNumber>();
             return services.BuildServiceProvider();
         }
 
@@ -48,15 +66,12 @@ namespace QuoteSwift
             var appData = serviceProvider.GetRequiredService<ApplicationData>();
             appData.Load();
 
-            var navigation = serviceProvider.GetRequiredService<INavigationService>();
-            var messenger = serviceProvider.GetRequiredService<IMessageService>();
-            var serializationService = serviceProvider.GetRequiredService<ISerializationService>();
-            var viewModel = serviceProvider.GetRequiredService<QuotesViewModel>();
-            viewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+            var mainForm = serviceProvider.GetRequiredService<FrmViewQuotes>();
+            mainForm.ViewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmViewQuotes(viewModel, navigation, messenger, serializationService));
+            Application.Run(mainForm);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly ViewBusinessesViewModel viewModel;
+        public ViewBusinessesViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly BindingSource businessBindingSource = new BindingSource();

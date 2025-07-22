@@ -12,9 +12,11 @@ namespace QuoteSwift
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
 
-        Business Container;
+        public AddCustomerViewModel ViewModel => viewModel;
 
-        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, Business container = null, IMessageService messageService = null, ISerializationService serializationService = null)
+        public Business Container { get; set; }
+
+        public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
             : base(messageService, navigation)
         {
             InitializeComponent();
@@ -22,7 +24,6 @@ namespace QuoteSwift
             this.navigation = navigation;
             this.serializationService = serializationService;
             this.messageService = messageService;
-            this.Container = container;
             viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
             BindIsBusy(viewModel);
 

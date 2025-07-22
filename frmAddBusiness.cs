@@ -8,6 +8,7 @@ namespace QuoteSwift
     {
 
         readonly AddBusinessViewModel viewModel;
+        public AddBusinessViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;

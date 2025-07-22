@@ -7,13 +7,14 @@ namespace QuoteSwift
     {
 
         readonly QuotesViewModel viewModel;
+        public QuotesViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
         readonly BindingSource quotesBindingSource = new BindingSource();
 
         public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
-            : base(messageService, navigation)
+        : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;

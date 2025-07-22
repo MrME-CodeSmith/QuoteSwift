@@ -9,6 +9,7 @@ namespace QuoteSwift
     {
 
         readonly ViewPartsViewModel viewModel;
+        public ViewPartsViewModel ViewModel => viewModel;
 
         readonly BindingSource partsBindingSource = new BindingSource();
 

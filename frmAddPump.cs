@@ -10,6 +10,7 @@ namespace QuoteSwift
     public partial class FrmAddPump : BaseForm
     {
         readonly AddPumpViewModel viewModel;
+        public AddPumpViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly ApplicationData appData;
         readonly ISerializationService serializationService;

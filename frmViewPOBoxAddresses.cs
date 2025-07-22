@@ -10,8 +10,9 @@ namespace QuoteSwift
         readonly ViewPOBoxAddressesViewModel viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
-        readonly Business business;
-        readonly Customer customer;
+        Business business;
+        Customer customer;
+        public ViewPOBoxAddressesViewModel ViewModel => viewModel;
 
         void SetupBindings()
         {
@@ -30,16 +31,20 @@ namespace QuoteSwift
             CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedAddressCommand);
         }
 
-        public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, Business business = null, Customer customer = null, IMessageService messageService = null)
+        public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
             : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
+            SetupBindings();
+        }
+
+        public void Initialize(Business business = null, Customer customer = null)
+        {
             this.business = business;
             this.customer = customer;
-            SetupBindings();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

@@ -8,6 +8,7 @@ namespace QuoteSwift
     {
 
         readonly ManagePhoneNumbersViewModel viewModel;
+        public ManagePhoneNumbersViewModel ViewModel => viewModel;
         readonly IMessageService messageService;
         readonly INavigationService navigation;
 
