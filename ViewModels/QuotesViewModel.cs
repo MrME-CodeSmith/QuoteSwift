@@ -23,7 +23,7 @@ namespace QuoteSwift
         public QuotesViewModel(IDataService service)
         {
             dataService = service;
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
+            LoadDataCommand = CreateLoadCommand(LoadDataAsync);
         }
 
 

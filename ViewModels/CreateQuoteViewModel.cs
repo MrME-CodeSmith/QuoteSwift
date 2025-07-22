@@ -60,7 +60,7 @@ namespace QuoteSwift
             notificationService = notifier;
             excelExportService = excelExporter;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
-            LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());
+            LoadDataCommand = CreateLoadCommand(LoadDataAsync);
         }
 
         public IDataService DataService => dataService;
