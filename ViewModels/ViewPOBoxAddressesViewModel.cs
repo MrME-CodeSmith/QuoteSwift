@@ -6,6 +6,7 @@ namespace QuoteSwift
     public class ViewPOBoxAddressesViewModel : ViewModelBase
     {
         readonly IDataService dataService;
+        readonly INavigationService navigation;
         readonly BindingList<Address> addresses = new BindingList<Address>();
         Business business;
         Customer customer;
@@ -13,14 +14,17 @@ namespace QuoteSwift
         Address selectedAddress;
 
         public ICommand RemoveSelectedAddressCommand { get; }
+        public ICommand SaveChangesCommand { get; }
 
 
-        public ViewPOBoxAddressesViewModel(IDataService service)
+        public ViewPOBoxAddressesViewModel(IDataService service, INavigationService navigation = null)
         {
             dataService = service;
+            this.navigation = navigation;
             RemoveSelectedAddressCommand = new RelayCommand(
                 _ => RemoveAddress(SelectedAddress),
                 _ => SelectedAddress != null);
+            SaveChangesCommand = new RelayCommand(_ => navigation?.SaveAllData());
         }
 
         public IDataService DataService => dataService;
