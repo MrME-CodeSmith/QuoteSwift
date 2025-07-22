@@ -53,11 +53,23 @@ namespace QuoteSwift
             CreateQuoteCommand = new AsyncRelayCommand(_ => CreateQuoteAsync());
             ViewQuoteCommand = new AsyncRelayCommand(_ => ViewQuoteAsync(), _ => Task.FromResult(SelectedQuote != null));
             CreateQuoteFromSelectionCommand = new AsyncRelayCommand(_ => CreateQuoteFromSelectionAsync(), _ => Task.FromResult(SelectedQuote != null));
-            AddBusinessCommand = new AsyncRelayCommand(async _ => { navigation?.AddBusiness(); await LoadDataAsync(); });
+            AddBusinessCommand = new AsyncRelayCommand(async _ => {
+                if (navigation != null) await navigation.AddBusiness();
+                await LoadDataAsync();
+            });
             ViewBusinessesCommand = new AsyncRelayCommand(async _ => { navigation?.ViewBusinesses(); await LoadDataAsync(); });
-            AddCustomerCommand = new AsyncRelayCommand(async _ => { navigation?.AddCustomer(); await LoadDataAsync(); });
-            ViewCustomersCommand = new AsyncRelayCommand(async _ => { navigation?.ViewCustomers(); await LoadDataAsync(); });
-            CreatePumpCommand = new AsyncRelayCommand(async _ => { navigation?.CreateNewPump(); await LoadDataAsync(); });
+            AddCustomerCommand = new AsyncRelayCommand(async _ => {
+                if (navigation != null) await navigation.AddCustomer();
+                await LoadDataAsync();
+            });
+            ViewCustomersCommand = new AsyncRelayCommand(async _ => {
+                if (navigation != null) await navigation.ViewCustomers();
+                await LoadDataAsync();
+            });
+            CreatePumpCommand = new AsyncRelayCommand(async _ => {
+                if (navigation != null) await navigation.CreateNewPump();
+                await LoadDataAsync();
+            });
             ViewPumpsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllPumps(); await LoadDataAsync(); });
             AddPartCommand = new AsyncRelayCommand(async _ => { navigation?.AddNewPart(); await LoadDataAsync(); });
             ViewPartsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllParts(); await LoadDataAsync(); });

@@ -37,8 +37,8 @@ namespace QuoteSwift
             this.messageService = messageService;
             fileDialogService = dialogService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            AddPumpCommand = new RelayCommand(_ => AddPump());
-            UpdatePumpCommand = new RelayCommand(_ => UpdatePump(), _ => SelectedPump != null);
+            AddPumpCommand = new AsyncRelayCommand(_ => AddPumpAsync());
+            UpdatePumpCommand = new AsyncRelayCommand(_ => UpdatePumpAsync(), _ => Task.FromResult(SelectedPump != null));
             RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
             ExportInventoryCommand = new AsyncRelayCommand(_ => ExportInventoryActionAsync());
             ExitCommand = new RelayCommand(_ =>
@@ -77,7 +77,7 @@ namespace QuoteSwift
             {
                 if (SetProperty(ref selectedPump, value))
                 {
-                    ((RelayCommand)UpdatePumpCommand).RaiseCanExecuteChanged();
+                    ((AsyncRelayCommand)UpdatePumpCommand).RaiseCanExecuteChanged();
                     ((RelayCommand)RemovePumpCommand).RaiseCanExecuteChanged();
                 }
             }
@@ -116,17 +116,19 @@ namespace QuoteSwift
                 RepairableItemNames = new HashSet<string>();
         }
 
-        void AddPump()
+        async Task AddPumpAsync()
         {
-            navigation?.CreateNewPump();
+            if (navigation != null)
+                await navigation.CreateNewPump();
             RefreshRepairableNames();
         }
 
-        void UpdatePump()
+        async Task UpdatePumpAsync()
         {
             if (SelectedPump != null)
             {
-                navigation?.CreateNewPump();
+                if (navigation != null)
+                    await navigation.CreateNewPump();
                 RefreshRepairableNames();
             }
             else

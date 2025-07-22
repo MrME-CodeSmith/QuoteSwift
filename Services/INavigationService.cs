@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
@@ -7,12 +8,12 @@ namespace QuoteSwift
         void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false);
         void ViewAllQuotes();
         void ViewAllPumps();
-        void CreateNewPump();
+        Task CreateNewPump();
         void ViewAllParts();
         void AddNewPart(Part partToChange = null, bool changeSpecificObject = false);
-        void AddCustomer(Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false);
-        void ViewCustomers();
-        void AddBusiness(Business businessToChange = null, bool changeSpecificObject = false);
+        Task AddCustomer(Business businessToChange = null, Customer customerToChange = null, bool changeSpecificObject = false);
+        Task ViewCustomers();
+        Task AddBusiness(Business businessToChange = null, bool changeSpecificObject = false);
         void ViewBusinesses();
         void ViewBusinessesAddresses(Business business = null, Customer customer = null);
         void ViewBusinessesPOBoxAddresses(Business business = null, Customer customer = null);
