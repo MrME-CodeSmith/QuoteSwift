@@ -83,7 +83,6 @@ namespace QuoteSwift
             this.loadPartBatchToolStripMenuItem.Name = "loadPartBatchToolStripMenuItem";
             this.loadPartBatchToolStripMenuItem.Size = new System.Drawing.Size(164, 24);
             this.loadPartBatchToolStripMenuItem.Text = "Import Batch";
-            this.loadPartBatchToolStripMenuItem.Click += new System.EventHandler(this.LoadPartBatchToolStripMenuItem_Click);
             // 
             // updatePartToolStripMenuItem
             // 

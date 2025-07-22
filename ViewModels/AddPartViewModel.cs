@@ -11,6 +11,8 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
+        readonly IMessageService messageService;
+        readonly IFileDialogService fileDialogService;
         Dictionary<string, Part> partMap;
         BindingList<Pump> pumpList;
         Part partToChange;
@@ -25,6 +27,7 @@ namespace QuoteSwift
 
         public ICommand SavePartCommand { get; }
         public ICommand LoadDataCommand { get; }
+        public ICommand ImportPartsCommand { get; }
 
         public bool LastOperationSuccessful
         {
@@ -54,10 +57,13 @@ namespace QuoteSwift
         }
 
 
-        public AddPartViewModel(IDataService service, INotificationService notifier)
+        public AddPartViewModel(IDataService service, INotificationService notifier,
+                                IMessageService messenger = null, IFileDialogService dialogService = null)
         {
             dataService = service;
             notificationService = notifier;
+            messageService = messenger;
+            fileDialogService = dialogService;
             CurrentPart = new Part();
             SavePartCommand = new RelayCommand(_ =>
             {
@@ -99,6 +105,7 @@ namespace QuoteSwift
                 }
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
+            ImportPartsCommand = new RelayCommand(_ => ImportParts());
         }
 
         public IDataService DataService => dataService;
@@ -273,6 +280,47 @@ namespace QuoteSwift
                 CurrentPart = new Part();
                 Quantity = 0;
                 return true;
+            }
+        }
+
+        void ImportParts()
+        {
+            if (messageService == null)
+                return;
+
+            string message = "Please ensure that the selected CSV file has the following items in this exact order:\n\n" +
+                             "First Column: Original Part Number\n" +
+                             "Second Column: Part Name\n" +
+                             "Third Column: Part Description\n" +
+                             "Fourth Column: New Part Number\n" +
+                             "Fifth Column: Part Price\n" +
+                             "Sixth Column: Part Quantity (To add this amount of parts to the pump specified) \n" +
+                             "Seventh Column: TRUE / FALSE value (Mandatory part)\n" +
+                             "Eighth Column: Pump Name(To add a part to a specific pump)\n" +
+                             "Ninth Column: Pump Price (Price when pump is bought new)\n" +
+                             "Click the OK button to select the file or alternative choose cancel to abort this action.";
+
+            bool proceed = messageService.RequestConfirmation(message, "INFORMATION - CSV Batch Part Import");
+
+            if (!proceed)
+                return;
+
+            string file = fileDialogService?.ShowOpenFileDialog("CSV files (*.csv)|*.csv|All Files (*.*)|*.*", "csv");
+            if (string.IsNullOrEmpty(file))
+                return;
+
+            bool updateDup = messageService.RequestConfirmation(
+                "In the case that a duplicate part is being added would you like to update the parts that has already been added before?",
+                "REQUEST - Update Duplicate Part");
+
+            try
+            {
+                ImportPartsFromCsv(file, updateDup);
+                messageService.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
+            }
+            catch
+            {
+                messageService.ShowError("The provided CSV File's format is incorrect, please try again once the format has been corrected.", "ERROR - CSV File Format Incorrect");
             }
         }
 
