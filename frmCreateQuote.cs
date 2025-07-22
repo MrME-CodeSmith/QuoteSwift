@@ -47,28 +47,28 @@ namespace QuoteSwift
             }
             else
             {
-                NewQuote = CreateQuote();
-
+                viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
+                NewQuote = viewModel.CreateAndSaveQuote();
 
                 if (NewQuote != null)
                 {
-                    if (!viewModel.AddQuote(NewQuote))
-                    {
-                        messageService.ShowError("The provided quote number or Job number has been used in a previous quote.\nPlease ensure that the provided details are indeed correct.", "ERROR - Quote Number or Job Number Already Exists.");
-                        return;
-                    }
-
                     if (messageService.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
                     {
                         ExportQuoteToTemplate(NewQuote);
                     }
-                    else messageService.ShowInformation("The quote was successfully added to the list of quotes.", "INFORMATION - Quote Added To List");
+                    else
+                    {
+                        messageService.ShowInformation("The quote was successfully added to the list of quotes.", "INFORMATION - Quote Added To List");
+                    }
 
                     quoteToChange = NewQuote;
                     ConvertToReadOnly();
                     createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
                 }
-                else messageService.ShowError("The Quote could not be created successfully.", "ERROR - Quote Creation Unsuccessful");
+                else
+                {
+                    messageService.ShowError("The Quote could not be created successfully.", "ERROR - Quote Creation Unsuccessful");
+                }
             }
         }
 
@@ -325,31 +325,6 @@ namespace QuoteSwift
             }
         }
 
-        Quote CreateQuote()
-        {
-            if (!viewModel.ValidateInput()) return null;
-
-            viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
-            viewModel.Calculate();
-
-            var quote = viewModel.CreateQuote(viewModel.QuoteNumber,
-                                               viewModel.QuoteCreationDate,
-                                               viewModel.QuoteExpiryDate,
-                                               viewModel.ReferenceNumber,
-                                               viewModel.JobNumber,
-                                               viewModel.PRNumber,
-                                               viewModel.PaymentTerm,
-                                               viewModel.SelectedBusinessPOBox,
-                                               viewModel.SelectedCustomerPOBox,
-                                               viewModel.LineNumber,
-                                               viewModel.BusinessTelephone,
-                                               viewModel.BusinessCellphone,
-                                               viewModel.BusinessEmail,
-                                               (int)(viewModel.PaymentTerm.Subtract(viewModel.QuoteCreationDate).TotalDays),
-                                               viewModel.Pricing);
-
-            return quote;
-        }
 
         private void ExportQuoteToTemplate(Quote q)
         {
