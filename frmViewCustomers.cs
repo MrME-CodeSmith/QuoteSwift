@@ -20,9 +20,17 @@ namespace QuoteSwift
             this.serializationService = serializationService;
             this.appData = appData;
             this.messageService = messageService;
+            SetupBindings();
+        }
+
+        void SetupBindings()
+        {
             customersBindingSource.DataSource = viewModel;
             customersBindingSource.DataMember = nameof(ViewCustomersViewModel.Customers);
             DgvCustomerList.DataSource = customersBindingSource;
+            SelectionBindings.BindSelectedItem(DgvCustomerList, viewModel, nameof(ViewCustomersViewModel.SelectedCustomer));
+            CommandBindings.Bind(btnUpdateSelectedCustomer, viewModel.UpdateCustomerCommand);
+            CommandBindings.Bind(btnAddCustomer, viewModel.AddCustomerCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -37,32 +45,9 @@ namespace QuoteSwift
         }
 
 
-        private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e)
-        {
-            Customer customer = GetCustomerSelection();
-            Business container = viewModel.SelectedBusiness;
-
-            if (customer == null)
-            {
-                messageService.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
-                return;
-            }
-
-            navigation.AddCustomer(container, customer, false);
-
-            viewModel.RefreshCustomers();
-
-
-        }
-
-        private void BtnAddCustomer_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.AddCustomer();
-            Show();
-
-            viewModel.RefreshCustomers();
-        }
+        // Legacy button handlers kept for reference; functionality now provided via commands
+        private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e) { }
+        private void BtnAddCustomer_Click(object sender, EventArgs e) { }
 
         private async void FrmViewCustomers_Load(object sender, EventArgs e)
         {

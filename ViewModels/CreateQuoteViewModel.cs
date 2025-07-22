@@ -53,6 +53,7 @@ namespace QuoteSwift
 
         public ICommand AddQuoteCommand { get; }
         public ICommand LoadDataCommand { get; }
+        public ICommand ExportQuoteCommand { get; }
 
 
         public CreateQuoteViewModel(IDataService service, INotificationService notifier, IExcelExportService excelExporter)
@@ -62,6 +63,7 @@ namespace QuoteSwift
             excelExportService = excelExporter;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
+            ExportQuoteCommand = new RelayCommand(q => ExportQuoteToTemplate(q as Quote));
         }
 
         public IDataService DataService => dataService;

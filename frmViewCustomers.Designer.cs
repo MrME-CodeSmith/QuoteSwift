@@ -88,7 +88,6 @@ namespace QuoteSwift
             this.btnUpdateSelectedCustomer.TabIndex = 3;
             this.btnUpdateSelectedCustomer.Text = "View Selected Customer";
             this.btnUpdateSelectedCustomer.UseVisualStyleBackColor = true;
-            this.btnUpdateSelectedCustomer.Click += new System.EventHandler(this.BtnUpdateSelectedCustomer_Click);
             // 
             // btnAddCustomer
             // 
@@ -99,7 +98,6 @@ namespace QuoteSwift
             this.btnAddCustomer.TabIndex = 1;
             this.btnAddCustomer.Text = "Add Customer";
             this.btnAddCustomer.UseVisualStyleBackColor = true;
-            this.btnAddCustomer.Click += new System.EventHandler(this.BtnAddCustomer_Click);
             // 
             // btnRemoveSelectedCustomer
             // 

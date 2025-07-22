@@ -69,7 +69,6 @@ namespace QuoteSwift
             this.btnAddBusiness.TabIndex = 1;
             this.btnAddBusiness.Text = "Add Business";
             this.btnAddBusiness.UseVisualStyleBackColor = true;
-            this.btnAddBusiness.Click += new System.EventHandler(this.BtnAddBusiness_Click);
             // 
             // DgvBusinessList
             // 
@@ -99,7 +98,6 @@ namespace QuoteSwift
             this.btnUpdateBusiness.TabIndex = 3;
             this.btnUpdateBusiness.Text = "View Selected Business";
             this.btnUpdateBusiness.UseVisualStyleBackColor = true;
-            this.btnUpdateBusiness.Click += new System.EventHandler(this.BtnUpdateBusiness_Click);
             // 
             // BtnRemoveSelected
             // 
