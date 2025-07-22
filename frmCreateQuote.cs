@@ -196,7 +196,7 @@ namespace QuoteSwift
             clmTotal.DataPropertyName = nameof(Quote_Part.Price);
             ClmRepairDevider.DataPropertyName = nameof(Quote_Part.RepairDevider);
             mandatorySource.DataSource = viewModel.MandatoryParts;
-            dgvMandatoryPartReplacement.DataSource = mandatorySource;
+            BindingHelpers.BindDataGridView(dgvMandatoryPartReplacement, mandatorySource, nameof(BindingSource.DataSource));
 
             DgvNonMandatoryPartReplacement.AutoGenerateColumns = false;
             dataGridViewTextBoxColumn1.DataPropertyName = "PumpPart.PumpPart.NewPartNumber";
@@ -210,71 +210,52 @@ namespace QuoteSwift
             dataGridViewTextBoxColumn9.DataPropertyName = nameof(Quote_Part.Price);
             ClmNMRepairDevider.DataPropertyName = nameof(Quote_Part.RepairDevider);
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
-            DgvNonMandatoryPartReplacement.DataSource = nonMandatorySource;
+            BindingHelpers.BindDataGridView(DgvNonMandatoryPartReplacement, nonMandatorySource, nameof(BindingSource.DataSource));
 
-            cbxBusinessSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Businesses), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxBusinessSelection.DisplayMember = "BusinessName";
-            cbxBusinessSelection.ValueMember = "BusinessName";
-            cbxBusinessSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusiness), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindComboBox(cbxBusinessSelection, viewModel, nameof(CreateQuoteViewModel.Businesses), nameof(CreateQuoteViewModel.SelectedBusiness), "BusinessName", "BusinessName");
 
-            cbxPumpSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Pumps), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxPumpSelection.DisplayMember = "PumpName";
-            cbxPumpSelection.ValueMember = "PumpName";
-            cbxPumpSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindComboBox(cbxPumpSelection, viewModel, nameof(CreateQuoteViewModel.Pumps), nameof(CreateQuoteViewModel.SelectedPump), "PumpName", "PumpName");
 
-            cbxBusinessTelephoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessTelephoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxBusinessCellphoneNumberSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessCellphoneNumbers), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxBusinessEmailAddressSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessEmailAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindComboBox(cbxBusinessTelephoneNumberSelection, viewModel, nameof(CreateQuoteViewModel.BusinessTelephoneNumbers), null);
+            BindingHelpers.BindComboBox(cbxBusinessCellphoneNumberSelection, viewModel, nameof(CreateQuoteViewModel.BusinessCellphoneNumbers), null);
+            BindingHelpers.BindComboBox(cbxBusinessEmailAddressSelection, viewModel, nameof(CreateQuoteViewModel.BusinessEmailAddresses), null);
 
-            cbxCustomerSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.Customers), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxCustomerSelection.DisplayMember = "CustomerCompanyName";
-            cbxCustomerSelection.ValueMember = "CustomerCompanyName";
-            cbxCustomerSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomer), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindComboBox(cbxCustomerSelection, viewModel, nameof(CreateQuoteViewModel.Customers), nameof(CreateQuoteViewModel.SelectedCustomer), "CustomerCompanyName", "CustomerCompanyName");
 
-            cbxCustomerDeliveryAddress.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryAddresses), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxCustomerDeliveryAddress.DisplayMember = "AddressDescription";
-            cbxCustomerDeliveryAddress.ValueMember = "AddressDescription";
+            BindingHelpers.BindComboBox(cbxCustomerDeliveryAddress, viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryAddresses), nameof(CreateQuoteViewModel.SelectedCustomerDeliveryAddress), "AddressDescription", "AddressDescription");
 
-            CbxPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
-            CbxPOBoxSelection.DisplayMember = "AddressDescription";
-            CbxPOBoxSelection.ValueMember = "AddressDescription";
+            BindingHelpers.BindComboBox(CbxPOBoxSelection, viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxes), nameof(CreateQuoteViewModel.SelectedBusinessPOBox), "AddressDescription", "AddressDescription");
 
-            CbxCustomerPOBoxSelection.DataBindings.Add("DataSource", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxes), false, DataSourceUpdateMode.OnPropertyChanged);
-            CbxCustomerPOBoxSelection.DisplayMember = "AddressDescription";
-            CbxCustomerPOBoxSelection.ValueMember = "AddressDescription";
+            BindingHelpers.BindComboBox(CbxCustomerPOBoxSelection, viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxes), nameof(CreateQuoteViewModel.SelectedCustomerPOBox), "AddressDescription", "AddressDescription");
 
-            txtCustomerVATNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerVATNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtJobNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.JobNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtReferenceNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.ReferenceNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtPRNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.PRNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtLineNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.LineNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtQuoteNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.QuoteNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(txtCustomerVATNumber, viewModel, nameof(CreateQuoteViewModel.CustomerVATNumber));
+            BindingHelpers.BindText(txtJobNumber, viewModel, nameof(CreateQuoteViewModel.JobNumber));
+            BindingHelpers.BindText(txtReferenceNumber, viewModel, nameof(CreateQuoteViewModel.ReferenceNumber));
+            BindingHelpers.BindText(txtPRNumber, viewModel, nameof(CreateQuoteViewModel.PRNumber));
+            BindingHelpers.BindText(txtLineNumber, viewModel, nameof(CreateQuoteViewModel.LineNumber));
+            BindingHelpers.BindText(txtQuoteNumber, viewModel, nameof(CreateQuoteViewModel.QuoteNumber));
 
-            rtxCustomerDeliveryDescripton.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryDescription), false, DataSourceUpdateMode.OnPropertyChanged);
-            dtpQuoteCreationDate.DataBindings.Add("Value", viewModel, nameof(CreateQuoteViewModel.QuoteCreationDate), false, DataSourceUpdateMode.OnPropertyChanged);
-            dtpQuoteExpiryDate.DataBindings.Add("Value", viewModel, nameof(CreateQuoteViewModel.QuoteExpiryDate), false, DataSourceUpdateMode.OnPropertyChanged);
-            dtpPaymentTerm.DataBindings.Add("Value", viewModel, nameof(CreateQuoteViewModel.PaymentTerm), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(rtxCustomerDeliveryDescripton, viewModel, nameof(CreateQuoteViewModel.CustomerDeliveryDescription));
+            BindingHelpers.BindValue(dtpQuoteCreationDate, viewModel, nameof(CreateQuoteViewModel.QuoteCreationDate));
+            BindingHelpers.BindValue(dtpQuoteExpiryDate, viewModel, nameof(CreateQuoteViewModel.QuoteExpiryDate));
+            BindingHelpers.BindValue(dtpPaymentTerm, viewModel, nameof(CreateQuoteViewModel.PaymentTerm));
 
-            cbxBusinessTelephoneNumberSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessTelephone), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxBusinessCellphoneNumberSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessCellphone), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxBusinessEmailAddressSelection.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessEmail), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(cbxBusinessTelephoneNumberSelection, viewModel, nameof(CreateQuoteViewModel.BusinessTelephone));
+            BindingHelpers.BindText(cbxBusinessCellphoneNumberSelection, viewModel, nameof(CreateQuoteViewModel.BusinessCellphone));
+            BindingHelpers.BindText(cbxBusinessEmailAddressSelection, viewModel, nameof(CreateQuoteViewModel.BusinessEmail));
 
-            lblBusinessPOBoxNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblBusinessPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxSuburbDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblBusinessPOBoxCity.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxCityDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblBusinessPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxAreaCodeDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblBusinessRegistrationNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessRegistrationNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblBusinessVATNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.BusinessVATNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(lblBusinessPOBoxNumber, viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxNumberDisplay));
+            BindingHelpers.BindText(lblBusinessPOBoxSuburb, viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxSuburbDisplay));
+            BindingHelpers.BindText(lblBusinessPOBoxCity, viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxCityDisplay));
+            BindingHelpers.BindText(lblBusinessPOBoxAreaCode, viewModel, nameof(CreateQuoteViewModel.BusinessPOBoxAreaCodeDisplay));
+            BindingHelpers.BindText(lblBusinessRegistrationNumber, viewModel, nameof(CreateQuoteViewModel.BusinessRegistrationNumberDisplay));
+            BindingHelpers.BindText(lblBusinessVATNumber, viewModel, nameof(CreateQuoteViewModel.BusinessVATNumberDisplay));
 
-            lblCustomerPOBoxStreetName.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxStreetNameDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblCustomerPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxSuburbDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblCustomerPOBoxCity.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxCityDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblCustomerPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxAreaCodeDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-            lblCustomerVendorNumber.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.CustomerVendorNumberDisplay), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            CbxPOBoxSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedBusinessPOBox), false, DataSourceUpdateMode.OnPropertyChanged);
-            CbxCustomerPOBoxSelection.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomerPOBox), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxCustomerDeliveryAddress.DataBindings.Add("SelectedItem", viewModel, nameof(CreateQuoteViewModel.SelectedCustomerDeliveryAddress), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(lblCustomerPOBoxStreetName, viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxStreetNameDisplay));
+            BindingHelpers.BindText(lblCustomerPOBoxSuburb, viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxSuburbDisplay));
+            BindingHelpers.BindText(lblCustomerPOBoxCity, viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxCityDisplay));
+            BindingHelpers.BindText(lblCustomerPOBoxAreaCode, viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxAreaCodeDisplay));
+            BindingHelpers.BindText(lblCustomerVendorNumber, viewModel, nameof(CreateQuoteViewModel.CustomerVendorNumberDisplay));
 
             UpdatePricingDisplay();
             CommandBindings.Bind(btnComplete, viewModel.SaveQuoteCommand);

@@ -93,35 +93,28 @@ namespace QuoteSwift
 
         private void SetupBindings()
         {
-            txtBusinessName.DataBindings.Clear();
-            txtBusinessName.DataBindings.Add("Text", viewModel.CurrentBusiness, nameof(Business.BusinessName), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(txtBusinessName, viewModel.CurrentBusiness, nameof(Business.BusinessName));
+            BindingHelpers.BindText(rtxtExtraInformation, viewModel.CurrentBusiness, nameof(Business.BusinessExtraInformation));
+            BindingHelpers.BindText(mtxtVATNumber, viewModel.CurrentBusiness, "BusinessLegalDetails.VatNumber");
+            BindingHelpers.BindText(mtxtRegistrationNumber, viewModel.CurrentBusiness, "BusinessLegalDetails.RegistrationNumber");
 
-            rtxtExtraInformation.DataBindings.Clear();
-            rtxtExtraInformation.DataBindings.Add("Text", viewModel.CurrentBusiness, nameof(Business.BusinessExtraInformation), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(txtBusinessAddresssDescription, viewModel, nameof(AddBusinessViewModel.AddressDescription));
+            BindingHelpers.BindText(mtxtStreetnumber, viewModel, nameof(AddBusinessViewModel.StreetNumber));
+            BindingHelpers.BindText(txtStreetName, viewModel, nameof(AddBusinessViewModel.StreetName));
+            BindingHelpers.BindText(txtSuburb, viewModel, nameof(AddBusinessViewModel.Suburb));
+            BindingHelpers.BindText(txtCity, viewModel, nameof(AddBusinessViewModel.City));
+            BindingHelpers.BindText(mtxtAreaCode, viewModel, nameof(AddBusinessViewModel.AreaCode));
 
-            mtxtVATNumber.DataBindings.Clear();
-            mtxtVATNumber.DataBindings.Add("Text", viewModel.CurrentBusiness, "BusinessLegalDetails.VatNumber", false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(txtBusinessPODescription, viewModel, nameof(AddBusinessViewModel.PODescription));
+            BindingHelpers.BindText(mtxtPOBoxStreetNumber, viewModel, nameof(AddBusinessViewModel.POStreetNumber));
+            BindingHelpers.BindText(txtPOBoxSuburb, viewModel, nameof(AddBusinessViewModel.POSuburb));
+            BindingHelpers.BindText(txtPOBoxCity, viewModel, nameof(AddBusinessViewModel.POCity));
+            BindingHelpers.BindText(mtxtPOBoxAreaCode, viewModel, nameof(AddBusinessViewModel.POAreaCode));
 
-            mtxtRegistrationNumber.DataBindings.Clear();
-            mtxtRegistrationNumber.DataBindings.Add("Text", viewModel.CurrentBusiness, "BusinessLegalDetails.RegistrationNumber", false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(mtxtTelephoneNumber, viewModel, nameof(AddBusinessViewModel.TelephoneInput));
+            BindingHelpers.BindText(mtxtCellphoneNumber, viewModel, nameof(AddBusinessViewModel.CellphoneInput));
 
-            txtBusinessAddresssDescription.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.AddressDescription), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtStreetnumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.StreetNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtStreetName.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.StreetName), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtSuburb.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.Suburb), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtCity.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.City), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtAreaCode.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.AreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            txtBusinessPODescription.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.PODescription), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtPOBoxStreetNumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POStreetNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtPOBoxSuburb.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POSuburb), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtPOBoxCity.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POCity), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtPOBoxAreaCode.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.POAreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            mtxtTelephoneNumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.TelephoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtCellphoneNumber.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.CellphoneInput), false, DataSourceUpdateMode.OnPropertyChanged);
-
-            mtxtEmail.DataBindings.Add("Text", viewModel, nameof(AddBusinessViewModel.EmailInput), false, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(mtxtEmail, viewModel, nameof(AddBusinessViewModel.EmailInput));
 
             gbxBusinessAddress.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
             gbxBusinessInformation.DataBindings.Add("Enabled", viewModel, nameof(AddBusinessViewModel.IsEditing));
