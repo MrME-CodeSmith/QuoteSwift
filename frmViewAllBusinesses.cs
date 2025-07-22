@@ -27,6 +27,9 @@ namespace QuoteSwift
             businessBindingSource.DataSource = viewModel;
             businessBindingSource.DataMember = nameof(ViewBusinessesViewModel.Businesses);
             DgvBusinessList.DataSource = businessBindingSource;
+            SelectionBindings.BindSelectedItem(DgvBusinessList, viewModel, nameof(ViewBusinessesViewModel.SelectedBusiness));
+            CommandBindings.Bind(btnUpdateBusiness, viewModel.UpdateBusinessCommand);
+            CommandBindings.Bind(btnAddBusiness, viewModel.AddBusinessCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -35,27 +38,9 @@ namespace QuoteSwift
                 Application.Exit();
         }
 
-        private void BtnUpdateBusiness_Click(object sender, EventArgs e)
-        {
-
-            Business Business = GetBusinessSelection();
-
-            if (Business == null)
-            {
-                messageService.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
-                return;
-            }
-
-            navigation.AddBusiness(Business, false);
-
-        }
-
-        private void BtnAddBusiness_Click(object sender, EventArgs e)
-        {
-            Hide();
-            navigation.AddBusiness();
-            Show();
-        }
+        // Legacy button handlers kept for reference; functionality now provided via commands
+        private void BtnUpdateBusiness_Click(object sender, EventArgs e) { }
+        private void BtnAddBusiness_Click(object sender, EventArgs e) { }
 
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {

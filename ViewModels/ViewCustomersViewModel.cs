@@ -9,17 +9,32 @@ namespace QuoteSwift
     public class ViewCustomersViewModel : ViewModelBase
     {
         readonly IDataService dataService;
+        readonly INavigationService navigation;
+        readonly IMessageService messageService;
         BindingList<Business> businesses;
         SortedDictionary<string, Quote> quoteMap;
         Business selectedBusiness;
         BindingList<Customer> customers;
+        Customer selectedCustomer;
         public ICommand LoadDataCommand { get; }
+        public ICommand AddCustomerCommand { get; }
+        public ICommand UpdateCustomerCommand { get; }
 
 
-        public ViewCustomersViewModel(IDataService service)
+        public ViewCustomersViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
         {
             dataService = service;
+            this.navigation = navigation;
+            this.messageService = messageService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
+            AddCustomerCommand = new RelayCommand(_ => navigation?.AddCustomer());
+            UpdateCustomerCommand = new RelayCommand(_ =>
+            {
+                if (SelectedCustomer != null)
+                    navigation?.AddCustomer(SelectedBusiness, SelectedCustomer, false);
+                else
+                    messageService?.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
+            }, _ => SelectedCustomer != null);
         }
 
         public BindingList<Business> Businesses
@@ -59,6 +74,18 @@ namespace QuoteSwift
             {
                 customers = value;
                 OnPropertyChanged(nameof(Customers));
+            }
+        }
+
+        public Customer SelectedCustomer
+        {
+            get => selectedCustomer;
+            set
+            {
+                if (SetProperty(ref selectedCustomer, value))
+                {
+                    ((RelayCommand)UpdateCustomerCommand).RaiseCanExecuteChanged();
+                }
             }
         }
 

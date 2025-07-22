@@ -329,7 +329,7 @@ namespace QuoteSwift
         private void ExportQuoteToTemplate(Quote q)
         {
             UseWaitCursor = true;
-            viewModel.ExportQuoteToTemplate(q);
+            viewModel.ExportQuoteCommand.Execute(q);
             UseWaitCursor = false;
         }
 
