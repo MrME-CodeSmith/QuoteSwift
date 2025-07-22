@@ -24,6 +24,7 @@ namespace QuoteSwift
             this.messageService = messageService;
             this.Container = container;
             viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
+            BindIsBusy(viewModel);
 
             BindingHelpers.BindText(txtCustomerCompanyName, viewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName));
             BindingHelpers.BindText(mtxtVendorNumber, viewModel.CurrentCustomer, nameof(Customer.VendorNumber));

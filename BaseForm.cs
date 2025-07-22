@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 
 namespace QuoteSwift
@@ -22,6 +23,24 @@ namespace QuoteSwift
         {
             OnClose();
             base.OnFormClosing(e);
+        }
+
+        /// <summary>
+        /// Binds the form's wait cursor to the IsBusy property of the supplied
+        /// view model.
+        /// </summary>
+        protected void BindIsBusy(ViewModelBase viewModel)
+        {
+            if (viewModel == null)
+                return;
+
+            viewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModelBase.IsBusy))
+                {
+                    BeginInvoke(new Action(() => UseWaitCursor = viewModel.IsBusy));
+                }
+            };
         }
     }
 }

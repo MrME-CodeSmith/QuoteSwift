@@ -22,6 +22,7 @@ namespace QuoteSwift
             this.appData = appData;
             this.messageService = messageService;
             SetupBindings();
+            BindIsBusy(viewModel);
         }
 
         void SetupBindings()
