@@ -35,6 +35,33 @@ namespace QuoteSwift
             grid.DataBindings.Add("DataSource", source, listProperty, false, mode);
         }
 
+        public static void BindEnabled(Control control, object source, string propertyName,
+            DataSourceUpdateMode mode = DataSourceUpdateMode.OnPropertyChanged)
+        {
+            if (control == null || source == null || string.IsNullOrWhiteSpace(propertyName))
+                return;
+            ClearExisting(control, "Enabled");
+            control.DataBindings.Add("Enabled", source, propertyName, false, mode);
+        }
+
+        public static void BindVisible(Control control, object source, string propertyName,
+            DataSourceUpdateMode mode = DataSourceUpdateMode.OnPropertyChanged)
+        {
+            if (control == null || source == null || string.IsNullOrWhiteSpace(propertyName))
+                return;
+            ClearExisting(control, "Visible");
+            control.DataBindings.Add("Visible", source, propertyName, false, mode);
+        }
+
+        public static void BindReadOnly(Control control, object source, string propertyName,
+            DataSourceUpdateMode mode = DataSourceUpdateMode.OnPropertyChanged)
+        {
+            if (control == null || source == null || string.IsNullOrWhiteSpace(propertyName))
+                return;
+            ClearExisting(control, "ReadOnly");
+            control.DataBindings.Add("ReadOnly", source, propertyName, false, mode);
+        }
+
         public static void BindComboBox(ComboBox combo, object source, string itemsProperty,
             string selectedItemProperty, string displayMember = null, string valueMember = null,
             DataSourceUpdateMode mode = DataSourceUpdateMode.OnPropertyChanged)

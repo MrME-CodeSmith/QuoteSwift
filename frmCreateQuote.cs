@@ -329,7 +329,8 @@ namespace QuoteSwift
 
         private void ConvertToReadOnly()
         {
-            ApplyControlState(true);
+            ControlStateHelper.ApplyReadOnly(Controls, true);
+            cbxPumpSelection.Enabled = false;
 
             dgvMandatoryPartReplacement.ReadOnly = true;
             DgvNonMandatoryPartReplacement.ReadOnly = true;
@@ -350,18 +351,14 @@ namespace QuoteSwift
 
         private void ConvertToReadWrite()
         {
-            ApplyControlState(false);
+            ControlStateHelper.ApplyReadOnly(Controls, false);
+            cbxPumpSelection.Enabled = true;
 
             Text = Text.Replace(quoteToChange.QuoteCompany.BusinessName, quoteToChange.QuoteCompany.BusinessName);
             Text = Text.Replace("Viewing", "Creating New");
 
         }
 
-        void ApplyControlState(bool readOnly)
-        {
-            ControlStateHelper.ApplyReadOnly(Controls, readOnly);
-            cbxPumpSelection.Enabled = !readOnly;
-        }
 
         private void CreateNewQuoteUsingThisQuoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
