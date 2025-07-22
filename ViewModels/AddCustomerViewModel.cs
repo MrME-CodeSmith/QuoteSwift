@@ -9,6 +9,8 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
+        readonly INavigationService navigation;
+        readonly IMessageService messageService;
         BindingList<Business> businessList;
         Customer customerToChange;
         bool changeSpecificObject;
@@ -34,6 +36,11 @@ namespace QuoteSwift
         public ICommand AddPOBoxAddressCommand { get; }
         public ICommand AddPhoneNumberCommand { get; }
         public ICommand AddEmailCommand { get; }
+
+        public ICommand ViewEmailAddressesCommand { get; }
+        public ICommand ViewAddressesCommand { get; }
+        public ICommand ViewPOBoxAddressesCommand { get; }
+        public ICommand ViewPhoneNumbersCommand { get; }
 
         public ICommand AddCustomerCommand { get; }
         public ICommand UpdateCustomerCommand { get; }
@@ -153,10 +160,15 @@ namespace QuoteSwift
         }
 
 
-        public AddCustomerViewModel(IDataService service, INotificationService notifier)
+        public AddCustomerViewModel(IDataService service,
+                                    INotificationService notifier,
+                                    INavigationService navigation,
+                                    IMessageService messageService)
         {
             dataService = service;
             notificationService = notifier;
+            this.navigation = navigation;
+            this.messageService = messageService;
             currentCustomer = new Customer();
             AddCustomerCommand = new RelayCommand(p =>
             {
@@ -234,6 +246,50 @@ namespace QuoteSwift
                 else
                 {
                     LastOperationSuccessful = false;
+                }
+            });
+            ViewPhoneNumbersCommand = new RelayCommand(_ =>
+            {
+                if (CurrentCustomer.CustomerCellphoneNumberList != null || CurrentCustomer.CustomerTelephoneNumberList != null)
+                {
+                    navigation?.ViewBusinessesPhoneNumbers(null, CurrentCustomer);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Customer Phone Numbers");
+                }
+            });
+            ViewPOBoxAddressesCommand = new RelayCommand(_ =>
+            {
+                if (CurrentCustomer.CustomerPOBoxAddress != null)
+                {
+                    navigation?.ViewBusinessesPOBoxAddresses(null, CurrentCustomer);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer P.O.Box Addresses");
+                }
+            });
+            ViewEmailAddressesCommand = new RelayCommand(_ =>
+            {
+                if (CurrentCustomer.CustomerEmailList != null)
+                {
+                    navigation?.ViewBusinessesEmailAddresses(null, CurrentCustomer);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Email Addresses");
+                }
+            });
+            ViewAddressesCommand = new RelayCommand(_ =>
+            {
+                if (CurrentCustomer != null)
+                {
+                    navigation?.ViewBusinessesAddresses(null, CurrentCustomer);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Addresses");
                 }
             });
             LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());

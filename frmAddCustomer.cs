@@ -55,6 +55,10 @@ namespace QuoteSwift
             CommandBindings.Bind(btnAddPOBoxAddress, viewModel.AddPOBoxAddressCommand);
             CommandBindings.Bind(btnAddNumber, viewModel.AddPhoneNumberCommand);
             CommandBindings.Bind(BtnAddEmail, viewModel.AddEmailCommand);
+            CommandBindings.Bind(btnViewAll, viewModel.ViewPhoneNumbersCommand);
+            CommandBindings.Bind(btnViewAllPOBoxAddresses, viewModel.ViewPOBoxAddressesCommand);
+            CommandBindings.Bind(btnViewEmailAddresses, viewModel.ViewEmailAddressesCommand);
+            CommandBindings.Bind(btnViewAddresses, viewModel.ViewAddressesCommand);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -112,47 +116,22 @@ namespace QuoteSwift
 
         private void BtnViewAll_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentCustomer.CustomerCellphoneNumberList != null || viewModel.CurrentCustomer.CustomerTelephoneNumberList != null)
-            {
-                Hide();
-                navigation.ViewBusinessesPhoneNumbers(null, viewModel.CurrentCustomer);
-                Show();
-            }
-            else messageService.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Customer Phone Numbers");
+            viewModel.ViewPhoneNumbersCommand.Execute(null);
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentCustomer.CustomerPOBoxAddress != null)
-            {
-                Hide();
-                navigation.ViewBusinessesPOBoxAddresses(null, viewModel.CurrentCustomer);
-                Show();
-            }
-            else messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer P.O.Box Addresses");
+            viewModel.ViewPOBoxAddressesCommand.Execute(null);
         }
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentCustomer.CustomerEmailList != null)
-            {
-                Hide();
-                navigation.ViewBusinessesEmailAddresses(null, viewModel.CurrentCustomer);
-                Show();
-
-            }
-            else messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Email Addresses");
+            viewModel.ViewEmailAddressesCommand.Execute(null);
         }
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentCustomer != null)
-            {
-                Hide();
-                navigation.ViewBusinessesAddresses(null, viewModel.CurrentCustomer);
-                Show();
-            }
-            else messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Addresses");
+            viewModel.ViewAddressesCommand.Execute(null);
         }
 
         private void UpdatedCustomerInformationToolStripMenuItem_Click(object sender, EventArgs e)

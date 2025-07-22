@@ -6,6 +6,8 @@ namespace QuoteSwift
     public class ViewBusinessAddressesViewModel : ViewModelBase
     {
         readonly IDataService dataService;
+        readonly INavigationService navigation;
+        readonly IMessageService messageService;
         readonly BindingList<Address> addresses = new BindingList<Address>();
         Business business;
         Customer customer;
@@ -13,13 +15,21 @@ namespace QuoteSwift
         Address selectedAddress;
 
         public ICommand RemoveSelectedAddressCommand { get; }
+        public ICommand EditAddressCommand { get; }
 
 
-        public ViewBusinessAddressesViewModel(IDataService service)
+        public ViewBusinessAddressesViewModel(IDataService service,
+                                              INavigationService navigation,
+                                              IMessageService messageService)
         {
             dataService = service;
+            this.navigation = navigation;
+            this.messageService = messageService;
             RemoveSelectedAddressCommand = new RelayCommand(
                 _ => RemoveAddress(SelectedAddress),
+                _ => SelectedAddress != null);
+            EditAddressCommand = new RelayCommand(
+                _ => EditSelectedAddress(),
                 _ => SelectedAddress != null);
         }
 
@@ -91,8 +101,22 @@ namespace QuoteSwift
             set
             {
                 if (SetProperty(ref selectedAddress, value))
+                {
                     ((RelayCommand)RemoveSelectedAddressCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)EditAddressCommand).RaiseCanExecuteChanged();
+                }
             }
+        }
+
+        void EditSelectedAddress()
+        {
+            if (SelectedAddress == null)
+            {
+                messageService.ShowError("Please select a valid Business Address, the current selection is invalid", "ERROR - Invalid Address Selection");
+                return;
+            }
+            navigation?.EditBusinessAddress(business, customer, SelectedAddress);
+            RefreshAddresses();
         }
 
         void RemoveAddress(Address address)

@@ -8,6 +8,8 @@ namespace QuoteSwift
     public class AddBusinessViewModel : ViewModelBase
     {
         readonly IDataService dataService;
+        readonly INavigationService navigation;
+        readonly IMessageService messageService;
         BindingList<Business> businessList;
         readonly Dictionary<string, Business> businessLookup = new Dictionary<string, Business>();
         readonly HashSet<string> businessVatNumbers = new HashSet<string>();
@@ -37,6 +39,11 @@ namespace QuoteSwift
         public ICommand AddPOBoxAddressCommand { get; }
         public ICommand AddPhoneNumberCommand { get; }
         public ICommand AddEmailCommand { get; }
+
+        public ICommand ViewEmailAddressesCommand { get; }
+        public ICommand ViewAddressesCommand { get; }
+        public ICommand ViewPOBoxAddressesCommand { get; }
+        public ICommand ViewPhoneNumbersCommand { get; }
         
         public ICommand AddBusinessCommand { get; }
         public ICommand UpdateBusinessCommand { get; }
@@ -168,9 +175,13 @@ namespace QuoteSwift
         }
 
 
-        public AddBusinessViewModel(IDataService service)
+        public AddBusinessViewModel(IDataService service,
+                                    INavigationService navigation,
+                                    IMessageService messageService)
         {
             dataService = service;
+            this.navigation = navigation;
+            this.messageService = messageService;
             AddBusinessCommand = new RelayCommand(_ =>
             {
                 var result = AddBusiness();
@@ -244,6 +255,50 @@ namespace QuoteSwift
                 if (r.Success)
                 {
                     EmailInput = string.Empty;
+                }
+            });
+            ViewEmailAddressesCommand = new RelayCommand(_ =>
+            {
+                if (CurrentBusiness.BusinessEmailAddressList != null)
+                {
+                    navigation?.ViewBusinessesEmailAddresses(CurrentBusiness, null);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
+                }
+            });
+            ViewAddressesCommand = new RelayCommand(_ =>
+            {
+                if (CurrentBusiness.BusinessAddressList != null)
+                {
+                    navigation?.ViewBusinessesAddresses(CurrentBusiness, null);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
+                }
+            });
+            ViewPOBoxAddressesCommand = new RelayCommand(_ =>
+            {
+                if (CurrentBusiness.BusinessPOBoxAddressList != null)
+                {
+                    navigation?.ViewBusinessesPOBoxAddresses(CurrentBusiness, null);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
+                }
+            });
+            ViewPhoneNumbersCommand = new RelayCommand(_ =>
+            {
+                if (CurrentBusiness.BusinessTelephoneNumberList != null || CurrentBusiness.BusinessCellphoneNumberList != null)
+                {
+                    navigation?.ViewBusinessesPhoneNumbers(CurrentBusiness, null);
+                }
+                else
+                {
+                    messageService.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
                 }
             });
             LoadDataCommand = new AsyncRelayCommand(_ => LoadDataAsync());

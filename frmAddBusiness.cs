@@ -52,47 +52,22 @@ namespace QuoteSwift
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentBusiness.BusinessEmailAddressList != null)
-            {
-                Hide();
-                navigation.ViewBusinessesEmailAddresses(viewModel.CurrentBusiness, null);
-                Show();
-
-            }
-            else messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
+            viewModel.ViewEmailAddressesCommand.Execute(null);
         }
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentBusiness.BusinessAddressList != null)
-            {
-                Hide();
-                navigation.ViewBusinessesAddresses(viewModel.CurrentBusiness, null);
-                Show();
-            }
-            else messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
+            viewModel.ViewAddressesCommand.Execute(null);
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentBusiness.BusinessPOBoxAddressList != null)
-            {
-                Hide();
-                navigation.ViewBusinessesPOBoxAddresses(viewModel.CurrentBusiness, null);
-                Show();
-            }
-            else messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
+            viewModel.ViewPOBoxAddressesCommand.Execute(null);
         }
 
         private void BtnViewAll_Click(object sender, EventArgs e)
         {
-            if (viewModel.CurrentBusiness.BusinessTelephoneNumberList != null || viewModel.CurrentBusiness.BusinessCellphoneNumberList != null)
-            {
-                Hide();
-                navigation.ViewBusinessesPhoneNumbers(viewModel.CurrentBusiness, null);
-                Show();
-            }
-            else messageService.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Business Phone Numbers");
+            viewModel.ViewPhoneNumbersCommand.Execute(null);
         }
 
         private void FrmAddBusiness_Load(object sender, EventArgs e)
@@ -178,6 +153,10 @@ namespace QuoteSwift
             CommandBindings.Bind(btnAddPOBoxAddress, viewModel.AddPOBoxAddressCommand);
             CommandBindings.Bind(btnAddNumber, viewModel.AddPhoneNumberCommand);
             CommandBindings.Bind(btnAddBusinessEmail, viewModel.AddEmailCommand);
+            CommandBindings.Bind(btnViewEmailAddresses, viewModel.ViewEmailAddressesCommand);
+            CommandBindings.Bind(btnViewAddresses, viewModel.ViewAddressesCommand);
+            CommandBindings.Bind(btnViewAllPOBoxAddresses, viewModel.ViewPOBoxAddressesCommand);
+            CommandBindings.Bind(btnViewAll, viewModel.ViewPhoneNumbersCommand);
         }
 
         /**********************************************************************************/

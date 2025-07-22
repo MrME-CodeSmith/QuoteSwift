@@ -25,6 +25,7 @@ namespace QuoteSwift
             };
 
             CommandBindings.Bind(BtnRemoveSelected, viewModel.RemoveSelectedAddressCommand);
+            CommandBindings.Bind(BtnChangeAddressInfo, viewModel.EditAddressCommand);
         }
 
         public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, Business business = null, Customer customer = null, IMessageService messageService = null)
@@ -80,17 +81,7 @@ namespace QuoteSwift
 
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
-            Address address = GetAddressSelection();
-
-            if (address == null)
-            {
-                messageService.ShowError("Please select a valid Business Address, the current selection is invalid", "ERROR - Invalid Address Selection");
-                return;
-            }
-
-            navigation?.EditBusinessAddress(business, customer, address);
-
-            viewModel.UpdateData(business, customer);
+            viewModel.EditAddressCommand.Execute(null);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
