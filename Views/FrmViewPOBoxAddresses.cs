@@ -9,7 +9,6 @@ namespace QuoteSwift.Views
 
         readonly ViewPOBoxAddressesViewModel viewModel;
         readonly INavigationService navigation;
-        readonly IMessageService messageService;
         Business business;
         Customer customer;
         public ViewPOBoxAddressesViewModel ViewModel => viewModel;
@@ -29,6 +28,9 @@ namespace QuoteSwift.Views
             BindingHelpers.BindEnabled(btnRemoveAddress, viewModel, nameof(ViewPOBoxAddressesViewModel.CanEdit));
 
             CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedAddressCommand);
+            CommandBindings.Bind(btnChangeAddressInfo, viewModel.EditAddressCommand);
+            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
@@ -37,7 +39,7 @@ namespace QuoteSwift.Views
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            this.messageService = messageService;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 
@@ -49,32 +51,21 @@ namespace QuoteSwift.Views
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-            {
-                navigation?.SaveAllData();
-                Application.Exit();
-            }
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
-            Address address = GetAddressSelection();
-
-            if (address == null)
-            {
-                messageService.ShowError("Please select a valid P.O.Box Address, the current selection is invalid", "ERROR - Invalid P.O.Box Address Selection");
-                return;
-            }
-
-            navigation?.EditBusinessAddress(business, customer, address);
-
-            viewModel.UpdateData(business, customer);
+            if (viewModel.EditAddressCommand.CanExecute(null))
+                viewModel.EditAddressCommand.Execute(null);
         }
 
         private void FrmViewPOBoxAddresses_Load(object sender, EventArgs e)
@@ -112,12 +103,6 @@ namespace QuoteSwift.Views
         *       Some of them are only to keep the above events readable 
         *       and clutter free.                                                          
         */
-
-        Address GetAddressSelection()
-        {
-            return dgvPOBoxAddresses.CurrentRow?.DataBoundItem as Address;
-        }
-
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {

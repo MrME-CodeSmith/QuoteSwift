@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -15,7 +16,10 @@ namespace QuoteSwift
         bool changeSpecificObject;
         Address selectedAddress;
 
+        public Action CloseAction { get; set; }
+
         public ICommand ExitCommand { get; }
+        public ICommand CancelCommand { get; }
 
         public ICommand RemoveSelectedAddressCommand { get; }
         public ICommand EditAddressCommand { get; }
@@ -36,11 +40,17 @@ namespace QuoteSwift
             EditAddressCommand = new RelayCommand(
                 _ => EditSelectedAddress(),
                 _ => SelectedAddress != null);
-            ExitCommand = new RelayCommand(_ =>
+
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.");
+
+            ExitCommand = CreateExitCommand(() =>
             {
                 navigation?.SaveAllData();
                 applicationService?.Exit();
-            });
+            }, messageService);
         }
 
         public IDataService DataService => dataService;

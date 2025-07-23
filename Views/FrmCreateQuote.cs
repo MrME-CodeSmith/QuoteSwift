@@ -29,6 +29,7 @@ namespace QuoteSwift.Views
         {
             InitializeComponent();
             this.viewModel = viewModel;
+            viewModel.CloseAction = Close;
             appData = data;
             this.messageService = messageService;
             this.serializationService = serializationService;
@@ -81,7 +82,8 @@ namespace QuoteSwift.Views
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

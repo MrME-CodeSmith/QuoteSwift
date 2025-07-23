@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -7,24 +8,50 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly INavigationService navigation;
+        readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         readonly BindingList<Address> addresses = new BindingList<Address>();
         Business business;
         Customer customer;
         bool changeSpecificObject;
         Address selectedAddress;
 
+        public Action CloseAction { get; set; }
+
         public ICommand RemoveSelectedAddressCommand { get; }
         public ICommand SaveChangesCommand { get; }
+        public ICommand EditAddressCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
 
 
-        public ViewPOBoxAddressesViewModel(IDataService service, INavigationService navigation = null)
+        public ViewPOBoxAddressesViewModel(IDataService service,
+                                            INavigationService navigation = null,
+                                            IMessageService messageService = null,
+                                            IApplicationService applicationService = null)
         {
             dataService = service;
             this.navigation = navigation;
+            this.messageService = messageService;
+            this.applicationService = applicationService;
             RemoveSelectedAddressCommand = new RelayCommand(
                 _ => RemoveAddress(SelectedAddress),
                 _ => SelectedAddress != null);
             SaveChangesCommand = new RelayCommand(_ => navigation?.SaveAllData());
+            EditAddressCommand = new RelayCommand(
+                _ => EditSelectedAddress(),
+                _ => SelectedAddress != null);
+
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.");
+
+            ExitCommand = CreateExitCommand(() =>
+            {
+                navigation?.SaveAllData();
+                applicationService?.Exit();
+            }, messageService);
         }
 
         public IDataService DataService => dataService;
@@ -98,7 +125,10 @@ namespace QuoteSwift
             set
             {
                 if (SetProperty(ref selectedAddress, value))
+                {
                     ((RelayCommand)RemoveSelectedAddressCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)EditAddressCommand).RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -111,6 +141,18 @@ namespace QuoteSwift
             else if (Customer != null)
                 Customer.RemovePOBoxAddress(address);
             addresses.Remove(address);
+        }
+
+        void EditSelectedAddress()
+        {
+            if (SelectedAddress == null)
+            {
+                messageService?.ShowError("Please select a valid P.O.Box Address, the current selection is invalid", "ERROR - Invalid P.O.Box Address Selection");
+                return;
+            }
+
+            navigation?.EditBusinessAddress(business, customer, SelectedAddress);
+            RefreshAddresses();
         }
 
     }
