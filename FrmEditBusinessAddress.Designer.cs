@@ -85,7 +85,6 @@ namespace QuoteSwift
             this.BtnUpdateAddress.TabIndex = 6;
             this.BtnUpdateAddress.Text = "Update Address";
             this.BtnUpdateAddress.UseVisualStyleBackColor = true;
-            this.BtnUpdateAddress.Click += new System.EventHandler(this.BtnUpdateAddress_Click);
             // 
             // mtxtAreaCode
             // 
@@ -189,7 +188,6 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // BtnCancel
             // 
@@ -200,7 +198,6 @@ namespace QuoteSwift
             this.BtnCancel.TabIndex = 7;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
-            this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // FrmEditBusinessAddress
             // 

@@ -30,6 +30,11 @@ namespace QuoteSwift
         public ICommand LoadDataCommand { get; }
         public ICommand ImportPartsCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand ResetInputCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand StartEditCommand { get; }
+
+        public Action CloseAction { get; set; }
 
         public bool LastOperationSuccessful
         {
@@ -120,9 +125,40 @@ namespace QuoteSwift
             ImportPartsCommand = new AsyncRelayCommand(_ => ImportPartsAsync());
             ExitCommand = new RelayCommand(_ =>
             {
-                navigation?.SaveAllData();
-                System.Windows.Forms.Application.Exit();
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination"))
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
             });
+
+            ResetInputCommand = new RelayCommand(_ =>
+            {
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to reset the current screen to it's default values?",
+                        "REQUEST - Screen Defaults Reset"))
+                    ResetInput();
+            });
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService.RequestConfirmation(
+                        "By canceling the current event, any parts not added will not be available in the part's list.",
+                        "REQUEAST - Action Cancellation"))
+                    CloseAction?.Invoke();
+            });
+
+            StartEditCommand = new RelayCommand(_ =>
+            {
+                if (PartToChange != null && messageService.RequestConfirmation(
+                        $"You are currently only viewing {PartToChange.PartName} part, would you like to update it's details instead?",
+                        "REQUEST - Update Specific Part Details"))
+                {
+                    ChangeSpecificObject = true;
+                }
+            }, _ => !ChangeSpecificObject);
         }
 
         public IDataService DataService => dataService;
@@ -174,6 +210,7 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(FormTitle));
                     OnPropertyChanged(nameof(ShowSaveButton));
                     OnPropertyChanged(nameof(SaveButtonText));
+                    ((RelayCommand)StartEditCommand).RaiseCanExecuteChanged();
                 }
             }
         }

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -8,6 +9,8 @@ namespace QuoteSwift
         Business business;
         Customer customer;
         Address address;
+        readonly IMessageService messageService;
+        readonly INavigationService navigation;
 
         string addressDescription = string.Empty;
         int streetNumber;
@@ -18,6 +21,11 @@ namespace QuoteSwift
         OperationResult lastResult = OperationResult.Successful();
 
         public ICommand UpdateAddressCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        public Action CloseAction { get; set; }
 
         public OperationResult LastResult
         {
@@ -69,8 +77,10 @@ namespace QuoteSwift
         }
 
 
-        public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null)
+        public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null, IMessageService messageService = null, INavigationService navigation = null)
         {
+            this.messageService = messageService;
+            this.navigation = navigation;
             Initialize(business, customer, address);
 
             UpdateAddressCommand = new RelayCommand(_ =>
@@ -87,6 +97,38 @@ namespace QuoteSwift
 
                 var r = UpdateAddress(updated);
                 LastResult = r;
+            });
+
+            SaveCommand = new RelayCommand(_ =>
+            {
+                UpdateAddressCommand.Execute(null);
+                var result = LastResult;
+                if (result.Success)
+                {
+                    messageService?.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
+                    CloseAction?.Invoke();
+                }
+                else if (result.Message != null)
+                    messageService?.ShowError(result.Message, result.Caption);
+            });
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.",
+                        "REQUEST - Cancellation") == true)
+                    CloseAction?.Invoke();
+            });
+
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
             });
         }
 

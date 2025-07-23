@@ -24,6 +24,7 @@ namespace QuoteSwift
             appData = data;
             this.serializationService = serializationService;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             viewModel.Initialize();
             SetupBindings();
             BindIsBusy(viewModel);
@@ -56,36 +57,14 @@ namespace QuoteSwift
             CommandBindings.Bind(btnAddPart, viewModel.SavePartCommand);
             CommandBindings.Bind(loadPartBatchToolStripMenuItem, viewModel.ImportPartsCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(resetInputToolStripMenuItem, viewModel.ResetInputCommand);
+            CommandBindings.Bind(updatePartToolStripMenuItem, viewModel.StartEditCommand);
         }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
-        }
-
-        private void FrmAddPart_Activated(object sender, EventArgs e)
-        {
-
-        }
-
 
         private void CbAddToPumpSelection_ContextMenuStripChanged(object sender, EventArgs e)
         {
             if (!cbxMandatoryPart.Enabled) cbxMandatoryPart.Enabled = true;
-        }
-
-        private void ResetInputToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to reset the current screen to it's default values?", "REQUEST - Screen Defaults Reset"))
-            {
-                viewModel.ResetInput();
-            }
-        }
-
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
         }
 
         private void FrmAddPart_Load(object sender, EventArgs e)
@@ -94,8 +73,6 @@ namespace QuoteSwift
             {
                 viewModel.ChangeSpecificObject = true;
             }
-
-            updatePartToolStripMenuItem.Enabled = viewModel.IsViewing;
         }
 
         /** Form Specific Functions And Procedures: 
@@ -108,15 +85,6 @@ namespace QuoteSwift
 
 
 
-        private void UpdatePartToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject)
-                if (messageService.RequestConfirmation("You are currently only viewing " + viewModel.PartToChange.PartName + " part, would you like to update it's details instead?", "REQUEST - Update Specific Part Details"))
-                {
-                    viewModel.ChangeSpecificObject = true;
-                    updatePartToolStripMenuItem.Enabled = false;
-                }
-        }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {

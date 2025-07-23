@@ -19,6 +19,7 @@ namespace QuoteSwift
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 
@@ -30,15 +31,10 @@ namespace QuoteSwift
             txtNewEmail.DataBindings.Add("Text", viewModel, nameof(ManageEmailsViewModel.NewEmail), false, DataSourceUpdateMode.OnPropertyChanged);
 
             CommandBindings.Bind(btnAddEmail, viewModel.AddEmailCommand);
-
             CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedEmailCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
-        }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
+            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(BtnChangeAddressInfo, viewModel.EditSelectedEmailCommand);
         }
 
         private void FrmManageAllEmails_Load(object sender, EventArgs e)
@@ -60,17 +56,7 @@ namespace QuoteSwift
             DgvEmails.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
-        }
 
-
-        private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
-        {
-            string email = viewModel.SelectedEmail?.Address ?? string.Empty;
-            navigation?.EditBusinessEmailAddress(viewModel.Business, viewModel.Customer, email);
-        }
 
 
 
