@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -16,6 +17,7 @@ namespace QuoteSwift
         string newTelephoneNumber;
         string newCellphoneNumber;
         readonly INavigationService navigation;
+        readonly IMessageService messageService;
 
         public ICommand RemoveTelephoneCommand { get; }
         public ICommand RemoveCellphoneCommand { get; }
@@ -26,12 +28,18 @@ namespace QuoteSwift
         public ICommand AddTelephoneCommand { get; }
         public ICommand AddCellphoneCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand EditTelephoneCommand { get; }
+        public ICommand EditCellphoneCommand { get; }
+
+        public Action CloseAction { get; set; }
 
 
-        public ManagePhoneNumbersViewModel(IDataService service, INavigationService navigation = null)
+        public ManagePhoneNumbersViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
         {
             dataService = service;
             this.navigation = navigation;
+            this.messageService = messageService;
             telephoneNumbers = new BindingList<NumberEntry>();
             cellphoneNumbers = new BindingList<NumberEntry>();
             RemoveTelephoneCommand = new RelayCommand(n => RemoveTelephone(n as string));
@@ -60,8 +68,49 @@ namespace QuoteSwift
             });
             ExitCommand = new RelayCommand(_ =>
             {
-                navigation?.SaveAllData();
-                System.Windows.Forms.Application.Exit();
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination"))
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.",
+                        "REQUEST - Cancelation"))
+                    CloseAction?.Invoke();
+            });
+
+            EditCellphoneCommand = new RelayCommand(_ =>
+            {
+                if (Business != null && Business.BusinessCellphoneNumberList != null)
+                {
+                    string oldNumber = SelectedCellphoneNumber?.Number ?? string.Empty;
+                    navigation?.EditPhoneNumber(Business, null, oldNumber);
+                }
+                else if (Customer != null && Customer.CustomerCellphoneNumberList != null)
+                {
+                    string oldNumber = SelectedCellphoneNumber?.Number ?? string.Empty;
+                    navigation?.EditPhoneNumber(null, Customer, oldNumber);
+                }
+            });
+
+            EditTelephoneCommand = new RelayCommand(_ =>
+            {
+                if (Business != null && Business.BusinessTelephoneNumberList != null)
+                {
+                    string oldNumber = SelectedTelephoneNumber?.Number ?? string.Empty;
+                    navigation?.EditPhoneNumber(Business, null, oldNumber);
+                }
+                else if (Customer != null && Customer.CustomerTelephoneNumberList != null)
+                {
+                    string oldNumber = SelectedTelephoneNumber?.Number ?? string.Empty;
+                    navigation?.EditPhoneNumber(null, Customer, oldNumber);
+                }
             });
         }
 

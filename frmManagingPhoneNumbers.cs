@@ -19,6 +19,7 @@ namespace QuoteSwift
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 
@@ -38,43 +39,13 @@ namespace QuoteSwift
 
             CommandBindings.Bind(btnRemoveTelNumber, viewModel.RemoveSelectedTelephoneCommand);
             CommandBindings.Bind(btnRemoveCellNumber, viewModel.RemoveSelectedCellphoneCommand);
+            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(BtnUpdateTelephoneNumber, viewModel.EditTelephoneCommand);
+            CommandBindings.Bind(BtnUpdateCellphoneNumber, viewModel.EditCellphoneCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-            {
-                Application.Exit();
-            }
-        }
 
-        private void BtnChangePhoneNumberInfo_Click(object sender, EventArgs e)
-        {
-            if (viewModel.Business != null && viewModel.Business.BusinessCellphoneNumberList != null)
-            {
-                string oldNumber = viewModel.SelectedCellphoneNumber?.Number ?? string.Empty;
-                navigation?.EditPhoneNumber(viewModel.Business, null, oldNumber);
-            }
-            else if (viewModel.Customer != null && viewModel.Customer.CustomerCellphoneNumberList != null)
-            {
-                string oldNumber = viewModel.SelectedCellphoneNumber?.Number ?? string.Empty;
-                navigation?.EditPhoneNumber(null, viewModel.Customer, oldNumber);
-            }
-        }
-
-        private void BtnUpdateTelephoneNumber_Click(object sender, EventArgs e)
-        {
-            if (viewModel.Business != null && viewModel.Business.BusinessTelephoneNumberList != null)
-            {
-                string oldNumber = viewModel.SelectedTelephoneNumber?.Number ?? string.Empty;
-                navigation?.EditPhoneNumber(viewModel.Business, null, oldNumber);
-            }
-            else if (viewModel.Customer != null && viewModel.Customer.CustomerTelephoneNumberList != null)
-            {
-                string oldNumber = viewModel.SelectedTelephoneNumber?.Number ?? string.Empty;
-                navigation?.EditPhoneNumber(null, viewModel.Customer, oldNumber);
-            }
-        }
 
         private void FrmManagingPhoneNumbers_Load(object sender, EventArgs e)
         {
@@ -99,10 +70,7 @@ namespace QuoteSwift
         }
 
 
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
-        }
+
 
 
 

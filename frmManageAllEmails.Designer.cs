@@ -93,7 +93,6 @@ namespace QuoteSwift
             this.BtnCancel.TabIndex = 4;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
-            this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // btnRemoveAddress
             // 
@@ -116,7 +115,6 @@ namespace QuoteSwift
             this.BtnChangeAddressInfo.TabIndex = 8;
             this.BtnChangeAddressInfo.Text = "Update Selected Email";
             this.BtnChangeAddressInfo.UseVisualStyleBackColor = true;
-            this.BtnChangeAddressInfo.Click += new System.EventHandler(this.BtnChangeAddressInfo_Click);
             //
             // txtNewEmail
             //

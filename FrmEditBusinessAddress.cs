@@ -17,6 +17,7 @@ namespace QuoteSwift
             this.viewModel = viewModel;
             this.messageService = messageService;
             this.navigation = navigation;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 
@@ -28,11 +29,10 @@ namespace QuoteSwift
             txtSuburb.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.Suburb), false, DataSourceUpdateMode.OnPropertyChanged);
             txtCity.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.City), false, DataSourceUpdateMode.OnPropertyChanged);
             mtxtAreaCode.DataBindings.Add("Text", viewModel, nameof(EditBusinessAddressViewModel.AreaCode), false, DataSourceUpdateMode.OnPropertyChanged);
-        }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            CommandBindings.Bind(BtnUpdateAddress, viewModel.SaveCommand);
+            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         private void FrmEditBusinessAddress_Load(object sender, EventArgs e)
@@ -43,24 +43,6 @@ namespace QuoteSwift
             }
         }
 
-        private void BtnUpdateAddress_Click(object sender, EventArgs e)
-        {
-            viewModel.UpdateAddressCommand.Execute(null);
-            var result = viewModel.LastResult;
-            if (result.Success)
-            {
-                messageService.ShowInformation("The address has been successfully updated", "INFORMATION - Address Successfully Updated");
-                Close();
-            }
-            else if (result.Message != null)
-                messageService.ShowError(result.Message, result.Caption);
-        }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                Application.Exit();
-        }
 
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

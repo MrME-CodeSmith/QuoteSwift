@@ -68,7 +68,6 @@ namespace QuoteSwift
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
             // dgvTelephoneNumbers
             // 
@@ -167,7 +166,6 @@ namespace QuoteSwift
             this.BtnCancel.TabIndex = 7;
             this.BtnCancel.Text = "Cancel";
             this.BtnCancel.UseVisualStyleBackColor = true;
-            this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // BtnUpdateCellphoneNumber
             // 
@@ -179,7 +177,6 @@ namespace QuoteSwift
             this.BtnUpdateCellphoneNumber.TabIndex = 6;
             this.BtnUpdateCellphoneNumber.Text = "Update Selected Phone Number";
             this.BtnUpdateCellphoneNumber.UseVisualStyleBackColor = true;
-            this.BtnUpdateCellphoneNumber.Click += new System.EventHandler(this.BtnChangePhoneNumberInfo_Click);
             // 
             // BtnUpdateTelephoneNumber
             // 
@@ -191,7 +188,6 @@ namespace QuoteSwift
             this.BtnUpdateTelephoneNumber.TabIndex = 8;
             this.BtnUpdateTelephoneNumber.Text = "Update Selected Phone Number";
             this.BtnUpdateTelephoneNumber.UseVisualStyleBackColor = true;
-            this.BtnUpdateTelephoneNumber.Click += new System.EventHandler(this.BtnUpdateTelephoneNumber_Click);
             //
             // txtNewTelephone
             //

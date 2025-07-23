@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -11,6 +12,7 @@ namespace QuoteSwift
         Customer customer;
         readonly BindingList<EmailEntry> emails;
         readonly INavigationService navigation;
+        readonly IMessageService messageService;
         EmailEntry selectedEmail;
         string newEmail;
 
@@ -19,12 +21,17 @@ namespace QuoteSwift
         public ICommand RemoveSelectedEmailCommand { get; }
         public ICommand UpdateEmailCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand EditSelectedEmailCommand { get; }
+
+        public Action CloseAction { get; set; }
 
 
-        public ManageEmailsViewModel(IDataService service, INavigationService navigation = null)
+        public ManageEmailsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
         {
             dataService = service;
             this.navigation = navigation;
+            this.messageService = messageService;
             emails = new BindingList<EmailEntry>();
             AddEmailCommand = new RelayCommand(
                 _ => { AddEmail(NewEmail); NewEmail = string.Empty; },
@@ -40,8 +47,27 @@ namespace QuoteSwift
             });
             ExitCommand = new RelayCommand(_ =>
             {
-                navigation?.SaveAllData();
-                System.Windows.Forms.Application.Exit();
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination"))
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.",
+                        "REQUEST - Cancellation"))
+                    CloseAction?.Invoke();
+            });
+
+            EditSelectedEmailCommand = new RelayCommand(_ =>
+            {
+                string email = SelectedEmail?.Address ?? string.Empty;
+                navigation?.EditBusinessEmailAddress(Business, Customer, email);
             });
         }
 
