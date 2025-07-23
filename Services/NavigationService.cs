@@ -206,6 +206,11 @@ namespace QuoteSwift
         public void SaveAllData()
         {
             appData.SaveAll();
+            serializationService.CloseApplication(true,
+                appData.BusinessList,
+                appData.PumpList,
+                appData.PartList,
+                appData.QuoteMap);
         }
     }
 }
