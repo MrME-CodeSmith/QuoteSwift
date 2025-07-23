@@ -119,7 +119,6 @@ namespace QuoteSwift.Views
             this.cbBusinessSelection.Name = "cbBusinessSelection";
             this.cbBusinessSelection.Size = new System.Drawing.Size(258, 26);
             this.cbBusinessSelection.TabIndex = 4;
-            this.cbBusinessSelection.SelectedIndexChanged += new System.EventHandler(this.CbBusinessSelection_SelectedIndexChanged);
             // 
             // lblBusinessSelection
             // 

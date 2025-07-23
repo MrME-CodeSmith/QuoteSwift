@@ -88,10 +88,12 @@ namespace QuoteSwift
         public Business SelectedBusiness
         {
             get => selectedBusiness;
-            private set
+            set
             {
-                selectedBusiness = value;
-                OnPropertyChanged(nameof(SelectedBusiness));
+                if (SetProperty(ref selectedBusiness, value))
+                {
+                    RefreshCustomers();
+                }
             }
         }
 
@@ -130,7 +132,6 @@ namespace QuoteSwift
         public void SelectBusiness(Business business)
         {
             SelectedBusiness = business;
-            RefreshCustomers();
         }
 
         public void RefreshCustomers()
