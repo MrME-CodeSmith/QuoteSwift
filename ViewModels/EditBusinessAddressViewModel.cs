@@ -11,6 +11,7 @@ namespace QuoteSwift
         Address address;
         readonly IMessageService messageService;
         readonly INavigationService navigation;
+        readonly IApplicationService applicationService;
 
         string addressDescription = string.Empty;
         int streetNumber;
@@ -77,10 +78,11 @@ namespace QuoteSwift
         }
 
 
-        public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null, IMessageService messageService = null, INavigationService navigation = null)
+        public EditBusinessAddressViewModel(Business business = null, Customer customer = null, Address address = null, IMessageService messageService = null, INavigationService navigation = null, IApplicationService applicationService = null)
         {
             this.messageService = messageService;
             this.navigation = navigation;
+            this.applicationService = applicationService;
             Initialize(business, customer, address);
 
             UpdateAddressCommand = new RelayCommand(_ =>
@@ -127,7 +129,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination") == true)
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
         }

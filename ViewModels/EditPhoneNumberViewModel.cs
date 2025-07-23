@@ -8,6 +8,7 @@ namespace QuoteSwift
         Business business;
         Customer customer;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         OperationResult lastResult = OperationResult.Successful();
         string originalNumber;
         string currentNumber;
@@ -19,9 +20,10 @@ namespace QuoteSwift
         public Action CloseAction { get; set; }
 
 
-        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null)
+        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null, IApplicationService applicationService = null)
         {
             this.messageService = messageService;
+            this.applicationService = applicationService;
             Initialize(business, customer, number);
             UpdateNumberCommand = new RelayCommand(_ =>
             {
@@ -40,7 +42,7 @@ namespace QuoteSwift
                 if (messageService?.RequestConfirmation(
                         "Are you sure you want to close the application?",
                         "REQUEST - Application Termination") == true)
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
             });
         }
 

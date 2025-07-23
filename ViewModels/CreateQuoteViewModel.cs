@@ -12,6 +12,7 @@ namespace QuoteSwift
         readonly INotificationService notificationService;
         readonly IExcelExportService excelExportService;
         readonly INavigationService navigation;
+        readonly IApplicationService applicationService;
         Dictionary<string, Part> partList;
         BindingList<Pump> pumps;
         BindingList<Business> businesses;
@@ -129,12 +130,14 @@ namespace QuoteSwift
         public CreateQuoteViewModel(IDataService service,
                                     INotificationService notifier,
                                     IExcelExportService excelExporter,
-                                    INavigationService navigation = null)
+                                    INavigationService navigation = null,
+                                    IApplicationService applicationService = null)
         {
             dataService = service;
             notificationService = notifier;
             excelExportService = excelExporter;
             this.navigation = navigation;
+            this.applicationService = applicationService;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
             SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
@@ -142,7 +145,7 @@ namespace QuoteSwift
             ExitCommand = new RelayCommand(_ =>
             {
                 navigation?.SaveAllData();
-                System.Windows.Forms.Application.Exit();
+                applicationService?.Exit();
             });
             CalculateRebateCommand = new RelayCommand(_ =>
             {

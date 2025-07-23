@@ -11,6 +11,7 @@ namespace QuoteSwift
         readonly INotificationService notificationService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         Pump currentPump;
         bool lastOperationSuccessful;
         string formTitle;
@@ -111,12 +112,14 @@ namespace QuoteSwift
         public AddPumpViewModel(IDataService service,
                                 INotificationService notifier,
                                 INavigationService navigation = null,
-                                IMessageService messageService = null)
+                                IMessageService messageService = null,
+                                IApplicationService applicationService = null)
         {
             dataService = service;
             notificationService = notifier;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             SelectedMandatoryParts = new BindingList<Pump_Part>();
             SelectedNonMandatoryParts = new BindingList<Pump_Part>();
             RepairableItemNames = new HashSet<string>();
@@ -137,7 +140,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination") == true)
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
 

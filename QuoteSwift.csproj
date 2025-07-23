@@ -250,6 +250,8 @@
     <Compile Include="Services\ParsingService.cs" />
     <Compile Include="Services\IExcelExportService.cs" />
     <Compile Include="Services\FileExcelExportService.cs" />
+    <Compile Include="Services\IApplicationService.cs" />
+    <Compile Include="Services\WinFormsApplicationService.cs" />
     <Compile Include="ViewModels\QuotesViewModel.cs" />
     <Compile Include="ViewModels\AddCustomerViewModel.cs" />
     <Compile Include="ViewModels\ViewCustomersViewModel.cs" />

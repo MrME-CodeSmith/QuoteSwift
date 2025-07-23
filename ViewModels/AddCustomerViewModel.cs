@@ -11,6 +11,7 @@ namespace QuoteSwift
         readonly INotificationService notificationService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         BindingList<Business> businessList;
         Customer customerToChange;
         bool changeSpecificObject;
@@ -167,12 +168,14 @@ namespace QuoteSwift
         public AddCustomerViewModel(IDataService service,
                                     INotificationService notifier,
                                     INavigationService navigation,
-                                    IMessageService messageService)
+                                    IMessageService messageService,
+                                    IApplicationService applicationService = null)
         {
             dataService = service;
             notificationService = notifier;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             currentCustomer = new Customer();
             AddCustomerCommand = new RelayCommand(p =>
             {
@@ -313,7 +316,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination"))
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
         }

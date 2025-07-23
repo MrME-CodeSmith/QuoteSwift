@@ -14,6 +14,7 @@ namespace QuoteSwift
         readonly IMessageService messageService;
         readonly IFileDialogService fileDialogService;
         readonly INavigationService navigation;
+        readonly IApplicationService applicationService;
         Dictionary<string, Part> partMap;
         BindingList<Pump> pumpList;
         Part partToChange;
@@ -74,13 +75,14 @@ namespace QuoteSwift
 
         public AddPartViewModel(IDataService service, INotificationService notifier,
                                 IMessageService messenger = null, IFileDialogService dialogService = null,
-                                INavigationService navigation = null)
+                                INavigationService navigation = null, IApplicationService applicationService = null)
         {
             dataService = service;
             notificationService = notifier;
             messageService = messenger;
             fileDialogService = dialogService;
             this.navigation = navigation;
+            this.applicationService = applicationService;
             CurrentPart = new Part();
             SavePartCommand = new RelayCommand(_ =>
             {
@@ -130,7 +132,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination"))
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
 

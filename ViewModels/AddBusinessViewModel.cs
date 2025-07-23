@@ -11,6 +11,7 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         BindingList<Business> businessList;
         readonly Dictionary<string, Business> businessLookup = new Dictionary<string, Business>();
         readonly HashSet<string> businessVatNumbers = new HashSet<string>();
@@ -190,11 +191,13 @@ namespace QuoteSwift
 
         public AddBusinessViewModel(IDataService service,
                                     INavigationService navigation,
-                                    IMessageService messageService)
+                                    IMessageService messageService,
+                                    IApplicationService applicationService = null)
         {
             dataService = service;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             AddBusinessCommand = new RelayCommand(_ =>
             {
                 var result = AddBusiness();
@@ -331,7 +334,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination"))
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
         }
