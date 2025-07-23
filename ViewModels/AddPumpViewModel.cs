@@ -110,6 +110,48 @@ namespace QuoteSwift
 
         public bool CanEdit => changeSpecificObject;
 
+        public string PumpName
+        {
+            get => CurrentPump?.PumpName;
+            set
+            {
+                if (CurrentPump != null && CurrentPump.PumpName != value)
+                {
+                    CurrentPump.PumpName = value;
+                    if (!ChangeSpecificObject)
+                        ChangeSpecificObject = true;
+                }
+            }
+        }
+
+        public string PumpDescription
+        {
+            get => CurrentPump?.PumpDescription;
+            set
+            {
+                if (CurrentPump != null && CurrentPump.PumpDescription != value)
+                {
+                    CurrentPump.PumpDescription = value;
+                    if (!ChangeSpecificObject)
+                        ChangeSpecificObject = true;
+                }
+            }
+        }
+
+        public decimal NewPumpPrice
+        {
+            get => CurrentPump?.NewPumpPrice ?? 0m;
+            set
+            {
+                if (CurrentPump != null && CurrentPump.NewPumpPrice != value)
+                {
+                    CurrentPump.NewPumpPrice = value;
+                    if (!ChangeSpecificObject)
+                        ChangeSpecificObject = true;
+                }
+            }
+        }
+
 
         public AddPumpViewModel(IDataService service,
                                 INotificationService notifier,
@@ -126,6 +168,16 @@ namespace QuoteSwift
             this.applicationService = applicationService;
             SelectedMandatoryParts = new BindingList<Pump_Part>();
             SelectedNonMandatoryParts = new BindingList<Pump_Part>();
+            SelectedMandatoryParts.ListChanged += (_, __) =>
+            {
+                if (!ChangeSpecificObject)
+                    ChangeSpecificObject = true;
+            };
+            SelectedNonMandatoryParts.ListChanged += (_, __) =>
+            {
+                if (!ChangeSpecificObject)
+                    ChangeSpecificObject = true;
+            };
             RepairableItemNames = new HashSet<string>();
             AddPumpCommand = new RelayCommand(_ => LastOperationSuccessful = AddPump());
             UpdatePumpCommand = new RelayCommand(_ => LastOperationSuccessful = UpdatePump());
