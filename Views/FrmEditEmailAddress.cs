@@ -20,6 +20,8 @@ namespace QuoteSwift.Views
             this.navigation = navigation;
             viewModel.CloseAction = Close;
             SetupBindings();
+            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         void SetupBindings()
@@ -36,23 +38,7 @@ namespace QuoteSwift.Views
         {
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (viewModel.CancelCommand.CanExecute(null))
-                viewModel.CancelCommand.Execute(null);
-        }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
-        }
-
-        private void CloseToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
-        }
+        // CommandBindings handle Cancel and Exit actions
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {

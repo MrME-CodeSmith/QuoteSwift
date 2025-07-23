@@ -24,6 +24,8 @@ namespace QuoteSwift.Views
             this.messageService = messageService;
             viewModel.CloseAction = Close;
             SetupBindings();
+            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
             BindIsBusy(viewModel);
         }
 
@@ -37,12 +39,7 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnAddCustomer, viewModel.AddCustomerCommand);
         }
 
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
-
-        }
+        // CommandBindings handle Exit action
 
 
         // Legacy button handlers kept for reference; functionality now provided via commands
@@ -128,11 +125,7 @@ namespace QuoteSwift.Views
             viewModel.SelectBusiness(GetSelectedBusiness());
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (viewModel.CancelCommand.CanExecute(null))
-                viewModel.CancelCommand.Execute(null);
-        }
+        // CommandBindings handle Cancel action
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {

@@ -45,11 +45,7 @@ namespace QuoteSwift.Views // Repair Quote Swift
             SetupBindings();
         }
 
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
-        }
+        // CommandBindings handle Exit action
 
 
         private void MainScreenViewQuotesToolStripMenuItem_Click(object sender, EventArgs e)

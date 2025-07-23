@@ -63,12 +63,8 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnViewAllPOBoxAddresses, viewModel.ViewPOBoxAddressesCommand);
             CommandBindings.Bind(btnViewEmailAddresses, viewModel.ViewEmailAddressesCommand);
             CommandBindings.Bind(btnViewAddresses, viewModel.ViewAddressesCommand);
-        }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
+            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
 
@@ -110,12 +106,6 @@ namespace QuoteSwift.Views
 
 
 
-
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (viewModel.CancelCommand.CanExecute(null))
-                viewModel.CancelCommand.Execute(null);
-        }
 
         private void BtnViewAll_Click(object sender, EventArgs e)
         {
