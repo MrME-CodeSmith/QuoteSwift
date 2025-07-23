@@ -152,7 +152,11 @@ namespace QuoteSwift
                 Pricing.Rebate = RebateInput;
                 Calculate();
             });
-            UpdateDatesCommand = new RelayCommand(p => UpdateDates(p as System.Windows.Forms.DateTimePicker));
+            UpdateDatesCommand = new RelayCommand(p =>
+            {
+                if (p is DateTime date)
+                    UpdateDates(date);
+            });
         }
 
         public IDataService DataService => dataService;
@@ -791,16 +795,15 @@ namespace QuoteSwift
             return part?.Price ?? 0m;
         }
 
-        void UpdateDates(System.Windows.Forms.DateTimePicker picker)
+        void UpdateDates(DateTime value)
         {
-            if (picker == null)
-                return;
-            if (picker.Name == "dtpQuoteCreationDate")
+            // Determine which date changed based on current bindings
+            if (value == QuoteCreationDate)
             {
                 QuoteExpiryDate = QuoteCreationDate.AddMonths(2);
                 PaymentTerm = QuoteCreationDate.AddMonths(1);
             }
-            else if (picker.Name == "dtpQuoteExpiryDate")
+            else if (value == QuoteExpiryDate)
             {
                 QuoteCreationDate = QuoteExpiryDate.AddMonths(-2);
                 PaymentTerm = QuoteCreationDate.AddMonths(1);
