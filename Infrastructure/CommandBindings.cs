@@ -35,12 +35,16 @@ namespace QuoteSwift
         {
             if (picker == null || command == null)
                 return;
-            picker.Enabled = command.CanExecute(picker);
-            command.CanExecuteChanged += (s, e) => picker.Enabled = command.CanExecute(picker);
+
+            // Evaluate CanExecute using the picker's current value
+            picker.Enabled = command.CanExecute(picker.Value);
+            command.CanExecuteChanged += (s, e) => picker.Enabled = command.CanExecute(picker.Value);
+
             picker.ValueChanged += (s, e) =>
             {
-                if (command.CanExecute(picker))
-                    command.Execute(picker);
+                var value = picker.Value;
+                if (command.CanExecute(value))
+                    command.Execute(value);
             };
         }
     }
