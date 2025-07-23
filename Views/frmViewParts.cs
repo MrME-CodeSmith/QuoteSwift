@@ -28,6 +28,8 @@ namespace QuoteSwift.Views
             if (appData != null)
                 viewModel.UpdateData(appData.PartList);
             SetupBindings();
+            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
         }
 
         void SetupBindings()
@@ -41,12 +43,6 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnAddPart, viewModel.AddPartCommand);
             CommandBindings.Bind(btnViewSelectedPart, viewModel.UpdatePartCommand);
             CommandBindings.Bind(btnRemovePart, viewModel.RemovePartCommand);
-        }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
         }
 
         private void FrmViewParts_Activated(object sender, EventArgs e)
@@ -69,12 +65,6 @@ namespace QuoteSwift.Views
         Part GetSelectedPart()
         {
             return dgvAllParts.CurrentRow?.DataBoundItem as Part;
-        }
-
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (viewModel.CancelCommand.CanExecute(null))
-                viewModel.CancelCommand.Execute(null);
         }
 
         private void FrmViewParts_Load(object sender, EventArgs e)

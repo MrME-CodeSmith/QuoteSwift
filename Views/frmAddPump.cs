@@ -35,19 +35,13 @@ namespace QuoteSwift.Views
             mandatorySource.DataSource = viewModel.SelectedMandatoryParts;
             nonMandatorySource.DataSource = viewModel.SelectedNonMandatoryParts;
             CommandBindings.Bind(btnAddPump, viewModel.SavePumpCommand);
+            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
             if (data != null)
                 viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
                                      data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
             BindIsBusy(viewModel);
         }
-
-        private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
-        }
-
 
         private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
@@ -137,12 +131,6 @@ namespace QuoteSwift.Views
 
 
 
-
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            if (viewModel.CancelCommand.CanExecute(null))
-                viewModel.CancelCommand.Execute(null);
-        }
 
         private void UpdatePumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
