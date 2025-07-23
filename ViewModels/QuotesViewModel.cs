@@ -57,7 +57,7 @@ namespace QuoteSwift
                 if (navigation != null) await navigation.AddBusiness();
                 await LoadDataAsync();
             });
-            ViewBusinessesCommand = new AsyncRelayCommand(async _ => { navigation?.ViewBusinesses(); await LoadDataAsync(); });
+            ViewBusinessesCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.ViewBusinesses(); await LoadDataAsync(); });
             AddCustomerCommand = new AsyncRelayCommand(async _ => {
                 if (navigation != null) await navigation.AddCustomer();
                 await LoadDataAsync();
@@ -70,9 +70,9 @@ namespace QuoteSwift
                 if (navigation != null) await navigation.CreateNewPump();
                 await LoadDataAsync();
             });
-            ViewPumpsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllPumps(); await LoadDataAsync(); });
-            AddPartCommand = new AsyncRelayCommand(async _ => { navigation?.AddNewPart(); await LoadDataAsync(); });
-            ViewPartsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllParts(); await LoadDataAsync(); });
+            ViewPumpsCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.ViewAllPumps(); await LoadDataAsync(); });
+            AddPartCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.AddNewPart(); await LoadDataAsync(); });
+            ViewPartsCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.ViewAllParts(); await LoadDataAsync(); });
 
             ExitCommand = CreateExitCommand(() =>
             {
@@ -186,7 +186,7 @@ namespace QuoteSwift
         {
             if (BusinessList != null && BusinessList.Count > 0 && PumpList != null && BusinessList[0].BusinessCustomerList != null)
             {
-                navigation?.CreateNewQuote();
+                if (navigation != null) await navigation.CreateNewQuote();
                 await LoadDataAsync();
             }
             else
@@ -204,7 +204,7 @@ namespace QuoteSwift
         {
             if (SelectedQuote != null)
             {
-                navigation?.CreateNewQuote(SelectedQuote, false);
+                if (navigation != null) await navigation.CreateNewQuote(SelectedQuote, false);
                 await LoadDataAsync();
             }
         }
@@ -213,7 +213,7 @@ namespace QuoteSwift
         {
             if (SelectedQuote != null)
             {
-                navigation?.CreateNewQuote(SelectedQuote, true);
+                if (navigation != null) await navigation.CreateNewQuote(SelectedQuote, true);
                 await LoadDataAsync();
             }
         }

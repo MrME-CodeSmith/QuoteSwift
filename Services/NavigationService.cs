@@ -35,23 +35,23 @@ namespace QuoteSwift
                 await loadable.LoadDataAsync();
         }
 
-        public void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
+        public async Task CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
         {
             using (var form = serviceProvider.GetRequiredService<FrmCreateQuote>())
             {
                 form.Initialize(quoteToChange, changeSpecificObject);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
             appData.SaveAll();
         }
 
-        public void ViewAllQuotes()
+        public async Task ViewAllQuotes()
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewQuotes>())
             {
                 form.ViewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
                 appData.QuoteMap = form.ViewModel.QuoteMap;
                 appData.BusinessList = form.ViewModel.BusinessList;
@@ -61,11 +61,11 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewAllPumps()
+        public async Task ViewAllPumps()
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewPump>())
             {
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
@@ -80,22 +80,22 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewAllParts()
+        public async Task ViewAllParts()
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewParts>())
             {
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void AddNewPart(Part partToChange = null, bool changeSpecificObject = false)
+        public async Task AddNewPart(Part partToChange = null, bool changeSpecificObject = false)
         {
             using (var form = serviceProvider.GetRequiredService<FrmAddPart>())
             {
                 form.ViewModel.PartToChange = partToChange;
                 form.ViewModel.ChangeSpecificObject = changeSpecificObject;
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
             appData.SaveAll();
@@ -136,84 +136,84 @@ namespace QuoteSwift
             appData.SaveAll();
         }
 
-        public void ViewBusinesses()
+        public async Task ViewBusinesses()
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewAllBusinesses>())
             {
                 form.ViewModel.UpdateData(appData.BusinessList);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void ViewBusinessesAddresses(Business business = null, Customer customer = null)
+        public async Task ViewBusinessesAddresses(Business business = null, Customer customer = null)
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewBusinessAddresses>())
             {
                 form.Initialize(business, customer);
                 form.ViewModel.UpdateData(business, customer);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void ViewBusinessesPOBoxAddresses(Business business = null, Customer customer = null)
+        public async Task ViewBusinessesPOBoxAddresses(Business business = null, Customer customer = null)
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewPOBoxAddresses>())
             {
                 form.Initialize(business, customer);
                 form.ViewModel.UpdateData(business, customer);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void ViewBusinessesEmailAddresses(Business business = null, Customer customer = null)
+        public async Task ViewBusinessesEmailAddresses(Business business = null, Customer customer = null)
         {
             using (var form = serviceProvider.GetRequiredService<FrmManageAllEmails>())
             {
                 form.ViewModel.UpdateData(business, customer);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void ViewBusinessesPhoneNumbers(Business business = null, Customer customer = null)
+        public async Task ViewBusinessesPhoneNumbers(Business business = null, Customer customer = null)
         {
             using (var form = serviceProvider.GetRequiredService<FrmManagingPhoneNumbers>())
             {
                 form.ViewModel.UpdateData(business, customer);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void EditBusinessAddress(Business business = null, Customer customer = null, Address address = null)
+        public async Task EditBusinessAddress(Business business = null, Customer customer = null, Address address = null)
         {
             using (var form = serviceProvider.GetRequiredService<FrmEditBusinessAddress>())
             {
                 form.ViewModel.Initialize(business, customer, address);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void EditBusinessEmailAddress(Business business = null, Customer customer = null, string email = "")
+        public async Task EditBusinessEmailAddress(Business business = null, Customer customer = null, string email = "")
         {
             using (var form = serviceProvider.GetRequiredService<FrmEditEmailAddress>())
             {
                 form.ViewModel.Initialize(business, customer, email);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
 
-        public void EditPhoneNumber(Business business = null, Customer customer = null, string number = "")
+        public async Task EditPhoneNumber(Business business = null, Customer customer = null, string number = "")
         {
             using (var form = serviceProvider.GetRequiredService<FrmEditPhoneNumber>())
             {
                 form.ViewModel.Initialize(business, customer, number);
-                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }

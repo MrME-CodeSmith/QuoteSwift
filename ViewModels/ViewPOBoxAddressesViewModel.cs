@@ -151,7 +151,7 @@ namespace QuoteSwift
                 return;
             }
 
-            navigation?.EditBusinessAddress(business, customer, SelectedAddress);
+            if (navigation != null) navigation.EditBusinessAddress(business, customer, SelectedAddress).GetAwaiter().GetResult();
             RefreshAddresses();
         }
 

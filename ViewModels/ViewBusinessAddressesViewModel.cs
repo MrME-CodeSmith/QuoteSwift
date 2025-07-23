@@ -138,7 +138,7 @@ namespace QuoteSwift
                 messageService.ShowError("Please select a valid Business Address, the current selection is invalid", "ERROR - Invalid Address Selection");
                 return;
             }
-            navigation?.EditBusinessAddress(business, customer, SelectedAddress);
+            if (navigation != null) navigation.EditBusinessAddress(business, customer, SelectedAddress).GetAwaiter().GetResult();
             RefreshAddresses();
         }
 

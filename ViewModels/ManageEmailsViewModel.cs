@@ -58,7 +58,7 @@ namespace QuoteSwift
             EditSelectedEmailCommand = new RelayCommand(_ =>
             {
                 string email = SelectedEmail?.Address ?? string.Empty;
-                navigation?.EditBusinessEmailAddress(Business, Customer, email);
+                if (navigation != null) navigation.EditBusinessEmailAddress(Business, Customer, email).GetAwaiter().GetResult();
             });
         }
 

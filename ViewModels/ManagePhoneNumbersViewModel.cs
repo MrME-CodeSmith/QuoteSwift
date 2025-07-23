@@ -85,12 +85,12 @@ namespace QuoteSwift
                 if (Business != null && Business.BusinessCellphoneNumberList != null)
                 {
                     string oldNumber = SelectedCellphoneNumber?.Number ?? string.Empty;
-                    navigation?.EditPhoneNumber(Business, null, oldNumber);
+                    if (navigation != null) navigation.EditPhoneNumber(Business, null, oldNumber).GetAwaiter().GetResult();
                 }
                 else if (Customer != null && Customer.CustomerCellphoneNumberList != null)
                 {
                     string oldNumber = SelectedCellphoneNumber?.Number ?? string.Empty;
-                    navigation?.EditPhoneNumber(null, Customer, oldNumber);
+                    if (navigation != null) navigation.EditPhoneNumber(null, Customer, oldNumber).GetAwaiter().GetResult();
                 }
             });
 
@@ -99,12 +99,12 @@ namespace QuoteSwift
                 if (Business != null && Business.BusinessTelephoneNumberList != null)
                 {
                     string oldNumber = SelectedTelephoneNumber?.Number ?? string.Empty;
-                    navigation?.EditPhoneNumber(Business, null, oldNumber);
+                    if (navigation != null) navigation.EditPhoneNumber(Business, null, oldNumber).GetAwaiter().GetResult();
                 }
                 else if (Customer != null && Customer.CustomerTelephoneNumberList != null)
                 {
                     string oldNumber = SelectedTelephoneNumber?.Number ?? string.Empty;
-                    navigation?.EditPhoneNumber(null, Customer, oldNumber);
+                    if (navigation != null) navigation.EditPhoneNumber(null, Customer, oldNumber).GetAwaiter().GetResult();
                 }
             });
         }

@@ -259,7 +259,7 @@ namespace QuoteSwift
             {
                 if (CurrentCustomer.CustomerCellphoneNumberList != null || CurrentCustomer.CustomerTelephoneNumberList != null)
                 {
-                    navigation?.ViewBusinessesPhoneNumbers(null, CurrentCustomer);
+                    if (navigation != null) navigation.ViewBusinessesPhoneNumbers(null, CurrentCustomer).GetAwaiter().GetResult();
                 }
                 else
                 {
@@ -270,7 +270,7 @@ namespace QuoteSwift
             {
                 if (CurrentCustomer.CustomerPOBoxAddress != null)
                 {
-                    navigation?.ViewBusinessesPOBoxAddresses(null, CurrentCustomer);
+                    if (navigation != null) navigation.ViewBusinessesPOBoxAddresses(null, CurrentCustomer).GetAwaiter().GetResult();
                 }
                 else
                 {
@@ -281,7 +281,7 @@ namespace QuoteSwift
             {
                 if (CurrentCustomer.CustomerEmailList != null)
                 {
-                    navigation?.ViewBusinessesEmailAddresses(null, CurrentCustomer);
+                    if (navigation != null) navigation.ViewBusinessesEmailAddresses(null, CurrentCustomer).GetAwaiter().GetResult();
                 }
                 else
                 {
@@ -292,7 +292,7 @@ namespace QuoteSwift
             {
                 if (CurrentCustomer != null)
                 {
-                    navigation?.ViewBusinessesAddresses(null, CurrentCustomer);
+                    if (navigation != null) navigation.ViewBusinessesAddresses(null, CurrentCustomer).GetAwaiter().GetResult();
                 }
                 else
                 {
