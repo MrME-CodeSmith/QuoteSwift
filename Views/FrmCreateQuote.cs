@@ -43,42 +43,7 @@ namespace QuoteSwift.Views
             this.changeSpecificObject = changeSpecificObject;
         }
 
-        private async void BtnComplete_Click(object sender, EventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject && viewModel.QuoteToChange != null)
-            {
-                NewQuote = quoteToChange;
-                await ExportQuoteToTemplateAsync(NewQuote);
-                NewQuote = null;
-            }
-            else
-            {
-                viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
-                viewModel.SaveQuoteCommand.Execute(null);
-                NewQuote = viewModel.LastCreatedQuote;
 
-                if (NewQuote != null)
-                {
-                    if (messageService.RequestConfirmation("The quote was successfully created. Would you like to export the quote an Excel document?", "REQUEST - Export Quote to Excel"))
-                    {
-                        await ExportQuoteToTemplateAsync(NewQuote);
-                    }
-                    else
-                    {
-                        messageService.ShowInformation("The quote was successfully added to the list of quotes.", "INFORMATION - Quote Added To List");
-                    }
-
-                    quoteToChange = NewQuote;
-                    viewModel.QuoteToChange = NewQuote;
-                    viewModel.ChangeSpecificObject = false;
-                    createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
-                }
-                else
-                {
-                    messageService.ShowError("The Quote could not be created successfully.", "ERROR - Quote Creation Unsuccessful");
-                }
-            }
-        }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
@@ -106,7 +71,6 @@ namespace QuoteSwift.Views
             if (viewModel.IsViewing)
             {
                 LoadFromPassedObject();
-                createNewQuoteUsingThisQuoteToolStripMenuItem.Enabled = true;
             }
             else if (viewModel.IsEditing && viewModel.QuoteToChange != null)
             {
@@ -260,11 +224,13 @@ namespace QuoteSwift.Views
             BindingHelpers.BindEnabled(cbxPumpSelection, viewModel, nameof(CreateQuoteViewModel.IsEditing));
             BindingHelpers.BindVisible(btnComplete, viewModel, nameof(CreateQuoteViewModel.ShowSaveButton));
             btnComplete.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.SaveButtonText));
-            CommandBindings.Bind(btnComplete, viewModel.SaveQuoteCommand);
+            CommandBindings.Bind(btnComplete, viewModel.CompleteQuoteCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
             CommandBindings.Bind(BtnCalculateRebate, viewModel.CalculateRebateCommand);
             CommandBindings.Bind(dtpQuoteCreationDate, viewModel.UpdateDatesCommand);
             CommandBindings.Bind(dtpQuoteExpiryDate, viewModel.UpdateDatesCommand);
+
+            createNewQuoteUsingThisQuoteToolStripMenuItem.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsViewing));
         }
 
         private void CbxUseAutomaticNumberingScheme_CheckedChanged(object sender, EventArgs e)

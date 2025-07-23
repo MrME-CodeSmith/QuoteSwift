@@ -62,6 +62,7 @@ namespace QuoteSwift
 
         public ICommand AddQuoteCommand { get; }
         public ICommand SaveQuoteCommand { get; }
+        public ICommand CompleteQuoteCommand { get; }
         public ICommand LoadDataCommand { get; }
         public ICommand ExportQuoteCommand { get; }
         public ICommand ExitCommand { get; }
@@ -148,6 +149,7 @@ namespace QuoteSwift
             SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ExportQuoteCommand = new AsyncRelayCommand(q => ExportQuoteToTemplateAsync(q as Quote));
+            CompleteQuoteCommand = new AsyncRelayCommand(_ => CompleteQuoteAsync());
 
             CancelCommand = CreateCancelCommand(
                 () => CloseAction?.Invoke(),
@@ -1063,6 +1065,43 @@ namespace QuoteSwift
             }
 
             return quote;
+        }
+
+        public async Task CompleteQuoteAsync()
+        {
+            if (!ChangeSpecificObject && QuoteToChange != null)
+            {
+                await ExportQuoteToTemplateAsync(QuoteToChange);
+                return;
+            }
+
+            Pricing.Rebate = RebateInput;
+            LastCreatedQuote = CreateAndSaveQuote();
+            var newQuote = LastCreatedQuote;
+
+            if (newQuote != null)
+            {
+                if (messageService?.RequestConfirmation(
+                        "The quote was successfully created. Would you like to export the quote an Excel document?",
+                        "REQUEST - Export Quote to Excel") == true)
+                {
+                    await ExportQuoteToTemplateAsync(newQuote);
+                }
+                else
+                {
+                    messageService?.ShowInformation(
+                        "The quote was successfully added to the list of quotes.",
+                        "INFORMATION - Quote Added To List");
+                }
+
+                QuoteToChange = newQuote;
+                ChangeSpecificObject = false;
+            }
+            else
+            {
+                messageService?.ShowError("The Quote could not be created successfully.",
+                    "ERROR - Quote Creation Unsuccessful");
+            }
         }
 
         public async Task ExportQuoteToTemplateAsync(Quote quote)
