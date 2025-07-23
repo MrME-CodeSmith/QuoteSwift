@@ -38,6 +38,7 @@ namespace QuoteSwift
             if (data != null)
                 viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
                                      data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
+            BindIsBusy(viewModel);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -77,8 +78,9 @@ namespace QuoteSwift
                 viewModel.ChangeSpecificObject = true;
         }
 
-        private void FrmAddPump_Load(object sender, EventArgs e)
+        private async void FrmAddPump_Load(object sender, EventArgs e)
         {
+            await viewModel.LoadDataAsync();
             SetupBindings();
 
             if (viewModel.PumpToChange == null)

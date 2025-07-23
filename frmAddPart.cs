@@ -67,8 +67,9 @@ namespace QuoteSwift
             if (!cbxMandatoryPart.Enabled) cbxMandatoryPart.Enabled = true;
         }
 
-        private void FrmAddPart_Load(object sender, EventArgs e)
+        private async void FrmAddPart_Load(object sender, EventArgs e)
         {
+            await viewModel.LoadDataAsync();
             if (viewModel.PartToChange == null)
             {
                 viewModel.ChangeSpecificObject = true;
