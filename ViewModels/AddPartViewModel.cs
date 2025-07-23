@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace QuoteSwift
 {
-    public class AddPartViewModel : ViewModelBase
+    public class AddPartViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;

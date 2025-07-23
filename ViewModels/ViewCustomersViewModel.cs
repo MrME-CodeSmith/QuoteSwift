@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
-    public class ViewCustomersViewModel : ViewModelBase
+    public class ViewCustomersViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INavigationService navigation;

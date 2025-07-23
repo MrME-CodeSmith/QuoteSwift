@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using QuoteSwift.Views;
 
+
 namespace QuoteSwift
 {
     public class NavigationService : INavigationService
@@ -28,11 +29,18 @@ namespace QuoteSwift
             fileDialogService = dialogService;
         }
 
+        static async Task LoadIfAvailableAsync(object viewModel)
+        {
+            if (viewModel is ILoadableViewModel loadable)
+                await loadable.LoadDataAsync();
+        }
+
         public void CreateNewQuote(Quote quoteToChange = null, bool changeSpecificObject = false)
         {
             using (var form = serviceProvider.GetRequiredService<FrmCreateQuote>())
             {
                 form.Initialize(quoteToChange, changeSpecificObject);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
             appData.SaveAll();
@@ -43,6 +51,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmViewQuotes>())
             {
                 form.ViewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
                 appData.QuoteMap = form.ViewModel.QuoteMap;
                 appData.BusinessList = form.ViewModel.BusinessList;
@@ -56,7 +65,7 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewPump>())
             {
-                form.ViewModel.LoadDataCommand.Execute(null);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -65,7 +74,7 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmAddPump>())
             {
-                await form.ViewModel.LoadDataAsync();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
             appData.SaveAll();
@@ -75,7 +84,7 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewParts>())
             {
-                form.ViewModel.LoadDataCommand.Execute(null);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -86,7 +95,7 @@ namespace QuoteSwift
             {
                 form.ViewModel.PartToChange = partToChange;
                 form.ViewModel.ChangeSpecificObject = changeSpecificObject;
-                form.ViewModel.LoadDataCommand.Execute(null);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
             appData.SaveAll();
@@ -99,6 +108,7 @@ namespace QuoteSwift
             {
                 form.ViewModel.UpdateData(appData.BusinessList, customerToChange, changeSpecificObject);
                 form.Container = businessToChange;
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
             appData.SaveAll();
@@ -109,7 +119,7 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewCustomers>())
             {
-                await form.ViewModel.LoadDataAsync();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
             }
         }
@@ -119,7 +129,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmAddBusiness>())
             {
                 form.ViewModel.UpdateData(appData.BusinessList, businessToChange, changeSpecificObject);
-                await form.ViewModel.LoadDataAsync();
+                await LoadIfAvailableAsync(form.ViewModel);
                 form.ShowDialog();
                 appData.BusinessList = form.ViewModel.BusinessList;
             }
@@ -131,6 +141,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmViewAllBusinesses>())
             {
                 form.ViewModel.UpdateData(appData.BusinessList);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -141,6 +152,7 @@ namespace QuoteSwift
             {
                 form.Initialize(business, customer);
                 form.ViewModel.UpdateData(business, customer);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -151,6 +163,7 @@ namespace QuoteSwift
             {
                 form.Initialize(business, customer);
                 form.ViewModel.UpdateData(business, customer);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -160,6 +173,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmManageAllEmails>())
             {
                 form.ViewModel.UpdateData(business, customer);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -169,6 +183,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmManagingPhoneNumbers>())
             {
                 form.ViewModel.UpdateData(business, customer);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -178,6 +193,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmEditBusinessAddress>())
             {
                 form.ViewModel.Initialize(business, customer, address);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -187,6 +203,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmEditEmailAddress>())
             {
                 form.ViewModel.Initialize(business, customer, email);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
@@ -196,6 +213,7 @@ namespace QuoteSwift
             using (var form = serviceProvider.GetRequiredService<FrmEditPhoneNumber>())
             {
                 form.ViewModel.Initialize(business, customer, number);
+                LoadIfAvailableAsync(form.ViewModel).GetAwaiter().GetResult();
                 form.ShowDialog();
             }
         }
