@@ -10,6 +10,7 @@ namespace QuoteSwift
     {
         readonly IDataService dataService;
         readonly INavigationService navigation;
+        readonly IMessageService messageService;
         Dictionary<string, Part> partList;
         readonly BindingList<Part> mandatoryParts;
         readonly BindingList<Part> nonMandatoryParts;
@@ -20,12 +21,17 @@ namespace QuoteSwift
         public ICommand UpdatePartCommand { get; }
         public ICommand RemovePartCommand { get; }
         public ICommand SaveChangesCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        public Action CloseAction { get; set; }
 
 
-        public ViewPartsViewModel(IDataService service, INavigationService navigation = null)
+        public ViewPartsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
         {
             dataService = service;
             this.navigation = navigation;
+            this.messageService = messageService;
             mandatoryParts = new BindingList<Part>();
             nonMandatoryParts = new BindingList<Part>();
             allParts = new BindingList<Part>();
@@ -34,6 +40,25 @@ namespace QuoteSwift
             UpdatePartCommand = new AsyncRelayCommand(_ => UpdatePartAsync(), _ => Task.FromResult(SelectedPart != null));
             RemovePartCommand = new RelayCommand(_ => RemoveSelectedPart(), _ => SelectedPart != null);
             SaveChangesCommand = new RelayCommand(_ => SaveChanges());
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.",
+                        "REQUEST - Cancellation") == true)
+                    CloseAction?.Invoke();
+            });
+
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
         }
 
         public IDataService DataService => dataService;

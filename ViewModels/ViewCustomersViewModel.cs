@@ -19,6 +19,10 @@ namespace QuoteSwift
         public ICommand LoadDataCommand { get; }
         public ICommand AddCustomerCommand { get; }
         public ICommand UpdateCustomerCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        public Action CloseAction { get; set; }
 
 
         public ViewCustomersViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
@@ -42,6 +46,25 @@ namespace QuoteSwift
                     messageService?.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
                 }
             }, _ => Task.FromResult(SelectedCustomer != null));
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.",
+                        "REQUEST - Cancellation") == true)
+                    CloseAction?.Invoke();
+            });
+
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
         }
 
         public BindingList<Business> Businesses

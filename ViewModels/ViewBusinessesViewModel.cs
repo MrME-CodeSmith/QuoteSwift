@@ -14,6 +14,10 @@ namespace QuoteSwift
         public ICommand LoadDataCommand { get; }
         public ICommand AddBusinessCommand { get; }
         public ICommand UpdateBusinessCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        public Action CloseAction { get; set; }
 
 
         public ViewBusinessesViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
@@ -37,6 +41,25 @@ namespace QuoteSwift
                     messageService?.ShowError("Please select a valid Business, the current selection is invalid", "ERROR - Invalid Business Selection");
                 }
             }, _ => Task.FromResult(SelectedBusiness != null));
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.",
+                        "REQUEST - Cancellation") == true)
+                    CloseAction?.Invoke();
+            });
+
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
         }
 
         public IDataService DataService => dataService;

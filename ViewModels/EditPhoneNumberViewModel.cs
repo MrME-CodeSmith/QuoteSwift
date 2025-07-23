@@ -7,20 +7,40 @@ namespace QuoteSwift
     {
         Business business;
         Customer customer;
+        readonly IMessageService messageService;
         OperationResult lastResult = OperationResult.Successful();
         string originalNumber;
         string currentNumber;
 
         public ICommand UpdateNumberCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        public Action CloseAction { get; set; }
 
 
-        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "")
+        public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null)
         {
+            this.messageService = messageService;
             Initialize(business, customer, number);
             UpdateNumberCommand = new RelayCommand(_ =>
             {
                 var r = UpdateNumber();
                 LastResult = r;
+            });
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "By canceling the current event, any parts not added will not be available in the part's list.",
+                        "REQUEAST - Action Cancellation") == true)
+                    CloseAction?.Invoke();
+            });
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                    System.Windows.Forms.Application.Exit();
             });
         }
 

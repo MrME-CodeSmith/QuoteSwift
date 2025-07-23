@@ -18,6 +18,7 @@ namespace QuoteSwift.Views
             this.viewModel = viewModel;
             this.messageService = messageService;
             this.navigation = navigation;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 
@@ -45,13 +46,14 @@ namespace QuoteSwift.Views
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                Application.Exit();
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

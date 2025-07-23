@@ -46,6 +46,10 @@ namespace QuoteSwift
         public ICommand UpdateCustomerCommand { get; }
         public ICommand SaveCustomerCommand { get; }
         public ICommand LoadDataCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        public Action CloseAction { get; set; }
 
         public OperationResult LastResult
         {
@@ -293,6 +297,25 @@ namespace QuoteSwift
                 }
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.",
+                        "REQUEST - Cancellation"))
+                    CloseAction?.Invoke();
+            });
+
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination"))
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
         }
 
         public IDataService DataService => dataService;

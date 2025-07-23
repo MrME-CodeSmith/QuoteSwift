@@ -27,6 +27,7 @@ namespace QuoteSwift.Views
             appData = data;
             this.serializationService = serializationService;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             viewModel.CurrentPump = viewModel.PumpToChange ?? new Pump();
             mtxtPumpName.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.PumpName), false, DataSourceUpdateMode.OnPropertyChanged);
             mtxtPumpDescription.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.PumpDescription), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -139,7 +140,8 @@ namespace QuoteSwift.Views
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("By canceling the current event, any parts not added will not be available in the part's list.", "REQUEAST - Action Cancellation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void UpdatePumpToolStripMenuItem_Click(object sender, EventArgs e)
