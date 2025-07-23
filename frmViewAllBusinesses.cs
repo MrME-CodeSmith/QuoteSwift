@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmViewAllBusinesses : Form
+    public partial class FrmViewAllBusinesses : BaseForm
     {
 
         readonly ViewBusinessesViewModel viewModel;
@@ -15,6 +15,7 @@ namespace QuoteSwift
         readonly BindingSource businessBindingSource = new BindingSource();
 
         public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -89,10 +90,6 @@ namespace QuoteSwift
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Still Needs Implementation.
-        }
-
-        private void FrmViewAllBusinesses_FormClosing(object sender, FormClosingEventArgs e)
-        {
         }
 
         /**********************************************************************************/

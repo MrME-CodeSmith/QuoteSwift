@@ -3,18 +3,21 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmEditPhoneNumber : Form
+    public partial class FrmEditPhoneNumber : BaseForm
     {
 
         readonly IMessageService messageService;
+        readonly INavigationService navigation;
         readonly EditPhoneNumberViewModel viewModel;
         public EditPhoneNumberViewModel ViewModel => viewModel;
 
-        public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, IMessageService messageService = null)
+        public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.messageService = messageService;
+            this.navigation = navigation;
             SetupBindings();
         }
 
@@ -56,8 +59,5 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmEditPhoneNumber_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
     }
 }
