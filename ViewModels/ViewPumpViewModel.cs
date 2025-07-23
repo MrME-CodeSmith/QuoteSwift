@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -45,7 +46,7 @@ namespace QuoteSwift
             AddPumpCommand = new AsyncRelayCommand(_ => AddPumpAsync());
             UpdatePumpCommand = new AsyncRelayCommand(_ => UpdatePumpAsync(), _ => Task.FromResult(SelectedPump != null));
             RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
-            ExportInventoryCommand = new AsyncRelayCommand(_ => ExportInventoryActionAsync());
+            ExportInventoryCommand = new AsyncRelayCommand((_, t) => ExportInventoryActionAsync(t));
             ExitCommand = CreateExitCommand(() =>
             {
                 navigation?.SaveAllData();
@@ -160,7 +161,7 @@ namespace QuoteSwift
             }
         }
 
-        async Task ExportInventoryActionAsync()
+        async Task ExportInventoryActionAsync(System.Threading.CancellationToken token)
         {
             string filePath = fileDialogService?.ShowSaveFileDialog(
                 "CSV files (*.csv)|*.csv|All Files (*.*)|*.*",
@@ -171,7 +172,7 @@ namespace QuoteSwift
             {
                 try
                 {
-                    await ExportInventoryAsync(filePath);
+                    await ExportInventoryAsync(filePath, token);
                     messageService?.ShowInformation("Inventory exported successfully.", "INFORMATION - Export Successful");
                 }
                 catch (Exception ex)
@@ -190,10 +191,13 @@ namespace QuoteSwift
             RepairableItemNames?.Remove(StringUtil.NormalizeKey(pump.PumpName));
         }
 
-        public Task ExportInventoryAsync(string filePath)
+        public Task ExportInventoryAsync(string filePath, System.Threading.CancellationToken token)
         {
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentNullException(nameof(filePath));
+
+            if (token.IsCancellationRequested)
+                return Task.CompletedTask;
 
             serializationService.ExportInventory(Pumps, filePath);
             return Task.CompletedTask;

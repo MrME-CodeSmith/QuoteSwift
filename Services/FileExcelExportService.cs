@@ -18,9 +18,11 @@ namespace QuoteSwift
         }
 
         [STAThread]
-        public System.Threading.Tasks.Task ExportQuoteToExcelAsync(Quote quote)
+        public System.Threading.Tasks.Task ExportQuoteToExcelAsync(Quote quote, System.Threading.CancellationToken token)
         {
             if (quote == null) return;
+
+            token.ThrowIfCancellationRequested();
 
             Excel.Application excelApp = null;
             Excel.Workbook workbook = null;
@@ -102,6 +104,8 @@ namespace QuoteSwift
                 int currentRow = worksheet.Cells.Find("<<Mandatory Begin>>").Row + 1;
                 for (int i = 0; i < quote.QuoteMandatoryPartList.Count; i++)
                 {
+                    if (token.IsCancellationRequested)
+                        return System.Threading.Tasks.Task.CompletedTask;
                     worksheet.Cells[currentRow, 1].Value2 = quote.QuoteMandatoryPartList[i].PumpPart.PumpPart.NewPartNumber ?? "NPN";
                     worksheet.Cells[currentRow, 2].Value2 = quote.QuoteMandatoryPartList[i].PumpPart.PumpPart.PartDescription ?? "NO DESCRIPTION";
                     worksheet.Cells[currentRow, 5].Value2 = quote.QuoteMandatoryPartList[i].PumpPart.PumpPartQuantity.ToString() ?? "0";
@@ -117,6 +121,8 @@ namespace QuoteSwift
                 currentRow = worksheet.Cells.Find("<<Non Mandatory Begin>>").Row + 1;
                 for (int i = 0; i < quote.QuoteNewList.Count - 3; i++)
                 {
+                    if (token.IsCancellationRequested)
+                        return System.Threading.Tasks.Task.CompletedTask;
                     Excel.Range range = worksheet.get_Range("A" + currentRow.ToString(), "L" + currentRow.ToString()).EntireRow;
                     range.Insert(Excel.XlInsertShiftDirection.xlShiftDown);
                     worksheet.get_Range("B" + currentRow.ToString() + ":D" + currentRow.ToString()).Merge();
@@ -127,6 +133,8 @@ namespace QuoteSwift
                 currentRow = worksheet.Cells.Find("<<Non Mandatory Begin>>").Row;
                 for (int i = 0; i < quote.QuoteNewList.Count; i++)
                 {
+                    if (token.IsCancellationRequested)
+                        return System.Threading.Tasks.Task.CompletedTask;
                     worksheet.Cells[currentRow, 1].Value2 = quote.QuoteNewList[i].PumpPart.PumpPart.NewPartNumber ?? "NPN";
                     worksheet.Cells[currentRow, 2].Value2 = quote.QuoteNewList[i].PumpPart.PumpPart.PartDescription ?? "NO DESCRIPTION";
                     worksheet.Cells[currentRow, 5].Value2 = quote.QuoteNewList[i].PumpPart.PumpPartQuantity.ToString() ?? "0";
