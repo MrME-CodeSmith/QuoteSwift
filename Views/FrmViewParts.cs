@@ -25,6 +25,7 @@ namespace QuoteSwift.Views
             appData = data;
             this.messageService = messageService;
             viewModel.CloseAction = Close;
+            BindIsBusy(viewModel);
             if (appData != null)
                 viewModel.UpdateData(appData.PartList);
             SetupBindings();
