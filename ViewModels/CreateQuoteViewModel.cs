@@ -157,6 +157,9 @@ namespace QuoteSwift
                 if (p is DateTime date)
                     UpdateDates(date);
             });
+
+            pricing.PropertyChanged += Pricing_PropertyChanged;
+            OnPricingChanged();
         }
 
         public IDataService DataService => dataService;
@@ -450,15 +453,45 @@ namespace QuoteSwift
             get => pricing;
             private set
             {
+                if (pricing != null)
+                    pricing.PropertyChanged -= Pricing_PropertyChanged;
                 pricing = value;
+                if (pricing != null)
+                    pricing.PropertyChanged += Pricing_PropertyChanged;
                 OnPropertyChanged(nameof(Pricing));
+                OnPricingChanged();
             }
         }
 
         public float RepairPercentage
         {
             get => repairPercentage;
-            private set => SetProperty(ref repairPercentage, value);
+            private set
+            {
+                if (SetProperty(ref repairPercentage, value))
+                    OnPropertyChanged(nameof(RepairPercentageDisplay));
+            }
+        }
+
+        public string PumpPriceDisplay => $"New Pump Price: R {Pricing.PumpPrice}";
+        public string RebateDisplay => $"R{Pricing.Rebate}";
+        public string SubTotalDisplay => $"R{Pricing.SubTotal}";
+        public string VATDisplay => $"R{Pricing.VAT}";
+        public string TotalDueDisplay => $"R{Pricing.TotalDue}";
+        public string RepairPercentageDisplay => $"Repair Percentage: {RepairPercentage}%";
+
+        void Pricing_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPricingChanged();
+        }
+
+        void OnPricingChanged()
+        {
+            OnPropertyChanged(nameof(PumpPriceDisplay));
+            OnPropertyChanged(nameof(RebateDisplay));
+            OnPropertyChanged(nameof(SubTotalDisplay));
+            OnPropertyChanged(nameof(VATDisplay));
+            OnPropertyChanged(nameof(TotalDueDisplay));
         }
 
         public Address SelectedBusinessPOBox

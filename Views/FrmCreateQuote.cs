@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -95,7 +94,6 @@ namespace QuoteSwift.Views
         {
             mandatorySource.DataSource = viewModel.MandatoryParts;
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
-            UpdatePricingDisplay();
         }
 
         private async void FrmCreateQuote_Load(object sender, EventArgs e)
@@ -128,7 +126,6 @@ namespace QuoteSwift.Views
                 viewModel.LoadPartlists();
                 mandatorySource.DataSource = viewModel.MandatoryParts;
                 nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
-                UpdatePricingDisplay();
                 if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
                     viewModel.QuoteNumber = viewModel.NextQuoteNumber;
 
@@ -155,13 +152,11 @@ namespace QuoteSwift.Views
         private void DgvMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             viewModel.Calculate();
-            UpdatePricingDisplay();
         }
 
         private void DgvNonMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             viewModel.Calculate();
-            UpdatePricingDisplay();
         }
 
 
@@ -246,6 +241,13 @@ namespace QuoteSwift.Views
             BindingHelpers.BindText(lblCustomerPOBoxAreaCode, viewModel, nameof(CreateQuoteViewModel.CustomerPOBoxAreaCodeDisplay));
             BindingHelpers.BindText(lblCustomerVendorNumber, viewModel, nameof(CreateQuoteViewModel.CustomerVendorNumberDisplay));
 
+            BindingHelpers.BindText(lblNewPumpUnitPrice, viewModel, nameof(CreateQuoteViewModel.PumpPriceDisplay));
+            BindingHelpers.BindText(lblRebateValue, viewModel, nameof(CreateQuoteViewModel.RebateDisplay));
+            BindingHelpers.BindText(lblSubTotalValue, viewModel, nameof(CreateQuoteViewModel.SubTotalDisplay));
+            BindingHelpers.BindText(lblVATValue, viewModel, nameof(CreateQuoteViewModel.VATDisplay));
+            BindingHelpers.BindText(lblTotalDueValue, viewModel, nameof(CreateQuoteViewModel.TotalDueDisplay));
+            BindingHelpers.BindText(lblRepairPercentage, viewModel, nameof(CreateQuoteViewModel.RepairPercentageDisplay));
+
             gbxBusinessInformation.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
             gbxBusinessPOBoxDetails.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
             gbxQuoteNumberManagement.DataBindings.Add("Enabled", viewModel, nameof(CreateQuoteViewModel.IsEditing));
@@ -256,28 +258,12 @@ namespace QuoteSwift.Views
             BindingHelpers.BindEnabled(cbxPumpSelection, viewModel, nameof(CreateQuoteViewModel.IsEditing));
             BindingHelpers.BindVisible(btnComplete, viewModel, nameof(CreateQuoteViewModel.ShowSaveButton));
             btnComplete.DataBindings.Add("Text", viewModel, nameof(CreateQuoteViewModel.SaveButtonText));
-
-            UpdatePricingDisplay();
             CommandBindings.Bind(btnComplete, viewModel.SaveQuoteCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
             CommandBindings.Bind(BtnCalculateRebate, viewModel.CalculateRebateCommand);
             CommandBindings.Bind(dtpQuoteCreationDate, viewModel.UpdateDatesCommand);
             CommandBindings.Bind(dtpQuoteExpiryDate, viewModel.UpdateDatesCommand);
-            viewModel.PropertyChanged += ViewModel_PropertyChanged;
-            viewModel.Pricing.PropertyChanged += Pricing_PropertyChanged;
         }
-
-        void UpdatePricingDisplay()
-        {
-            lblNewPumpUnitPrice.Text = "New Pump Price: R " + viewModel.Pricing.PumpPrice.ToString();
-            lblRebateValue.Text = "R" + viewModel.Pricing.Rebate.ToString();
-            lblSubTotalValue.Text = "R" + viewModel.Pricing.SubTotal.ToString();
-            lblVATValue.Text = "R" + viewModel.Pricing.VAT.ToString();
-            lblTotalDueValue.Text = "R" + viewModel.Pricing.TotalDue.ToString();
-            lblRepairPercentage.Text = "Repair Percentage: " + viewModel.RepairPercentage + "%";
-        }
-
-
 
         private void CbxUseAutomaticNumberingScheme_CheckedChanged(object sender, EventArgs e)
         {
@@ -299,27 +285,11 @@ namespace QuoteSwift.Views
             await ((AsyncRelayCommand)viewModel.ExportQuoteCommand).ExecuteAsync(q);
         }
 
-        void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(CreateQuoteViewModel.Pricing))
-            {
-                viewModel.Pricing.PropertyChanged += Pricing_PropertyChanged;
-                UpdatePricingDisplay();
-            }
-        }
-
-        void Pricing_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            UpdatePricingDisplay();
-        }
-
-
         private void LoadFromPassedObject()
         {
             viewModel.LoadFromQuote(quoteToChange);
             mandatorySource.DataSource = viewModel.MandatoryParts;
             nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
-            UpdatePricingDisplay();
         }
 
         // View-model bindings manage read-only state
