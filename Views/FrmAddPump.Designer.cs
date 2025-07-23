@@ -133,7 +133,6 @@ namespace QuoteSwift.Views
             this.dgvMandatoryPartView.Name = "dgvMandatoryPartView";
             this.dgvMandatoryPartView.Size = new System.Drawing.Size(1266, 307);
             this.dgvMandatoryPartView.TabIndex = 9;
-            this.dgvMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvMandatoryPartView_CellContentClick);
             // 
             // ClmPartName
             // 
@@ -205,7 +204,6 @@ namespace QuoteSwift.Views
             this.dgvNonMandatoryPartView.Name = "dgvNonMandatoryPartView";
             this.dgvNonMandatoryPartView.Size = new System.Drawing.Size(1266, 286);
             this.dgvNonMandatoryPartView.TabIndex = 11;
-            this.dgvNonMandatoryPartView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvNonMandatoryPartView_CellContentClick);
             // 
             // ClmNMPartName
             // 

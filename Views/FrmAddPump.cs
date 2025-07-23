@@ -26,9 +26,9 @@ namespace QuoteSwift.Views
             this.messageService = messageService;
             viewModel.CloseAction = Close;
             viewModel.CurrentPump = viewModel.PumpToChange ?? new Pump();
-            mtxtPumpName.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.PumpName), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtPumpDescription.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.PumpDescription), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtNewPumpPrice.DataBindings.Add("Text", viewModel.CurrentPump, nameof(Pump.NewPumpPrice), true, DataSourceUpdateMode.OnPropertyChanged);
+            BindingHelpers.BindText(mtxtPumpName, viewModel, nameof(AddPumpViewModel.PumpName));
+            BindingHelpers.BindText(mtxtPumpDescription, viewModel, nameof(AddPumpViewModel.PumpDescription));
+            BindingHelpers.BindText(mtxtNewPumpPrice, viewModel, nameof(AddPumpViewModel.NewPumpPrice));
             mandatorySource.DataSource = viewModel.SelectedMandatoryParts;
             nonMandatorySource.DataSource = viewModel.SelectedNonMandatoryParts;
             CommandBindings.Bind(btnAddPump, viewModel.SavePumpCommand);
@@ -38,35 +38,7 @@ namespace QuoteSwift.Views
             BindIsBusy(viewModel);
         }
 
-        private void MtxtPumpName_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject)
-                viewModel.ChangeSpecificObject = true;
-        }
-
-        private void MtxtPumpDescription_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject)
-                viewModel.ChangeSpecificObject = true;
-        }
-
-        private void MtxtNewPumpPrice_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject)
-                viewModel.ChangeSpecificObject = true;
-        }
-
-        private void DgvMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject)
-                viewModel.ChangeSpecificObject = true;
-        }
-
-        private void DgvNonMandatoryPartView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (!viewModel.ChangeSpecificObject)
-                viewModel.ChangeSpecificObject = true;
-        }
+        // Input changes are tracked by the view model
 
         private async void FrmAddPump_Load(object sender, EventArgs e)
         {
