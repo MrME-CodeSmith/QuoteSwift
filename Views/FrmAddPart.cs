@@ -10,18 +10,15 @@ namespace QuoteSwift.Views
         readonly AddPartViewModel viewModel;
         public AddPartViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
-
-        readonly ApplicationData appData;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
 
-        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
             : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            appData = data;
             this.serializationService = serializationService;
             this.messageService = messageService;
             viewModel.CloseAction = Close;
@@ -69,7 +66,7 @@ namespace QuoteSwift.Views
 
         private async void FrmAddPart_Load(object sender, EventArgs e)
         {
-            await viewModel.LoadDataAsync();
+            await ((AsyncRelayCommand)viewModel.LoadDataCommand).ExecuteAsync(null);
             if (viewModel.PartToChange == null)
             {
                 viewModel.ChangeSpecificObject = true;

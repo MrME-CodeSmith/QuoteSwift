@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace QuoteSwift.Views
@@ -12,19 +11,17 @@ namespace QuoteSwift.Views
         readonly AddPumpViewModel viewModel;
         public AddPumpViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
         readonly BindingSource mandatorySource = new BindingSource();
         readonly BindingSource nonMandatorySource = new BindingSource();
 
-        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
             : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            appData = data;
             this.serializationService = serializationService;
             this.messageService = messageService;
             viewModel.CloseAction = Close;
@@ -37,9 +34,7 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnAddPump, viewModel.SavePumpCommand);
             CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
-            if (data != null)
-                viewModel.UpdateData(data.PumpList, data.PartList, viewModel.PumpToChange, viewModel.ChangeSpecificObject,
-                                     data.PumpList != null ? new HashSet<string>(data.PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName))) : null);
+            viewModel.LoadDataCommand.Execute(null);
             BindIsBusy(viewModel);
         }
 
@@ -75,7 +70,7 @@ namespace QuoteSwift.Views
 
         private async void FrmAddPump_Load(object sender, EventArgs e)
         {
-            await viewModel.LoadDataAsync();
+            await ((AsyncRelayCommand)viewModel.LoadDataCommand).ExecuteAsync(null);
             SetupBindings();
 
             if (viewModel.PumpToChange == null)

@@ -13,7 +13,6 @@ namespace QuoteSwift.Views
     {
         readonly CreateQuoteViewModel viewModel;
         public CreateQuoteViewModel ViewModel => viewModel;
-        readonly ApplicationData appData;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
         Quote quoteToChange;
@@ -24,13 +23,12 @@ namespace QuoteSwift.Views
         readonly BindingSource nonMandatorySource = new BindingSource();
 
 
-        public FrmCreateQuote(CreateQuoteViewModel viewModel, ApplicationData data, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmCreateQuote(CreateQuoteViewModel viewModel, IMessageService messageService = null, ISerializationService serializationService = null)
             : base(messageService)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             viewModel.CloseAction = Close;
-            appData = data;
             this.messageService = messageService;
             this.serializationService = serializationService;
             SetupBindings();
@@ -65,7 +63,7 @@ namespace QuoteSwift.Views
 
         private async void FrmCreateQuote_Load(object sender, EventArgs e)
         {
-            await viewModel.LoadDataAsync();
+            await ((AsyncRelayCommand)viewModel.LoadDataCommand).ExecuteAsync(null);
             viewModel.QuoteToChange = quoteToChange;
             viewModel.ChangeSpecificObject = changeSpecificObject;
             if (viewModel.IsViewing)

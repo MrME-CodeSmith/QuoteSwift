@@ -56,7 +56,7 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewPump>())
             {
-                form.ViewModel.UpdateData(appData.PumpList);
+                form.ViewModel.LoadDataCommand.Execute(null);
                 form.ShowDialog();
             }
         }
@@ -65,11 +65,8 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmAddPump>())
             {
-                form.ViewModel.UpdateData(appData.PumpList, appData.PartList);
                 await form.ViewModel.LoadDataAsync();
                 form.ShowDialog();
-                appData.PumpList = form.ViewModel.PumpList;
-                appData.PartList = form.ViewModel.PartMap;
             }
             appData.SaveAll();
         }
@@ -78,7 +75,7 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmViewParts>())
             {
-                form.ViewModel.UpdateData(appData.PartList);
+                form.ViewModel.LoadDataCommand.Execute(null);
                 form.ShowDialog();
             }
         }
@@ -87,10 +84,10 @@ namespace QuoteSwift
         {
             using (var form = serviceProvider.GetRequiredService<FrmAddPart>())
             {
-                form.ViewModel.UpdateData(appData.PartList, appData.PumpList, partToChange, changeSpecificObject);
+                form.ViewModel.PartToChange = partToChange;
+                form.ViewModel.ChangeSpecificObject = changeSpecificObject;
+                form.ViewModel.LoadDataCommand.Execute(null);
                 form.ShowDialog();
-                appData.PartList = form.ViewModel.PartMap;
-                appData.PumpList = form.ViewModel.PumpList;
             }
             appData.SaveAll();
         }

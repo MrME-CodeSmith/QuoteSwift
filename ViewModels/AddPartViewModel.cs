@@ -15,6 +15,7 @@ namespace QuoteSwift
         readonly IFileDialogService fileDialogService;
         readonly INavigationService navigation;
         readonly IApplicationService applicationService;
+        readonly ApplicationData appData;
         Dictionary<string, Part> partMap;
         BindingList<Pump> pumpList;
         Part partToChange;
@@ -74,11 +75,13 @@ namespace QuoteSwift
 
 
         public AddPartViewModel(IDataService service, INotificationService notifier,
+                                ApplicationData appData,
                                 IMessageService messenger = null, IFileDialogService dialogService = null,
                                 INavigationService navigation = null, IApplicationService applicationService = null)
         {
             dataService = service;
             notificationService = notifier;
+            this.appData = appData;
             messageService = messenger;
             fileDialogService = dialogService;
             this.navigation = navigation;
@@ -267,11 +270,12 @@ namespace QuoteSwift
 
         public async Task LoadDataAsync()
         {
-            PartMap = await dataService.LoadPartListAsync();
-            PumpList = await dataService.LoadPumpListAsync();
+            PartMap = appData.PartList;
+            PumpList = appData.PumpList;
             Parts = new BindingList<Part>(PartMap?.Values.ToList() ?? new List<Part>());
             Pumps = PumpList;
             CurrentPart = PartToChange ?? new Part();
+            await Task.CompletedTask;
         }
 
         public void UpdateData(Dictionary<string, Part> partMap,
