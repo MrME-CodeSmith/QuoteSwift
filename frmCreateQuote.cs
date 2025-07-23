@@ -152,23 +152,6 @@ namespace QuoteSwift
             DgvNonMandatoryPartReplacement.RowsDefaultCellStyle.BackColor = Color.Bisque;
             DgvNonMandatoryPartReplacement.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
-
-        private void CbxCustomerSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void CbxBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void CbxPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void CbxCustomerDeliveryAddress_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
         private void DgvMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             viewModel.Calculate();
@@ -294,11 +277,6 @@ namespace QuoteSwift
             lblRepairPercentage.Text = "Repair Percentage: " + viewModel.RepairPercentage + "%";
         }
 
-
-
-        private void CbxCustomerPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
 
 
         private void CbxUseAutomaticNumberingScheme_CheckedChanged(object sender, EventArgs e)

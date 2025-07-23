@@ -301,7 +301,6 @@ namespace QuoteSwift
             this.CbxPOBoxSelection.Size = new System.Drawing.Size(315, 26);
             this.CbxPOBoxSelection.TabIndex = 2;
             this.CbxPOBoxSelection.Text = "Business Selection";
-            this.CbxPOBoxSelection.SelectedIndexChanged += new System.EventHandler(this.CbxPOBoxSelection_SelectedIndexChanged);
             // 
             // lblBusinessPOBoxAreaCode
             // 
@@ -352,7 +351,6 @@ namespace QuoteSwift
             this.cbxBusinessSelection.Size = new System.Drawing.Size(389, 26);
             this.cbxBusinessSelection.TabIndex = 1;
             this.cbxBusinessSelection.Text = "Business Selection";
-            this.cbxBusinessSelection.SelectedIndexChanged += new System.EventHandler(this.CbxBusinessSelection_SelectedIndexChanged);
             // 
             // panel1
             // 
@@ -532,7 +530,6 @@ namespace QuoteSwift
             this.CbxCustomerPOBoxSelection.Size = new System.Drawing.Size(312, 26);
             this.CbxCustomerPOBoxSelection.TabIndex = 7;
             this.CbxCustomerPOBoxSelection.Text = "Customer P.O.Box Selection";
-            this.CbxCustomerPOBoxSelection.SelectedIndexChanged += new System.EventHandler(this.CbxCustomerPOBoxSelection_SelectedIndexChanged);
             // 
             // lblCustomerPOBoxStreetName
             // 
@@ -583,7 +580,6 @@ namespace QuoteSwift
             this.cbxCustomerSelection.Size = new System.Drawing.Size(400, 26);
             this.cbxCustomerSelection.TabIndex = 6;
             this.cbxCustomerSelection.Text = "Customer Selection";
-            this.cbxCustomerSelection.SelectedIndexChanged += new System.EventHandler(this.CbxCustomerSelection_SelectedIndexChanged);
             // 
             // panel3
             // 
@@ -637,7 +633,6 @@ namespace QuoteSwift
             this.cbxCustomerDeliveryAddress.Size = new System.Drawing.Size(400, 26);
             this.cbxCustomerDeliveryAddress.TabIndex = 12;
             this.cbxCustomerDeliveryAddress.Text = "Customer Delivery Address Selection";
-            this.cbxCustomerDeliveryAddress.SelectedIndexChanged += new System.EventHandler(this.CbxCustomerDeliveryAddress_SelectedIndexChanged);
             // 
             // panel4
             // 
