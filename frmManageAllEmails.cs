@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmManageAllEmails : Form
+    public partial class FrmManageAllEmails : BaseForm
     {
 
         readonly ManageEmailsViewModel viewModel;
@@ -13,6 +13,7 @@ namespace QuoteSwift
         readonly INavigationService navigation;
 
         public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -78,9 +79,6 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmManageAllEmails_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
     }
 
 }

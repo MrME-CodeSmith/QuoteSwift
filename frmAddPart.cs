@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmAddPart : Form
+    public partial class FrmAddPart : BaseForm
     {
 
         readonly AddPartViewModel viewModel;
@@ -16,6 +16,7 @@ namespace QuoteSwift
         readonly IMessageService messageService;
 
         public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -25,6 +26,7 @@ namespace QuoteSwift
             this.messageService = messageService;
             viewModel.Initialize();
             SetupBindings();
+            BindIsBusy(viewModel);
         }
 
         void SetupBindings()

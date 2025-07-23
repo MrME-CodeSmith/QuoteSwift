@@ -3,17 +3,20 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmEditBusinessAddress : Form
+    public partial class FrmEditBusinessAddress : BaseForm
     {
         readonly IMessageService messageService;
+        readonly INavigationService navigation;
         readonly EditBusinessAddressViewModel viewModel;
         public EditBusinessAddressViewModel ViewModel => viewModel;
 
-        public FrmEditBusinessAddress(EditBusinessAddressViewModel viewModel, IMessageService messageService = null)
+        public FrmEditBusinessAddress(EditBusinessAddressViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.messageService = messageService;
+            this.navigation = navigation;
             SetupBindings();
         }
 
@@ -65,8 +68,6 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmEditBusinessAddress_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
+        
     }
 }

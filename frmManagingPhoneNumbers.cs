@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public partial class FrmManagingPhoneNumbers : Form
+    public partial class FrmManagingPhoneNumbers : BaseForm
     {
 
         readonly ManagePhoneNumbersViewModel viewModel;
@@ -13,6 +13,7 @@ namespace QuoteSwift
         readonly INavigationService navigation;
 
         public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
+            : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
@@ -110,8 +111,5 @@ namespace QuoteSwift
             //Still Needs Implementation.
         }
 
-        private void FrmManagingPhoneNumbers_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
     }
 }
