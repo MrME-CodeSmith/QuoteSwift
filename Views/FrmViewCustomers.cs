@@ -33,6 +33,9 @@ namespace QuoteSwift.Views
             SelectionBindings.BindSelectedItem(DgvCustomerList, viewModel, nameof(ViewCustomersViewModel.SelectedCustomer));
             CommandBindings.Bind(btnUpdateSelectedCustomer, viewModel.UpdateCustomerCommand);
             CommandBindings.Bind(btnAddCustomer, viewModel.AddCustomerCommand);
+            BindingHelpers.BindComboBox(cbBusinessSelection, viewModel,
+                nameof(ViewCustomersViewModel.Businesses), nameof(ViewCustomersViewModel.SelectedBusiness),
+                "BusinessName", "BusinessName");
         }
 
         // CommandBindings handle Exit action
@@ -40,7 +43,6 @@ namespace QuoteSwift.Views
         private async void FrmViewCustomers_Load(object sender, EventArgs e)
         {
             await viewModel.LoadDataAsync();
-            LinkBusinessToSource(ref cbBusinessSelection);
             clmCustomerCompanyName.DataPropertyName = nameof(Customer.CustomerCompanyName);
             clmPreviousQuoteDate.DataPropertyName = nameof(Customer.PreviousQuoteDate);
             DgvCustomerList.AutoGenerateColumns = false;
@@ -62,52 +64,6 @@ namespace QuoteSwift.Views
         */
 
         // Binding handled automatically via customersBindingSource
-
-
-        private bool ReplaceCustomer(Customer Original, Customer New, Business Container)
-        {
-            if (New != null && Original != null && Container != null && Container.BusinessCustomerList != null)
-            {
-                if (Container.CustomerMap.TryGetValue(New.CustomerCompanyName, out Customer existing) && existing != Original)
-                {
-                    messageService.ShowError("This customer name is already in use.", "ERROR - Duplicate Customer Name");
-                    return false;
-                }
-
-                Container.UpdateCustomer(Original, New);
-                return true;
-            }
-
-            return false;
-        }
-
-        private Customer GetCustomerSelection()
-        {
-            return DgvCustomerList.CurrentRow?.DataBoundItem as Customer;
-        }
-
-        private Business GetSelectedBusiness()
-        {
-            return cbBusinessSelection.SelectedItem as Business;
-        }
-
-        public void LinkBusinessToSource(ref ComboBox cb)
-        {
-            if (viewModel.Businesses != null)
-            {
-                BindingSource source = new BindingSource { DataSource = viewModel.Businesses };
-
-                cb.DataSource = source.DataSource;
-
-                cb.DisplayMember = "BusinessName";
-                cb.ValueMember = "BusinessName";
-            }
-        }
-
-        private void CbBusinessSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            viewModel.SelectBusiness(GetSelectedBusiness());
-        }
 
         // CommandBindings handle Cancel action
 

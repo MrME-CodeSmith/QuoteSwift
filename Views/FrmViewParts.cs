@@ -54,13 +54,6 @@ namespace QuoteSwift.Views
         *       and clutter free.                                                          
         */
 
-        // Binding handled automatically via BindingSource
-
-        Part GetSelectedPart()
-        {
-            return dgvAllParts.CurrentRow?.DataBoundItem as Part;
-        }
-
         private void FrmViewParts_Load(object sender, EventArgs e)
         {
             dgvAllParts.RowsDefaultCellStyle.BackColor = Color.Bisque;

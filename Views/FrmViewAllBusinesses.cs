@@ -59,17 +59,6 @@ namespace QuoteSwift.Views
         *       and clutter free.                                                          
         */
 
-        private Business GetBusinessSelection()
-        {
-            return DgvBusinessList.CurrentRow?.DataBoundItem as Business;
-        }
-
-        private void LoadInformation()
-        {
-            // Binding handled automatically via businessBindingSource
-        }
-
-
         // CommandBindings handle Cancel action
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)
