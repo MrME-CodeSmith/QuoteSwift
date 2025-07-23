@@ -36,15 +36,8 @@ namespace QuoteSwift.Views
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
-            viewModel.UpdateNumberCommand.Execute(null);
-            var result = viewModel.LastResult;
-            if (result.Success)
-            {
-                messageService.ShowInformation("The phone number was updated successfully.", "INFORMATION - Phone Number Updated Successfully");
-                Close();
-            }
-            else if (result.Message != null)
-                messageService.ShowError(result.Message, result.Caption);
+            if (viewModel.UpdateNumberAndCloseCommand.CanExecute(null))
+                viewModel.UpdateNumberAndCloseCommand.Execute(null);
         }
 
         // CommandBindings handle Cancel and Exit actions

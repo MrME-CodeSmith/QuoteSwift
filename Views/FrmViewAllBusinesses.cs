@@ -48,16 +48,8 @@ namespace QuoteSwift.Views
 
         private void BtnRemoveSelected_Click(object sender, EventArgs e)
         {
-            Business business = GetBusinessSelection();
-
-            if (business != null && viewModel.Businesses != null)
-            {
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + business.BusinessName + "' from the business list?", "REQUEST - Deletion Request"))
-                {
-                    viewModel.RemoveBusiness(business);
-                    messageService.ShowInformation("Successfully deleted '" + business.BusinessName + "' from the business list", "CONFIRMATION - Deletion Success");
-                }
-            }
+            if (viewModel.RemoveBusinessCommand.CanExecute(null))
+                viewModel.RemoveBusinessCommand.Execute(null);
         }
 
         /** Form Specific Functions And Procedures: 

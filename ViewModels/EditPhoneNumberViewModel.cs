@@ -14,6 +14,7 @@ namespace QuoteSwift
         string currentNumber;
 
         public ICommand UpdateNumberCommand { get; }
+        public ICommand UpdateNumberAndCloseCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand ExitCommand { get; }
 
@@ -29,6 +30,22 @@ namespace QuoteSwift
             {
                 var r = UpdateNumber();
                 LastResult = r;
+            });
+            UpdateNumberAndCloseCommand = new RelayCommand(_ =>
+            {
+                var r = UpdateNumber();
+                LastResult = r;
+                if (r.Success)
+                {
+                    messageService?.ShowInformation(
+                        "The phone number was updated successfully.",
+                        "INFORMATION - Phone Number Updated Successfully");
+                    CloseAction?.Invoke();
+                }
+                else if (r.Message != null)
+                {
+                    messageService?.ShowError(r.Message, r.Caption);
+                }
             });
             CancelCommand = CreateCancelCommand(
                 () => CloseAction?.Invoke(),

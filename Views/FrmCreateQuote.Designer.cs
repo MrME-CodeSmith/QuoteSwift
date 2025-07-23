@@ -1261,7 +1261,6 @@ namespace QuoteSwift.Views
             this.btnComplete.TabIndex = 23;
             this.btnComplete.Text = "Complete";
             this.btnComplete.UseVisualStyleBackColor = true;
-            this.btnComplete.Click += new System.EventHandler(this.BtnComplete_Click);
             // 
             // btnCancel
             // 

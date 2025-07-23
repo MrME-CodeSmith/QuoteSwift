@@ -20,6 +20,7 @@ namespace QuoteSwift
         public ICommand LoadDataCommand { get; }
         public ICommand AddCustomerCommand { get; }
         public ICommand UpdateCustomerCommand { get; }
+        public ICommand RemoveCustomerCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand ExitCommand { get; }
 
@@ -48,6 +49,9 @@ namespace QuoteSwift
                     messageService?.ShowError("Please select a valid customer, the current selection is invalid", "ERROR - Invalid Customer Selection");
                 }
             }, _ => Task.FromResult(SelectedCustomer != null));
+
+            RemoveCustomerCommand = new RelayCommand(_ => RemoveCustomerWithConfirmation(SelectedCustomer),
+                _ => SelectedCustomer != null);
 
             CancelCommand = CreateCancelCommand(
                 () => CloseAction?.Invoke(),
@@ -155,6 +159,22 @@ namespace QuoteSwift
             {
                 SelectedBusiness.RemoveCustomer(customer);
                 RefreshCustomers();
+            }
+        }
+
+        void RemoveCustomerWithConfirmation(Customer customer)
+        {
+            if (customer == null)
+                return;
+
+            if (messageService?.RequestConfirmation(
+                    "Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?",
+                    "REQUEST - Deletion Request") == true)
+            {
+                RemoveCustomer(customer);
+                messageService?.ShowInformation(
+                    "Successfully deleted '" + customer.CustomerName + "' from the business list",
+                    "CONFIRMATION - Deletion Success");
             }
         }
 

@@ -50,15 +50,8 @@ namespace QuoteSwift.Views
 
         private void BtnRemoveSelectedCustomer_Click(object sender, EventArgs e)
         {
-            Customer customer = GetCustomerSelection();
-            if (customer != null)
-            {
-                if (messageService.RequestConfirmation("Are you sure you want to permanently delete '" + customer.CustomerName + "' from the customer list?", "REQUEST - Deletion Request"))
-                {
-                    viewModel.RemoveCustomer(customer);
-                    messageService.ShowInformation("Successfully deleted '" + customer.CustomerName + "' from the business list", "CONFIRMATION - Deletion Success");
-                }
-            }
+            if (viewModel.RemoveCustomerCommand.CanExecute(null))
+                viewModel.RemoveCustomerCommand.Execute(null);
         }
 
         /** Form Specific Functions And Procedures: 
