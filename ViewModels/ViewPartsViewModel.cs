@@ -12,6 +12,7 @@ namespace QuoteSwift
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly IApplicationService applicationService;
+        readonly ApplicationData appData;
         Dictionary<string, Part> partList;
         readonly BindingList<Part> mandatoryParts;
         readonly BindingList<Part> nonMandatoryParts;
@@ -28,9 +29,10 @@ namespace QuoteSwift
         public Action CloseAction { get; set; }
 
 
-        public ViewPartsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)
+        public ViewPartsViewModel(IDataService service, ApplicationData appData, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)
         {
             dataService = service;
+            this.appData = appData;
             this.navigation = navigation;
             this.messageService = messageService;
             this.applicationService = applicationService;
@@ -88,8 +90,9 @@ namespace QuoteSwift
 
         public async Task LoadDataAsync()
         {
-            PartList = await dataService.LoadPartListAsync();
+            PartList = appData.PartList;
             RefreshLists();
+            await Task.CompletedTask;
         }
 
         public void UpdateData(Dictionary<string, Part> parts)

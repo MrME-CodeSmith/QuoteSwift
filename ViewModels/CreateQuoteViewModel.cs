@@ -14,6 +14,7 @@ namespace QuoteSwift
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly IApplicationService applicationService;
+        readonly ApplicationData appData;
         Dictionary<string, Part> partList;
         BindingList<Pump> pumps;
         BindingList<Business> businesses;
@@ -135,6 +136,7 @@ namespace QuoteSwift
         public CreateQuoteViewModel(IDataService service,
                                     INotificationService notifier,
                                     IExcelExportService excelExporter,
+                                    ApplicationData appData,
                                     INavigationService navigation = null,
                                     IMessageService messageService = null,
                                     IApplicationService applicationService = null)
@@ -142,6 +144,7 @@ namespace QuoteSwift
             dataService = service;
             notificationService = notifier;
             excelExportService = excelExporter;
+            this.appData = appData;
             this.navigation = navigation;
             this.messageService = messageService;
             this.applicationService = applicationService;
@@ -653,12 +656,13 @@ namespace QuoteSwift
 
         public async Task LoadDataAsync()
         {
-            PartList = await dataService.LoadPartListAsync();
-            Pumps = await dataService.LoadPumpListAsync();
-            Businesses = await dataService.LoadBusinessListAsync();
-            QuoteMap = await dataService.LoadQuoteMapAsync();
+            PartList = appData.PartList;
+            Pumps = appData.PumpList;
+            Businesses = appData.BusinessList;
+            QuoteMap = appData.QuoteMap;
             Pricing = new Pricing();
             PrepareComboBoxLists();
+            await Task.CompletedTask;
         }
 
         public void LoadQuote(Quote quote)

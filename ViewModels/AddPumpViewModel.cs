@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace QuoteSwift
 {
@@ -12,6 +13,7 @@ namespace QuoteSwift
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly IApplicationService applicationService;
+        readonly ApplicationData appData;
         Pump currentPump;
         bool lastOperationSuccessful;
         string formTitle;
@@ -111,12 +113,14 @@ namespace QuoteSwift
 
         public AddPumpViewModel(IDataService service,
                                 INotificationService notifier,
+                                ApplicationData appData,
                                 INavigationService navigation = null,
                                 IMessageService messageService = null,
                                 IApplicationService applicationService = null)
         {
             dataService = service;
             notificationService = notifier;
+            this.appData = appData;
             this.navigation = navigation;
             this.messageService = messageService;
             this.applicationService = applicationService;
@@ -165,18 +169,17 @@ namespace QuoteSwift
 
         public async Task LoadDataAsync()
         {
-            PumpList = await dataService.LoadPumpListAsync();
-            PartMap = await dataService.LoadPartListAsync();
+            PumpList = appData.PumpList;
+            PartMap = appData.PartList;
             if (PumpList != null)
             {
-                RepairableItemNames = new HashSet<string>();
-                foreach (var p in PumpList)
-                    RepairableItemNames.Add(StringUtil.NormalizeKey(p.PumpName));
+                RepairableItemNames = new HashSet<string>(PumpList.Select(p => StringUtil.NormalizeKey(p.PumpName)));
             }
             else
             {
                 RepairableItemNames = new HashSet<string>();
             }
+            await Task.CompletedTask;
         }
 
         public void UpdateData(BindingList<Pump> pumpList,

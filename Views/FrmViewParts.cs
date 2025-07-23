@@ -12,22 +12,18 @@ namespace QuoteSwift.Views
         public ViewPartsViewModel ViewModel => viewModel;
 
         readonly BindingSource partsBindingSource = new BindingSource();
-
-        readonly ApplicationData appData;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
-        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, ApplicationData data = null, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmViewParts(ViewPartsViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
             : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.serializationService = serializationService;
-            appData = data;
             this.messageService = messageService;
             viewModel.CloseAction = Close;
             BindIsBusy(viewModel);
-            if (appData != null)
-                viewModel.UpdateData(appData.PartList);
+            viewModel.LoadDataCommand.Execute(null);
             SetupBindings();
             CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
@@ -48,10 +44,7 @@ namespace QuoteSwift.Views
 
         private void FrmViewParts_Activated(object sender, EventArgs e)
         {
-            if (appData != null)
-            {
-                viewModel.UpdateData(appData.PartList);
-            }
+            viewModel.LoadDataCommand.Execute(null);
         }
 
         /** Form Specific Functions And Procedures: 
