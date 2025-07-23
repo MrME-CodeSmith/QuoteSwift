@@ -376,7 +376,6 @@ namespace QuoteSwift
             this.dtpQuoteExpiryDate.Name = "dtpQuoteExpiryDate";
             this.dtpQuoteExpiryDate.Size = new System.Drawing.Size(326, 24);
             this.dtpQuoteExpiryDate.TabIndex = 11;
-            this.dtpQuoteExpiryDate.ValueChanged += new System.EventHandler(this.DtpQuoteExpiryDate_ValueChanged);
             // 
             // dtpQuoteCreationDate
             // 
@@ -385,7 +384,6 @@ namespace QuoteSwift
             this.dtpQuoteCreationDate.Name = "dtpQuoteCreationDate";
             this.dtpQuoteCreationDate.Size = new System.Drawing.Size(326, 24);
             this.dtpQuoteCreationDate.TabIndex = 10;
-            this.dtpQuoteCreationDate.ValueChanged += new System.EventHandler(this.DtpQuoteCreationDate_ValueChanged);
             // 
             // lblQuoteExpiryDate
             // 
@@ -1097,7 +1095,6 @@ namespace QuoteSwift
             this.BtnCalculateRebate.TabIndex = 22;
             this.BtnCalculateRebate.Text = "Recalculate";
             this.BtnCalculateRebate.UseVisualStyleBackColor = true;
-            this.BtnCalculateRebate.Click += new System.EventHandler(this.BtnCalculateRebate_Click);
             // 
             // lblRebateTestInput
             // 
