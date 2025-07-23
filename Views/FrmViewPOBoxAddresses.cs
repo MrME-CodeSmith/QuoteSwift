@@ -16,13 +16,8 @@ namespace QuoteSwift.Views
         void SetupBindings()
         {
             dgvPOBoxAddresses.DataSource = viewModel.Addresses;
-            dgvPOBoxAddresses.SelectionChanged += (s, e) =>
-            {
-                if (dgvPOBoxAddresses.CurrentRow?.DataBoundItem is Address a)
-                    viewModel.SelectedAddress = a;
-                else
-                    viewModel.SelectedAddress = null;
-            };
+            SelectionBindings.BindSelectedItem(dgvPOBoxAddresses, viewModel,
+                nameof(ViewPOBoxAddressesViewModel.SelectedAddress));
 
             BindingHelpers.BindReadOnly(dgvPOBoxAddresses, viewModel, nameof(ViewPOBoxAddressesViewModel.IsReadOnly));
             BindingHelpers.BindEnabled(btnRemoveAddress, viewModel, nameof(ViewPOBoxAddressesViewModel.CanEdit));

@@ -16,13 +16,8 @@ namespace QuoteSwift.Views
         void SetupBindings()
         {
             DgvViewAllBusinessAddresses.DataSource = viewModel.Addresses;
-            DgvViewAllBusinessAddresses.SelectionChanged += (s, e) =>
-            {
-                if (DgvViewAllBusinessAddresses.CurrentRow?.DataBoundItem is Address a)
-                    viewModel.SelectedAddress = a;
-                else
-                    viewModel.SelectedAddress = null;
-            };
+            SelectionBindings.BindSelectedItem(DgvViewAllBusinessAddresses, viewModel,
+                nameof(ViewBusinessAddressesViewModel.SelectedAddress));
 
             BindingHelpers.BindReadOnly(DgvViewAllBusinessAddresses, viewModel, nameof(ViewBusinessAddressesViewModel.IsReadOnly));
             BindingHelpers.BindEnabled(BtnRemoveSelected, viewModel, nameof(ViewBusinessAddressesViewModel.CanEdit));
