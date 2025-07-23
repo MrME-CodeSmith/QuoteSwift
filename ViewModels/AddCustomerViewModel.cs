@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace QuoteSwift
 {
-    public class AddCustomerViewModel : ViewModelBase
+    public class AddCustomerViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;

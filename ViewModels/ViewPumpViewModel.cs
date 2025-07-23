@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace QuoteSwift
 {
-    public class ViewPumpViewModel : ViewModelBase
+    public class ViewPumpViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         BindingList<Pump> pumps;

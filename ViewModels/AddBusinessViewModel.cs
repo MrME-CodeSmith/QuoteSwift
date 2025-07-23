@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public class AddBusinessViewModel : ViewModelBase
+    public class AddBusinessViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INavigationService navigation;

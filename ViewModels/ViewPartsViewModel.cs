@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace QuoteSwift
 {
-    public class ViewPartsViewModel : ViewModelBase
+    public class ViewPartsViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INavigationService navigation;

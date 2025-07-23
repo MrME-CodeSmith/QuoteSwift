@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuoteSwift
 {
-    public class CreateQuoteViewModel : ViewModelBase
+    public class CreateQuoteViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;

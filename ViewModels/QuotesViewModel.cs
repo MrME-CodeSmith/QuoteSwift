@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace QuoteSwift
 {
-    public class QuotesViewModel : ViewModelBase
+    public class QuotesViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INavigationService navigation;

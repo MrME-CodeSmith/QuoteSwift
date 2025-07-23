@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace QuoteSwift
 {
-    public class AddPumpViewModel : ViewModelBase
+    public class AddPumpViewModel : ViewModelBase, ILoadableViewModel
     {
         readonly IDataService dataService;
         readonly INotificationService notificationService;
