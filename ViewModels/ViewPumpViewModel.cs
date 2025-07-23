@@ -15,6 +15,7 @@ namespace QuoteSwift
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly IFileDialogService fileDialogService;
+        readonly IApplicationService applicationService;
         HashSet<string> repairableItemNames;
 
         Pump selectedPump;
@@ -32,13 +33,14 @@ namespace QuoteSwift
 
         public ViewPumpViewModel(IDataService service, ISerializationService serializer,
                                  INavigationService navigation = null, IMessageService messageService = null,
-                                 IFileDialogService dialogService = null)
+                                 IFileDialogService dialogService = null, IApplicationService applicationService = null)
         {
             dataService = service;
             serializationService = serializer;
             this.navigation = navigation;
             this.messageService = messageService;
             fileDialogService = dialogService;
+            this.applicationService = applicationService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             AddPumpCommand = new AsyncRelayCommand(_ => AddPumpAsync());
             UpdatePumpCommand = new AsyncRelayCommand(_ => UpdatePumpAsync(), _ => Task.FromResult(SelectedPump != null));
@@ -51,7 +53,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination") == true)
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
 

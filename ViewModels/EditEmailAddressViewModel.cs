@@ -9,6 +9,7 @@ namespace QuoteSwift
         Business business;
         Customer customer;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         OperationResult lastResult = OperationResult.Successful();
         string originalEmail;
         string currentEmail;
@@ -23,9 +24,11 @@ namespace QuoteSwift
         public EditEmailAddressViewModel(Business business = null,
                                           Customer customer = null,
                                           string email = null,
-                                          IMessageService messageService = null)
+                                          IMessageService messageService = null,
+                                          IApplicationService applicationService = null)
         {
             this.messageService = messageService;
+            this.applicationService = applicationService;
             Initialize(business, customer, email);
             UpdateEmailCommand = new RelayCommand(_ =>
             {
@@ -59,7 +62,7 @@ namespace QuoteSwift
                         "Are you sure you want to close the application?",
                         "REQUEST - Application Termination") == true)
                 {
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
         }

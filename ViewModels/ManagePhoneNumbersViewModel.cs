@@ -18,6 +18,7 @@ namespace QuoteSwift
         string newCellphoneNumber;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
 
         public ICommand RemoveTelephoneCommand { get; }
         public ICommand RemoveCellphoneCommand { get; }
@@ -35,11 +36,12 @@ namespace QuoteSwift
         public Action CloseAction { get; set; }
 
 
-        public ManagePhoneNumbersViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
+        public ManagePhoneNumbersViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)
         {
             dataService = service;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             telephoneNumbers = new BindingList<NumberEntry>();
             cellphoneNumbers = new BindingList<NumberEntry>();
             RemoveTelephoneCommand = new RelayCommand(n => RemoveTelephone(n as string));
@@ -73,7 +75,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination"))
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
 

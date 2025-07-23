@@ -8,6 +8,7 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         readonly BindingList<Address> addresses = new BindingList<Address>();
         Business business;
         Customer customer;
@@ -22,11 +23,13 @@ namespace QuoteSwift
 
         public ViewBusinessAddressesViewModel(IDataService service,
                                               INavigationService navigation,
-                                              IMessageService messageService)
+                                              IMessageService messageService,
+                                              IApplicationService applicationService = null)
         {
             dataService = service;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             RemoveSelectedAddressCommand = new RelayCommand(
                 _ => RemoveAddress(SelectedAddress),
                 _ => SelectedAddress != null);
@@ -36,7 +39,7 @@ namespace QuoteSwift
             ExitCommand = new RelayCommand(_ =>
             {
                 navigation?.SaveAllData();
-                System.Windows.Forms.Application.Exit();
+                applicationService?.Exit();
             });
         }
 

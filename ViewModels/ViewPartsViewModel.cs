@@ -11,6 +11,7 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         Dictionary<string, Part> partList;
         readonly BindingList<Part> mandatoryParts;
         readonly BindingList<Part> nonMandatoryParts;
@@ -27,11 +28,12 @@ namespace QuoteSwift
         public Action CloseAction { get; set; }
 
 
-        public ViewPartsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
+        public ViewPartsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)
         {
             dataService = service;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             mandatoryParts = new BindingList<Part>();
             nonMandatoryParts = new BindingList<Part>();
             allParts = new BindingList<Part>();
@@ -56,7 +58,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination") == true)
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
         }

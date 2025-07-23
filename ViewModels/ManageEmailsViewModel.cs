@@ -13,6 +13,7 @@ namespace QuoteSwift
         readonly BindingList<EmailEntry> emails;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         EmailEntry selectedEmail;
         string newEmail;
 
@@ -27,11 +28,12 @@ namespace QuoteSwift
         public Action CloseAction { get; set; }
 
 
-        public ManageEmailsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
+        public ManageEmailsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)
         {
             dataService = service;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             emails = new BindingList<EmailEntry>();
             AddEmailCommand = new RelayCommand(
                 _ => { AddEmail(NewEmail); NewEmail = string.Empty; },
@@ -52,7 +54,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination"))
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
 

@@ -8,6 +8,7 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly IApplicationService applicationService;
         BindingList<Business> businesses;
         Business selectedBusiness;
 
@@ -20,11 +21,12 @@ namespace QuoteSwift
         public Action CloseAction { get; set; }
 
 
-        public ViewBusinessesViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null)
+        public ViewBusinessesViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)
         {
             dataService = service;
             this.navigation = navigation;
             this.messageService = messageService;
+            this.applicationService = applicationService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             AddBusinessCommand = new AsyncRelayCommand(async _ =>
             {
@@ -57,7 +59,7 @@ namespace QuoteSwift
                         "REQUEST - Application Termination") == true)
                 {
                     navigation?.SaveAllData();
-                    System.Windows.Forms.Application.Exit();
+                    applicationService?.Exit();
                 }
             });
         }
