@@ -68,24 +68,17 @@ namespace QuoteSwift
                 if (p is object[] arr && arr.Length == 2 && arr[0] is string oldN && arr[1] is string newN)
                     UpdateCellphone(oldN, newN);
             });
-            ExitCommand = new RelayCommand(_ =>
+            ExitCommand = CreateExitCommand(() =>
             {
-                if (messageService.RequestConfirmation(
-                        "Are you sure you want to close the application?",
-                        "REQUEST - Application Termination"))
-                {
-                    navigation?.SaveAllData();
-                    applicationService?.Exit();
-                }
-            });
+                navigation?.SaveAllData();
+                applicationService?.Exit();
+            }, messageService);
 
-            CancelCommand = new RelayCommand(_ =>
-            {
-                if (messageService.RequestConfirmation(
-                        "Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.",
-                        "REQUEST - Cancelation"))
-                    CloseAction?.Invoke();
-            });
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.",
+                "REQUEST - Cancelation");
 
             EditCellphoneCommand = new RelayCommand(_ =>
             {

@@ -46,24 +46,13 @@ namespace QuoteSwift
             UpdatePumpCommand = new AsyncRelayCommand(_ => UpdatePumpAsync(), _ => Task.FromResult(SelectedPump != null));
             RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
             ExportInventoryCommand = new AsyncRelayCommand(_ => ExportInventoryActionAsync());
-            ExitCommand = new RelayCommand(_ =>
+            ExitCommand = CreateExitCommand(() =>
             {
-                if (messageService?.RequestConfirmation(
-                        "Are you sure you want to close the application?",
-                        "REQUEST - Application Termination") == true)
-                {
-                    navigation?.SaveAllData();
-                    applicationService?.Exit();
-                }
-            });
+                navigation?.SaveAllData();
+                applicationService?.Exit();
+            }, messageService);
 
-            CancelCommand = new RelayCommand(_ =>
-            {
-                if (messageService?.RequestConfirmation(
-                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.",
-                        "REQUEST - Cancellation") == true)
-                    CloseAction?.Invoke();
-            });
+            CancelCommand = CreateCancelCommand(() => CloseAction?.Invoke(), messageService);
         }
 
         public IDataService DataService => dataService;
