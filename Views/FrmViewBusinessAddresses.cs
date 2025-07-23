@@ -36,6 +36,7 @@ namespace QuoteSwift.Views
             this.viewModel = viewModel;
             this.navigation = navigation;
             viewModel.CloseAction = Close;
+            BindIsBusy(viewModel);
             SetupBindings();
         }
 

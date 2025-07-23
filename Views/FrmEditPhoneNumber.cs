@@ -19,6 +19,7 @@ namespace QuoteSwift.Views
             this.messageService = messageService;
             this.navigation = navigation;
             viewModel.CloseAction = Close;
+            BindIsBusy(viewModel);
             SetupBindings();
             CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
