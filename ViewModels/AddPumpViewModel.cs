@@ -133,24 +133,17 @@ namespace QuoteSwift
                     LastOperationSuccessful = AddPump();
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            ExitCommand = new RelayCommand(_ =>
+            ExitCommand = CreateExitCommand(() =>
             {
-                if (messageService?.RequestConfirmation(
-                        "Are you sure you want to close the application?",
-                        "REQUEST - Application Termination") == true)
-                {
-                    navigation?.SaveAllData();
-                    applicationService?.Exit();
-                }
-            });
+                navigation?.SaveAllData();
+                applicationService?.Exit();
+            }, messageService);
 
-            CancelCommand = new RelayCommand(_ =>
-            {
-                if (messageService?.RequestConfirmation(
-                        "By canceling the current event, any parts not added will not be available in the part's list.",
-                        "REQUEAST - Action Cancellation") == true)
-                    CloseAction?.Invoke();
-            });
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "By canceling the current event, any parts not added will not be available in the part's list.",
+                "REQUEAST - Action Cancellation");
         }
 
         public IDataService DataService => dataService;

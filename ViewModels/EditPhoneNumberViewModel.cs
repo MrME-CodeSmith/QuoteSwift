@@ -30,20 +30,16 @@ namespace QuoteSwift
                 var r = UpdateNumber();
                 LastResult = r;
             });
-            CancelCommand = new RelayCommand(_ =>
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "By canceling the current event, any parts not added will not be available in the part's list.",
+                "REQUEAST - Action Cancellation");
+
+            ExitCommand = CreateExitCommand(() =>
             {
-                if (messageService?.RequestConfirmation(
-                        "By canceling the current event, any parts not added will not be available in the part's list.",
-                        "REQUEAST - Action Cancellation") == true)
-                    CloseAction?.Invoke();
-            });
-            ExitCommand = new RelayCommand(_ =>
-            {
-                if (messageService?.RequestConfirmation(
-                        "Are you sure you want to close the application?",
-                        "REQUEST - Application Termination") == true)
-                    applicationService?.Exit();
-            });
+                applicationService?.Exit();
+            }, messageService);
         }
 
         public void Initialize(Business business = null, Customer customer = null, string number = "")

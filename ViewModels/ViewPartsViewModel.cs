@@ -43,24 +43,16 @@ namespace QuoteSwift
             RemovePartCommand = new RelayCommand(_ => RemoveSelectedPart(), _ => SelectedPart != null);
             SaveChangesCommand = new RelayCommand(_ => SaveChanges());
 
-            CancelCommand = new RelayCommand(_ =>
-            {
-                if (messageService?.RequestConfirmation(
-                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.",
-                        "REQUEST - Cancellation") == true)
-                    CloseAction?.Invoke();
-            });
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.");
 
-            ExitCommand = new RelayCommand(_ =>
+            ExitCommand = CreateExitCommand(() =>
             {
-                if (messageService?.RequestConfirmation(
-                        "Are you sure you want to close the application?",
-                        "REQUEST - Application Termination") == true)
-                {
-                    navigation?.SaveAllData();
-                    applicationService?.Exit();
-                }
-            });
+                navigation?.SaveAllData();
+                applicationService?.Exit();
+            }, messageService);
         }
 
         public IDataService DataService => dataService;

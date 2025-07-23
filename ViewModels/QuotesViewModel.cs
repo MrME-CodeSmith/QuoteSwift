@@ -74,19 +74,14 @@ namespace QuoteSwift
             AddPartCommand = new AsyncRelayCommand(async _ => { navigation?.AddNewPart(); await LoadDataAsync(); });
             ViewPartsCommand = new AsyncRelayCommand(async _ => { navigation?.ViewAllParts(); await LoadDataAsync(); });
 
-            ExitCommand = new RelayCommand(_ =>
+            ExitCommand = CreateExitCommand(() =>
             {
-                if (messageService.RequestConfirmation(
-                        "Are you sure you want to close the application?",
-                        "REQUEST - Application Termination"))
-                {
-                    serializationService?.CloseApplication(true,
-                        BusinessList,
-                        PumpList,
-                        PartMap,
-                        QuoteMap);
-                }
-            });
+                serializationService?.CloseApplication(true,
+                    BusinessList,
+                    PumpList,
+                    PartMap,
+                    QuoteMap);
+            }, messageService);
         }
 
 

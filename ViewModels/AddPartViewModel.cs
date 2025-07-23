@@ -125,16 +125,11 @@ namespace QuoteSwift
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ImportPartsCommand = new AsyncRelayCommand(_ => ImportPartsAsync());
-            ExitCommand = new RelayCommand(_ =>
+            ExitCommand = CreateExitCommand(() =>
             {
-                if (messageService.RequestConfirmation(
-                        "Are you sure you want to close the application?",
-                        "REQUEST - Application Termination"))
-                {
-                    navigation?.SaveAllData();
-                    applicationService?.Exit();
-                }
-            });
+                navigation?.SaveAllData();
+                applicationService?.Exit();
+            }, messageService);
 
             ResetInputCommand = new RelayCommand(_ =>
             {
@@ -144,13 +139,11 @@ namespace QuoteSwift
                     ResetInput();
             });
 
-            CancelCommand = new RelayCommand(_ =>
-            {
-                if (messageService.RequestConfirmation(
-                        "By canceling the current event, any parts not added will not be available in the part's list.",
-                        "REQUEAST - Action Cancellation"))
-                    CloseAction?.Invoke();
-            });
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "By canceling the current event, any parts not added will not be available in the part's list.",
+                "REQUEAST - Action Cancellation");
 
             StartEditCommand = new RelayCommand(_ =>
             {
