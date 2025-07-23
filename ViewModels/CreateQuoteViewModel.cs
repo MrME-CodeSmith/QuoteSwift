@@ -12,6 +12,7 @@ namespace QuoteSwift
         readonly INotificationService notificationService;
         readonly IExcelExportService excelExportService;
         readonly INavigationService navigation;
+        readonly IMessageService messageService;
         readonly IApplicationService applicationService;
         Dictionary<string, Part> partList;
         BindingList<Pump> pumps;
@@ -57,11 +58,14 @@ namespace QuoteSwift
         Quote quoteToChange;
         bool changeSpecificObject;
 
+        public Action CloseAction { get; set; }
+
         public ICommand AddQuoteCommand { get; }
         public ICommand SaveQuoteCommand { get; }
         public ICommand LoadDataCommand { get; }
         public ICommand ExportQuoteCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand CancelCommand { get; }
         public ICommand CalculateRebateCommand { get; }
         public ICommand UpdateDatesCommand { get; }
 
@@ -131,22 +135,31 @@ namespace QuoteSwift
                                     INotificationService notifier,
                                     IExcelExportService excelExporter,
                                     INavigationService navigation = null,
+                                    IMessageService messageService = null,
                                     IApplicationService applicationService = null)
         {
             dataService = service;
             notificationService = notifier;
             excelExportService = excelExporter;
             this.navigation = navigation;
+            this.messageService = messageService;
             this.applicationService = applicationService;
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
             SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ExportQuoteCommand = new AsyncRelayCommand(q => ExportQuoteToTemplateAsync(q as Quote));
-            ExitCommand = new RelayCommand(_ =>
+
+            CancelCommand = CreateCancelCommand(
+                () => CloseAction?.Invoke(),
+                messageService,
+                "By canceling the current event, any parts not added will not be available in the part's list.",
+                "REQUEAST - Action Cancellation");
+
+            ExitCommand = CreateExitCommand(() =>
             {
                 navigation?.SaveAllData();
                 applicationService?.Exit();
-            });
+            }, messageService);
             CalculateRebateCommand = new RelayCommand(_ =>
             {
                 Pricing.Rebate = RebateInput;
