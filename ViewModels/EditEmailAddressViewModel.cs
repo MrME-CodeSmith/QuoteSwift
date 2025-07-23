@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -7,20 +8,39 @@ namespace QuoteSwift
     {
         Business business;
         Customer customer;
+        readonly IMessageService messageService;
         OperationResult lastResult = OperationResult.Successful();
         string originalEmail;
         string currentEmail;
 
         public ICommand UpdateEmailCommand { get; }
+        public ICommand SaveCommand { get; }
 
+        public Action CloseAction { get; set; }
 
-        public EditEmailAddressViewModel(Business business = null, Customer customer = null, string email = null)
+        public EditEmailAddressViewModel(Business business = null,
+                                          Customer customer = null,
+                                          string email = null,
+                                          IMessageService messageService = null)
         {
+            this.messageService = messageService;
             Initialize(business, customer, email);
             UpdateEmailCommand = new RelayCommand(_ =>
             {
                 var r = UpdateEmail();
                 LastResult = r;
+            });
+            SaveCommand = new RelayCommand(_ =>
+            {
+                UpdateEmailCommand.Execute(null);
+                var result = LastResult;
+                if (result.Success)
+                {
+                    messageService?.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
+                    CloseAction?.Invoke();
+                }
+                else if (result.Message != null)
+                    messageService?.ShowError(result.Message, result.Caption);
             });
         }
 

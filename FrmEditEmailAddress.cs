@@ -18,6 +18,7 @@ namespace QuoteSwift
             this.viewModel = viewModel;
             this.messageService = messageService;
             this.navigation = navigation;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 
@@ -28,15 +29,7 @@ namespace QuoteSwift
 
         private void BtnUpdateBusinessEmail_Click(object sender, EventArgs e)
         {
-            viewModel.UpdateEmailCommand.Execute(null);
-            var result = viewModel.LastResult;
-            if (result.Success)
-            {
-                messageService.ShowInformation("The email address has been successfully updated", "INFORMATION - Email Address Successfully Updated");
-                Close();
-            }
-            else if (result.Message != null)
-                messageService.ShowError(result.Message, result.Caption);
+            viewModel.SaveCommand.Execute(null);
         }
 
         private void FrmEditEmailAddress_Load(object sender, EventArgs e)
