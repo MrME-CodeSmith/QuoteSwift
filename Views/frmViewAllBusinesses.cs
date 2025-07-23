@@ -39,10 +39,6 @@ namespace QuoteSwift.Views
 
         // CommandBindings handle Exit action
 
-        // Legacy button handlers kept for reference; functionality now provided via commands
-        private void BtnUpdateBusiness_Click(object sender, EventArgs e) { }
-        private void BtnAddBusiness_Click(object sender, EventArgs e) { }
-
         private void FrmViewAllBusinesses_Load(object sender, EventArgs e)
         {
             DgvBusinessList.RowsDefaultCellStyle.BackColor = Color.Bisque;
