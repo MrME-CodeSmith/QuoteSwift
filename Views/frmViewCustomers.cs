@@ -9,18 +9,14 @@ namespace QuoteSwift.Views
         readonly ViewCustomersViewModel viewModel;
         public ViewCustomersViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
-        readonly ApplicationData appData;
-        readonly ISerializationService serializationService;
         readonly IMessageService messageService;
         readonly BindingSource customersBindingSource = new BindingSource();
-        public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, ApplicationData appData = null, IMessageService messageService = null, ISerializationService serializationService = null)
+        public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
             : base(messageService, navigation)
         {
             InitializeComponent();
             this.viewModel = viewModel;
             this.navigation = navigation;
-            this.serializationService = serializationService;
-            this.appData = appData;
             this.messageService = messageService;
             viewModel.CloseAction = Close;
             SetupBindings();
@@ -127,14 +123,7 @@ namespace QuoteSwift.Views
             //Still Needs Implementation.
         }
 
-        protected override void OnClose()
-        {
-            serializationService.CloseApplication(true,
-                appData?.BusinessList,
-                appData?.PumpList,
-                appData?.PartList,
-                appData?.QuoteMap);
-        }
+        // rely on base.OnClose for data persistence
 
         /**********************************************************************************/
     }
