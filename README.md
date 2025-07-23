@@ -45,7 +45,27 @@ view models, opens the appropriate form and persists updated data back into the
 
 When contributing new functionality please follow the existing MVVM pattern:
 add a view model for new forms, bind controls to view model properties and use
-`RelayCommand` for button logic.
+`RelayCommand` for button logic. All user prompts (confirmation dialogs,
+errors and informational messages) should be triggered from these commands so
+that the view models remain the sole source of application logic.
+
+Selection in `DataGridView` controls is bound back to view model properties via
+`SelectionBindings.BindSelectedItem`. Base forms also provide `BindIsBusy` to
+tie the form's wait cursor to `ViewModelBase.IsBusy` while background commands
+execute.
+
+```csharp
+public class ExampleViewModel : ViewModelBase
+{
+    public ICommand CancelCommand { get; }
+
+    public ExampleViewModel(IMessageService messageService)
+    {
+        CancelCommand = CreateCancelCommand(
+            () => CloseAction?.Invoke(), messageService);
+    }
+}
+```
 
 ## Binding forms to view models
 
