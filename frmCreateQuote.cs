@@ -244,6 +244,7 @@ namespace QuoteSwift
             BindingHelpers.BindValue(dtpQuoteCreationDate, viewModel, nameof(CreateQuoteViewModel.QuoteCreationDate));
             BindingHelpers.BindValue(dtpQuoteExpiryDate, viewModel, nameof(CreateQuoteViewModel.QuoteExpiryDate));
             BindingHelpers.BindValue(dtpPaymentTerm, viewModel, nameof(CreateQuoteViewModel.PaymentTerm));
+            mtxtRebate.DataBindings.Add("Value", viewModel, nameof(CreateQuoteViewModel.RebateInput), false, DataSourceUpdateMode.OnPropertyChanged);
 
             BindingHelpers.BindText(cbxBusinessTelephoneNumberSelection, viewModel, nameof(CreateQuoteViewModel.BusinessTelephone));
             BindingHelpers.BindText(cbxBusinessCellphoneNumberSelection, viewModel, nameof(CreateQuoteViewModel.BusinessCellphone));
@@ -276,6 +277,11 @@ namespace QuoteSwift
             UpdatePricingDisplay();
             CommandBindings.Bind(btnComplete, viewModel.SaveQuoteCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(BtnCalculateRebate, viewModel.CalculateRebateCommand);
+            CommandBindings.Bind(dtpQuoteCreationDate, viewModel.UpdateDatesCommand);
+            CommandBindings.Bind(dtpQuoteExpiryDate, viewModel.UpdateDatesCommand);
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            viewModel.Pricing.PropertyChanged += Pricing_PropertyChanged;
         }
 
         void UpdatePricingDisplay()
@@ -288,24 +294,7 @@ namespace QuoteSwift
             lblRepairPercentage.Text = "Repair Percentage: " + viewModel.RepairPercentage + "%";
         }
 
-        private void BtnCalculateRebate_Click(object sender, EventArgs e)
-        {
-            viewModel.Pricing.Rebate = ParsingService.ParseDecimal(mtxtRebate.Text);
-            viewModel.Calculate();
-            UpdatePricingDisplay();
-        }
 
-        private void DtpQuoteCreationDate_ValueChanged(object sender, EventArgs e)
-        {
-            dtpQuoteExpiryDate.Value = dtpQuoteCreationDate.Value.AddMonths(2);
-            dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
-        }
-
-        private void DtpQuoteExpiryDate_ValueChanged(object sender, EventArgs e)
-        {
-            dtpQuoteCreationDate.Value = dtpQuoteExpiryDate.Value.AddMonths(-2);
-            dtpPaymentTerm.Value = dtpQuoteCreationDate.Value.AddMonths(1);
-        }
 
         private void CbxCustomerPOBoxSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -330,6 +319,20 @@ namespace QuoteSwift
         private async System.Threading.Tasks.Task ExportQuoteToTemplateAsync(Quote q)
         {
             await ((AsyncRelayCommand)viewModel.ExportQuoteCommand).ExecuteAsync(q);
+        }
+
+        void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CreateQuoteViewModel.Pricing))
+            {
+                viewModel.Pricing.PropertyChanged += Pricing_PropertyChanged;
+                UpdatePricingDisplay();
+            }
+        }
+
+        void Pricing_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            UpdatePricingDisplay();
         }
 
 

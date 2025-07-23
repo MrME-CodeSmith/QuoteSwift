@@ -30,5 +30,18 @@ namespace QuoteSwift
                     command.Execute(null);
             };
         }
+
+        public static void Bind(DateTimePicker picker, ICommand command)
+        {
+            if (picker == null || command == null)
+                return;
+            picker.Enabled = command.CanExecute(picker);
+            command.CanExecuteChanged += (s, e) => picker.Enabled = command.CanExecute(picker);
+            picker.ValueChanged += (s, e) =>
+            {
+                if (command.CanExecute(picker))
+                    command.Execute(picker);
+            };
+        }
     }
 }

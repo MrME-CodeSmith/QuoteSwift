@@ -51,6 +51,7 @@ namespace QuoteSwift
         DateTime quoteCreationDate = DateTime.Today;
         DateTime quoteExpiryDate = DateTime.Today;
         DateTime paymentTerm = DateTime.Today;
+        decimal rebateInput;
 
         Quote quoteToChange;
         bool changeSpecificObject;
@@ -60,6 +61,8 @@ namespace QuoteSwift
         public ICommand LoadDataCommand { get; }
         public ICommand ExportQuoteCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand CalculateRebateCommand { get; }
+        public ICommand UpdateDatesCommand { get; }
 
         Quote lastCreatedQuote;
         public Quote LastCreatedQuote
@@ -141,6 +144,12 @@ namespace QuoteSwift
                 navigation?.SaveAllData();
                 System.Windows.Forms.Application.Exit();
             });
+            CalculateRebateCommand = new RelayCommand(_ =>
+            {
+                Pricing.Rebate = RebateInput;
+                Calculate();
+            });
+            UpdateDatesCommand = new RelayCommand(p => UpdateDates(p as System.Windows.Forms.DateTimePicker));
         }
 
         public IDataService DataService => dataService;
@@ -532,6 +541,12 @@ namespace QuoteSwift
             set => SetProperty(ref paymentTerm, value);
         }
 
+        public decimal RebateInput
+        {
+            get => rebateInput;
+            set => SetProperty(ref rebateInput, value);
+        }
+
         public string BusinessPOBoxNumberDisplay =>
             SelectedBusinessPOBox != null ?
                 $"P.O.Box Number {SelectedBusinessPOBox.AddressStreetNumber}" : string.Empty;
@@ -771,6 +786,22 @@ namespace QuoteSwift
 
             var part = NonMandatoryParts?.FirstOrDefault(p => p.PumpPart.PumpPart.PartDescription == description);
             return part?.Price ?? 0m;
+        }
+
+        void UpdateDates(System.Windows.Forms.DateTimePicker picker)
+        {
+            if (picker == null)
+                return;
+            if (picker.Name == "dtpQuoteCreationDate")
+            {
+                QuoteExpiryDate = QuoteCreationDate.AddMonths(2);
+                PaymentTerm = QuoteCreationDate.AddMonths(1);
+            }
+            else if (picker.Name == "dtpQuoteExpiryDate")
+            {
+                QuoteCreationDate = QuoteExpiryDate.AddMonths(-2);
+                PaymentTerm = QuoteCreationDate.AddMonths(1);
+            }
         }
 
         public void UpdateNextQuoteNumber()
