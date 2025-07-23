@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace QuoteSwift
 {
@@ -151,7 +152,7 @@ namespace QuoteSwift
             AddQuoteCommand = new RelayCommand(q => AddQuote(q as Quote));
             SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            ExportQuoteCommand = new AsyncRelayCommand(q => ExportQuoteToTemplateAsync(q as Quote));
+            ExportQuoteCommand = new AsyncRelayCommand((q, t) => ExportQuoteToTemplateAsync(q as Quote, t));
             CompleteQuoteCommand = new AsyncRelayCommand(_ => CompleteQuoteAsync());
 
             CancelCommand = CreateCancelCommand(
@@ -1075,7 +1076,7 @@ namespace QuoteSwift
         {
             if (!ChangeSpecificObject && QuoteToChange != null)
             {
-                await ExportQuoteToTemplateAsync(QuoteToChange);
+                await ExportQuoteToTemplateAsync(QuoteToChange, CancellationToken.None);
                 return;
             }
 
@@ -1089,7 +1090,7 @@ namespace QuoteSwift
                         "The quote was successfully created. Would you like to export the quote an Excel document?",
                         "REQUEST - Export Quote to Excel") == true)
                 {
-                    await ExportQuoteToTemplateAsync(newQuote);
+                    await ExportQuoteToTemplateAsync(newQuote, CancellationToken.None);
                 }
                 else
                 {
@@ -1108,12 +1109,12 @@ namespace QuoteSwift
             }
         }
 
-        public async Task ExportQuoteToTemplateAsync(Quote quote)
+        public async Task ExportQuoteToTemplateAsync(Quote quote, System.Threading.CancellationToken token)
         {
             IsBusy = true;
             try
             {
-                await excelExportService.ExportQuoteToExcelAsync(quote);
+                await excelExportService.ExportQuoteToExcelAsync(quote, token);
             }
             finally
             {
