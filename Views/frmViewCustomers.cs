@@ -41,11 +41,6 @@ namespace QuoteSwift.Views
 
         // CommandBindings handle Exit action
 
-
-        // Legacy button handlers kept for reference; functionality now provided via commands
-        private void BtnUpdateSelectedCustomer_Click(object sender, EventArgs e) { }
-        private void BtnAddCustomer_Click(object sender, EventArgs e) { }
-
         private async void FrmViewCustomers_Load(object sender, EventArgs e)
         {
             await viewModel.LoadDataAsync();
