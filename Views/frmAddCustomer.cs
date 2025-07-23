@@ -24,6 +24,7 @@ namespace QuoteSwift.Views
             this.navigation = navigation;
             this.serializationService = serializationService;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
             BindIsBusy(viewModel);
 
@@ -66,11 +67,9 @@ namespace QuoteSwift.Views
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-            {
-                navigation?.SaveAllData();
-                Application.Exit();
-            }
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
+        }
 
 
         private async void FrmAddCustomer_Load(object sender, EventArgs e)
@@ -114,7 +113,8 @@ namespace QuoteSwift.Views
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void BtnViewAll_Click(object sender, EventArgs e)

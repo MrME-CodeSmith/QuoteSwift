@@ -25,6 +25,9 @@ namespace QuoteSwift
         public ICommand RemovePumpCommand { get; }
         public ICommand ExportInventoryCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        public Action CloseAction { get; set; }
 
 
         public ViewPumpViewModel(IDataService service, ISerializationService serializer,
@@ -43,8 +46,21 @@ namespace QuoteSwift
             ExportInventoryCommand = new AsyncRelayCommand(_ => ExportInventoryActionAsync());
             ExitCommand = new RelayCommand(_ =>
             {
-                navigation?.SaveAllData();
-                System.Windows.Forms.Application.Exit();
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.",
+                        "REQUEST - Cancellation") == true)
+                    CloseAction?.Invoke();
             });
         }
 

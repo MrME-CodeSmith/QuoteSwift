@@ -21,6 +21,7 @@ namespace QuoteSwift.Views
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 
@@ -36,8 +37,8 @@ namespace QuoteSwift.Views
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                Application.Exit();
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
         // Legacy button handlers kept for reference; functionality now provided via commands
@@ -84,7 +85,8 @@ namespace QuoteSwift.Views
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.", "REQUEST - Cancellation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

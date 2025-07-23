@@ -24,6 +24,7 @@ namespace QuoteSwift.Views
             this.serializationService = serializationService;
             appData = data;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             if (appData != null)
                 viewModel.UpdateData(appData.PartList);
             SetupBindings();
@@ -44,12 +45,9 @@ namespace QuoteSwift.Views
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                serializationService.CloseApplication(true,
-                    appData?.BusinessList,
-                    appData?.PumpList,
-                    appData?.PartList,
-                    appData?.QuoteMap);
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
+        }
 
         private void FrmViewParts_Activated(object sender, EventArgs e)
         {
@@ -75,7 +73,8 @@ namespace QuoteSwift.Views
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancellation can cause any changes to this current window to be lost.", "REQUEST - Cancellation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void FrmViewParts_Load(object sender, EventArgs e)

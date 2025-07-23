@@ -41,6 +41,7 @@ namespace QuoteSwift.Views // Repair Quote Swift
             this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
+            viewModel.CloseAction = Close;
             SetupBindings();
         }
 

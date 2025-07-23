@@ -38,19 +38,20 @@ namespace QuoteSwift.Views
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.", "REQUEST - Cancelation")) Close();
+            if (viewModel.CancelCommand.CanExecute(null))
+                viewModel.CancelCommand.Execute(null);
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?\nAny unsaved work will be lost.", "REQUEST - Application Termination"))
-                Application.Exit();
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
         private void CloseToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            if (messageService.RequestConfirmation("Are you sure you want to close the application?", "REQUEST - Application Termination"))
-                Application.Exit();
+            if (viewModel.ExitCommand.CanExecute(null))
+                viewModel.ExitCommand.Execute(null);
         }
 
         private void HelpToolStripMenuItem_Click(object sender, EventArgs e)

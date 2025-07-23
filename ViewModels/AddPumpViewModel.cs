@@ -10,6 +10,7 @@ namespace QuoteSwift
         readonly IDataService dataService;
         readonly INotificationService notificationService;
         readonly INavigationService navigation;
+        readonly IMessageService messageService;
         Pump currentPump;
         bool lastOperationSuccessful;
         string formTitle;
@@ -19,6 +20,9 @@ namespace QuoteSwift
         public ICommand SavePumpCommand { get; }
         public ICommand LoadDataCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        public Action CloseAction { get; set; }
 
         public bool LastOperationSuccessful
         {
@@ -106,11 +110,13 @@ namespace QuoteSwift
 
         public AddPumpViewModel(IDataService service,
                                 INotificationService notifier,
-                                INavigationService navigation = null)
+                                INavigationService navigation = null,
+                                IMessageService messageService = null)
         {
             dataService = service;
             notificationService = notifier;
             this.navigation = navigation;
+            this.messageService = messageService;
             SelectedMandatoryParts = new BindingList<Pump_Part>();
             SelectedNonMandatoryParts = new BindingList<Pump_Part>();
             RepairableItemNames = new HashSet<string>();
@@ -126,8 +132,21 @@ namespace QuoteSwift
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ExitCommand = new RelayCommand(_ =>
             {
-                navigation?.SaveAllData();
-                System.Windows.Forms.Application.Exit();
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                {
+                    navigation?.SaveAllData();
+                    System.Windows.Forms.Application.Exit();
+                }
+            });
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "By canceling the current event, any parts not added will not be available in the part's list.",
+                        "REQUEAST - Action Cancellation") == true)
+                    CloseAction?.Invoke();
             });
         }
 

@@ -15,6 +15,8 @@ namespace QuoteSwift
 
         public ICommand UpdateEmailCommand { get; }
         public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand ExitCommand { get; }
 
         public Action CloseAction { get; set; }
 
@@ -41,6 +43,24 @@ namespace QuoteSwift
                 }
                 else if (result.Message != null)
                     messageService?.ShowError(result.Message, result.Caption);
+            });
+
+            CancelCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to cancel the current action?\nCancellation can cause any changes to be lost.",
+                        "REQUEST - Cancellation") == true)
+                    CloseAction?.Invoke();
+            });
+
+            ExitCommand = new RelayCommand(_ =>
+            {
+                if (messageService?.RequestConfirmation(
+                        "Are you sure you want to close the application?",
+                        "REQUEST - Application Termination") == true)
+                {
+                    System.Windows.Forms.Application.Exit();
+                }
             });
         }
 
