@@ -12,6 +12,7 @@ namespace QuoteSwift.Views
         readonly INavigationService navigation;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
+        readonly Button btnCancelOperation;
 
         public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
             : base(messageService, navigation)
@@ -25,6 +26,15 @@ namespace QuoteSwift.Views
             viewModel.Initialize();
             SetupBindings();
             BindIsBusy(viewModel);
+
+            btnCancelOperation = new Button
+            {
+                Text = "Cancel Operation",
+                Size = new Size(130, 32),
+                Location = new Point(btnAddPart.Right + 10, btnAddPart.Top)
+            };
+            btnCancelOperation.Click += BtnCancelOperation_Click;
+            Controls.Add(btnCancelOperation);
         }
 
         void SetupBindings()
@@ -57,6 +67,11 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
             CommandBindings.Bind(resetInputToolStripMenuItem, viewModel.ResetInputCommand);
             CommandBindings.Bind(updatePartToolStripMenuItem, viewModel.StartEditCommand);
+        }
+
+        private void BtnCancelOperation_Click(object sender, EventArgs e)
+        {
+            ((AsyncRelayCommand)viewModel.ImportPartsCommand).Cancel();
         }
 
         private void CbAddToPumpSelection_ContextMenuStripChanged(object sender, EventArgs e)

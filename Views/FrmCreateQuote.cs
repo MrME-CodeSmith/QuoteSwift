@@ -15,6 +15,7 @@ namespace QuoteSwift.Views
         public CreateQuoteViewModel ViewModel => viewModel;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
+        readonly Button btnCancelOperation;
         Quote quoteToChange;
         bool changeSpecificObject;
         public Quote NewQuote;
@@ -33,6 +34,15 @@ namespace QuoteSwift.Views
             this.serializationService = serializationService;
             SetupBindings();
             BindIsBusy(viewModel);
+
+            btnCancelOperation = new Button
+            {
+                Text = "Cancel Operation",
+                Size = new Size(130, 32),
+                Location = new Point(btnCancel.Right + 10, btnCancel.Top)
+            };
+            btnCancelOperation.Click += BtnCancelOperation_Click;
+            Controls.Add(btnCancelOperation);
         }
 
         public void Initialize(Quote quoteToChange = null, bool changeSpecificObject = false)
@@ -47,6 +57,11 @@ namespace QuoteSwift.Views
         {
             if (viewModel.CancelCommand.CanExecute(null))
                 viewModel.CancelCommand.Execute(null);
+        }
+
+        private void BtnCancelOperation_Click(object sender, EventArgs e)
+        {
+            ((AsyncRelayCommand)viewModel.ExportQuoteCommand).Cancel();
         }
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)

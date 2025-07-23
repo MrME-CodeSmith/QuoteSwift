@@ -11,6 +11,7 @@ namespace QuoteSwift.Views // Repair Quote Swift
         public ViewPumpViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
+        readonly Button btnCancelOperation;
         readonly BindingSource pumpBindingSource = new BindingSource();
 
         void SetupBindings()
@@ -44,6 +45,15 @@ namespace QuoteSwift.Views // Repair Quote Swift
             viewModel.CloseAction = Close;
             BindIsBusy(viewModel);
             SetupBindings();
+
+            btnCancelOperation = new Button
+            {
+                Text = "Cancel Operation",
+                Size = new Size(130, 32),
+                Location = new Point(btnAddPump.Right + 10, btnAddPump.Top)
+            };
+            btnCancelOperation.Click += BtnCancelOperation_Click;
+            Controls.Add(btnCancelOperation);
         }
 
         // CommandBindings handle Exit action
@@ -59,6 +69,11 @@ namespace QuoteSwift.Views // Repair Quote Swift
         {
             dgvPumpList.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvPumpList.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
+        }
+
+        private void BtnCancelOperation_Click(object sender, EventArgs e)
+        {
+            ((AsyncRelayCommand)viewModel.ExportInventoryCommand).Cancel();
         }
 
         /** Form Specific Functions And Procedures: 

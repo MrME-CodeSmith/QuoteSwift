@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace QuoteSwift
 {
@@ -127,7 +128,7 @@ namespace QuoteSwift
                 }
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            ImportPartsCommand = new AsyncRelayCommand(_ => ImportPartsAsync());
+            ImportPartsCommand = new AsyncRelayCommand((_, t) => ImportPartsAsync(t));
             ExitCommand = CreateExitCommand(() =>
             {
                 navigation?.SaveAllData();
@@ -347,7 +348,7 @@ namespace QuoteSwift
             }
         }
 
-        async Task ImportPartsAsync()
+        async Task ImportPartsAsync(System.Threading.CancellationToken token)
         {
             if (messageService == null)
                 return;
@@ -379,7 +380,7 @@ namespace QuoteSwift
 
             try
             {
-                await ImportPartsFromCsvAsync(file, updateDup);
+                await ImportPartsFromCsvAsync(file, updateDup, token);
                 messageService.ShowInformation("The selected CSV file has been successfully imported.", "CONFIRMATION - Batch Part Import Successful");
             }
             catch
@@ -388,7 +389,7 @@ namespace QuoteSwift
             }
         }
 
-        public async Task ImportPartsFromCsvAsync(string file, bool updateDuplicates)
+        public async Task ImportPartsFromCsvAsync(string file, bool updateDuplicates, System.Threading.CancellationToken token)
         {
             IsBusy = true;
             try
@@ -400,6 +401,8 @@ namespace QuoteSwift
 
                 while (!parser.EndOfData)
                 {
+                    if (token.IsCancellationRequested)
+                        return;
                     string[] readFields = parser.ReadFields();
                     Part newPart = new Part(readFields[1], readFields[2], readFields[0], readFields[3],
                         ParsingService.ParseBoolean(readFields[6]),
