@@ -487,6 +487,19 @@ namespace QuoteSwift
             return false;
         }
 
+        public OperationResult InitializeCurrentBusinessResult()
+        {
+            if (InitializeCurrentBusiness())
+            {
+                return OperationResult.Successful();
+            }
+
+            return OperationResult.Failure(
+                "The form was activated without the correct parameters to have an achievable goal.\n" +
+                "The Form's input parameters will be disabled to avoid possible data corruption.",
+                "ERROR - Undefined Form Use Called");
+        }
+
         public void EnsureLegalDetails()
         {
             if (CurrentBusiness != null && CurrentBusiness.BusinessLegalDetails == null)

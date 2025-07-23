@@ -44,9 +44,9 @@ namespace QuoteSwift
         private async void FrmAddBusiness_Load(object sender, EventArgs e)
         {
             await viewModel.LoadDataAsync();
-            if (!viewModel.InitializeCurrentBusiness())
+            var initResult = viewModel.InitializeCurrentBusinessResult();
+            if (!initResult.Success)
             {
-                messageService.ShowError("The form was activated without the correct parameters to have an achievable goal.\nThe Form's input parameters will be disabled to avoid possible data corruption.", "ERROR - Undefined Form Use Called");
                 DisableMainComponents();
             }
 
@@ -110,6 +110,17 @@ namespace QuoteSwift
             CommandBindings.Bind(btnViewAll, viewModel.ViewPhoneNumbersCommand);
             CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+        }
+
+        private void DisableMainComponents()
+        {
+            gbxBusinessAddress.Enabled = false;
+            gbxBusinessInformation.Enabled = false;
+            gbxPhoneRelated.Enabled = false;
+            gbxEmailRelated.Enabled = false;
+            gbxLegalInformation.Enabled = false;
+            gbxPOBoxAddress.Enabled = false;
+            btnAddBusiness.Enabled = false;
         }
 
         /**********************************************************************************/
