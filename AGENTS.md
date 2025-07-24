@@ -9,14 +9,19 @@ This repository contains **QuoteSwift**, a Windows Forms application built with 
 - JSON files such as `BusinessList.json`, `Parts.json` and `PumpList.json` hold data used by the application.
 
 ## Building
-1. Open the solution in Visual Studio (2019 or newer) **or** from any command prompt run:
+1. Install the **.NET 9 SDK** on your Linux machine.
+2. From the repository root run:
    ```bash
    dotnet build QuoteSwift.sln
    ```
-2. All projects build together. After a successful build the main executable will be in `QuoteSwift/bin/Debug` (or `bin/Release`).
+3. All projects build together. After a successful build the output will be placed in `QuoteSwift/bin/Debug` (or `bin/Release`).
 
 ## Running
-Launch `QuoteSwift.exe` to start the quoting application. When exporting a quote you will be prompted for a location to save the Excel file generated from `QuoteTemplate.xlsx`.
+Start the application with:
+```bash
+dotnet QuoteSwift/bin/Debug/net9.0-windows/QuoteSwift.dll
+```
+When exporting a quote you will be prompted for a location to save the Excel file generated from `QuoteTemplate.xlsx`.
 
 ## Code guidelines
 - Target framework: **.NET 9**.
