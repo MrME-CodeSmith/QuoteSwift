@@ -65,6 +65,9 @@ namespace QuoteSwift
 
         static async Task Main()
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             var serviceProvider = ConfigureServices();
             var appData = serviceProvider.GetRequiredService<ApplicationData>();
             await appData.LoadAsync();
@@ -72,8 +75,6 @@ namespace QuoteSwift
             var mainForm = serviceProvider.GetRequiredService<FrmViewQuotes>();
             mainForm.ViewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(mainForm);
         }
     }
