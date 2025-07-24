@@ -9,7 +9,7 @@ Earlier versions used a `Pass` helper class for this role.
 
 ## Prerequisites
 
-- **.NET 9.0 SDK**
+ - **.NET 9 SDK**
 - Visual Studio 2022 (or newer) with the *.NET desktop development* workload installed.  Alternatively, the project can be built with the `dotnet` command line tools.
 
 ## Building the project
