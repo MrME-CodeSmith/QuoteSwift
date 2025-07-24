@@ -61,7 +61,6 @@
     <Content Include="QuoteTemplate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="App.config" />
     <None Include="app.manifest" />
   </ItemGroup>
 
