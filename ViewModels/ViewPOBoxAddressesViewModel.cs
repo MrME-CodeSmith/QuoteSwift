@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -38,9 +39,9 @@ namespace QuoteSwift
                 _ => RemoveAddress(SelectedAddress),
                 _ => SelectedAddress != null);
             SaveChangesCommand = new RelayCommand(_ => navigation?.SaveAllData());
-            EditAddressCommand = new RelayCommand(
-                _ => EditSelectedAddress(),
-                _ => SelectedAddress != null);
+            EditAddressCommand = new AsyncRelayCommand(
+                _ => EditSelectedAddressAsync(),
+                _ => Task.FromResult(SelectedAddress != null));
 
             CancelCommand = CreateCancelCommand(
                 () => CloseAction?.Invoke(),
@@ -143,7 +144,7 @@ namespace QuoteSwift
             addresses.Remove(address);
         }
 
-        void EditSelectedAddress()
+        async Task EditSelectedAddressAsync()
         {
             if (SelectedAddress == null)
             {
@@ -151,7 +152,7 @@ namespace QuoteSwift
                 return;
             }
 
-            if (navigation != null) navigation.EditBusinessAddress(business, customer, SelectedAddress).GetAwaiter().GetResult();
+            if (navigation != null) await navigation.EditBusinessAddress(business, customer, SelectedAddress);
             RefreshAddresses();
         }
 

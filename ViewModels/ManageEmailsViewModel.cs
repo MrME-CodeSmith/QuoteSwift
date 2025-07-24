@@ -55,10 +55,10 @@ namespace QuoteSwift
 
             CancelCommand = CreateCancelCommand(() => CloseAction?.Invoke(), messageService);
 
-            EditSelectedEmailCommand = new RelayCommand(_ =>
+            EditSelectedEmailCommand = new AsyncRelayCommand(async _ =>
             {
                 string email = SelectedEmail?.Address ?? string.Empty;
-                if (navigation != null) navigation.EditBusinessEmailAddress(Business, Customer, email).GetAwaiter().GetResult();
+                if (navigation != null) await navigation.EditBusinessEmailAddress(Business, Customer, email);
             });
         }
 
