@@ -53,7 +53,7 @@ namespace QuoteSwift
 
             CancelCommand = CreateCancelCommand(() => CloseAction?.Invoke(), messageService);
 
-            EditSelectedEmailCommand = new AsyncRelayCommand(async _ =>
+            EditSelectedEmailCommand = new AsyncRelayCommand(async (object _) =>
             {
                 string email = SelectedEmail?.Address ?? string.Empty;
                 if (navigation != null) await navigation.EditBusinessEmailAddress(Business, Customer, email);

@@ -34,11 +34,11 @@ namespace QuoteSwift
             this.messageService = messageService;
             this.applicationService = applicationService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            AddCustomerCommand = new AsyncRelayCommand(async _ =>
+            AddCustomerCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (navigation != null) await navigation.AddCustomer();
             });
-            UpdateCustomerCommand = new AsyncRelayCommand(async _ =>
+            UpdateCustomerCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (SelectedCustomer != null)
                 {

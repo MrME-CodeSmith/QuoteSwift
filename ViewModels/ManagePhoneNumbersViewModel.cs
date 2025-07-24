@@ -78,7 +78,7 @@ namespace QuoteSwift
                 "Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.",
                 "REQUEST - Cancelation");
 
-            EditCellphoneCommand = new AsyncRelayCommand(async _ =>
+            EditCellphoneCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (Business != null && Business.BusinessCellphoneNumberList != null)
                 {
@@ -92,7 +92,7 @@ namespace QuoteSwift
                 }
             });
 
-            EditTelephoneCommand = new AsyncRelayCommand(async _ =>
+            EditTelephoneCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (Business != null && Business.BusinessTelephoneNumberList != null)
                 {

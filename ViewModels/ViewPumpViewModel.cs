@@ -43,8 +43,8 @@ namespace QuoteSwift
             fileDialogService = dialogService;
             this.applicationService = applicationService;
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            AddPumpCommand = new AsyncRelayCommand(_ => AddPumpAsync());
-            UpdatePumpCommand = new AsyncRelayCommand(_ => UpdatePumpAsync(), _ => Task.FromResult(SelectedPump != null));
+            AddPumpCommand = new AsyncRelayCommand((object _) => AddPumpAsync());
+            UpdatePumpCommand = new AsyncRelayCommand((object _) => UpdatePumpAsync(), _ => Task.FromResult(SelectedPump != null));
             RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
             ExportInventoryCommand = new AsyncRelayCommand((_, t) => ExportInventoryActionAsync(t));
             CancelExportInventoryCommand = new RelayCommand(_ => ((AsyncRelayCommand)ExportInventoryCommand).Cancel());

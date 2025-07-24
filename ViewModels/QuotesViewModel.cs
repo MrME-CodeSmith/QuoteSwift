@@ -49,29 +49,29 @@ namespace QuoteSwift
 
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
 
-            CreateQuoteCommand = new AsyncRelayCommand(_ => CreateQuoteAsync());
-            ViewQuoteCommand = new AsyncRelayCommand(_ => ViewQuoteAsync(), _ => Task.FromResult(SelectedQuote != null));
-            CreateQuoteFromSelectionCommand = new AsyncRelayCommand(_ => CreateQuoteFromSelectionAsync(), _ => Task.FromResult(SelectedQuote != null));
-            AddBusinessCommand = new AsyncRelayCommand(async _ => {
+            CreateQuoteCommand = new AsyncRelayCommand((object _) => CreateQuoteAsync());
+            ViewQuoteCommand = new AsyncRelayCommand((object _) => ViewQuoteAsync(), _ => Task.FromResult(SelectedQuote != null));
+            CreateQuoteFromSelectionCommand = new AsyncRelayCommand((object _) => CreateQuoteFromSelectionAsync(), _ => Task.FromResult(SelectedQuote != null));
+            AddBusinessCommand = new AsyncRelayCommand(async (object _) => {
                 if (navigation != null) await navigation.AddBusiness();
                 await LoadDataAsync();
             });
-            ViewBusinessesCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.ViewBusinesses(); await LoadDataAsync(); });
-            AddCustomerCommand = new AsyncRelayCommand(async _ => {
+            ViewBusinessesCommand = new AsyncRelayCommand(async (object _) => { if (navigation != null) await navigation.ViewBusinesses(); await LoadDataAsync(); });
+            AddCustomerCommand = new AsyncRelayCommand(async (object _) => {
                 if (navigation != null) await navigation.AddCustomer();
                 await LoadDataAsync();
             });
-            ViewCustomersCommand = new AsyncRelayCommand(async _ => {
+            ViewCustomersCommand = new AsyncRelayCommand(async (object _) => {
                 if (navigation != null) await navigation.ViewCustomers();
                 await LoadDataAsync();
             });
-            CreatePumpCommand = new AsyncRelayCommand(async _ => {
+            CreatePumpCommand = new AsyncRelayCommand(async (object _) => {
                 if (navigation != null) await navigation.CreateNewPump();
                 await LoadDataAsync();
             });
-            ViewPumpsCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.ViewAllPumps(); await LoadDataAsync(); });
-            AddPartCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.AddNewPart(); await LoadDataAsync(); });
-            ViewPartsCommand = new AsyncRelayCommand(async _ => { if (navigation != null) await navigation.ViewAllParts(); await LoadDataAsync(); });
+            ViewPumpsCommand = new AsyncRelayCommand(async (object _) => { if (navigation != null) await navigation.ViewAllPumps(); await LoadDataAsync(); });
+            AddPartCommand = new AsyncRelayCommand(async (object _) => { if (navigation != null) await navigation.AddNewPart(); await LoadDataAsync(); });
+            ViewPartsCommand = new AsyncRelayCommand(async (object _) => { if (navigation != null) await navigation.ViewAllParts(); await LoadDataAsync(); });
 
             ExitCommand = CreateExitCommand(() =>
             {

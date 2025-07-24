@@ -39,8 +39,8 @@ namespace QuoteSwift
             nonMandatoryParts = new BindingList<Part>();
             allParts = new BindingList<Part>();
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
-            AddPartCommand = new AsyncRelayCommand(_ => AddPartAsync());
-            UpdatePartCommand = new AsyncRelayCommand(_ => UpdatePartAsync(), _ => Task.FromResult(SelectedPart != null));
+            AddPartCommand = new AsyncRelayCommand((object _) => AddPartAsync());
+            UpdatePartCommand = new AsyncRelayCommand((object _) => UpdatePartAsync(), _ => Task.FromResult(SelectedPart != null));
             RemovePartCommand = new RelayCommand(_ => RemoveSelectedPart(), _ => SelectedPart != null);
             SaveChangesCommand = new RelayCommand(_ => SaveChanges());
 

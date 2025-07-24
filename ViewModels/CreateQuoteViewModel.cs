@@ -154,7 +154,7 @@ namespace QuoteSwift
             SaveQuoteCommand = new RelayCommand(_ => LastCreatedQuote = CreateAndSaveQuote());
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ExportQuoteCommand = new AsyncRelayCommand((q, t) => ExportQuoteToTemplateAsync(q as Quote, t));
-            CompleteQuoteCommand = new AsyncRelayCommand(_ => CompleteQuoteAsync());
+            CompleteQuoteCommand = new AsyncRelayCommand((object _) => CompleteQuoteAsync());
 
             CancelCommand = CreateCancelCommand(
                 () => CloseAction?.Invoke(),

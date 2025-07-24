@@ -39,7 +39,7 @@ namespace QuoteSwift
                 _ => SelectedAddress != null);
             SaveChangesCommand = new RelayCommand(_ => navigation?.SaveAllData());
             EditAddressCommand = new AsyncRelayCommand(
-                _ => EditSelectedAddressAsync(),
+                (object _) => EditSelectedAddressAsync(),
                 _ => Task.FromResult(SelectedAddress != null));
 
             CancelCommand = CreateCancelCommand(

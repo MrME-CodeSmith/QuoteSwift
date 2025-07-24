@@ -38,7 +38,7 @@ namespace QuoteSwift
                 _ => RemoveAddress(SelectedAddress),
                 _ => SelectedAddress != null);
             EditAddressCommand = new AsyncRelayCommand(
-                _ => EditSelectedAddressAsync(),
+                (object _) => EditSelectedAddressAsync(),
                 _ => Task.FromResult(SelectedAddress != null));
 
             CancelCommand = CreateCancelCommand(
