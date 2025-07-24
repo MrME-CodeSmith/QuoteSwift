@@ -8,5 +8,10 @@ namespace QuoteSwift
         {
             MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        public void ShowInformation(string text, string caption)
+        {
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
