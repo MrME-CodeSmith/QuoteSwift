@@ -21,7 +21,7 @@ namespace QuoteSwift.Views
             BindingHelpers.BindEnabled(btnRemoveAddress, ViewModel, nameof(ViewPOBoxAddressesViewModel.CanEdit));
 
             CommandBindings.Bind(btnRemoveAddress, ViewModel.RemoveSelectedAddressCommand);
-            CommandBindings.Bind(btnChangeAddressInfo, ViewModel.EditAddressCommand);
+            CommandBindings.Bind(BtnChangeAddressInfo, ViewModel.EditAddressCommand);
             CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
         }
