@@ -9,16 +9,16 @@ Earlier versions used a `Pass` helper class for this role.
 
 ## Prerequisites
 
-- **.NET Framework 4.8** or later
-- Visual Studio 2019 (or newer) with the *.NET desktop development* workload installed.  Alternatively, the project can be built with the `msbuild` or `dotnet` command line tools.
+- **.NET 9.0 SDK**
+- Visual Studio 2022 (or newer) with the *.NET desktop development* workload installed.  Alternatively, the project can be built with the `dotnet` command line tools.
 
 ## Building the project
 
 1. Clone this repository.
-2. Open `QuoteSwift.sln` in Visual Studio and build the solution, **or** from a Developer Command Prompt run:
+2. Open `QuoteSwift.sln` in Visual Studio and build the solution, **or** run:
 
    ```bash
-   msbuild QuoteSwift.sln
+   dotnet build QuoteSwift.sln
    ```
 
 All projects (the main application and supporting library) are built together.
