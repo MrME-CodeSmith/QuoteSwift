@@ -37,9 +37,8 @@ namespace QuoteSwift.Views
 
         // Input changes are tracked by the view model
 
-        private async void FrmAddPump_Load(object sender, EventArgs e)
+        private void FrmAddPump_Load(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             SetupBindings();
 
             if (ViewModel.PumpToChange == null)

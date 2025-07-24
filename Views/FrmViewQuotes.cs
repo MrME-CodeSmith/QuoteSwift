@@ -52,9 +52,8 @@ namespace QuoteSwift.Views
 
 
         bool columnsConfigured = false;
-        private async void FrmViewQuotes_Load(object sender, EventArgs e)
+        private void FrmViewQuotes_Load(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             quotesBindingSource.DataSource = ViewModel.Quotes;
             ConfigureColumns();
         }
