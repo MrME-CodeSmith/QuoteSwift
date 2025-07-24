@@ -463,10 +463,34 @@ namespace QuoteSwift
             set => SetProperty(ref quoteNumber, value);
         }
 
+        bool useAutomaticNumberingScheme = true;
+        public bool UseAutomaticNumberingScheme
+        {
+            get => useAutomaticNumberingScheme;
+            set
+            {
+                if (SetProperty(ref useAutomaticNumberingScheme, value))
+                {
+                    if (useAutomaticNumberingScheme)
+                        QuoteNumber = NextQuoteNumber;
+                    OnPropertyChanged(nameof(IsQuoteNumberReadOnly));
+                }
+            }
+        }
+
+        public bool IsQuoteNumberReadOnly => UseAutomaticNumberingScheme;
+
         public string NextQuoteNumber
         {
             get => nextQuoteNumber;
-            private set => SetProperty(ref nextQuoteNumber, value);
+            private set
+            {
+                if (SetProperty(ref nextQuoteNumber, value))
+                {
+                    if (UseAutomaticNumberingScheme)
+                        QuoteNumber = nextQuoteNumber;
+                }
+            }
         }
 
         public Pricing Pricing
