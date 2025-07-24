@@ -484,6 +484,7 @@ namespace QuoteSwift
                     }
                 }
             }
+            }
             finally
             {
                 IsBusy = false;
