@@ -32,6 +32,7 @@ namespace QuoteSwift
         public ICommand SavePartCommand { get; }
         public ICommand LoadDataCommand { get; }
         public ICommand ImportPartsCommand { get; }
+        public ICommand CancelImportPartsCommand { get; }
         public ICommand ExitCommand { get; }
         public ICommand ResetInputCommand { get; }
         public ICommand CancelCommand { get; }
@@ -128,6 +129,7 @@ namespace QuoteSwift
             });
             LoadDataCommand = CreateLoadCommand(LoadDataAsync);
             ImportPartsCommand = new AsyncRelayCommand((_, t) => ImportPartsAsync(t));
+            CancelImportPartsCommand = new RelayCommand(_ => ((AsyncRelayCommand)ImportPartsCommand).Cancel());
             ExitCommand = CreateExitCommand(() =>
             {
                 navigation?.SaveAllData();

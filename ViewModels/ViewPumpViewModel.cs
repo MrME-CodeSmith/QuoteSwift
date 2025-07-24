@@ -26,6 +26,7 @@ namespace QuoteSwift
         public ICommand UpdatePumpCommand { get; }
         public ICommand RemovePumpCommand { get; }
         public ICommand ExportInventoryCommand { get; }
+        public ICommand CancelExportInventoryCommand { get; }
         public ICommand ExitCommand { get; }
         public ICommand CancelCommand { get; }
 
@@ -46,6 +47,7 @@ namespace QuoteSwift
             UpdatePumpCommand = new AsyncRelayCommand(_ => UpdatePumpAsync(), _ => Task.FromResult(SelectedPump != null));
             RemovePumpCommand = new RelayCommand(_ => RemoveSelectedPump(), _ => SelectedPump != null);
             ExportInventoryCommand = new AsyncRelayCommand((_, t) => ExportInventoryActionAsync(t));
+            CancelExportInventoryCommand = new RelayCommand(_ => ((AsyncRelayCommand)ExportInventoryCommand).Cancel());
             ExitCommand = CreateExitCommand(() =>
             {
                 navigation?.SaveAllData();
