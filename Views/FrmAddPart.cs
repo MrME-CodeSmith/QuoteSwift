@@ -86,6 +86,11 @@ namespace QuoteSwift.Views
             }
         }
 
+        private void FrmAddPart_Activated(object sender, EventArgs e)
+        {
+            Text = ViewModel.FormTitle;
+        }
+
         /** Form Specific Functions And Procedures: 
         *
         * Note: Not all Functions or Procedures below are being used more than once

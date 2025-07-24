@@ -33,6 +33,7 @@ namespace QuoteSwift.Views
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadPartBatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updatePartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetInputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAddPartDescription = new System.Windows.Forms.Label();
             this.lblPartName = new System.Windows.Forms.Label();
@@ -73,7 +74,8 @@ namespace QuoteSwift.Views
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadPartBatchToolStripMenuItem,
-            this.updatePartToolStripMenuItem});
+            this.updatePartToolStripMenuItem,
+            this.resetInputToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
             this.fileToolStripMenuItem.Text = "File";
@@ -90,9 +92,15 @@ namespace QuoteSwift.Views
             this.updatePartToolStripMenuItem.Name = "updatePartToolStripMenuItem";
             this.updatePartToolStripMenuItem.Size = new System.Drawing.Size(164, 24);
             this.updatePartToolStripMenuItem.Text = "Update Part";
-            // 
+            //
+            // resetInputToolStripMenuItem
+            //
+            this.resetInputToolStripMenuItem.Name = "resetInputToolStripMenuItem";
+            this.resetInputToolStripMenuItem.Size = new System.Drawing.Size(164, 24);
+            this.resetInputToolStripMenuItem.Text = "Reset Input";
+            //
             // closeToolStripMenuItem
-            // 
+            //
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(57, 24);
             this.closeToolStripMenuItem.Text = "Close";
@@ -334,6 +342,7 @@ namespace QuoteSwift.Views
         private System.Windows.Forms.ToolStripMenuItem loadPartBatchToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog OfdOpenCSVFile;
         private System.Windows.Forms.ToolStripMenuItem updatePartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetInputToolStripMenuItem;
         private QuoteSwift.Controls.NumericTextBox mtxtPartPrice;
     }
 }
