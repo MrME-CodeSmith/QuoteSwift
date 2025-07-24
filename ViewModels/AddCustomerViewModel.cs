@@ -485,6 +485,40 @@ namespace QuoteSwift
             ChangeSpecificObject = changeSpecificObject;
         }
 
+        /// <summary>
+        /// Validates the initialization parameters and populates
+        /// <see cref="CurrentCustomer"/> accordingly.
+        /// </summary>
+        /// <returns><c>true</c> when initialization succeeded.</returns>
+        public bool ValidateInitialization()
+        {
+            if (CustomerToChange != null && ChangeSpecificObject)
+            {
+                CurrentCustomer = CustomerToChange;
+                return true;
+            }
+
+            if (CustomerToChange != null && !ChangeSpecificObject)
+            {
+                CurrentCustomer = CustomerToChange;
+                ConvertToViewOnly();
+                LoadInformation();
+                return true;
+            }
+
+            if (CustomerToChange == null && !ChangeSpecificObject)
+            {
+                ClearCurrentCustomer();
+                return true;
+            }
+
+            messageService.ShowError(
+                "The form was activated without the correct parameters to have an achievable goal.\n" +
+                "The Form's input parameters will be disabled to avoid possible data corruption.",
+                "ERROR - Undefined Form Use Called");
+            return false;
+        }
+
         public OperationResult AddCustomer(Business container)
         {
             if (container == null)
