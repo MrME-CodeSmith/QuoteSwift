@@ -827,7 +827,6 @@ namespace QuoteSwift.Views
             this.DgvNonMandatoryPartReplacement.Name = "DgvNonMandatoryPartReplacement";
             this.DgvNonMandatoryPartReplacement.Size = new System.Drawing.Size(791, 325);
             this.DgvNonMandatoryPartReplacement.TabIndex = 3;
-            this.DgvNonMandatoryPartReplacement.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvNonMandatoryPartReplacement_CellEndEdit);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -949,7 +948,6 @@ namespace QuoteSwift.Views
             this.dgvMandatoryPartReplacement.Name = "dgvMandatoryPartReplacement";
             this.dgvMandatoryPartReplacement.Size = new System.Drawing.Size(791, 325);
             this.dgvMandatoryPartReplacement.TabIndex = 1;
-            this.dgvMandatoryPartReplacement.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvMandatoryPartReplacement_CellEndEdit);
             // 
             // clmPartNumber
             // 
