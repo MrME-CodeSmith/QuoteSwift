@@ -39,9 +39,8 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnRemovePart, ViewModel.RemovePartCommand);
         }
 
-        private async void FrmViewParts_Activated(object sender, EventArgs e)
+        private void FrmViewParts_Activated(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
         }
 
         /** Form Specific Functions And Procedures: 

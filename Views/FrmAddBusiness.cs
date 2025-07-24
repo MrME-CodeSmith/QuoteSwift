@@ -38,9 +38,8 @@ namespace QuoteSwift.Views
 
 
 
-        private async void FrmAddBusiness_Load(object sender, EventArgs e)
+        private void FrmAddBusiness_Load(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             var initResult = ViewModel.InitializeCurrentBusinessResult();
             if (!initResult.Success)
             {

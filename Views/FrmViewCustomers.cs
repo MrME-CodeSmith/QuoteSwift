@@ -38,9 +38,8 @@ namespace QuoteSwift.Views
 
         // CommandBindings handle Exit action
 
-        private async void FrmViewCustomers_Load(object sender, EventArgs e)
+        private void FrmViewCustomers_Load(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             clmCustomerCompanyName.DataPropertyName = nameof(Customer.CustomerCompanyName);
             clmPreviousQuoteDate.DataPropertyName = nameof(Customer.PreviousQuoteDate);
             DgvCustomerList.AutoGenerateColumns = false;

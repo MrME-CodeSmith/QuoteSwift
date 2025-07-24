@@ -67,9 +67,8 @@ namespace QuoteSwift.Views
         }
 
 
-        private async void FrmCreateQuote_Load(object sender, EventArgs e)
+        private void FrmCreateQuote_Load(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             ViewModel.QuoteToChange = quoteToChange;
             ViewModel.ChangeSpecificObject = changeSpecificObject;
             if (ViewModel.IsViewing)
