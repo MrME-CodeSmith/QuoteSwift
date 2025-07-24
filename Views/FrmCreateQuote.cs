@@ -20,8 +20,6 @@ namespace QuoteSwift.Views
         bool changeSpecificObject;
         public Quote NewQuote;
 
-        readonly BindingSource mandatorySource = new BindingSource();
-        readonly BindingSource nonMandatorySource = new BindingSource();
 
 
         public FrmCreateQuote(CreateQuoteViewModel viewModel, IMessageService messageService = null, ISerializationService serializationService = null)
@@ -70,11 +68,6 @@ namespace QuoteSwift.Views
                 viewModel.ExitCommand.Execute(null);
         }
 
-        private void CbxPumpSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            mandatorySource.DataSource = viewModel.MandatoryParts;
-            nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
-        }
 
         private async void FrmCreateQuote_Load(object sender, EventArgs e)
         {
@@ -83,11 +76,11 @@ namespace QuoteSwift.Views
             viewModel.ChangeSpecificObject = changeSpecificObject;
             if (viewModel.IsViewing)
             {
-                LoadFromPassedObject();
+                viewModel.LoadPassedQuoteCommand.Execute(null);
             }
             else if (viewModel.IsEditing && viewModel.QuoteToChange != null)
             {
-                LoadFromPassedObject();
+                viewModel.LoadPassedQuoteCommand.Execute(null);
 
                 viewModel.QuoteCreationDate = DateTime.Today;
                 viewModel.QuoteExpiryDate = viewModel.QuoteCreationDate.AddMonths(2);
@@ -103,8 +96,6 @@ namespace QuoteSwift.Views
             {
                 viewModel.PrepareComboBoxLists();
                 viewModel.LoadPartlists();
-                mandatorySource.DataSource = viewModel.MandatoryParts;
-                nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
                 if (!string.IsNullOrEmpty(viewModel.NextQuoteNumber))
                     viewModel.QuoteNumber = viewModel.NextQuoteNumber;
 
@@ -157,8 +148,7 @@ namespace QuoteSwift.Views
             clmUnitPrice.DataPropertyName = nameof(Quote_Part.UnitPrice);
             clmTotal.DataPropertyName = nameof(Quote_Part.Price);
             ClmRepairDevider.DataPropertyName = nameof(Quote_Part.RepairDevider);
-            mandatorySource.DataSource = viewModel.MandatoryParts;
-            BindingHelpers.BindDataGridView(dgvMandatoryPartReplacement, mandatorySource, nameof(BindingSource.DataSource));
+            BindingHelpers.BindDataGridView(dgvMandatoryPartReplacement, viewModel, nameof(CreateQuoteViewModel.MandatoryParts));
 
             DgvNonMandatoryPartReplacement.AutoGenerateColumns = false;
             dataGridViewTextBoxColumn1.DataPropertyName = "PumpPart.PumpPart.NewPartNumber";
@@ -171,8 +161,7 @@ namespace QuoteSwift.Views
             ClmNMUnitPrice.DataPropertyName = nameof(Quote_Part.UnitPrice);
             dataGridViewTextBoxColumn9.DataPropertyName = nameof(Quote_Part.Price);
             ClmNMRepairDevider.DataPropertyName = nameof(Quote_Part.RepairDevider);
-            nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
-            BindingHelpers.BindDataGridView(DgvNonMandatoryPartReplacement, nonMandatorySource, nameof(BindingSource.DataSource));
+            BindingHelpers.BindDataGridView(DgvNonMandatoryPartReplacement, viewModel, nameof(CreateQuoteViewModel.NonMandatoryParts));
 
             BindingHelpers.BindComboBox(cbxBusinessSelection, viewModel, nameof(CreateQuoteViewModel.Businesses), nameof(CreateQuoteViewModel.SelectedBusiness), "BusinessName", "BusinessName");
 
@@ -264,13 +253,6 @@ namespace QuoteSwift.Views
         private async System.Threading.Tasks.Task ExportQuoteToTemplateAsync(Quote q)
         {
             await ((AsyncRelayCommand)viewModel.ExportQuoteCommand).ExecuteAsync(q);
-        }
-
-        private void LoadFromPassedObject()
-        {
-            viewModel.LoadFromQuote(quoteToChange);
-            mandatorySource.DataSource = viewModel.MandatoryParts;
-            nonMandatorySource.DataSource = viewModel.NonMandatoryParts;
         }
 
         // View-model bindings manage read-only state

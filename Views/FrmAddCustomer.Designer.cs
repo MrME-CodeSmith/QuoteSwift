@@ -363,7 +363,6 @@ namespace QuoteSwift.Views
             this.updatedCustomerInformationToolStripMenuItem.Name = "updatedCustomerInformationToolStripMenuItem";
             this.updatedCustomerInformationToolStripMenuItem.Size = new System.Drawing.Size(285, 24);
             this.updatedCustomerInformationToolStripMenuItem.Text = "Update Customer\'s Information";
-            this.updatedCustomerInformationToolStripMenuItem.Click += new System.EventHandler(this.UpdatedCustomerInformationToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 

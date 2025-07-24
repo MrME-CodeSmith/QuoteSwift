@@ -71,6 +71,7 @@ namespace QuoteSwift
         public ICommand CancelCommand { get; }
         public ICommand CalculateRebateCommand { get; }
         public ICommand UpdateDatesCommand { get; }
+        public ICommand LoadPassedQuoteCommand { get; }
 
         Quote lastCreatedQuote;
         public Quote LastCreatedQuote
@@ -176,6 +177,8 @@ namespace QuoteSwift
                 if (p is DateTime date)
                     UpdateDates(date);
             });
+
+            LoadPassedQuoteCommand = new RelayCommand(_ => LoadFromPassedObject());
 
             pricing.PropertyChanged += Pricing_PropertyChanged;
             OnPricingChanged();
@@ -722,6 +725,14 @@ namespace QuoteSwift
         {
             LoadQuote(quote);
             PrepareComboBoxLists();
+        }
+
+        public void LoadFromPassedObject()
+        {
+            if (QuoteToChange != null)
+            {
+                LoadFromQuote(QuoteToChange);
+            }
         }
 
         public void PrepareComboBoxLists()

@@ -25,6 +25,8 @@ namespace QuoteSwift.Views
             this.serializationService = serializationService;
             this.messageService = messageService;
             viewModel.CloseAction = Close;
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.FormTitle));
             viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
             BindIsBusy(viewModel);
 
@@ -54,6 +56,9 @@ namespace QuoteSwift.Views
             gbxPhoneRelated.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
             gbxPOBoxAddress.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
 
+            btnAddCustomer.DataBindings.Add("Visible", viewModel, nameof(AddCustomerViewModel.ShowSaveButton));
+            btnAddCustomer.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.SaveButtonText));
+
             CommandBindings.Bind(btnAddCustomer, viewModel.SaveCustomerCommand);
             CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
             CommandBindings.Bind(btnAddPOBoxAddress, viewModel.AddPOBoxAddressCommand);
@@ -65,6 +70,15 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnViewAddresses, viewModel.ViewAddressesCommand);
             CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(updatedCustomerInformationToolStripMenuItem, viewModel.StartEditCommand);
+        }
+
+        void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(AddCustomerViewModel.IsViewing))
+            {
+                updatedCustomerInformationToolStripMenuItem.Enabled = viewModel.IsViewing;
+            }
         }
 
 
@@ -86,8 +100,8 @@ namespace QuoteSwift.Views
             else if (viewModel.CustomerToChange != null && !viewModel.ChangeSpecificObject) // View Existing Customer Info
             {
                 viewModel.CurrentCustomer = viewModel.CustomerToChange;
-                ConvertToViewOnly();
-                LoadInformation();
+                viewModel.ConvertToViewOnly();
+                viewModel.LoadInformation();
 
             }
             else if (viewModel.CustomerToChange == null && !viewModel.ChangeSpecificObject) // Add New Business Info
@@ -127,12 +141,7 @@ namespace QuoteSwift.Views
             viewModel.ViewAddressesCommand.Execute(null);
         }
 
-        private void UpdatedCustomerInformationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ConvertToEdit();
-            viewModel.ChangeSpecificObject = true;
-            updatedCustomerInformationToolStripMenuItem.Enabled = false;
-        }
+
 
 
 
@@ -153,76 +162,6 @@ namespace QuoteSwift.Views
             gbxEmailRelated.Enabled = false;
             gbxPOBoxAddress.Enabled = false;
             btnAddCustomer.Enabled = false;
-        }
-
-        private void ClearCustomerAddressInput()
-        {
-            txtCustomerAddresssDescription.ResetText();
-            txtAtt.ResetText();
-            txtWorkArea.ResetText();
-            txtWorkPlace.ResetText();
-        }
-
-        private void ClearPOBoxAddressInput()
-        {
-            txtCustomerPODescription.ResetText();
-            mtxtPOBoxStreetNumber.ResetText();
-            txtPOBoxSuburb.ResetText();
-            txtPOBoxCity.ResetText();
-            mtxtPOBoxAreaCode.ResetText();
-        }
-
-        private void ResetScreenInput()
-        {
-            txtCustomerCompanyName.ResetText();
-            cbBusinessSelection.ResetText();
-            mtxtVATNumber.ResetText();
-            mtxtRegistrationNumber.ResetText();
-            ClearCustomerAddressInput();
-            ClearPOBoxAddressInput();
-            mtxtEmailAddress.ResetText();
-            mtxtCellphoneNumber.ResetText();
-            mtxtTelephoneNumber.ResetText();
-            mtxtVendorNumber.ResetText();
-        }
-
-        private void LoadInformation()
-        {
-            if (viewModel.CurrentCustomer != null)
-            {
-                txtCustomerCompanyName.Text = viewModel.CurrentCustomer.CustomerCompanyName;
-                cbBusinessSelection.Text = Container?.BusinessName;
-                mtxtVATNumber.Text = viewModel.CurrentCustomer.CustomerLegalDetails.VatNumber;
-                mtxtRegistrationNumber.Text = viewModel.CurrentCustomer.CustomerLegalDetails.RegistrationNumber;
-                mtxtVendorNumber.Text = viewModel.CurrentCustomer.VendorNumber;
-            }
-        }
-
-        private void ConvertToViewOnly()
-        {
-            viewModel.ChangeSpecificObject = false;
-
-            btnViewAddresses.Enabled = true;
-            btnViewAll.Enabled = true;
-            btnViewAllPOBoxAddresses.Enabled = true;
-            btnViewEmailAddresses.Enabled = true;
-
-            btnAddCustomer.Visible = false;
-            Text = Text.Replace("Add Customer", "Viewing " + viewModel.CurrentCustomer.CustomerName);
-            updatedCustomerInformationToolStripMenuItem.Enabled = true;
-        }
-
-        private void ConvertToEdit()
-        {
-            viewModel.ChangeSpecificObject = true;
-
-            btnAddCustomer.Visible = true;
-            btnAddCustomer.Text = "Update Customer";
-            if (Container != null)
-                Text = Text.Replace("Viewing " + Container.BusinessName, "Updating " + Container.BusinessName);
-            if (viewModel.CustomerToChange != null)
-                Text = Text.Replace("Viewing " + viewModel.CustomerToChange.CustomerName, "Updating " + viewModel.CustomerToChange.CustomerName);
-            updatedCustomerInformationToolStripMenuItem.Enabled = false;
         }
 
 
