@@ -151,7 +151,7 @@ namespace QuoteSwift
             set => SetProperty(ref emailInput, value);
         }
 
-        public bool IsEditing => changeSpecificObject;
+        public bool IsEditing => changeSpecificObject || customerToChange == null;
 
         public bool IsViewing => customerToChange != null && !changeSpecificObject;
 
@@ -203,7 +203,7 @@ namespace QuoteSwift
             });
             SaveCustomerCommand = new RelayCommand(p =>
             {
-                if (ChangeSpecificObject)
+                if (CustomerToChange != null && ChangeSpecificObject)
                 {
                     if (p is object[] arr && arr.Length == 2 && arr[0] is Business b && arr[1] is string name)
                     {
@@ -413,7 +413,7 @@ namespace QuoteSwift
             }
         }
 
-        public bool IsReadOnly => !changeSpecificObject;
+        public bool IsReadOnly => customerToChange != null && !changeSpecificObject;
 
         public bool CanEdit => changeSpecificObject;
 

@@ -120,13 +120,13 @@ namespace QuoteSwift
             }
         }
 
-        public bool IsEditing => changeSpecificObject;
+        public bool IsEditing => changeSpecificObject || quoteToChange == null;
 
         public bool IsViewing => quoteToChange != null && !changeSpecificObject;
 
         public bool IsAdding => quoteToChange == null && !changeSpecificObject;
 
-        public bool IsReadOnly => !changeSpecificObject;
+        public bool IsReadOnly => quoteToChange != null && !changeSpecificObject;
 
         public bool CanEdit => changeSpecificObject;
 
