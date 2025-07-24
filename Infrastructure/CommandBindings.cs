@@ -18,6 +18,23 @@ namespace QuoteSwift
             };
         }
 
+        public static void Bind(Button button, ICommand command, Func<object> parameterProvider)
+        {
+            if (button == null || command == null)
+                return;
+
+            object GetParam() => parameterProvider?.Invoke();
+
+            button.Enabled = command.CanExecute(GetParam());
+            command.CanExecuteChanged += (s, e) => button.Enabled = command.CanExecute(GetParam());
+            button.Click += (s, e) =>
+            {
+                var param = GetParam();
+                if (command.CanExecute(param))
+                    command.Execute(param);
+            };
+        }
+
         public static void Bind(ToolStripMenuItem item, ICommand command)
         {
             if (item == null || command == null)
