@@ -56,7 +56,16 @@ namespace QuoteSwift.Views
             btnAddCustomer.DataBindings.Add("Visible", ViewModel, nameof(AddCustomerViewModel.ShowSaveButton));
             btnAddCustomer.DataBindings.Add("Text", ViewModel, nameof(AddCustomerViewModel.SaveButtonText));
 
-            CommandBindings.Bind(btnAddCustomer, ViewModel.SaveCustomerCommand);
+            CommandBindings.Bind(
+                btnAddCustomer,
+                ViewModel.SaveCustomerCommand,
+                () =>
+                {
+                    var business = cbBusinessSelection.SelectedItem as Business ?? Container;
+                    if (ViewModel.CustomerToChange != null && ViewModel.ChangeSpecificObject)
+                        return new object[] { business, ViewModel.CustomerToChange.CustomerCompanyName };
+                    return business;
+                });
             CommandBindings.Bind(btnAddAddress, ViewModel.AddAddressCommand);
             CommandBindings.Bind(btnAddPOBoxAddress, ViewModel.AddPOBoxAddressCommand);
             CommandBindings.Bind(btnAddNumber, ViewModel.AddPhoneNumberCommand);
