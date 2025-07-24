@@ -13,10 +13,10 @@ namespace QuoteSwift
             dataService = service;
         }
 
-        public Dictionary<string, Part> PartList { get; private set; }
-        public BindingList<Pump> PumpList { get; private set; }
-        public BindingList<Business> BusinessList { get; private set; }
-        public SortedDictionary<string, Quote> QuoteMap { get; private set; }
+        public Dictionary<string, Part> PartList { get; internal set; }
+        public BindingList<Pump> PumpList { get; internal set; }
+        public BindingList<Business> BusinessList { get; internal set; }
+        public SortedDictionary<string, Quote> QuoteMap { get; internal set; }
 
         public async Task LoadAsync()
         {

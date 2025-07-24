@@ -20,7 +20,7 @@ namespace QuoteSwift
         [STAThread]
         public System.Threading.Tasks.Task ExportQuoteToExcelAsync(Quote quote, System.Threading.CancellationToken token)
         {
-            if (quote == null) return;
+            if (quote == null) return System.Threading.Tasks.Task.CompletedTask;
 
             token.ThrowIfCancellationRequested();
 
@@ -42,7 +42,7 @@ namespace QuoteSwift
                 if (excelApp == null)
                 {
                     messageService?.ShowError("Excel is not installed on this machine.", "ERROR - Excel Export Failed");
-                    return;
+                    return System.Threading.Tasks.Task.CompletedTask;
                 }
 
                 workbook = excelApp.Workbooks.Open(Path.GetDirectoryName(Application.ExecutablePath) + "\\QuoteTemplate.xlsx");
@@ -163,12 +163,12 @@ namespace QuoteSwift
                         if (!proceed)
                         {
                             messageService?.ShowError("Quote could not export correctly.\nQuote Export Canceled", "ERROR - Quote Not Exported");
-                            return;
+                            return System.Threading.Tasks.Task.CompletedTask;
                         }
                     }
                     messageService?.ShowInformation("Excel file created and stored at selected location.", "INFORMATION - Quote Stored Successfully");
                 }
-                else return;
+                else return System.Threading.Tasks.Task.CompletedTask;
             }
             catch
             {
@@ -190,15 +190,6 @@ namespace QuoteSwift
                     messageService?.ShowError("The template file needed to export the quote cannot be found.\nQuote was created successfully but the exportation of the quote was unsuccessful.", "ERROR - Template File Missing");
                 }
             }
-            finally
-            {
-                if (workbook != null) workbook.Close();
-                if (excelApp != null) excelApp.Quit();
-                if (worksheet != null) Marshal.ReleaseComObject(worksheet);
-                if (workbook != null) Marshal.ReleaseComObject(workbook);
-                if (excelApp != null) Marshal.ReleaseComObject(excelApp);
-            }
-
             return System.Threading.Tasks.Task.CompletedTask;
         }
     }

@@ -11,6 +11,7 @@ namespace QuoteSwift.Views
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Business Container { get; set; }
 
         public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)

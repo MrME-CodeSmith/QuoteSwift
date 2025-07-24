@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace QuoteSwift.Controls
 {
@@ -12,18 +13,21 @@ namespace QuoteSwift.Controls
         private decimal maxValue = decimal.MaxValue;
         private decimal currentValue = 0m;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public decimal MinValue
         {
             get => minValue;
             set { minValue = value; ValidateValue(); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public decimal MaxValue
         {
             get => maxValue;
             set { maxValue = value; ValidateValue(); }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public decimal Value
         {
             get

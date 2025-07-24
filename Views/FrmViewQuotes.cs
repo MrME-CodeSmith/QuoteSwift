@@ -134,5 +134,11 @@ namespace QuoteSwift.Views
         {
             quotesBindingSource.DataSource = ViewModel.Quotes;
         }
+
+        private void FrmViewQuotes_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // You can add any cleanup or save logic here if needed
+            ViewModel.SaveChanges();
+        }
     }
 }
