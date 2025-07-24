@@ -39,7 +39,7 @@ namespace QuoteSwift
             }
         }
 
-        public bool IsEditing => changeSpecificObject;
+        public bool IsEditing => changeSpecificObject || pumpToChange == null;
 
         public bool IsViewing => pumpToChange != null && !changeSpecificObject;
 
@@ -105,7 +105,7 @@ namespace QuoteSwift
             }
         }
 
-        public bool IsReadOnly => !changeSpecificObject;
+        public bool IsReadOnly => pumpToChange != null && !changeSpecificObject;
 
         public bool CanEdit => changeSpecificObject;
 
@@ -182,7 +182,7 @@ namespace QuoteSwift
             UpdatePumpCommand = new RelayCommand(_ => LastOperationSuccessful = UpdatePump());
             SavePumpCommand = new RelayCommand(_ =>
             {
-                if (ChangeSpecificObject)
+                if (PumpToChange != null && ChangeSpecificObject)
                     LastOperationSuccessful = UpdatePump();
                 else
                     LastOperationSuccessful = AddPump();
