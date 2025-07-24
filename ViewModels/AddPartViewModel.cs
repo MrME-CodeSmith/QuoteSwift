@@ -37,7 +37,6 @@ namespace QuoteSwift
         public ICommand CancelCommand { get; }
         public ICommand StartEditCommand { get; }
 
-        public Action CloseAction { get; set; }
 
         public bool LastOperationSuccessful
         {

@@ -26,7 +26,6 @@ namespace QuoteSwift
         public ICommand CancelCommand { get; }
         public ICommand ExitCommand { get; }
 
-        public Action CloseAction { get; set; }
 
 
         public ViewPartsViewModel(IDataService service, ApplicationData appData, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)

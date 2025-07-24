@@ -52,7 +52,6 @@ namespace QuoteSwift
         public ICommand StartEditCommand { get; }
         public ICommand StartViewCommand { get; }
 
-        public Action CloseAction { get; set; }
 
         public OperationResult LastResult
         {

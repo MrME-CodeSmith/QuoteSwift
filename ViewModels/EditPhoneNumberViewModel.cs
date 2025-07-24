@@ -18,7 +18,6 @@ namespace QuoteSwift
         public ICommand CancelCommand { get; }
         public ICommand ExitCommand { get; }
 
-        public Action CloseAction { get; set; }
 
 
         public EditPhoneNumberViewModel(Business business = null, Customer customer = null, string number = "", IMessageService messageService = null, IApplicationService applicationService = null)

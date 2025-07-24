@@ -29,7 +29,6 @@ namespace QuoteSwift
         public ICommand ExitCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public Action CloseAction { get; set; }
 
 
         public ViewPumpViewModel(IDataService service, ISerializationService serializer,

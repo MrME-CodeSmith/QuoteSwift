@@ -25,7 +25,6 @@ namespace QuoteSwift
         public ICommand CancelCommand { get; }
         public ICommand ExitCommand { get; }
 
-        public Action CloseAction { get; set; }
 
         public OperationResult LastResult
         {

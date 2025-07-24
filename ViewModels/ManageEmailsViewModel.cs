@@ -24,7 +24,6 @@ namespace QuoteSwift
         public ICommand CancelCommand { get; }
         public ICommand EditSelectedEmailCommand { get; }
 
-        public Action CloseAction { get; set; }
 
 
         public ManageEmailsViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)

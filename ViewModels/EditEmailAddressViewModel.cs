@@ -19,7 +19,6 @@ namespace QuoteSwift
         public ICommand CancelCommand { get; }
         public ICommand ExitCommand { get; }
 
-        public Action CloseAction { get; set; }
 
         public EditEmailAddressViewModel(Business business = null,
                                           Customer customer = null,
