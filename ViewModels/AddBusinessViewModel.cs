@@ -271,7 +271,7 @@ namespace QuoteSwift
                     EmailInput = string.Empty;
                 }
             });
-            ViewEmailAddressesCommand = new AsyncRelayCommand(async _ =>
+            ViewEmailAddressesCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (CurrentBusiness.BusinessEmailAddressList != null)
                 {
@@ -282,7 +282,7 @@ namespace QuoteSwift
                     messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
                 }
             });
-            ViewAddressesCommand = new AsyncRelayCommand(async _ =>
+            ViewAddressesCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (CurrentBusiness.BusinessAddressList != null)
                 {
@@ -293,7 +293,7 @@ namespace QuoteSwift
                     messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
                 }
             });
-            ViewPOBoxAddressesCommand = new AsyncRelayCommand(async _ =>
+            ViewPOBoxAddressesCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (CurrentBusiness.BusinessPOBoxAddressList != null)
                 {
@@ -304,7 +304,7 @@ namespace QuoteSwift
                     messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
                 }
             });
-            ViewPhoneNumbersCommand = new AsyncRelayCommand(async _ =>
+            ViewPhoneNumbersCommand = new AsyncRelayCommand(async (object _) =>
             {
                 if (CurrentBusiness.BusinessTelephoneNumberList != null || CurrentBusiness.BusinessCellphoneNumberList != null)
                 {
