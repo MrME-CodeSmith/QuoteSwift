@@ -11,7 +11,7 @@ This repository contains **QuoteSwift**, a Windows Forms application built with 
 ## Building
 1. Open the solution in Visual Studio (2019 or newer) **or** from a Developer Command Prompt run:
    ```bash
-   msbuild QuoteSwift.sln
+   dotnet build QuoteSwift.sln
    ```
 2. All projects build together. After a successful build the main executable will be in `QuoteSwift/bin/Debug` (or `bin/Release`).
 
@@ -19,10 +19,10 @@ This repository contains **QuoteSwift**, a Windows Forms application built with 
 Launch `QuoteSwift.exe` to start the quoting application. When exporting a quote you will be prompted for a location to save the Excel file generated from `QuoteTemplate.xlsx`.
 
 ## Code guidelines
-- Target framework: **.NET Framework 4.8**.
+- Target framework: **.NET 9**.
 - Keep code in the existing C# coding style (PascalCase for public members, camelCase for locals, etc.).
 - The solution does not currently include an automated test suite.
-- After modifying code, compile the solution with `msbuild QuoteSwift.sln` to ensure it builds successfully.
+- After modifying code, compile the solution with `dotnet build QuoteSwift.sln` to ensure it builds successfully.
 
 ## Contributing
 1. Create descriptive commit messages summarizing the change.
