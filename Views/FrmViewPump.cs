@@ -70,7 +70,8 @@ namespace QuoteSwift.Views // Repair Quote Swift
 
         private void BtnCancelOperation_Click(object sender, EventArgs e)
         {
-            ((AsyncRelayCommand)ViewModel.ExportInventoryCommand).Cancel();
+            if (ViewModel.CancelExportInventoryCommand.CanExecute(null))
+                ViewModel.CancelExportInventoryCommand.Execute(null);
         }
 
         /** Form Specific Functions And Procedures: 

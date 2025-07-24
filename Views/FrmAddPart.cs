@@ -68,7 +68,8 @@ namespace QuoteSwift.Views
 
         private void BtnCancelOperation_Click(object sender, EventArgs e)
         {
-            ((AsyncRelayCommand)ViewModel.ImportPartsCommand).Cancel();
+            if (ViewModel.CancelImportPartsCommand.CanExecute(null))
+                ViewModel.CancelImportPartsCommand.Execute(null);
         }
 
         private void CbAddToPumpSelection_ContextMenuStripChanged(object sender, EventArgs e)
