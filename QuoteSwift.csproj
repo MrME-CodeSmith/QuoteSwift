@@ -28,6 +28,8 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <SignManifests>true</SignManifests>
     <TargetZone>Custom</TargetZone>
+    <!-- Explicitly reference the single application manifest to avoid build errors -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
     <GenerateManifests>true</GenerateManifests>
     <StartupObject>QuoteSwift.Program</StartupObject>
   </PropertyGroup>
