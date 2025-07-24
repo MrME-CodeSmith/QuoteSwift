@@ -315,8 +315,7 @@ namespace QuoteSwift
             get => mandatoryParts;
             set
             {
-                mandatoryParts = value;
-                OnPropertyChanged(nameof(MandatoryParts));
+                SetPartCollection(ref mandatoryParts, value, MandatoryParts_ListChanged, nameof(MandatoryParts));
             }
         }
 
@@ -325,8 +324,7 @@ namespace QuoteSwift
             get => nonMandatoryParts;
             set
             {
-                nonMandatoryParts = value;
-                OnPropertyChanged(nameof(NonMandatoryParts));
+                SetPartCollection(ref nonMandatoryParts, value, NonMandatoryParts_ListChanged, nameof(NonMandatoryParts));
             }
         }
 
@@ -837,6 +835,51 @@ namespace QuoteSwift
                 NonMandatoryParts.Add(new Quote_Part(new Pump_Part(new Part { NewPartNumber = "CON TS6", PartDescription = "CONSUMABLES incl COLLECTION & DELIVERY", PartPrice = 1000m }, 1), 0, 0, 1, 0, 1000m, 1));
 
                 Pricing.PumpPrice = pump.NewPumpPrice;
+            }
+        }
+
+        void SetPartCollection(ref BindingList<Quote_Part> field,
+                               BindingList<Quote_Part> value,
+                               ListChangedEventHandler handler,
+                               string propertyName)
+        {
+            if (field != null)
+            {
+                foreach (var part in field)
+                    part.PropertyChanged -= QuotePart_PropertyChanged;
+                field.ListChanged -= handler;
+            }
+
+            field = value ?? new BindingList<Quote_Part>();
+
+            foreach (var part in field)
+                part.PropertyChanged += QuotePart_PropertyChanged;
+
+            field.ListChanged += handler;
+            OnPropertyChanged(propertyName);
+        }
+
+        void MandatoryParts_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.ItemAdded && e.NewIndex >= 0)
+                mandatoryParts[e.NewIndex].PropertyChanged += QuotePart_PropertyChanged;
+            Calculate();
+        }
+
+        void NonMandatoryParts_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.ItemAdded && e.NewIndex >= 0)
+                nonMandatoryParts[e.NewIndex].PropertyChanged += QuotePart_PropertyChanged;
+            Calculate();
+        }
+
+        void QuotePart_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Quote_Part.Repaired) ||
+                e.PropertyName == nameof(Quote_Part.UnitPrice) ||
+                e.PropertyName == nameof(Quote_Part.RepairDevider))
+            {
+                Calculate();
             }
         }
 

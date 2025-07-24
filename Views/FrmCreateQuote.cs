@@ -116,15 +116,7 @@ namespace QuoteSwift.Views
             DgvNonMandatoryPartReplacement.RowsDefaultCellStyle.BackColor = Color.Bisque;
             DgvNonMandatoryPartReplacement.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
         }
-        private void DgvMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            ViewModel.Calculate();
-        }
 
-        private void DgvNonMandatoryPartReplacement_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            ViewModel.Calculate();
-        }
 
 
 
