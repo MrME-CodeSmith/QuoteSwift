@@ -253,4 +253,5 @@ namespace QuoteSwift.Views
                 ViewModel.ExitCommand.Execute(null);
         }
 
+    }
 }
