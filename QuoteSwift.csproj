@@ -1,17 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2662F7B4-4179-46A3-8625-074BF4093962}</ProjectGuid>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>QuoteSwift</RootNamespace>
-    <AssemblyName>QuoteSwift</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\Users\vanzy\Desktop\QuoteSwift Instalation\</PublishUrl>
     <Install>true</Install>
@@ -34,283 +24,50 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <SignManifests>true</SignManifests>
+    <TargetZone>Custom</TargetZone>
+    <GenerateManifests>true</GenerateManifests>
+    <StartupObject>QuoteSwift.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>
     </CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetZone>Custom</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
-    <StartupObject>QuoteSwift.Program</StartupObject>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
-      <HintPath>packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Collections.Immutable.1.7.1\lib\net461\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="4.0.20710.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrmAddBusiness.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmAddBusiness.Designer.cs">
-      <DependentUpon>FrmAddBusiness.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmAddCustomer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmAddCustomer.Designer.cs">
-      <DependentUpon>FrmAddCustomer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmAddPart.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmAddPart.Designer.cs">
-      <DependentUpon>FrmAddPart.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmAddPump.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmAddPump.Designer.cs">
-      <DependentUpon>FrmAddPump.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmCreateQuote.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmCreateQuote.Designer.cs">
-      <DependentUpon>FrmCreateQuote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmEditBusinessAddress.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmEditBusinessAddress.Designer.cs">
-      <DependentUpon>FrmEditBusinessAddress.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmEditEmailAddress.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmEditEmailAddress.Designer.cs">
-      <DependentUpon>FrmEditEmailAddress.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmEditPhoneNumber.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmEditPhoneNumber.Designer.cs">
-      <DependentUpon>FrmEditPhoneNumber.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmManageAllEmails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmManageAllEmails.Designer.cs">
-      <DependentUpon>FrmManageAllEmails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmManagingPhoneNumbers.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmManagingPhoneNumbers.Designer.cs">
-      <DependentUpon>FrmManagingPhoneNumbers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmViewAllBusinesses.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmViewAllBusinesses.Designer.cs">
-      <DependentUpon>FrmViewAllBusinesses.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmViewBusinessAddresses.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmViewBusinessAddresses.Designer.cs">
-      <DependentUpon>FrmViewBusinessAddresses.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmViewCustomers.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmViewCustomers.Designer.cs">
-      <DependentUpon>FrmViewCustomers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmViewParts.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmViewParts.Designer.cs">
-      <DependentUpon>FrmViewParts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmViewPOBoxAddresses.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmViewPOBoxAddresses.Designer.cs">
-      <DependentUpon>FrmViewPOBoxAddresses.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmViewPump.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmViewPump.Designer.cs">
-      <DependentUpon>FrmViewPump.cs</DependentUpon>
-    </Compile>
-    <Compile Include="QuoteSwiftMainCode.cs" />
-    <Compile Include="Controls\NumericTextBox.cs">
+    <Compile Update="Controls\NumericTextBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="FrmViewQuotes.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmViewQuotes.Designer.cs">
-      <DependentUpon>FrmViewQuotes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="ExcelExporter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FrmAddBusiness.resx">
-      <DependentUpon>FrmAddBusiness.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmAddCustomer.resx">
-      <DependentUpon>FrmAddCustomer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmAddPart.resx">
-      <DependentUpon>FrmAddPart.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmAddPump.resx">
-      <DependentUpon>FrmAddPump.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmCreateQuote.resx">
-      <DependentUpon>FrmCreateQuote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmEditBusinessAddress.resx">
-      <DependentUpon>FrmEditBusinessAddress.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmEditEmailAddress.resx">
-      <DependentUpon>FrmEditEmailAddress.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmEditPhoneNumber.resx">
-      <DependentUpon>FrmEditPhoneNumber.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmManageAllEmails.resx">
-      <DependentUpon>FrmManageAllEmails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmManagingPhoneNumbers.resx">
-      <DependentUpon>FrmManagingPhoneNumbers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewAllBusinesses.resx">
-      <DependentUpon>FrmViewAllBusinesses.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewBusinessAddresses.resx">
-      <DependentUpon>FrmViewBusinessAddresses.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewCustomers.resx">
-      <DependentUpon>FrmViewCustomers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewParts.resx">
-      <DependentUpon>FrmViewParts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewPOBoxAddresses.resx">
-      <DependentUpon>FrmViewPOBoxAddresses.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewPump.resx">
-      <DependentUpon>FrmViewPump.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmViewQuotes.resx">
-      <DependentUpon>FrmViewQuotes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Content Include="BusinessList.json" />
     <Content Include="MandatoryParts.json" />
     <Content Include="NonMandatoryParts.json" />
-    <None Include="app.manifest" />
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <Content Include="PumpList.json" />
     <None Include="QuoteSwift_TemporaryKey.pfx" />
     <Content Include="QuoteTemplate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -355,10 +112,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="MainProgramLibrary\MainProgramLibrary.csproj">
-      <Project>{374f4d18-b639-468b-adc7-88a9f39d6553}</Project>
-      <Name>MainProgramLibrary</Name>
-    </ProjectReference>
+    <ProjectReference Include="MainProgramLibrary\MainProgramLibrary.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
