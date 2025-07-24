@@ -10,7 +10,7 @@ namespace QuoteSwift
     public class ViewModelBase : ObservableObject
     {
         bool isBusy;
-
+        
         /// <summary>
         /// Indicates whether the view model is performing a background
         /// operation.
@@ -20,6 +20,11 @@ namespace QuoteSwift
             get => isBusy;
             protected set => SetProperty(ref isBusy, value);
         }
+
+        /// <summary>
+        /// Action invoked when a view should be closed.
+        /// </summary>
+        public Action CloseAction { get; set; }
         /// <summary>
         /// Creates an <see cref="AsyncRelayCommand"/> for the supplied asynchronous
         /// load action.

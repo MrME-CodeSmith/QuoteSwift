@@ -17,7 +17,6 @@ namespace QuoteSwift
         bool changeSpecificObject;
         Address selectedAddress;
 
-        public Action CloseAction { get; set; }
 
         public ICommand RemoveSelectedAddressCommand { get; }
         public ICommand SaveChangesCommand { get; }

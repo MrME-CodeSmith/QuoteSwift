@@ -32,7 +32,6 @@ namespace QuoteSwift
         public ICommand EditTelephoneCommand { get; }
         public ICommand EditCellphoneCommand { get; }
 
-        public Action CloseAction { get; set; }
 
 
         public ManagePhoneNumbersViewModel(IDataService service, INavigationService navigation = null, IMessageService messageService = null, IApplicationService applicationService = null)

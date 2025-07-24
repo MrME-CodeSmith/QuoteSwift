@@ -60,7 +60,6 @@ namespace QuoteSwift
         Quote quoteToChange;
         bool changeSpecificObject;
 
-        public Action CloseAction { get; set; }
 
         public ICommand AddQuoteCommand { get; }
         public ICommand SaveQuoteCommand { get; }
