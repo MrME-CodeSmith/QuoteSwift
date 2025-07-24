@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace QuoteSwift
@@ -37,9 +38,9 @@ namespace QuoteSwift
             RemoveSelectedAddressCommand = new RelayCommand(
                 _ => RemoveAddress(SelectedAddress),
                 _ => SelectedAddress != null);
-            EditAddressCommand = new RelayCommand(
-                _ => EditSelectedAddress(),
-                _ => SelectedAddress != null);
+            EditAddressCommand = new AsyncRelayCommand(
+                _ => EditSelectedAddressAsync(),
+                _ => Task.FromResult(SelectedAddress != null));
 
             CancelCommand = CreateCancelCommand(
                 () => CloseAction?.Invoke(),
@@ -131,14 +132,14 @@ namespace QuoteSwift
             }
         }
 
-        void EditSelectedAddress()
+        async Task EditSelectedAddressAsync()
         {
             if (SelectedAddress == null)
             {
                 messageService.ShowError("Please select a valid Business Address, the current selection is invalid", "ERROR - Invalid Address Selection");
                 return;
             }
-            if (navigation != null) navigation.EditBusinessAddress(business, customer, SelectedAddress).GetAwaiter().GetResult();
+            if (navigation != null) await navigation.EditBusinessAddress(business, customer, SelectedAddress);
             RefreshAddresses();
         }
 

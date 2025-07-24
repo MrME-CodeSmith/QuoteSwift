@@ -255,44 +255,44 @@ namespace QuoteSwift
                     LastOperationSuccessful = false;
                 }
             });
-            ViewPhoneNumbersCommand = new RelayCommand(_ =>
+            ViewPhoneNumbersCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentCustomer.CustomerCellphoneNumberList != null || CurrentCustomer.CustomerTelephoneNumberList != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesPhoneNumbers(null, CurrentCustomer).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesPhoneNumbers(null, CurrentCustomer);
                 }
                 else
                 {
                     messageService.ShowError("You need to first add at least one phone number before you can view the list of phone numbers.\nPlease add a phone number first", "ERROR - Can't View Non-Existing Customer Phone Numbers");
                 }
             });
-            ViewPOBoxAddressesCommand = new RelayCommand(_ =>
+            ViewPOBoxAddressesCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentCustomer.CustomerPOBoxAddress != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesPOBoxAddresses(null, CurrentCustomer).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesPOBoxAddresses(null, CurrentCustomer);
                 }
                 else
                 {
                     messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer P.O.Box Addresses");
                 }
             });
-            ViewEmailAddressesCommand = new RelayCommand(_ =>
+            ViewEmailAddressesCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentCustomer.CustomerEmailList != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesEmailAddresses(null, CurrentCustomer).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesEmailAddresses(null, CurrentCustomer);
                 }
                 else
                 {
                     messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Customer Email Addresses");
                 }
             });
-            ViewAddressesCommand = new RelayCommand(_ =>
+            ViewAddressesCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentCustomer != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesAddresses(null, CurrentCustomer).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesAddresses(null, CurrentCustomer);
                 }
                 else
                 {

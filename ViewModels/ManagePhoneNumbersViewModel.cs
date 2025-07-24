@@ -80,31 +80,31 @@ namespace QuoteSwift
                 "Are you sure you want to cancel the current action?\nCancelation can cause any changes to be lost.",
                 "REQUEST - Cancelation");
 
-            EditCellphoneCommand = new RelayCommand(_ =>
+            EditCellphoneCommand = new AsyncRelayCommand(async _ =>
             {
                 if (Business != null && Business.BusinessCellphoneNumberList != null)
                 {
                     string oldNumber = SelectedCellphoneNumber?.Number ?? string.Empty;
-                    if (navigation != null) navigation.EditPhoneNumber(Business, null, oldNumber).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.EditPhoneNumber(Business, null, oldNumber);
                 }
                 else if (Customer != null && Customer.CustomerCellphoneNumberList != null)
                 {
                     string oldNumber = SelectedCellphoneNumber?.Number ?? string.Empty;
-                    if (navigation != null) navigation.EditPhoneNumber(null, Customer, oldNumber).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.EditPhoneNumber(null, Customer, oldNumber);
                 }
             });
 
-            EditTelephoneCommand = new RelayCommand(_ =>
+            EditTelephoneCommand = new AsyncRelayCommand(async _ =>
             {
                 if (Business != null && Business.BusinessTelephoneNumberList != null)
                 {
                     string oldNumber = SelectedTelephoneNumber?.Number ?? string.Empty;
-                    if (navigation != null) navigation.EditPhoneNumber(Business, null, oldNumber).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.EditPhoneNumber(Business, null, oldNumber);
                 }
                 else if (Customer != null && Customer.CustomerTelephoneNumberList != null)
                 {
                     string oldNumber = SelectedTelephoneNumber?.Number ?? string.Empty;
-                    if (navigation != null) navigation.EditPhoneNumber(null, Customer, oldNumber).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.EditPhoneNumber(null, Customer, oldNumber);
                 }
             });
         }

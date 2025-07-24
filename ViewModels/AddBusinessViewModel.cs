@@ -273,44 +273,44 @@ namespace QuoteSwift
                     EmailInput = string.Empty;
                 }
             });
-            ViewEmailAddressesCommand = new RelayCommand(_ =>
+            ViewEmailAddressesCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentBusiness.BusinessEmailAddressList != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesEmailAddresses(CurrentBusiness, null).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesEmailAddresses(CurrentBusiness, null);
                 }
                 else
                 {
                     messageService.ShowError("You need to first add an Email address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Email Addresses");
                 }
             });
-            ViewAddressesCommand = new RelayCommand(_ =>
+            ViewAddressesCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentBusiness.BusinessAddressList != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesAddresses(CurrentBusiness, null).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesAddresses(CurrentBusiness, null);
                 }
                 else
                 {
                     messageService.ShowError("You need to first add an address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business Addresses");
                 }
             });
-            ViewPOBoxAddressesCommand = new RelayCommand(_ =>
+            ViewPOBoxAddressesCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentBusiness.BusinessPOBoxAddressList != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesPOBoxAddresses(CurrentBusiness, null).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesPOBoxAddresses(CurrentBusiness, null);
                 }
                 else
                 {
                     messageService.ShowError("You need to first add an P.O.Box address before you can view the list of addresses.\nPlease add an address first", "ERROR - Can't View Non-Existing Business P.O.Box Addresses");
                 }
             });
-            ViewPhoneNumbersCommand = new RelayCommand(_ =>
+            ViewPhoneNumbersCommand = new AsyncRelayCommand(async _ =>
             {
                 if (CurrentBusiness.BusinessTelephoneNumberList != null || CurrentBusiness.BusinessCellphoneNumberList != null)
                 {
-                    if (navigation != null) navigation.ViewBusinessesPhoneNumbers(CurrentBusiness, null).GetAwaiter().GetResult();
+                    if (navigation != null) await navigation.ViewBusinessesPhoneNumbers(CurrentBusiness, null);
                 }
                 else
                 {
