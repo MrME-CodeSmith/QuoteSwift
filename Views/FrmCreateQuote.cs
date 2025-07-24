@@ -104,10 +104,9 @@ namespace QuoteSwift.Views
                 Text = Text.Replace("<< Business Name >>", ViewModel.SelectedBusiness.BusinessName);
                 if (ViewModel.QuoteMap == null || ViewModel.QuoteMap.Count == 0)
                 {
-                    cbxUseAutomaticNumberingScheme.Checked = false;
+                    ViewModel.UseAutomaticNumberingScheme = false;
                     cbxUseAutomaticNumberingScheme.Enabled = false;
                     txtQuoteNumber.Enabled = true;
-                    txtQuoteNumber.ReadOnly = false;
                 }
             }
 
@@ -183,6 +182,8 @@ namespace QuoteSwift.Views
             BindingHelpers.BindText(txtPRNumber, ViewModel, nameof(CreateQuoteViewModel.PRNumber));
             BindingHelpers.BindText(txtLineNumber, ViewModel, nameof(CreateQuoteViewModel.LineNumber));
             BindingHelpers.BindText(txtQuoteNumber, ViewModel, nameof(CreateQuoteViewModel.QuoteNumber));
+            cbxUseAutomaticNumberingScheme.DataBindings.Add("Checked", ViewModel, nameof(CreateQuoteViewModel.UseAutomaticNumberingScheme));
+            BindingHelpers.BindReadOnly(txtQuoteNumber, ViewModel, nameof(CreateQuoteViewModel.IsQuoteNumberReadOnly));
 
             BindingHelpers.BindText(rtxCustomerDeliveryDescripton, ViewModel, nameof(CreateQuoteViewModel.CustomerDeliveryDescription));
             BindingHelpers.BindValue(dtpQuoteCreationDate, ViewModel, nameof(CreateQuoteViewModel.QuoteCreationDate));
@@ -232,21 +233,6 @@ namespace QuoteSwift.Views
 
             createNewQuoteUsingThisQuoteToolStripMenuItem.DataBindings.Add("Enabled", ViewModel, nameof(CreateQuoteViewModel.IsViewing));
         }
-
-        private void CbxUseAutomaticNumberingScheme_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbxUseAutomaticNumberingScheme.Checked)
-            {
-                txtQuoteNumber.ReadOnly = true;
-                if (!string.IsNullOrEmpty(ViewModel.NextQuoteNumber))
-                    ViewModel.QuoteNumber = ViewModel.NextQuoteNumber;
-            }
-            else
-            {
-                txtQuoteNumber.ReadOnly = false;
-            }
-        }
-
 
         private async System.Threading.Tasks.Task ExportQuoteToTemplateAsync(Quote q)
         {

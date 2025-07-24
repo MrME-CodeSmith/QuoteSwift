@@ -430,7 +430,6 @@ namespace QuoteSwift.Views
             this.cbxUseAutomaticNumberingScheme.TabIndex = 9;
             this.cbxUseAutomaticNumberingScheme.Text = "Continue Automatic Numbering Scheme";
             this.cbxUseAutomaticNumberingScheme.UseVisualStyleBackColor = true;
-            this.cbxUseAutomaticNumberingScheme.CheckedChanged += new System.EventHandler(this.CbxUseAutomaticNumberingScheme_CheckedChanged);
             // 
             // lblQuoteNumberText
             // 
