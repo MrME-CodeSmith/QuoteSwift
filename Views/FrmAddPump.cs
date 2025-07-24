@@ -32,7 +32,6 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnAddPump, ViewModel.SavePumpCommand);
             CommandBindings.Bind(btnCancel, ViewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
-            ViewModel.LoadDataCommand.Execute(null);
             BindIsBusy(ViewModel);
         }
 

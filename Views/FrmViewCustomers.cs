@@ -40,7 +40,7 @@ namespace QuoteSwift.Views
 
         private async void FrmViewCustomers_Load(object sender, EventArgs e)
         {
-            await ViewModel.LoadDataAsync();
+            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             clmCustomerCompanyName.DataPropertyName = nameof(Customer.CustomerCompanyName);
             clmPreviousQuoteDate.DataPropertyName = nameof(Customer.PreviousQuoteDate);
             DgvCustomerList.AutoGenerateColumns = false;

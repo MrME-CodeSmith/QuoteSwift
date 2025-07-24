@@ -54,7 +54,7 @@ namespace QuoteSwift.Views
         bool columnsConfigured = false;
         private async void FrmViewQuotes_Load(object sender, EventArgs e)
         {
-            await ViewModel.LoadDataAsync();
+            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             quotesBindingSource.DataSource = ViewModel.Quotes;
             ConfigureColumns();
         }

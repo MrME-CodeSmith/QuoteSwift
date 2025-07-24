@@ -21,7 +21,6 @@ namespace QuoteSwift.Views
             this.messageService = messageService;
             ViewModel.CloseAction = Close;
             BindIsBusy(ViewModel);
-            ViewModel.LoadDataCommand.Execute(null);
             SetupBindings();
             CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
             CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
@@ -40,9 +39,9 @@ namespace QuoteSwift.Views
             CommandBindings.Bind(btnRemovePart, ViewModel.RemovePartCommand);
         }
 
-        private void FrmViewParts_Activated(object sender, EventArgs e)
+        private async void FrmViewParts_Activated(object sender, EventArgs e)
         {
-            ViewModel.LoadDataCommand.Execute(null);
+            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
         }
 
         /** Form Specific Functions And Procedures: 
