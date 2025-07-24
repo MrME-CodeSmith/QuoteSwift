@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using QuoteSwift.Views;
@@ -62,11 +63,11 @@ namespace QuoteSwift
             return services.BuildServiceProvider();
         }
 
-        static void Main()
+        static async Task Main()
         {
             var serviceProvider = ConfigureServices();
             var appData = serviceProvider.GetRequiredService<ApplicationData>();
-            appData.Load();
+            await appData.LoadAsync();
 
             var mainForm = serviceProvider.GetRequiredService<FrmViewQuotes>();
             mainForm.ViewModel.UpdateData(appData.QuoteMap, appData.BusinessList, appData.PumpList, appData.PartList);

@@ -117,7 +117,7 @@ namespace QuoteSwift
 
         async Task AddPartAsync()
         {
-            navigation?.AddNewPart();
+            if (navigation != null) await navigation.AddNewPart();
             await LoadDataAsync();
         }
 
@@ -125,7 +125,7 @@ namespace QuoteSwift
         {
             if (SelectedPart != null)
             {
-                navigation?.AddNewPart(SelectedPart, false);
+                if (navigation != null) await navigation.AddNewPart(SelectedPart, false);
                 await LoadDataAsync();
             }
         }

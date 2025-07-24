@@ -18,11 +18,6 @@ namespace QuoteSwift
         public BindingList<Business> BusinessList { get; private set; }
         public SortedDictionary<string, Quote> QuoteMap { get; private set; }
 
-        public void Load()
-        {
-            LoadAsync().GetAwaiter().GetResult();
-        }
-
         public async Task LoadAsync()
         {
             PartList = await dataService.LoadPartListAsync();
