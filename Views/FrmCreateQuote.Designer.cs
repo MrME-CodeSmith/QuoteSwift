@@ -1047,7 +1047,6 @@ namespace QuoteSwift.Views
             this.cbxPumpSelection.Size = new System.Drawing.Size(343, 26);
             this.cbxPumpSelection.TabIndex = 20;
             this.cbxPumpSelection.Text = "Pump Selection";
-            this.cbxPumpSelection.SelectedIndexChanged += new System.EventHandler(this.CbxPumpSelection_SelectedIndexChanged);
             // 
             // panel6
             // 

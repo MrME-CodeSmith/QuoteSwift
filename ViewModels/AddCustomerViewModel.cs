@@ -49,6 +49,8 @@ namespace QuoteSwift
         public ICommand LoadDataCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand ExitCommand { get; }
+        public ICommand StartEditCommand { get; }
+        public ICommand StartViewCommand { get; }
 
         public Action CloseAction { get; set; }
 
@@ -151,6 +153,14 @@ namespace QuoteSwift
         }
 
         public bool IsEditing => changeSpecificObject;
+
+        public bool IsViewing => customerToChange != null && !changeSpecificObject;
+
+        public bool IsAdding => customerToChange == null && !changeSpecificObject;
+
+        public bool ShowSaveButton => !IsViewing;
+
+        public string SaveButtonText => changeSpecificObject ? "Update Customer" : "Add Customer";
 
         public string FormTitle
         {
@@ -308,6 +318,9 @@ namespace QuoteSwift
                 navigation?.SaveAllData();
                 applicationService?.Exit();
             }, messageService);
+
+            StartEditCommand = new RelayCommand(_ => ConvertToEdit(), _ => !ChangeSpecificObject);
+            StartViewCommand = new RelayCommand(_ => ConvertToViewOnly(), _ => ChangeSpecificObject);
         }
 
         public IDataService DataService => dataService;
@@ -372,6 +385,10 @@ namespace QuoteSwift
                     customerToChange = value;
                     OnPropertyChanged(nameof(CustomerToChange));
                     OnPropertyChanged(nameof(FormTitle));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                 }
             }
         }
@@ -387,8 +404,12 @@ namespace QuoteSwift
                     OnPropertyChanged(nameof(ChangeSpecificObject));
                     OnPropertyChanged(nameof(IsReadOnly));
                     OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(IsViewing));
+                    OnPropertyChanged(nameof(IsAdding));
                     OnPropertyChanged(nameof(CanEdit));
                     OnPropertyChanged(nameof(FormTitle));
+                    OnPropertyChanged(nameof(ShowSaveButton));
+                    OnPropertyChanged(nameof(SaveButtonText));
                 }
             }
         }
@@ -406,6 +427,48 @@ namespace QuoteSwift
                 OnPropertyChanged(nameof(CurrentCustomer));
                 OnPropertyChanged(nameof(FormTitle));
             }
+        }
+
+        public void ConvertToViewOnly()
+        {
+            ChangeSpecificObject = false;
+        }
+
+        public void ConvertToEdit()
+        {
+            ChangeSpecificObject = true;
+        }
+
+        public void ClearCustomerAddressInput()
+        {
+            AddressDescription = string.Empty;
+            Att = string.Empty;
+            WorkArea = string.Empty;
+            WorkPlace = string.Empty;
+        }
+
+        public void ClearPOBoxAddressInput()
+        {
+            PODescription = string.Empty;
+            POStreetNumber = string.Empty;
+            POSuburb = string.Empty;
+            POCity = string.Empty;
+            POAreaCode = string.Empty;
+        }
+
+        public void ResetScreenInput()
+        {
+            CurrentCustomer = new Customer();
+            ClearCustomerAddressInput();
+            ClearPOBoxAddressInput();
+            TelephoneInput = string.Empty;
+            CellphoneInput = string.Empty;
+            EmailInput = string.Empty;
+        }
+
+        public void LoadInformation()
+        {
+            OnPropertyChanged(nameof(CurrentCustomer));
         }
 
         public async Task LoadDataAsync()
