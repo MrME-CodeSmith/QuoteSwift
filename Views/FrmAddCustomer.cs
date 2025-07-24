@@ -93,24 +93,9 @@ namespace QuoteSwift.Views
                 cbBusinessSelection.ValueMember = "BusinessName";
             }
 
-            if (viewModel.CustomerToChange != null && viewModel.ChangeSpecificObject) // Change Existing Customer Info
+            bool initSuccess = viewModel.ValidateInitialization();
+            if (!initSuccess)
             {
-                viewModel.CurrentCustomer = viewModel.CustomerToChange;
-            }
-            else if (viewModel.CustomerToChange != null && !viewModel.ChangeSpecificObject) // View Existing Customer Info
-            {
-                viewModel.CurrentCustomer = viewModel.CustomerToChange;
-                viewModel.ConvertToViewOnly();
-                viewModel.LoadInformation();
-
-            }
-            else if (viewModel.CustomerToChange == null && !viewModel.ChangeSpecificObject) // Add New Business Info
-            {
-                viewModel.ClearCurrentCustomer();
-            }
-            else // Undefined Use - Show ERROR
-            {
-                messageService.ShowError("The form was activated without the correct parameters to have an achievable goal.\nThe Form's input parameters will be disabled to avoid possible data corruption.", "ERROR - Undefined Form Use Called");
                 DisableMainComponents();
             }
         }
