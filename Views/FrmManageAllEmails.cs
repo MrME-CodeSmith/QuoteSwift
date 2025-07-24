@@ -4,51 +4,48 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmManageAllEmails : BaseForm
+    public partial class FrmManageAllEmails : BaseForm<ManageEmailsViewModel>
     {
 
-        readonly ManageEmailsViewModel viewModel;
-        public ManageEmailsViewModel ViewModel => viewModel;
         readonly IMessageService messageService;
         readonly INavigationService navigation;
 
         public FrmManageAllEmails(ManageEmailsViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            BindIsBusy(ViewModel);
             SetupBindings();
         }
 
         void SetupBindings()
         {
-            DgvEmails.DataSource = viewModel.Emails;
-            SelectionBindings.BindSelectedItem(DgvEmails, viewModel, nameof(ManageEmailsViewModel.SelectedEmail));
+            DgvEmails.DataSource = ViewModel.Emails;
+            SelectionBindings.BindSelectedItem(DgvEmails, ViewModel, nameof(ManageEmailsViewModel.SelectedEmail));
 
-            txtNewEmail.DataBindings.Add("Text", viewModel, nameof(ManageEmailsViewModel.NewEmail), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtNewEmail.DataBindings.Add("Text", ViewModel, nameof(ManageEmailsViewModel.NewEmail), false, DataSourceUpdateMode.OnPropertyChanged);
 
-            CommandBindings.Bind(btnAddEmail, viewModel.AddEmailCommand);
-            CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedEmailCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
-            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(BtnChangeAddressInfo, viewModel.EditSelectedEmailCommand);
+            CommandBindings.Bind(btnAddEmail, ViewModel.AddEmailCommand);
+            CommandBindings.Bind(btnRemoveAddress, ViewModel.RemoveSelectedEmailCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
+            CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(BtnChangeAddressInfo, ViewModel.EditSelectedEmailCommand);
         }
 
         private void FrmManageAllEmails_Load(object sender, EventArgs e)
         {
-            if (viewModel.Business != null && viewModel.Business.BusinessEmailAddressList != null)
+            if (ViewModel.Business != null && ViewModel.Business.BusinessEmailAddressList != null)
             {
-                Text = Text.Replace("< Business Name >", viewModel.Business.BusinessName);
+                Text = Text.Replace("< Business Name >", ViewModel.Business.BusinessName);
 
                 // components remain editable
             }
-            else if (viewModel.Customer != null && viewModel.Customer.CustomerEmailList != null)
+            else if (ViewModel.Customer != null && ViewModel.Customer.CustomerEmailList != null)
             {
-                Text = Text.Replace("< Business Name >", viewModel.Customer.CustomerName);
+                Text = Text.Replace("< Business Name >", ViewModel.Customer.CustomerName);
 
                 // components remain editable
             }

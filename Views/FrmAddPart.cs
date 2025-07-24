@@ -4,28 +4,25 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmAddPart : BaseForm
+    public partial class FrmAddPart : BaseForm<AddPartViewModel>
     {
 
-        readonly AddPartViewModel viewModel;
-        public AddPartViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
         readonly Button btnCancelOperation;
 
         public FrmAddPart(AddPartViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.serializationService = serializationService;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
-            viewModel.Initialize();
+            ViewModel.CloseAction = Close;
+            ViewModel.Initialize();
             SetupBindings();
-            BindIsBusy(viewModel);
+            BindIsBusy(ViewModel);
 
             btnCancelOperation = new Button
             {
@@ -39,39 +36,39 @@ namespace QuoteSwift.Views
 
         void SetupBindings()
         {
-            mtxtPartName.DataBindings.Add("Text", viewModel.CurrentPart, nameof(Part.PartName), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtPartDescription.DataBindings.Add("Text", viewModel.CurrentPart, nameof(Part.PartDescription), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtOriginalPartNumber.DataBindings.Add("Text", viewModel.CurrentPart, nameof(Part.OriginalItemPartNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtNewPartNumber.DataBindings.Add("Text", viewModel.CurrentPart, nameof(Part.NewPartNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            mtxtPartPrice.DataBindings.Add("Value", viewModel.CurrentPart, nameof(Part.PartPrice), false, DataSourceUpdateMode.OnPropertyChanged);
-            cbxMandatoryPart.DataBindings.Add("Checked", viewModel.CurrentPart, nameof(Part.MandatoryPart), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPartName.DataBindings.Add("Text", ViewModel.CurrentPart, nameof(Part.PartName), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPartDescription.DataBindings.Add("Text", ViewModel.CurrentPart, nameof(Part.PartDescription), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtOriginalPartNumber.DataBindings.Add("Text", ViewModel.CurrentPart, nameof(Part.OriginalItemPartNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtNewPartNumber.DataBindings.Add("Text", ViewModel.CurrentPart, nameof(Part.NewPartNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            mtxtPartPrice.DataBindings.Add("Value", ViewModel.CurrentPart, nameof(Part.PartPrice), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbxMandatoryPart.DataBindings.Add("Checked", ViewModel.CurrentPart, nameof(Part.MandatoryPart), false, DataSourceUpdateMode.OnPropertyChanged);
 
-            BindingHelpers.BindReadOnly(mtxtPartName, viewModel, nameof(AddPartViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(mtxtPartDescription, viewModel, nameof(AddPartViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(mtxtOriginalPartNumber, viewModel, nameof(AddPartViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(mtxtNewPartNumber, viewModel, nameof(AddPartViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(mtxtPartPrice, viewModel, nameof(AddPartViewModel.IsReadOnly));
-            BindingHelpers.BindEnabled(cbxMandatoryPart, viewModel, nameof(AddPartViewModel.CanEdit));
-            BindingHelpers.BindVisible(btnAddPart, viewModel, nameof(AddPartViewModel.ShowSaveButton));
-            btnAddPart.DataBindings.Add("Text", viewModel, nameof(AddPartViewModel.SaveButtonText));
+            BindingHelpers.BindReadOnly(mtxtPartName, ViewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtPartDescription, ViewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtOriginalPartNumber, ViewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtNewPartNumber, ViewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtPartPrice, ViewModel, nameof(AddPartViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(cbxMandatoryPart, ViewModel, nameof(AddPartViewModel.CanEdit));
+            BindingHelpers.BindVisible(btnAddPart, ViewModel, nameof(AddPartViewModel.ShowSaveButton));
+            btnAddPart.DataBindings.Add("Text", ViewModel, nameof(AddPartViewModel.SaveButtonText));
 
-            cbAddToPumpSelection.DataSource = viewModel.Pumps;
+            cbAddToPumpSelection.DataSource = ViewModel.Pumps;
             cbAddToPumpSelection.DisplayMember = nameof(Pump.PumpName);
             cbAddToPumpSelection.ValueMember = nameof(Pump.PumpName);
-            cbAddToPumpSelection.DataBindings.Add("SelectedItem", viewModel, nameof(AddPartViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
-            NudQuantity.DataBindings.Add("Value", viewModel, nameof(AddPartViewModel.Quantity), false, DataSourceUpdateMode.OnPropertyChanged);
+            cbAddToPumpSelection.DataBindings.Add("SelectedItem", ViewModel, nameof(AddPartViewModel.SelectedPump), false, DataSourceUpdateMode.OnPropertyChanged);
+            NudQuantity.DataBindings.Add("Value", ViewModel, nameof(AddPartViewModel.Quantity), false, DataSourceUpdateMode.OnPropertyChanged);
 
-            CommandBindings.Bind(btnAddPart, viewModel.SavePartCommand);
-            CommandBindings.Bind(loadPartBatchToolStripMenuItem, viewModel.ImportPartsCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
-            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(resetInputToolStripMenuItem, viewModel.ResetInputCommand);
-            CommandBindings.Bind(updatePartToolStripMenuItem, viewModel.StartEditCommand);
+            CommandBindings.Bind(btnAddPart, ViewModel.SavePartCommand);
+            CommandBindings.Bind(loadPartBatchToolStripMenuItem, ViewModel.ImportPartsCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
+            CommandBindings.Bind(btnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(resetInputToolStripMenuItem, ViewModel.ResetInputCommand);
+            CommandBindings.Bind(updatePartToolStripMenuItem, ViewModel.StartEditCommand);
         }
 
         private void BtnCancelOperation_Click(object sender, EventArgs e)
         {
-            ((AsyncRelayCommand)viewModel.ImportPartsCommand).Cancel();
+            ((AsyncRelayCommand)ViewModel.ImportPartsCommand).Cancel();
         }
 
         private void CbAddToPumpSelection_ContextMenuStripChanged(object sender, EventArgs e)
@@ -81,10 +78,10 @@ namespace QuoteSwift.Views
 
         private async void FrmAddPart_Load(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)viewModel.LoadDataCommand).ExecuteAsync(null);
-            if (viewModel.PartToChange == null)
+            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
+            if (ViewModel.PartToChange == null)
             {
-                viewModel.ChangeSpecificObject = true;
+                ViewModel.ChangeSpecificObject = true;
             }
         }
 

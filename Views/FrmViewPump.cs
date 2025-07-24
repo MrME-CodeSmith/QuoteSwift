@@ -4,11 +4,9 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views // Repair Quote Swift
 {
-    public partial class FrmViewPump : BaseForm
+    public partial class FrmViewPump : BaseForm<ViewPumpViewModel>
     {
 
-        readonly ViewPumpViewModel viewModel;
-        public ViewPumpViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly Button btnCancelOperation;
@@ -16,34 +14,33 @@ namespace QuoteSwift.Views // Repair Quote Swift
 
         void SetupBindings()
         {
-            pumpBindingSource.DataSource = viewModel;
+            pumpBindingSource.DataSource = ViewModel;
             pumpBindingSource.DataMember = nameof(ViewPumpViewModel.Pumps);
             dgvPumpList.DataSource = pumpBindingSource;
 
-            SelectionBindings.BindSelectedItem(dgvPumpList, viewModel, nameof(ViewPumpViewModel.SelectedPump));
+            SelectionBindings.BindSelectedItem(dgvPumpList, ViewModel, nameof(ViewPumpViewModel.SelectedPump));
 
-            CommandBindings.Bind(btnViewSelectedPump, viewModel.UpdatePumpCommand);
-            CommandBindings.Bind(btnAddPump, viewModel.AddPumpCommand);
-            CommandBindings.Bind(btnRemovePumpSelection, viewModel.RemovePumpCommand);
+            CommandBindings.Bind(btnViewSelectedPump, ViewModel.UpdatePumpCommand);
+            CommandBindings.Bind(btnAddPump, ViewModel.AddPumpCommand);
+            CommandBindings.Bind(btnRemovePumpSelection, ViewModel.RemovePumpCommand);
 
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
 
             exportInventoryToolStripMenuItem.Click += async (s, e) =>
             {
-                if (viewModel.ExportInventoryCommand.CanExecute(null))
-                    await ((AsyncRelayCommand)viewModel.ExportInventoryCommand).ExecuteAsync(null);
+                if (ViewModel.ExportInventoryCommand.CanExecute(null))
+                    await ((AsyncRelayCommand)ViewModel.ExportInventoryCommand).ExecuteAsync(null);
             };
         }
 
         public FrmViewPump(ViewPumpViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            BindIsBusy(ViewModel);
             SetupBindings();
 
             btnCancelOperation = new Button
@@ -73,7 +70,7 @@ namespace QuoteSwift.Views // Repair Quote Swift
 
         private void BtnCancelOperation_Click(object sender, EventArgs e)
         {
-            ((AsyncRelayCommand)viewModel.ExportInventoryCommand).Cancel();
+            ((AsyncRelayCommand)ViewModel.ExportInventoryCommand).Cancel();
         }
 
         /** Form Specific Functions And Procedures: 
@@ -92,7 +89,7 @@ namespace QuoteSwift.Views // Repair Quote Swift
 
         protected override void OnClose()
         {
-            viewModel.SaveChanges();
+            ViewModel.SaveChanges();
         }
 
         /*********************************************************************************/

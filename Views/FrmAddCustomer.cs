@@ -4,96 +4,92 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmAddCustomer : BaseForm
+    public partial class FrmAddCustomer : BaseForm<AddCustomerViewModel>
     {
 
-        readonly AddCustomerViewModel viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
 
-        public AddCustomerViewModel ViewModel => viewModel;
-
         public Business Container { get; set; }
 
         public FrmAddCustomer(AddCustomerViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.serializationService = serializationService;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
-            viewModel.PropertyChanged += ViewModel_PropertyChanged;
-            DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.FormTitle));
-            viewModel.CurrentCustomer = viewModel.CustomerToChange ?? new Customer();
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            DataBindings.Add("Text", ViewModel, nameof(AddCustomerViewModel.FormTitle));
+            ViewModel.CurrentCustomer = ViewModel.CustomerToChange ?? new Customer();
+            BindIsBusy(ViewModel);
 
-            BindingHelpers.BindText(txtCustomerCompanyName, viewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName));
-            BindingHelpers.BindText(mtxtVendorNumber, viewModel.CurrentCustomer, nameof(Customer.VendorNumber));
+            BindingHelpers.BindText(txtCustomerCompanyName, ViewModel.CurrentCustomer, nameof(Customer.CustomerCompanyName));
+            BindingHelpers.BindText(mtxtVendorNumber, ViewModel.CurrentCustomer, nameof(Customer.VendorNumber));
 
-            BindingHelpers.BindText(txtCustomerAddresssDescription, viewModel, nameof(AddCustomerViewModel.AddressDescription));
-            BindingHelpers.BindText(txtAtt, viewModel, nameof(AddCustomerViewModel.Att));
-            BindingHelpers.BindText(txtWorkArea, viewModel, nameof(AddCustomerViewModel.WorkArea));
-            BindingHelpers.BindText(txtWorkPlace, viewModel, nameof(AddCustomerViewModel.WorkPlace));
+            BindingHelpers.BindText(txtCustomerAddresssDescription, ViewModel, nameof(AddCustomerViewModel.AddressDescription));
+            BindingHelpers.BindText(txtAtt, ViewModel, nameof(AddCustomerViewModel.Att));
+            BindingHelpers.BindText(txtWorkArea, ViewModel, nameof(AddCustomerViewModel.WorkArea));
+            BindingHelpers.BindText(txtWorkPlace, ViewModel, nameof(AddCustomerViewModel.WorkPlace));
 
-            BindingHelpers.BindText(txtCustomerPODescription, viewModel, nameof(AddCustomerViewModel.PODescription));
-            BindingHelpers.BindText(mtxtPOBoxStreetNumber, viewModel, nameof(AddCustomerViewModel.POStreetNumber));
-            BindingHelpers.BindText(txtPOBoxSuburb, viewModel, nameof(AddCustomerViewModel.POSuburb));
-            BindingHelpers.BindText(txtPOBoxCity, viewModel, nameof(AddCustomerViewModel.POCity));
-            BindingHelpers.BindText(mtxtPOBoxAreaCode, viewModel, nameof(AddCustomerViewModel.POAreaCode));
+            BindingHelpers.BindText(txtCustomerPODescription, ViewModel, nameof(AddCustomerViewModel.PODescription));
+            BindingHelpers.BindText(mtxtPOBoxStreetNumber, ViewModel, nameof(AddCustomerViewModel.POStreetNumber));
+            BindingHelpers.BindText(txtPOBoxSuburb, ViewModel, nameof(AddCustomerViewModel.POSuburb));
+            BindingHelpers.BindText(txtPOBoxCity, ViewModel, nameof(AddCustomerViewModel.POCity));
+            BindingHelpers.BindText(mtxtPOBoxAreaCode, ViewModel, nameof(AddCustomerViewModel.POAreaCode));
 
-            BindingHelpers.BindText(mtxtTelephoneNumber, viewModel, nameof(AddCustomerViewModel.TelephoneInput));
-            BindingHelpers.BindText(mtxtCellphoneNumber, viewModel, nameof(AddCustomerViewModel.CellphoneInput));
+            BindingHelpers.BindText(mtxtTelephoneNumber, ViewModel, nameof(AddCustomerViewModel.TelephoneInput));
+            BindingHelpers.BindText(mtxtCellphoneNumber, ViewModel, nameof(AddCustomerViewModel.CellphoneInput));
 
-            BindingHelpers.BindText(mtxtEmailAddress, viewModel, nameof(AddCustomerViewModel.EmailInput));
+            BindingHelpers.BindText(mtxtEmailAddress, ViewModel, nameof(AddCustomerViewModel.EmailInput));
 
-            gbxCustomerInformation.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
-            gbxCustomerAddress.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
-            gbxEmailRelated.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
-            gbxLegalInformation.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
-            gbxPhoneRelated.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
-            gbxPOBoxAddress.DataBindings.Add("Enabled", viewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxCustomerInformation.DataBindings.Add("Enabled", ViewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxCustomerAddress.DataBindings.Add("Enabled", ViewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxEmailRelated.DataBindings.Add("Enabled", ViewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxLegalInformation.DataBindings.Add("Enabled", ViewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxPhoneRelated.DataBindings.Add("Enabled", ViewModel, nameof(AddCustomerViewModel.IsEditing));
+            gbxPOBoxAddress.DataBindings.Add("Enabled", ViewModel, nameof(AddCustomerViewModel.IsEditing));
 
-            btnAddCustomer.DataBindings.Add("Visible", viewModel, nameof(AddCustomerViewModel.ShowSaveButton));
-            btnAddCustomer.DataBindings.Add("Text", viewModel, nameof(AddCustomerViewModel.SaveButtonText));
+            btnAddCustomer.DataBindings.Add("Visible", ViewModel, nameof(AddCustomerViewModel.ShowSaveButton));
+            btnAddCustomer.DataBindings.Add("Text", ViewModel, nameof(AddCustomerViewModel.SaveButtonText));
 
-            CommandBindings.Bind(btnAddCustomer, viewModel.SaveCustomerCommand);
-            CommandBindings.Bind(btnAddAddress, viewModel.AddAddressCommand);
-            CommandBindings.Bind(btnAddPOBoxAddress, viewModel.AddPOBoxAddressCommand);
-            CommandBindings.Bind(btnAddNumber, viewModel.AddPhoneNumberCommand);
-            CommandBindings.Bind(BtnAddEmail, viewModel.AddEmailCommand);
-            CommandBindings.Bind(btnViewAll, viewModel.ViewPhoneNumbersCommand);
-            CommandBindings.Bind(btnViewAllPOBoxAddresses, viewModel.ViewPOBoxAddressesCommand);
-            CommandBindings.Bind(btnViewEmailAddresses, viewModel.ViewEmailAddressesCommand);
-            CommandBindings.Bind(btnViewAddresses, viewModel.ViewAddressesCommand);
-            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
-            CommandBindings.Bind(updatedCustomerInformationToolStripMenuItem, viewModel.StartEditCommand);
+            CommandBindings.Bind(btnAddCustomer, ViewModel.SaveCustomerCommand);
+            CommandBindings.Bind(btnAddAddress, ViewModel.AddAddressCommand);
+            CommandBindings.Bind(btnAddPOBoxAddress, ViewModel.AddPOBoxAddressCommand);
+            CommandBindings.Bind(btnAddNumber, ViewModel.AddPhoneNumberCommand);
+            CommandBindings.Bind(BtnAddEmail, ViewModel.AddEmailCommand);
+            CommandBindings.Bind(btnViewAll, ViewModel.ViewPhoneNumbersCommand);
+            CommandBindings.Bind(btnViewAllPOBoxAddresses, ViewModel.ViewPOBoxAddressesCommand);
+            CommandBindings.Bind(btnViewEmailAddresses, ViewModel.ViewEmailAddressesCommand);
+            CommandBindings.Bind(btnViewAddresses, ViewModel.ViewAddressesCommand);
+            CommandBindings.Bind(btnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
+            CommandBindings.Bind(updatedCustomerInformationToolStripMenuItem, ViewModel.StartEditCommand);
         }
 
         void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(AddCustomerViewModel.IsViewing))
             {
-                updatedCustomerInformationToolStripMenuItem.Enabled = viewModel.IsViewing;
+                updatedCustomerInformationToolStripMenuItem.Enabled = ViewModel.IsViewing;
             }
         }
 
 
         private async void FrmAddCustomer_Load(object sender, EventArgs e)
         {
-            await viewModel.LoadDataAsync();
-            if (viewModel.BusinessList != null)
+            await ViewModel.LoadDataAsync();
+            if (ViewModel.BusinessList != null)
             {
-                BindingSource source = new BindingSource { DataSource = viewModel.BusinessList };
+                BindingSource source = new BindingSource { DataSource = ViewModel.BusinessList };
                 cbBusinessSelection.DataSource = source.DataSource;
                 cbBusinessSelection.DisplayMember = "BusinessName";
                 cbBusinessSelection.ValueMember = "BusinessName";
             }
 
-            bool initSuccess = viewModel.ValidateInitialization();
+            bool initSuccess = ViewModel.ValidateInitialization();
             if (!initSuccess)
             {
                 DisableMainComponents();
@@ -108,22 +104,22 @@ namespace QuoteSwift.Views
 
         private void BtnViewAll_Click(object sender, EventArgs e)
         {
-            viewModel.ViewPhoneNumbersCommand.Execute(null);
+            ViewModel.ViewPhoneNumbersCommand.Execute(null);
         }
 
         private void BtnViewAllPOBoxAddresses_Click(object sender, EventArgs e)
         {
-            viewModel.ViewPOBoxAddressesCommand.Execute(null);
+            ViewModel.ViewPOBoxAddressesCommand.Execute(null);
         }
 
         private void BtnViewEmailAddresses_Click(object sender, EventArgs e)
         {
-            viewModel.ViewEmailAddressesCommand.Execute(null);
+            ViewModel.ViewEmailAddressesCommand.Execute(null);
         }
 
         private void BtnViewAddresses_Click(object sender, EventArgs e)
         {
-            viewModel.ViewAddressesCommand.Execute(null);
+            ViewModel.ViewAddressesCommand.Execute(null);
         }
 
 

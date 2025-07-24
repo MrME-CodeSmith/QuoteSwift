@@ -4,36 +4,34 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmViewCustomers : BaseForm
+    public partial class FrmViewCustomers : BaseForm<ViewCustomersViewModel>
     {
-        readonly ViewCustomersViewModel viewModel;
-        public ViewCustomersViewModel ViewModel => viewModel;
+
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly BindingSource customersBindingSource = new BindingSource();
         public FrmViewCustomers(ViewCustomersViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
+            ViewModel.CloseAction = Close;
             SetupBindings();
-            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
-            BindIsBusy(viewModel);
+            CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
+            BindIsBusy(ViewModel);
         }
 
         void SetupBindings()
         {
-            customersBindingSource.DataSource = viewModel;
+            customersBindingSource.DataSource = ViewModel;
             customersBindingSource.DataMember = nameof(ViewCustomersViewModel.Customers);
             DgvCustomerList.DataSource = customersBindingSource;
-            SelectionBindings.BindSelectedItem(DgvCustomerList, viewModel, nameof(ViewCustomersViewModel.SelectedCustomer));
-            CommandBindings.Bind(btnUpdateSelectedCustomer, viewModel.UpdateCustomerCommand);
-            CommandBindings.Bind(btnAddCustomer, viewModel.AddCustomerCommand);
-            BindingHelpers.BindComboBox(cbBusinessSelection, viewModel,
+            SelectionBindings.BindSelectedItem(DgvCustomerList, ViewModel, nameof(ViewCustomersViewModel.SelectedCustomer));
+            CommandBindings.Bind(btnUpdateSelectedCustomer, ViewModel.UpdateCustomerCommand);
+            CommandBindings.Bind(btnAddCustomer, ViewModel.AddCustomerCommand);
+            BindingHelpers.BindComboBox(cbBusinessSelection, ViewModel,
                 nameof(ViewCustomersViewModel.Businesses), nameof(ViewCustomersViewModel.SelectedBusiness),
                 "BusinessName", "BusinessName");
         }
@@ -42,7 +40,7 @@ namespace QuoteSwift.Views
 
         private async void FrmViewCustomers_Load(object sender, EventArgs e)
         {
-            await viewModel.LoadDataAsync();
+            await ViewModel.LoadDataAsync();
             clmCustomerCompanyName.DataPropertyName = nameof(Customer.CustomerCompanyName);
             clmPreviousQuoteDate.DataPropertyName = nameof(Customer.PreviousQuoteDate);
             DgvCustomerList.AutoGenerateColumns = false;
@@ -52,8 +50,8 @@ namespace QuoteSwift.Views
 
         private void BtnRemoveSelectedCustomer_Click(object sender, EventArgs e)
         {
-            if (viewModel.RemoveCustomerCommand.CanExecute(null))
-                viewModel.RemoveCustomerCommand.Execute(null);
+            if (ViewModel.RemoveCustomerCommand.CanExecute(null))
+                ViewModel.RemoveCustomerCommand.Execute(null);
         }
 
         /** Form Specific Functions And Procedures: 

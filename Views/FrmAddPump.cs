@@ -6,10 +6,9 @@ using System.Linq;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmAddPump : BaseForm
+    public partial class FrmAddPump : BaseForm<AddPumpViewModel>
     {
-        readonly AddPumpViewModel viewModel;
-        public AddPumpViewModel ViewModel => viewModel;
+        
         readonly INavigationService navigation;
         readonly ISerializationService serializationService;
         readonly IMessageService messageService;
@@ -17,35 +16,34 @@ namespace QuoteSwift.Views
         readonly BindingSource nonMandatorySource = new BindingSource();
 
         public FrmAddPump(AddPumpViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.serializationService = serializationService;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
-            viewModel.CurrentPump = viewModel.PumpToChange ?? new Pump();
-            BindingHelpers.BindText(mtxtPumpName, viewModel, nameof(AddPumpViewModel.PumpName));
-            BindingHelpers.BindText(mtxtPumpDescription, viewModel, nameof(AddPumpViewModel.PumpDescription));
-            BindingHelpers.BindText(mtxtNewPumpPrice, viewModel, nameof(AddPumpViewModel.NewPumpPrice));
-            mandatorySource.DataSource = viewModel.SelectedMandatoryParts;
-            nonMandatorySource.DataSource = viewModel.SelectedNonMandatoryParts;
-            CommandBindings.Bind(btnAddPump, viewModel.SavePumpCommand);
-            CommandBindings.Bind(btnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
-            viewModel.LoadDataCommand.Execute(null);
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            ViewModel.CurrentPump = ViewModel.PumpToChange ?? new Pump();
+            BindingHelpers.BindText(mtxtPumpName, ViewModel, nameof(AddPumpViewModel.PumpName));
+            BindingHelpers.BindText(mtxtPumpDescription, ViewModel, nameof(AddPumpViewModel.PumpDescription));
+            BindingHelpers.BindText(mtxtNewPumpPrice, ViewModel, nameof(AddPumpViewModel.NewPumpPrice));
+            mandatorySource.DataSource = ViewModel.SelectedMandatoryParts;
+            nonMandatorySource.DataSource = ViewModel.SelectedNonMandatoryParts;
+            CommandBindings.Bind(btnAddPump, ViewModel.SavePumpCommand);
+            CommandBindings.Bind(btnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
+            ViewModel.LoadDataCommand.Execute(null);
+            BindIsBusy(ViewModel);
         }
 
         // Input changes are tracked by the view model
 
         private async void FrmAddPump_Load(object sender, EventArgs e)
         {
-            await ((AsyncRelayCommand)viewModel.LoadDataCommand).ExecuteAsync(null);
+            await ((AsyncRelayCommand)ViewModel.LoadDataCommand).ExecuteAsync(null);
             SetupBindings();
 
-            if (viewModel.PumpToChange == null)
+            if (ViewModel.PumpToChange == null)
                 mtxtPumpName.Focus();
 
             dgvMandatoryPartView.RowsDefaultCellStyle.BackColor = Color.Bisque;
@@ -83,14 +81,14 @@ namespace QuoteSwift.Views
             clmNMPartQuantity.DataPropertyName = nameof(Pump_Part.PumpPartQuantity);
             dgvNonMandatoryPartView.DataSource = nonMandatorySource;
 
-            BindingHelpers.BindReadOnly(mtxtPumpName, viewModel, nameof(AddPumpViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(mtxtPumpDescription, viewModel, nameof(AddPumpViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(mtxtNewPumpPrice, viewModel, nameof(AddPumpViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(dgvMandatoryPartView, viewModel, nameof(AddPumpViewModel.IsReadOnly));
-            BindingHelpers.BindReadOnly(dgvNonMandatoryPartView, viewModel, nameof(AddPumpViewModel.IsReadOnly));
-            BindingHelpers.BindEnabled(btnAddPump, viewModel, nameof(AddPumpViewModel.CanEdit));
-            BindingHelpers.BindVisible(btnAddPump, viewModel, nameof(AddPumpViewModel.ShowSaveButton));
-            btnAddPump.DataBindings.Add("Text", viewModel, nameof(AddPumpViewModel.SaveButtonText));
+            BindingHelpers.BindReadOnly(mtxtPumpName, ViewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtPumpDescription, ViewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(mtxtNewPumpPrice, ViewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(dgvMandatoryPartView, ViewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindReadOnly(dgvNonMandatoryPartView, ViewModel, nameof(AddPumpViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(btnAddPump, ViewModel, nameof(AddPumpViewModel.CanEdit));
+            BindingHelpers.BindVisible(btnAddPump, ViewModel, nameof(AddPumpViewModel.ShowSaveButton));
+            btnAddPump.DataBindings.Add("Text", ViewModel, nameof(AddPumpViewModel.SaveButtonText));
         }
 
 
@@ -101,8 +99,8 @@ namespace QuoteSwift.Views
 
         private void UpdatePumpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!viewModel.ChangeSpecificObject)
-                viewModel.ChangeSpecificObject = true;
+            if (!ViewModel.ChangeSpecificObject)
+                ViewModel.ChangeSpecificObject = true;
             updatePumpToolStripMenuItem.Enabled = false;
         }
 
@@ -113,8 +111,8 @@ namespace QuoteSwift.Views
 
         protected override void OnClose()
         {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
+            if (ViewModel.ExitCommand.CanExecute(null))
+                ViewModel.ExitCommand.Execute(null);
         }
     }
 }
