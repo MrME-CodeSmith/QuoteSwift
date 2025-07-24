@@ -3,69 +3,66 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmViewQuotes : BaseForm
+    public partial class FrmViewQuotes : BaseForm<QuotesViewModel>
     {
 
-        readonly QuotesViewModel viewModel;
-        public QuotesViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly ISerializationService serializationService;
         readonly BindingSource quotesBindingSource = new BindingSource();
 
         public FrmViewQuotes(QuotesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null, ISerializationService serializationService = null)
-        : base(messageService, navigation)
+        : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.serializationService = serializationService;
             this.messageService = messageService;
-            quotesBindingSource.DataSource = viewModel.Quotes;
+            quotesBindingSource.DataSource = ViewModel.Quotes;
             dgvPreviousQuotes.DataSource = quotesBindingSource;
             SetupBindings();
-            BindIsBusy(viewModel);
+            BindIsBusy(ViewModel);
         }
 
         void SetupBindings()
         {
-            SelectionBindings.BindSelectedItem(dgvPreviousQuotes, viewModel, nameof(QuotesViewModel.SelectedQuote));
+            SelectionBindings.BindSelectedItem(dgvPreviousQuotes, ViewModel, nameof(QuotesViewModel.SelectedQuote));
 
-            CommandBindings.Bind(btnCreateNewQuote, viewModel.CreateQuoteCommand);
-            CommandBindings.Bind(btnViewSelectedQuote, viewModel.ViewQuoteCommand);
-            CommandBindings.Bind(btnCreateNewQuoteOnSelection, viewModel.CreateQuoteFromSelectionCommand);
+            CommandBindings.Bind(btnCreateNewQuote, ViewModel.CreateQuoteCommand);
+            CommandBindings.Bind(btnViewSelectedQuote, ViewModel.ViewQuoteCommand);
+            CommandBindings.Bind(btnCreateNewQuoteOnSelection, ViewModel.CreateQuoteFromSelectionCommand);
 
-            CommandBindings.Bind(manageBusinessesToolStripMenuItem, viewModel.ViewBusinessesCommand);
-            CommandBindings.Bind(addNewBusinessToolStripMenuItem, viewModel.AddBusinessCommand);
-            CommandBindings.Bind(ViewAllBusinessesToolStripMenuItem, viewModel.ViewBusinessesCommand);
+            CommandBindings.Bind(manageBusinessesToolStripMenuItem, ViewModel.ViewBusinessesCommand);
+            CommandBindings.Bind(addNewBusinessToolStripMenuItem, ViewModel.AddBusinessCommand);
+            CommandBindings.Bind(ViewAllBusinessesToolStripMenuItem, ViewModel.ViewBusinessesCommand);
 
-            CommandBindings.Bind(manageCustomersToolStripMenuItem, viewModel.ViewCustomersCommand);
-            CommandBindings.Bind(addNewCustomerToolStripMenuItem, viewModel.AddCustomerCommand);
-            CommandBindings.Bind(viewAllCustomersToolStripMenuItem, viewModel.ViewCustomersCommand);
+            CommandBindings.Bind(manageCustomersToolStripMenuItem, ViewModel.ViewCustomersCommand);
+            CommandBindings.Bind(addNewCustomerToolStripMenuItem, ViewModel.AddCustomerCommand);
+            CommandBindings.Bind(viewAllCustomersToolStripMenuItem, ViewModel.ViewCustomersCommand);
 
-            CommandBindings.Bind(managePumpsToolStripMenuItem, viewModel.ViewPumpsCommand);
-            CommandBindings.Bind(createNewPumpToolStripMenuItem, viewModel.CreatePumpCommand);
-            CommandBindings.Bind(viewAllPumpsToolStripMenuItem, viewModel.ViewPumpsCommand);
+            CommandBindings.Bind(managePumpsToolStripMenuItem, ViewModel.ViewPumpsCommand);
+            CommandBindings.Bind(createNewPumpToolStripMenuItem, ViewModel.CreatePumpCommand);
+            CommandBindings.Bind(viewAllPumpsToolStripMenuItem, ViewModel.ViewPumpsCommand);
 
-            CommandBindings.Bind(managePumpPartsToolStripMenuItem, viewModel.ViewPartsCommand);
-            CommandBindings.Bind(addNewPartToolStripMenuItem, viewModel.AddPartCommand);
-            CommandBindings.Bind(viewAllPartsToolStripMenuItem, viewModel.ViewPartsCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(managePumpPartsToolStripMenuItem, ViewModel.ViewPartsCommand);
+            CommandBindings.Bind(addNewPartToolStripMenuItem, ViewModel.AddPartCommand);
+            CommandBindings.Bind(viewAllPartsToolStripMenuItem, ViewModel.ViewPartsCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
         }
 
 
         bool columnsConfigured = false;
         private async void FrmViewQuotes_Load(object sender, EventArgs e)
         {
-            await viewModel.LoadDataAsync();
-            quotesBindingSource.DataSource = viewModel.Quotes;
+            await ViewModel.LoadDataAsync();
+            quotesBindingSource.DataSource = ViewModel.Quotes;
             ConfigureColumns();
         }
 
         readonly int count = 0;
         protected override void OnClose()
         {
-            viewModel.SaveChanges();
+            ViewModel.SaveChanges();
         }
 
         void ConfigureColumns()
@@ -136,7 +133,7 @@ namespace QuoteSwift.Views
 
         private void FrmViewQuotes_Activated(object sender, EventArgs e)
         {
-            quotesBindingSource.DataSource = viewModel.Quotes;
+            quotesBindingSource.DataSource = ViewModel.Quotes;
         }
     }
 }

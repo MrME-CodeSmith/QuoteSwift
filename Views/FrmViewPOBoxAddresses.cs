@@ -4,38 +4,35 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmViewPOBoxAddresses : BaseForm
+    public partial class FrmViewPOBoxAddresses : BaseForm<ViewPOBoxAddressesViewModel>
     {
 
-        readonly ViewPOBoxAddressesViewModel viewModel;
         readonly INavigationService navigation;
         Business business;
         Customer customer;
-        public ViewPOBoxAddressesViewModel ViewModel => viewModel;
 
         void SetupBindings()
         {
-            dgvPOBoxAddresses.DataSource = viewModel.Addresses;
-            SelectionBindings.BindSelectedItem(dgvPOBoxAddresses, viewModel,
+            dgvPOBoxAddresses.DataSource = ViewModel.Addresses;
+            SelectionBindings.BindSelectedItem(dgvPOBoxAddresses, ViewModel,
                 nameof(ViewPOBoxAddressesViewModel.SelectedAddress));
 
-            BindingHelpers.BindReadOnly(dgvPOBoxAddresses, viewModel, nameof(ViewPOBoxAddressesViewModel.IsReadOnly));
-            BindingHelpers.BindEnabled(btnRemoveAddress, viewModel, nameof(ViewPOBoxAddressesViewModel.CanEdit));
+            BindingHelpers.BindReadOnly(dgvPOBoxAddresses, ViewModel, nameof(ViewPOBoxAddressesViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(btnRemoveAddress, ViewModel, nameof(ViewPOBoxAddressesViewModel.CanEdit));
 
-            CommandBindings.Bind(btnRemoveAddress, viewModel.RemoveSelectedAddressCommand);
-            CommandBindings.Bind(btnChangeAddressInfo, viewModel.EditAddressCommand);
-            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(btnRemoveAddress, ViewModel.RemoveSelectedAddressCommand);
+            CommandBindings.Bind(btnChangeAddressInfo, ViewModel.EditAddressCommand);
+            CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
         }
 
         public FrmViewPOBoxAddresses(ViewPOBoxAddressesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
-            viewModel.CloseAction = Close;
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            BindIsBusy(ViewModel);
             SetupBindings();
         }
 
@@ -47,21 +44,21 @@ namespace QuoteSwift.Views
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
+            if (ViewModel.ExitCommand.CanExecute(null))
+                ViewModel.ExitCommand.Execute(null);
         }
 
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (viewModel.CancelCommand.CanExecute(null))
-                viewModel.CancelCommand.Execute(null);
+            if (ViewModel.CancelCommand.CanExecute(null))
+                ViewModel.CancelCommand.Execute(null);
         }
 
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
-            if (viewModel.EditAddressCommand.CanExecute(null))
-                viewModel.EditAddressCommand.Execute(null);
+            if (ViewModel.EditAddressCommand.CanExecute(null))
+                ViewModel.EditAddressCommand.Execute(null);
         }
 
         private void FrmViewPOBoxAddresses_Load(object sender, EventArgs e)
@@ -70,7 +67,7 @@ namespace QuoteSwift.Views
             {
                 Text = Text.Replace("<<Business name>>", business.BusinessName);
 
-                if (viewModel.IsReadOnly)
+                if (ViewModel.IsReadOnly)
                 {
                     BtnCancel.Enabled = true;
                 }
@@ -80,14 +77,14 @@ namespace QuoteSwift.Views
             {
                 Text = Text.Replace("<<Business name>>", customer.CustomerName);
 
-                if (viewModel.IsReadOnly)
+                if (ViewModel.IsReadOnly)
                 {
                     BtnCancel.Enabled = true;
                 }
 
             }
 
-            viewModel.UpdateData(business, customer);
+            ViewModel.UpdateData(business, customer);
 
             dgvPOBoxAddresses.RowsDefaultCellStyle.BackColor = Color.Bisque;
             dgvPOBoxAddresses.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;

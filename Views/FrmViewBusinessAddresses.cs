@@ -4,39 +4,36 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmViewBusinessAddresses : BaseForm
+    public partial class FrmViewBusinessAddresses : BaseForm<ViewBusinessAddressesViewModel>
     {
 
-        readonly ViewBusinessAddressesViewModel viewModel;
         readonly INavigationService navigation;
         Business business;
         Customer customer;
-        public ViewBusinessAddressesViewModel ViewModel => viewModel;
 
         void SetupBindings()
         {
-            DgvViewAllBusinessAddresses.DataSource = viewModel.Addresses;
-            SelectionBindings.BindSelectedItem(DgvViewAllBusinessAddresses, viewModel,
+            DgvViewAllBusinessAddresses.DataSource = ViewModel.Addresses;
+            SelectionBindings.BindSelectedItem(DgvViewAllBusinessAddresses, ViewModel,
                 nameof(ViewBusinessAddressesViewModel.SelectedAddress));
 
-            BindingHelpers.BindReadOnly(DgvViewAllBusinessAddresses, viewModel, nameof(ViewBusinessAddressesViewModel.IsReadOnly));
-            BindingHelpers.BindEnabled(BtnRemoveSelected, viewModel, nameof(ViewBusinessAddressesViewModel.CanEdit));
-            BindingHelpers.BindEnabled(BtnChangeAddressInfo, viewModel, nameof(ViewBusinessAddressesViewModel.CanEdit));
+            BindingHelpers.BindReadOnly(DgvViewAllBusinessAddresses, ViewModel, nameof(ViewBusinessAddressesViewModel.IsReadOnly));
+            BindingHelpers.BindEnabled(BtnRemoveSelected, ViewModel, nameof(ViewBusinessAddressesViewModel.CanEdit));
+            BindingHelpers.BindEnabled(BtnChangeAddressInfo, ViewModel, nameof(ViewBusinessAddressesViewModel.CanEdit));
 
-            CommandBindings.Bind(BtnRemoveSelected, viewModel.RemoveSelectedAddressCommand);
-            CommandBindings.Bind(BtnChangeAddressInfo, viewModel.EditAddressCommand);
-            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(BtnRemoveSelected, ViewModel.RemoveSelectedAddressCommand);
+            CommandBindings.Bind(BtnChangeAddressInfo, ViewModel.EditAddressCommand);
+            CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
         }
 
         public FrmViewBusinessAddresses(ViewBusinessAddressesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
-            viewModel.CloseAction = Close;
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            BindIsBusy(ViewModel);
             SetupBindings();
         }
 
@@ -48,8 +45,8 @@ namespace QuoteSwift.Views
 
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (viewModel.ExitCommand.CanExecute(null))
-                viewModel.ExitCommand.Execute(null);
+            if (ViewModel.ExitCommand.CanExecute(null))
+                ViewModel.ExitCommand.Execute(null);
         }
 
         private void FrmViewBusinessAddresses_Load(object sender, EventArgs e)
@@ -58,7 +55,7 @@ namespace QuoteSwift.Views
             {
                 Text = Text.Replace("<<Business name>>", business.BusinessName);
 
-                if (viewModel.IsReadOnly)
+                if (ViewModel.IsReadOnly)
                 {
                     BtnCancel.Enabled = true;
                 }
@@ -68,14 +65,14 @@ namespace QuoteSwift.Views
             {
                 Text = Text.Replace("<<Business name>>", customer.CustomerName);
 
-                if (viewModel.IsReadOnly)
+                if (ViewModel.IsReadOnly)
                 {
                     BtnCancel.Enabled = true;
                 }
 
             }
 
-            viewModel.UpdateData(business, customer);
+            ViewModel.UpdateData(business, customer);
 
             DgvViewAllBusinessAddresses.RowsDefaultCellStyle.BackColor = Color.Bisque;
             DgvViewAllBusinessAddresses.AlternatingRowsDefaultCellStyle.BackColor = Color.Beige;
@@ -83,13 +80,13 @@ namespace QuoteSwift.Views
 
         private void BtnChangeAddressInfo_Click(object sender, EventArgs e)
         {
-            viewModel.EditAddressCommand.Execute(null);
+            ViewModel.EditAddressCommand.Execute(null);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (viewModel.CancelCommand.CanExecute(null))
-                viewModel.CancelCommand.Execute(null);
+            if (ViewModel.CancelCommand.CanExecute(null))
+                ViewModel.CancelCommand.Execute(null);
         }
 
 

@@ -4,61 +4,58 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmManagingPhoneNumbers : BaseForm
+    public partial class FrmManagingPhoneNumbers : BaseForm<ManagePhoneNumbersViewModel>
     {
 
-        readonly ManagePhoneNumbersViewModel viewModel;
-        public ManagePhoneNumbersViewModel ViewModel => viewModel;
         readonly IMessageService messageService;
         readonly INavigationService navigation;
 
         public FrmManagingPhoneNumbers(ManagePhoneNumbersViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            BindIsBusy(ViewModel);
             SetupBindings();
         }
 
         void SetupBindings()
         {
-            dgvTelephoneNumbers.DataSource = viewModel.TelephoneNumbers;
-            SelectionBindings.BindSelectedItem(dgvTelephoneNumbers, viewModel, nameof(ManagePhoneNumbersViewModel.SelectedTelephoneNumber));
+            dgvTelephoneNumbers.DataSource = ViewModel.TelephoneNumbers;
+            SelectionBindings.BindSelectedItem(dgvTelephoneNumbers, ViewModel, nameof(ManagePhoneNumbersViewModel.SelectedTelephoneNumber));
 
-            dgvCellphoneNumbers.DataSource = viewModel.CellphoneNumbers;
-            SelectionBindings.BindSelectedItem(dgvCellphoneNumbers, viewModel, nameof(ManagePhoneNumbersViewModel.SelectedCellphoneNumber));
+            dgvCellphoneNumbers.DataSource = ViewModel.CellphoneNumbers;
+            SelectionBindings.BindSelectedItem(dgvCellphoneNumbers, ViewModel, nameof(ManagePhoneNumbersViewModel.SelectedCellphoneNumber));
 
-            txtNewTelephone.DataBindings.Add("Text", viewModel, nameof(ManagePhoneNumbersViewModel.NewTelephoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
-            txtNewCellphone.DataBindings.Add("Text", viewModel, nameof(ManagePhoneNumbersViewModel.NewCellphoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtNewTelephone.DataBindings.Add("Text", ViewModel, nameof(ManagePhoneNumbersViewModel.NewTelephoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtNewCellphone.DataBindings.Add("Text", ViewModel, nameof(ManagePhoneNumbersViewModel.NewCellphoneNumber), false, DataSourceUpdateMode.OnPropertyChanged);
 
-            CommandBindings.Bind(btnAddTelephone, viewModel.AddTelephoneCommand);
-            CommandBindings.Bind(btnAddCellphone, viewModel.AddCellphoneCommand);
+            CommandBindings.Bind(btnAddTelephone, ViewModel.AddTelephoneCommand);
+            CommandBindings.Bind(btnAddCellphone, ViewModel.AddCellphoneCommand);
 
-            CommandBindings.Bind(btnRemoveTelNumber, viewModel.RemoveSelectedTelephoneCommand);
-            CommandBindings.Bind(btnRemoveCellNumber, viewModel.RemoveSelectedCellphoneCommand);
-            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(BtnUpdateTelephoneNumber, viewModel.EditTelephoneCommand);
-            CommandBindings.Bind(BtnUpdateCellphoneNumber, viewModel.EditCellphoneCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(btnRemoveTelNumber, ViewModel.RemoveSelectedTelephoneCommand);
+            CommandBindings.Bind(btnRemoveCellNumber, ViewModel.RemoveSelectedCellphoneCommand);
+            CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(BtnUpdateTelephoneNumber, ViewModel.EditTelephoneCommand);
+            CommandBindings.Bind(BtnUpdateCellphoneNumber, ViewModel.EditCellphoneCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
         }
 
 
 
         private void FrmManagingPhoneNumbers_Load(object sender, EventArgs e)
         {
-            if (viewModel.Business != null && (viewModel.Business.BusinessTelephoneNumberList != null || viewModel.Business.BusinessCellphoneNumberList != null))
+            if (ViewModel.Business != null && (ViewModel.Business.BusinessTelephoneNumberList != null || ViewModel.Business.BusinessCellphoneNumberList != null))
             {
-                Text = Text.Replace("< Business Name >", viewModel.Business.BusinessName);
+                Text = Text.Replace("< Business Name >", ViewModel.Business.BusinessName);
 
                 // components remain editable
             }
-            else if (viewModel.Customer != null && (viewModel.Customer.CustomerCellphoneNumberList != null || viewModel.Customer.CustomerTelephoneNumberList != null))
+            else if (ViewModel.Customer != null && (ViewModel.Customer.CustomerCellphoneNumberList != null || ViewModel.Customer.CustomerTelephoneNumberList != null))
             {
-                Text = Text.Replace("< Business Name >", viewModel.Customer.CustomerName);
+                Text = Text.Replace("< Business Name >", ViewModel.Customer.CustomerName);
 
                 // components remain editable
             }

@@ -5,37 +5,34 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmViewAllBusinesses : BaseForm
+    public partial class FrmViewAllBusinesses : BaseForm<ViewBusinessesViewModel>
     {
 
-        readonly ViewBusinessesViewModel viewModel;
-        public ViewBusinessesViewModel ViewModel => viewModel;
         readonly INavigationService navigation;
         readonly IMessageService messageService;
         readonly BindingSource businessBindingSource = new BindingSource();
 
         public FrmViewAllBusinesses(ViewBusinessesViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.navigation = navigation;
             this.messageService = messageService;
-            viewModel.CloseAction = Close;
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            BindIsBusy(ViewModel);
             SetupBindings();
-            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
         }
 
         void SetupBindings()
         {
-            businessBindingSource.DataSource = viewModel;
+            businessBindingSource.DataSource = ViewModel;
             businessBindingSource.DataMember = nameof(ViewBusinessesViewModel.Businesses);
             DgvBusinessList.DataSource = businessBindingSource;
-            SelectionBindings.BindSelectedItem(DgvBusinessList, viewModel, nameof(ViewBusinessesViewModel.SelectedBusiness));
-            CommandBindings.Bind(btnUpdateBusiness, viewModel.UpdateBusinessCommand);
-            CommandBindings.Bind(btnAddBusiness, viewModel.AddBusinessCommand);
+            SelectionBindings.BindSelectedItem(DgvBusinessList, ViewModel, nameof(ViewBusinessesViewModel.SelectedBusiness));
+            CommandBindings.Bind(btnUpdateBusiness, ViewModel.UpdateBusinessCommand);
+            CommandBindings.Bind(btnAddBusiness, ViewModel.AddBusinessCommand);
         }
 
         // CommandBindings handle Exit action
@@ -48,8 +45,8 @@ namespace QuoteSwift.Views
 
         private void BtnRemoveSelected_Click(object sender, EventArgs e)
         {
-            if (viewModel.RemoveBusinessCommand.CanExecute(null))
-                viewModel.RemoveBusinessCommand.Execute(null);
+            if (ViewModel.RemoveBusinessCommand.CanExecute(null))
+                ViewModel.RemoveBusinessCommand.Execute(null);
         }
 
         /** Form Specific Functions And Procedures: 

@@ -3,31 +3,28 @@ using System.Windows.Forms;
 
 namespace QuoteSwift.Views
 {
-    public partial class FrmEditPhoneNumber : BaseForm
+    public partial class FrmEditPhoneNumber : BaseForm<EditPhoneNumberViewModel>
     {
 
         readonly IMessageService messageService;
         readonly INavigationService navigation;
-        readonly EditPhoneNumberViewModel viewModel;
-        public EditPhoneNumberViewModel ViewModel => viewModel;
 
         public FrmEditPhoneNumber(EditPhoneNumberViewModel viewModel, INavigationService navigation = null, IMessageService messageService = null)
-            : base(messageService, navigation)
+            : base(viewModel, messageService, navigation)
         {
             InitializeComponent();
-            this.viewModel = viewModel;
             this.messageService = messageService;
             this.navigation = navigation;
-            viewModel.CloseAction = Close;
-            BindIsBusy(viewModel);
+            ViewModel.CloseAction = Close;
+            BindIsBusy(ViewModel);
             SetupBindings();
-            CommandBindings.Bind(BtnCancel, viewModel.CancelCommand);
-            CommandBindings.Bind(closeToolStripMenuItem, viewModel.ExitCommand);
+            CommandBindings.Bind(BtnCancel, ViewModel.CancelCommand);
+            CommandBindings.Bind(closeToolStripMenuItem, ViewModel.ExitCommand);
         }
 
         void SetupBindings()
         {
-            txtPhoneNumber.DataBindings.Add("Text", viewModel, nameof(EditPhoneNumberViewModel.CurrentNumber), false, DataSourceUpdateMode.OnPropertyChanged);
+            txtPhoneNumber.DataBindings.Add("Text", ViewModel, nameof(EditPhoneNumberViewModel.CurrentNumber), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void FrmEditPhoneNumber_Load(object sender, EventArgs e)
@@ -36,8 +33,8 @@ namespace QuoteSwift.Views
 
         private void BtnUpdateNumber_Click(object sender, EventArgs e)
         {
-            if (viewModel.UpdateNumberAndCloseCommand.CanExecute(null))
-                viewModel.UpdateNumberAndCloseCommand.Execute(null);
+            if (ViewModel.UpdateNumberAndCloseCommand.CanExecute(null))
+                ViewModel.UpdateNumberAndCloseCommand.Execute(null);
         }
 
         // CommandBindings handle Cancel and Exit actions

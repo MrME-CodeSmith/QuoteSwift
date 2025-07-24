@@ -43,4 +43,15 @@ namespace QuoteSwift
             };
         }
     }
+
+    public abstract class BaseForm<TViewModel> : BaseForm
+    {
+        protected BaseForm(TViewModel viewModel, IMessageService messageService = null, INavigationService navigation = null)
+            : base(messageService, navigation)
+        {
+            ViewModel = viewModel;
+        }
+
+        public TViewModel ViewModel { get; }
+    }
 }
